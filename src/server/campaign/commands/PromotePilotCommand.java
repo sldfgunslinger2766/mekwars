@@ -17,6 +17,7 @@ import java.util.StringTokenizer;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
+import client.campaign.SArmy;       //Baruk Khazad! 20150929
 import server.campaign.pilot.SPilot;
 import server.campaign.pilot.SPilotSkills;
 import server.campaign.pilot.skills.AstechSkill;
@@ -95,6 +96,22 @@ public class PromotePilotCommand implements Command {
             CampaignMain.cm.toUser("AM:A skill needs to be provided", Username, true);
             return;
         }
+        
+        //start code section 1 of 2 - Baruk Khazad! 20150929
+        //disallow Promotion if unit is in army and player is not in reserve
+        //this code belongs in both PromotePilotCommand.java and DemotePilotCommand.java
+        boolean isInArmy = false;
+        for (SArmy currA : player.getArmies()) {
+             if (currA.getUnit(unit) != null) {
+                   isInArmy = true;
+                   break;
+             }
+        }
+        if (isInArmy && player.getDutyStatus()!= SPlayer.STATUS_RESERVE) {
+             CampaignMain.cm.toUser("AM:Your pilot is on patrol or fighting and needs to return to base for this training.", Username, true);
+             return;
+        }
+        //end code section 1 of 2 - Baruk Khazad! 20150929
 
         if (skill.equalsIgnoreCase("gunnery")) {
             int gun = pilot.getGunnery();
@@ -221,6 +238,16 @@ public class PromotePilotCommand implements Command {
 
         CampaignMain.cm.toUser("AM:Skill " + skill + " purchased for pilot " + pilot.getName() + " for " + cost + " exp.", Username);
         CampaignMain.cm.toUser("PL|UU|" + unit.getId() + "|" + unit.toString(true), Username, false);
+        //start code section 2 of 2 - Baruk Khazad! 20150929
+        // correct the BV of any army which contains the unit
+        for (SArmy currA : player.getArmies()) {
+             if (currA.getUnit(unit) != null) {
+                  currA.setBV(0);
+                  CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), player.name, false);
+                  CampaignMain.cm.getOpsManager().checkOperations(currA, true);
+             }
+        }
+        //end code section 2 of 2 - Baruk Khazad! 20150929
 
     }// end process()
 
