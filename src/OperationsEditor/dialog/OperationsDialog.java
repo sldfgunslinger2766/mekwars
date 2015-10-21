@@ -635,6 +635,11 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseCheckBox.setName("AutoresolveBattle");
         rangesBox2.add(BaseCheckBox);
 
+        //Baruk Khazad! - 20151003 - new checkbox
+        BaseCheckBox = new JCheckBox("Defender ignores Min % Owned");
+        BaseCheckBox.setToolTipText("<html>If defender owns some of the planet but less than the Min%Owned, defender is eligible to be attacked.</html>");
+        BaseCheckBox.setName("MinPlanetOwnershipIgnoredByDefender");
+        rangesBox2.add(BaseCheckBox);
         
         // finalize layout.
         SpringLayoutHelper.setupSpringGrid(rangesBox, 4);

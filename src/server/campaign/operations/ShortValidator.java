@@ -1371,8 +1371,15 @@ public class ShortValidator {
         	percentOwned = (double)100 * ((double)target.getInfluence().getInfluence(dp.getHouseFightingFor().getId()) / (double)target.getConquestPoints());
         else
         	percentOwned = 0;
-        if (target != null && percentOwned < o.getIntValue("MinPlanetOwnership"))
-            failureReasons.add(SFAIL_DEFEND_NOTPLANDEF);
+        //Baruk Khazad! - 20151003 - start
+        if (target != null && percentOwned < o.getIntValue("MinPlanetOwnership")) {
+            if (percentOwned > 0 && o.getIntValue("MinPlanetOwnership") > 0 && o.getBooleanValue("MinPlanetOwnershipIgnoredByDefender")) {
+                //do not apply a fail flag because 1) they own some 2) there is a non-zero min%Owned value 3) the ignore flag is set to true. This fits the condition described in the Operations Manager.
+            } else {
+                failureReasons.add(SFAIL_DEFEND_NOTPLANDEF); 
+            }
+        }
+        //Baruk Khazad! - 20151003 - end
         if (dp.getHouseFightingFor().isNewbieHouse() && !solCanDefend)
             failureReasons.add(SFAIL_DEFEND_SOLCANTDEF);
         if (!dp.getHouseFightingFor().isConquerable() && !nonConqCanDefend)
