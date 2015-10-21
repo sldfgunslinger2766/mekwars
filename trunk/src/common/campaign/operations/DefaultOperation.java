@@ -84,6 +84,7 @@ public class DefaultOperation {
          * PercentageToAttackOnWorld   - % required to launch an attack on-planet
          * PercentageToAttackOffWorld  - % required to launch an attack off-planet
          * MinPlanetOwnership          - % a faction must own for world to be legal target     - AFC=235
+         * MinPlanetOwnershipIgnoredByDefender - if partially owned and MinPlanetOwnership>0 then MinPlanetOwnership will be ignored for the defender's legibility for the op //Baruk Khazad! - 20151003  
          * MaxPlanetOwnership          - If faction owns > max %, world is not a legal target  - AFC=236
          * OnlyAgainstHomeWorlds       - Limit attack to planets that are homeworlds
          * OnlyAgainstNonHomeWorlds    - Limit attack to planets that are not homeworlds
@@ -129,6 +130,7 @@ public class DefaultOperation {
         operationsDefaults.put("PercentageToAttackOnWorld", "50");// own or push to attack
         operationsDefaults.put("PercentageToAttackOffWorld", "50");// own or push to attack
         operationsDefaults.put("MinPlanetOwnership", "0");// attack anywhere
+        operationsDefaults.put("MinPlanetOwnershipIgnoredByDefender", "false");//Baruk Khazad! - 20151003 
         operationsDefaults.put("MaxPlanetOwnership", "100");// attack anywhere
         operationsDefaults.put("OnlyAgainstHomeWorlds", "false");
         operationsDefaults.put("OnlyAgainstNonHomeWorlds", "false");

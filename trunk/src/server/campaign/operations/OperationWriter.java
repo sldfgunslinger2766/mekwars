@@ -84,6 +84,7 @@ public class OperationWriter {
 				String launchOn = currO.getValue("PercentageToAttackOnWorld") + "*";
 				String launchFrom = currO.getValue("PercentageToAttackOffWorld") + "*";
 				String minOwn = currO.getValue("MinPlanetOwnership") + "*";
+				String minOwnIBD = currO.getValue("MinPlanetOwnershipIgnoredByDefender") + "*"; //Baruk Khazad! - 20151003
 				String maxOwn = currO.getValue("MaxPlanetOwnership") + "*";
 				String reserveOnly = currO.getValue("OnlyAllowedFromReserve") + "*";
 				String activeOnly = currO.getValue("OnlyAllowedFromActive") + "*";
@@ -143,6 +144,7 @@ public class OperationWriter {
 						+ launchOn
 						+ launchFrom
 						+ minOwn
+						+ minOwnIBD      //Baruk Khazad! - 20151003
 						+ maxOwn
 						+ reserveOnly
 						+ activeOnly
