@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-import client.campaign.SArmy;       //Baruk Khazad! 20150929
+import server.campaign.SArmy;       //Baruk Khazad! 20150929
 import server.campaign.pilot.SPilot;
 import server.campaign.pilot.SPilotSkills;
 import server.campaign.pilot.skills.AstechSkill;
@@ -102,7 +102,7 @@ public class PromotePilotCommand implements Command {
         //this code belongs in both PromotePilotCommand.java and DemotePilotCommand.java
         boolean isInArmy = false;
         for (SArmy currA : player.getArmies()) {
-             if (currA.getUnit(unit) != null) {
+             if (currA.isUnitInArmy(unit)) {
                    isInArmy = true;
                    break;
              }
@@ -241,9 +241,9 @@ public class PromotePilotCommand implements Command {
         //start code section 2 of 2 - Baruk Khazad! 20150929
         // correct the BV of any army which contains the unit
         for (SArmy currA : player.getArmies()) {
-             if (currA.getUnit(unit) != null) {
+             if (currA.isUnitInArmy(unit)) {
                   currA.setBV(0);
-                  CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), player.name, false);
+                  CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), player.getName(), false);
                   CampaignMain.cm.getOpsManager().checkOperations(currA, true);
              }
         }
