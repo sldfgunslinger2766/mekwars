@@ -1,6 +1,13 @@
 VERSION HISTORY:
 ----------------
-v 0.4.0.x
+
+R Released Client v0.4.0.4, Server v0.4.0.10
++ Updated contributors.txt
++ New MM v0.41.11-MW20151022-ebbe819
++ Bug: Map shows incorrect attack options on worlds with > 100cp
++ Disallow promotion of pilot in active army
++ Bug: army BV and available ops not updating when pilot promoted
++ added ops setting MinPlanetOwnershipIgnoredByDefender
 + make megamek not listen to keybindings when MM not focused
 + Fix MegaMek keybindings
 + Added missing MM libraries and config files
