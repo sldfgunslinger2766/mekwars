@@ -157,8 +157,8 @@ public class AttackMenu extends JMenu implements ActionListener {
                     String homeInfo = opProps[AttackMenu.OPHOMEINFO];
 					int launchOn = Integer.parseInt(opProps[AttackMenu.OPLAUNCHON]);
 					int launchFrom = Integer.parseInt(opProps[AttackMenu.OPLAUNCHFROM]);
-					int minOwn = Integer.parseInt(opProps[AttackMenu.OPMINOWN]);
-					int maxOwn = Integer.parseInt(opProps[AttackMenu.OPMAXOWN]);
+					double minOwn = Double.parseDouble(opProps[AttackMenu.OPMINOWN]);
+					double maxOwn = Double.parseDouble(opProps[AttackMenu.OPMAXOWN]);
 					String legalDefenders = opProps[AttackMenu.OPLEGALDEFENDERS];
 					String allowPlanetFlags = opProps[AttackMenu.OPALLOWEDPLANETFLAGS]+"^";
                     String disallowPlanetFlags = opProps[AttackMenu.OPDISALLOWEDPLANETFLAGS]+"^";
@@ -200,6 +200,11 @@ public class AttackMenu extends JMenu implements ActionListener {
                         continue;
                     else if (!tp.isHomeWorld() && homeInfo.equals("only"))
                         continue;
+                    
+                    // convert minOwn and maxOwn to a percentage
+                    // wildj79 (James Allred) 2015-09-30
+                    minOwn /= 100.0D;
+                    maxOwn /= 100.0D;
                     
 					//check the ownership requirements
 					if (tp.getInfluence().getInfluence(houseID) < minOwn)

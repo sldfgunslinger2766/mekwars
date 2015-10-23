@@ -9,6 +9,7 @@
   Kestrel
   fahr				(eventsbeyondme@users.sourceforge.net)
   BarukKhazad!
+  James Allred 		(wildj79)
   
  MekWars testing and documentation (a few of many):
   Alan Bell         (Carpe Mortis)
