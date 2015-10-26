@@ -1,6 +1,7 @@
 VERSION HISTORY:
 ----------------
-
+R Released Client v0.4.0.5
++ Bug: MinOwnIBD sent but client was never configured to receive
 R Released Client v0.4.0.4, Server v0.4.0.10
 + Updated contributors.txt
 + New MM v0.41.11-MW20151022-ebbe819
