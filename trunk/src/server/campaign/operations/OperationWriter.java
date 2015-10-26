@@ -144,14 +144,15 @@ public class OperationWriter {
 						+ launchOn
 						+ launchFrom
 						+ minOwn
-						+ minOwnIBD      //Baruk Khazad! - 20151003
 						+ maxOwn
 						+ reserveOnly
 						+ activeOnly
 						+ legalDefenders.toString().trim()
 						+ allowPlanetFlags.toString().trim()
 						+ disallowPlanetFlags.toString().trim()
-						+ minSubFactionLevel);
+						+ minSubFactionLevel
+						+ minOwnIBD);      //Baruk Khazad! - 20151003
+				
 			}
 			ps.close();
 		} catch (FileNotFoundException fe) {

@@ -182,7 +182,7 @@ public final class MWClient implements IClient, GameListener {
 
     CConfig Config;
 
-    public static final String CLIENT_VERSION = "0.4.0.4"; // change this with
+    public static final String CLIENT_VERSION = "0.4.0.5"; // change this with
 
     // all client
     // changes @Torren
@@ -2026,6 +2026,7 @@ public final class MWClient implements IClient, GameListener {
                 String allowPlanetFlags = st.nextToken();
                 String disallowPlanetFlags = st.nextToken();
                 String minAccessLevel = st.nextToken();// int
+                String minOwnIBD = st.nextToken(); // boolean
 
                 // TODO: Replace explicit numerical references with static ints.
                 String[] props = {// value bag
@@ -2043,7 +2044,8 @@ public final class MWClient implements IClient, GameListener {
                         disallowPlanetFlags,// 11
                         reserveOnly,// 12
                         activeOnly,// 13
-                        minAccessLevel // 14
+                        minAccessLevel, // 14
+                        minOwnIBD // 15
                 };
                 allOps.put(name, props);
 
