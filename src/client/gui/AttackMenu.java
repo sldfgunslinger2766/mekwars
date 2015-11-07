@@ -84,6 +84,7 @@ public class AttackMenu extends JMenu implements ActionListener {
 	private static int OPAFR = 12;
 	private static int OPACTIVE = 13;
 	private static int OPACCESSLEVEL = 14;
+	//private static int OPMINOWNIBD = 15;	//Baruk 2015-11-7 code to grab value in case it is needed by this .java some other time
 	
 	//CONSTRUCTOR
 	public AttackMenu(MWClient mwclient, int armyID, String planetName) {
@@ -164,6 +165,7 @@ public class AttackMenu extends JMenu implements ActionListener {
                     String disallowPlanetFlags = opProps[AttackMenu.OPDISALLOWEDPLANETFLAGS]+"^";
                     boolean reserveOnly = Boolean.parseBoolean(opProps[AttackMenu.OPAFR]);
                     int minAccessLevel = Integer.parseInt(opProps[AttackMenu.OPACCESSLEVEL]);
+                    //boolean minOwnIBD = Boolean.parseBoolean(opProps[AttackMenu.OPMINOWNIBD]);  //Baruk 2015-11-7  code to grab value in case it is needed by this .java some other time  
                     
                     //Your sub faction is not allowed to use this!
                     if ( accessLevel < minAccessLevel)
@@ -203,8 +205,8 @@ public class AttackMenu extends JMenu implements ActionListener {
                     
                     // convert minOwn and maxOwn to a percentage
                     // wildj79 (James Allred) 2015-09-30
-                    minOwn /= 100.0D;
-                    maxOwn /= 100.0D;
+                    minOwn *= tp.getConquestPoints()/100.0D;   //Baruk 2015-11-7 modified to include planet CP in formula
+                    maxOwn *= tp.getConquestPoints()/100.0D;   //Baruk 2015-11-7 modified to include planet CP in formula
                     
 					//check the ownership requirements
 					if (tp.getInfluence().getInfluence(houseID) < minOwn)
