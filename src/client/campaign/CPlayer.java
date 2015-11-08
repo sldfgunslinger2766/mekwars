@@ -755,6 +755,7 @@ CampaignData.mwlog.infoLog("My Player Flags: " + flags.export());
             while (i.hasNext()) {
                 if (i.next().getId() == unitid) {
                     i.remove();
+                    getArmy(army).removeCommander(unitid); //Baruk Khazad!  20151108c it is safe to removeCommander regardless of whether isCommander or not
                     break;
                 }
             }
