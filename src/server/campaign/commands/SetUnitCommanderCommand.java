@@ -120,7 +120,21 @@ public class SetUnitCommanderCommand implements Command {
             CampaignMain.cm.toUser("AM:" + m.getModelName() + " is already a unit commander for this army!", Username);
             return;
         }
-
+        //start Baruk Khazad!  20151108b
+        boolean isInArmy = false;
+        for (SArmy currA : p.getArmies()) {
+             if (currA.isUnitInArmy(m) && !currA.isDisabled()) {
+                   isInArmy = true;
+                   break;
+             }
+        }     
+        if (isInArmy && p.getDutyStatus()!= SPlayer.STATUS_RESERVE) {
+            CampaignMain.cm.toUser("AM:Your army is on patrol or fighting and needs to return to base first.", Username, true);
+            return;
+        }
+        //end Baruk Khazad!  20151108b
+        
+        
         p.setSave();
 
         if (commander) {
