@@ -366,16 +366,15 @@ public class ActivateCommand implements Command {
     }
 
     private boolean hasCommanderlessUnits(Vector<SArmy> armies) {
-        // loop though all units in all armies
+        // start Baruk Khazad!  20151108a 
+    	Boolean result = false;  
         for (SArmy army : armies) {
-            if (army.getCommanders().size() > 0) {
-                return false;
+            if (army.getCommanders().size() == 0 && !army.isDisabled()) {    
+                result = true;   
             }
         }
-
-        // no unit commanders found
-        return true;
-
+        return result;  
+        // end Baruk Khazad!  20151108a 
     }
 
     private int hasIllegalOpArmies(SPlayer player, Vector<SArmy> armies) {
