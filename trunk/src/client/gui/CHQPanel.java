@@ -2028,7 +2028,7 @@ public class CHQPanel extends JPanel {
                 // check access
             } else if (command.equalsIgnoreCase("CAA")) {
                 int armyID = Integer.parseInt(st.nextToken());
-                JComboBox<String> attackCombo = new JComboBox<String>((String[]) mwclient.getAllOps().keySet().toArray());
+                JComboBox attackCombo = new JComboBox(mwclient.getAllOps().keySet().toArray()); //Barukkhazad! 20151108 removed castings
                 attackCombo.setEditable(false);
 
                 attackCombo.grabFocus();
