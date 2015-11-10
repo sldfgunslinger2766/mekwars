@@ -1181,7 +1181,12 @@ public final class CampaignMain implements Serializable {
      * for removal. this.getPlayer() will retreive the memory resident SPlayer
      * from the save queue if the player returns before the purge.
      */
-    public void doLogoutPlayer(String name) {
+    
+    public void doLogoutPlayer(String name) {   //start Baruk Khazad! 20151110   created method so all old doLogoutPlayer calls will continue to work without need for change
+        	doLogoutPlayer(name,true);
+    }
+    
+    public void doLogoutPlayer(String name, Boolean bSavePlayerOrNot) { //Baruk Khazad! 20151110   added method parameter bSavePlayerOrNot to allow for command.DeleteAccount to skip the SavePlayer call 
 
         // if the name is null or blank, return.
         if (name == null || name.trim().length() == 0) {
@@ -1201,7 +1206,11 @@ public final class CampaignMain implements Serializable {
          */
         releaseLostSoul(name);
         // set save, then log the player out of his house
-        toLogout.setSave();
+        //start Baruk Khazad! 20151110  put IF wrapper around setSave() so deleted players can be told to logout without being saved(which basically recreates their account
+        if (bSavePlayerOrNot) {    
+           toLogout.setSave();      
+        }                          
+        //end Baruk Khazad! 20151110  
         toLogout.getMyHouse().doLogout(toLogout);// hacky.
 
         // clear the addon and send the new logged out status to all players
