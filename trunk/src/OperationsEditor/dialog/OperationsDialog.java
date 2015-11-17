@@ -104,7 +104,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
     private Dimension textBoxSize = new Dimension(70, 22);
 
     JTabbedPane ConfigPane = new JTabbedPane(SwingConstants.TOP);
-    
+
     FlagTable afTable;
     FlagTable dfTable;
     FlagTable wfTable;
@@ -391,7 +391,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
     public void jMenuCreateShortOp_actionPerformed(ActionEvent e) {
         taskName = JOptionPane.showInputDialog(null, "Operation Name", "New Operation Name", JOptionPane.OK_CANCEL_OPTION);
 
-        if (taskName == null || taskName.length() == 0) {
+        if ((taskName == null) || (taskName.length() == 0)) {
             return;
         }
 
@@ -557,13 +557,13 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseTextField.setToolTipText("<html>% Chance operation will occur at dusk.  Default 0%</html>");
         BaseTextField.setName("DuskChance");
         rangesBox.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         rangesBox.add(new JLabel("Attacker Briefing", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html>Message Attacker recieves after launching</html>");
         BaseTextField.setName("AttackerBriefing");
         rangesBox.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         rangesBox.add(new JLabel("Defender Briefing", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html>Message Defender recieves after launching</html>");
@@ -640,7 +640,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseCheckBox.setToolTipText("<html>If defender owns some of the planet but less than the Min%Owned, defender is eligible to be attacked.</html>");
         BaseCheckBox.setName("MinPlanetOwnershipIgnoredByDefender");
         rangesBox2.add(BaseCheckBox);
-        
+
         // finalize layout.
         SpringLayoutHelper.setupSpringGrid(rangesBox, 4);
         SpringLayoutHelper.setupSpringGrid(rangesBox2, 3);
@@ -750,7 +750,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseCheckBox.setToolTipText("If true, infantry and BA are included when checking BV spreads between high/low units.");
         BaseCheckBox.setName("CountInfForSpread");
         spreadPanel.add(BaseCheckBox);
-        
+
         BaseCheckBox = new JCheckBox("Ignore pilot for BV Spread");
         BaseCheckBox.setToolTipText("If true, pilot levels will be ignored for the purposes of spread-checking");
         BaseCheckBox.setName("IgnorePilotsForBVSpread");
@@ -765,15 +765,15 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseCheckBox.setToolTipText("<html>If true, support units will be counted as normal units for purposes of unit count.<br>If false, a support unit will not count towards it unit type count.</html>");
         BaseCheckBox.setName("CountSupportUnits");
         spreadPanel.add(BaseCheckBox);
-        
+
         BaseCheckBox = new JCheckBox("Count support units in Spread");
         BaseCheckBox.setToolTipText("If true, protos are included when checking BV spreads between high/low units.");
         BaseCheckBox.setName("CountSupportUnitsForSpread");
         spreadPanel.add(BaseCheckBox);
-        
+
         //spreadPanel.add(new JLabel(" "));
-        
-        
+
+
         BaseTextField = new JTextField(5);
         spreadPanel.add(new JLabel("Repod Omni to Base:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<HTML>String. Omni's that where used in this op are repodded<br>back to this base configuration.<br>Leave blank to disable this option </HTML>");
@@ -901,7 +901,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         /* padding to get both jump fields on the same line. Can be replaced with content */
         attackerPanel.add(new JLabel(" "));
         attackerPanel.add(new JLabel(" "));
-        
+
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("Min Jump:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html>Min number of jump points<br>that any unit in the attackers army can have<br>to participate in this operation</html>");
@@ -961,13 +961,13 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseTextField.setToolTipText("<html>Min BV difference between the highest and lowest counted units.</html>");
         BaseTextField.setName("MinAttackerUnitBVSpread");
         attackerPanel.add(BaseTextField);
-        
+
         attackerPanel.add(new JLabel("Use % BV Spread", SwingConstants.TRAILING));
         BaseCheckBox = new JCheckBox();
         BaseCheckBox.setToolTipText("<html>BV Spread will be a % of the army's BV.<br>Float value, so 0.2 = 20%</html>");
         BaseCheckBox.setName("AttackerUsePercentageBVSpread");
         attackerPanel.add(BaseCheckBox);
-        
+
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("BV Spread %", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("% of army's BV allowed");
@@ -1033,31 +1033,31 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseTextField.setToolTipText("<html>Maximum percent of an army that may be Clantech</html>");
         BaseTextField.setName("AttackerMaxClanEquipmentPercent");
         attackerPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("Min Support Units:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("Minimum number of support units");
         BaseTextField.setName("MinAttackerSupportUnits");
         attackerPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("Max Support Units:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("Maximum number of support units");
         BaseTextField.setName("MaxAttackerSupportUnits");
-        attackerPanel.add(BaseTextField);        
+        attackerPanel.add(BaseTextField);
 
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("Min Non-Support Units:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("Minimum number of non-support units");
         BaseTextField.setName("MinAttackerNonSupportUnits");
         attackerPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("Max Non-Support Units:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("Maximum number of non-support units");
         BaseTextField.setName("MaxAttackerNonSupportUnits");
-        attackerPanel.add(BaseTextField); 
-        
+        attackerPanel.add(BaseTextField);
+
         SpringLayoutHelper.setupSpringGrid(attackerPanel, 4);
 
         BaseCheckBox = new JCheckBox("Allow Meks");
@@ -1178,13 +1178,13 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         /* padding to get both jump fields on the same line. Can be replaced with content */
         defenderPanel.add(new JLabel(" "));
         defenderPanel.add(new JLabel(" "));
-        
+
         BaseTextField = new JTextField(5);
         defenderPanel.add(new JLabel("Min Jump:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html>Min number of jump points<br>that any unit in the defenders army can have<br>to participate in this operation</html>");
         BaseTextField.setName("MinDefenderJump");
         defenderPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         defenderPanel.add(new JLabel("Max Jump:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html>Max number of jump points<br>that any unit in the defenders army can have<br>to participate in this operation</html>");
@@ -1244,7 +1244,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseCheckBox.setToolTipText("BV Spread will be a % of the army's BV");
         BaseCheckBox.setName("DefenderUsePercentBVSpread");
         defenderPanel.add(BaseCheckBox);
-        
+
         BaseTextField = new JTextField(5);
         defenderPanel.add(new JLabel("BV Spread %", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("% of army's BV allowed.  Float value, so 0.20 = 20%");
@@ -1310,13 +1310,13 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseTextField.setToolTipText("<html>Maximum percent of an army that may be Clantech</html>");
         BaseTextField.setName("DefenderMaxClanEquipmentPercent");
         defenderPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         defenderPanel.add(new JLabel("Min Support Units:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("Minimum number of support units");
         BaseTextField.setName("MinDefenderSupportUnits");
         defenderPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         defenderPanel.add(new JLabel("Max Support Units:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("Maximum number of support units");
@@ -1328,13 +1328,13 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseTextField.setToolTipText("Minimum number of non-support units");
         BaseTextField.setName("MinDefenderNonSupportUnits");
         defenderPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         defenderPanel.add(new JLabel("Max Non-Support Units:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("Maximum number of non-support units");
         BaseTextField.setName("MaxDefenderNonSupportUnits");
         defenderPanel.add(BaseTextField);
-        
+
         SpringLayoutHelper.setupSpringGrid(defenderPanel, 4);
 
         attackerBox.add(new JLabel("Attacker"));
@@ -2260,13 +2260,13 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseTextField.setToolTipText("<html>1 Exp added to Base pay for every complete<br>increment. ie - if 2, will add BV/2 Exp to pay</html>");
         BaseTextField.setName("AttackerPayBVforExperience");
         attackerPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("RP per BV:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html>1 RP added to Base pay for every complete<br>increment. ie - if 2, will add BV/2 RP to pay</html>");
         BaseTextField.setName("AttackerPayBVforRP");
         attackerPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("Win Money:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("flat boost to pay for winning attack");
@@ -2382,7 +2382,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseTextField.setToolTipText("<html>1 RP added to Base pay for every complete<br>increment. ie - if 2, will add BV/2 RP to pay</html>");
         BaseTextField.setName("DefenderPayBVforRP");
         defenderPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         defenderPanel.add(new JLabel("Win Money:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("flat boost to pay for winning defend");
@@ -2545,16 +2545,16 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseTextField.setToolTipText("<html><html><b>NOTE:</b>This is an Integer Field. 25 = 25%<br>Chance, out of 100, that a legged/gyroed unit is utterly destroyed while trying to be salvaged. Default 0</html>");
         BaseTextField.setName("ForcedSalvageUnitsScrappedChance");
         fleeingPanel.add(BaseTextField);
-        
+
         JPanel separateSalvagePanel = new JPanel();
         separateSalvagePanel.setLayout(new BoxLayout(separateSalvagePanel, BoxLayout.Y_AXIS));
         JPanel checkBoxPanel = new JPanel();
         JPanel salvageOptionsPanel = new JPanel();
-        
+
         BaseCheckBox = new JCheckBox("Use Separate Legged/Gyroed Salvage Chance");
         BaseCheckBox.setName("UseSeparateLegAndGyroScrappedChance");
         checkBoxPanel.add(BaseCheckBox);
-        
+
         BaseTextField = new JTextField(5);
         salvageOptionsPanel.add(new JLabel("Gyroed Units Scrapped:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html><b>NOTE:</b>This is an Integer Field. 25 = 25%<br> Chance, out of 100, that a gyroed unit is utterly destroyed while trying to be salvaged.  Default 0</html>");
@@ -2562,7 +2562,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         salvageOptionsPanel.add(BaseTextField);
 
         salvageOptionsPanel.add(new JLabel("    "));
-        
+
         BaseTextField = new JTextField(5);
         salvageOptionsPanel.add(new JLabel("Legged Units Scrapped:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html><b>NOTE:</b>This is an Integer Field. 25 = 25%<br> Chance, out of 100, that a legged unit is utterly destroyed while trying to be salvaged.  Default 0</html>");
@@ -2571,7 +2571,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
 
         separateSalvagePanel.add(checkBoxPanel);
         separateSalvagePanel.add(salvageOptionsPanel);
-        
+
         SpringLayoutHelper.setupSpringGrid(fleeingPanel, 4);
         fleeingBox.add(new JLabel("Fleeing Penalties"));
         fleeingBox.add(fleeingPanel);
@@ -2942,7 +2942,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseTextField.setToolTipText("units to take an additional factory unit (confusing!)");
         BaseTextField.setName("AttackerFactoryUnitsUnitAdjustment");
         attackerPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("Target Op Mod:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html>Op Adjustments are used to increase or decrease victory THRESHOLDS for<br>targetted long-ops. Not recommended for individual games. Generally, better<br>for use as a long-op (w/ fewer games than target) set up as a counter-assault<br>or spoling attack.</html>");
@@ -2954,13 +2954,13 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseTextField.setToolTipText("<html>Maximum number of units to award to a player<br>instead of the faction</html>");
         BaseTextField.setName("AttackerAwardFactoryUnitsTakenToPlayerMax");
         attackerPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("Max award BV percent:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html>Maximum BV of single unit to award to a player<br>based on a percentage of the BV of<br>their initial force.<br><br>This stops players from recovering a WarShip<br>with a single ASF.</html>");
         BaseTextField.setName("AttackerAwardFactoryUnitsTakenToPlayerBVPercent");
         attackerPanel.add(BaseTextField);
-        
+
         BaseTextField = new JTextField(5);
         attackerPanel.add(new JLabel("Max total award BV percent:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html>Maximum total BV of units to award to a player<br>based on a percentage of the BV of<br>their initial force.</html>");
@@ -2969,42 +2969,42 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
 
         SpringLayoutHelper.setupSpringGrid(attackerPanel, 4);
         // *** START new valid factory panel
-        JPanel validAttackerFactoryPanel = new JPanel(new SpringLayout());       
-        
+        JPanel validAttackerFactoryPanel = new JPanel(new SpringLayout());
+
         validAttackerFactoryPanel.add(new JLabel("Valid factory types to capture from:"));
         BaseCheckBox = new JCheckBox("Mek Factories");
         BaseCheckBox.setToolTipText("<html>Only capture components and force produce units from Mek factories</html>");
         BaseCheckBox.setName("ForceProduceAndCaptureMeks");
         validAttackerFactoryPanel.add(BaseCheckBox);
-        
+
         BaseCheckBox = new JCheckBox("Vee Factories");
         BaseCheckBox.setToolTipText("<html>Only capture components and force produce units from Vee factories</html>");
         BaseCheckBox.setName("ForceProduceAndCaptureVees");
         validAttackerFactoryPanel.add(BaseCheckBox);
-        
+
         BaseCheckBox = new JCheckBox("Inf Factories");
         BaseCheckBox.setToolTipText("<html>Only capture components and force produce units from Inf factories</html>");
         BaseCheckBox.setName("ForceProduceAndCaptureInfs");
         validAttackerFactoryPanel.add(BaseCheckBox);
-        
+
         BaseCheckBox = new JCheckBox("BA Factories");
         BaseCheckBox.setToolTipText("<html>Only capture components and force produce units from BA factories</html>");
         BaseCheckBox.setName("ForceProduceAndCaptureBAs");
         validAttackerFactoryPanel.add(BaseCheckBox);
-        
+
         BaseCheckBox = new JCheckBox("Aero Factories");
         BaseCheckBox.setToolTipText("<html>Only capture components and force produce units from Aero factories</html>");
         BaseCheckBox.setName("ForceProduceAndCaptureAeros");
         validAttackerFactoryPanel.add(BaseCheckBox);
-        
+
         BaseCheckBox = new JCheckBox("Proto Factories");
         BaseCheckBox.setToolTipText("<html>Only capture components and force produce units from Proto factories</html>");
         BaseCheckBox.setName("ForceProduceAndCaptureProtos");
         validAttackerFactoryPanel.add(BaseCheckBox);
-        
-        SpringLayoutHelper.setupSpringGrid(validAttackerFactoryPanel, 1);        
+
+        SpringLayoutHelper.setupSpringGrid(validAttackerFactoryPanel, 1);
         // *** END new valid factory panel
-        
+
         BaseTextField = new JTextField(5);
         defenderPanel.add(new JLabel("Base Conquer:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("Base points of a planet taken for winning defender");
@@ -3159,7 +3159,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseCheckBox.setToolTipText("<html>If enabled then the attacker can target a planet without claimed land and will automatically capture CP.</html>");
         BaseCheckBox.setName("AttackerAllowAgainstUnclaimedLand");
         attackerBox.add(BaseCheckBox);
-        
+
         attackerBox.add(attackerPanel);
 
         attackerBox.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -3173,7 +3173,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         capsBox.add(capsPanel);
 
         attackerBox.add(validAttackerFactoryPanel);
-        
+
         metaBox.add(attackerBox);
         metaBox.add(defenderBox);
 
@@ -3620,6 +3620,17 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         BaseCheckBox.setName("UseBVRatioPercent");
         checkBoxBox.add(BaseCheckBox);
 
+        BaseCheckBox = new JCheckBox("Use Game Turn Limit?");
+        BaseCheckBox.setToolTipText("<html>If this is turned on UseGameTurnLimit field will be sent to MM.</html>");
+        BaseCheckBox.setName("UseGameTurnLimit");
+        checkBoxBox.add(BaseCheckBox);
+
+        BaseCheckBox = new JCheckBox("Use Kill Count?");
+        BaseCheckBox.setToolTipText("<html>If this is turned on UseKillCount field will be sent to MM.</html>");
+        BaseCheckBox.setName("UseKillCount");
+        checkBoxBox.add(BaseCheckBox);
+
+
         BaseCheckBox = new JCheckBox("Use Unit Commanders?");
         BaseCheckBox.setToolTipText("<html>If this is turned on UseUnitCommanders field will be sent to MM.</html>");
         BaseCheckBox.setName("UseUnitCommander");
@@ -3641,6 +3652,18 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         victoryParamsPanel.add(new JLabel("BV Ratio Percent:", SwingConstants.TRAILING));
         BaseTextField.setToolTipText("<html>Friendly forces outnumber enemy forces by a percentage ratio.<br>Measured by current BV.<br>E.G. 300 means you have 3x the surviving BV of the enemy.</html>");
         BaseTextField.setName("BVRatioPercent");
+        victoryParamsPanel.add(BaseTextField);
+
+        BaseTextField = new JTextField(5);
+        victoryParamsPanel.add(new JLabel("Game Turn Limit:", SwingConstants.TRAILING));
+        BaseTextField.setToolTipText("<html>Limit of game turns.</html>");
+        BaseTextField.setName("GameTurnLimit");
+        victoryParamsPanel.add(BaseTextField);
+
+        BaseTextField = new JTextField(5);
+        victoryParamsPanel.add(new JLabel("Game Kill Count:", SwingConstants.TRAILING));
+        BaseTextField.setToolTipText("<html>Number of kills needed to achieve victory.</html>");
+        BaseTextField.setName("KillCount");
         victoryParamsPanel.add(BaseTextField);
 
         BaseTextField = new JTextField(5);
@@ -3925,7 +3948,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         masterBox.add(mapParamsPanel);
         masterBox.add(mapParamsPanel2);
         deploymentPanel.add(masterBox);
-        
+
         /*
          * Set up Player Flag panel
          */
@@ -3939,7 +3962,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         //wfPanel.setBorder(BorderFactory.createEtchedBorder());
         JPanel lfPanel = new JPanel(new VerticalLayout());
         //lfPanel.setBorder(BorderFactory.createEtchedBorder());
-        
+
         afTable = new FlagTable(this, FlagSet.FLAGTYPE_PLAYER);
         afTable.setName("AttackerFlags");
         dfTable = new FlagTable(this, FlagSet.FLAGTYPE_PLAYER);
@@ -3948,7 +3971,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         wfTable.setName("WinnerFlags");
         lfTable = new FlagTable(this, FlagSet.FLAGTYPE_RESULTS);
         lfTable.setName("LoserFlags");
-        
+
         afPanel.add(new JLabel("Required Attacker Flags"));
         afPanel.add(afTable.getTableHeader());
         afPanel.add(afTable);
@@ -3961,32 +3984,32 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         lfPanel.add(new JLabel("Loser Flags to Set"));
         lfPanel.add(lfTable.getTableHeader());
         lfPanel.add(lfTable);
-        
+
         JPanel mainFlagPanel = new JPanel();
-        
+
         //mainFlagPanel.setLayout(new VerticalLayout());
         mainFlagPanel.setLayout(new GridLayout(2,2,10,10));
-        
+
         //mainFlagPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         mainFlagPanel.add(afPanel);
         mainFlagPanel.add(dfPanel);
         mainFlagPanel.add(wfPanel);
         mainFlagPanel.add(lfPanel);
-        
+
         flagsPanel.add(mainFlagPanel);
-        
+
         // Unit Ratios Tab
         unitRatiosPanel.setLayout(new VerticalLayout());
         JPanel aeroRatioPanel = new JPanel();
         JPanel supportRatioPanel = new JPanel();
         JPanel attackerRatioPanel = new JPanel();
         JPanel defenderRatioPanel = new JPanel();
-        
+
         BaseCheckBox = new JCheckBox("Count Support Aero");
         BaseCheckBox.setName("CountSupportUnitsInAeroRatio");
         BaseCheckBox.setToolTipText("<html>If checked, support Aero will count as normal aero for purposes of the ratio<br>If unchecked, support aero will not count toward the ratio</html>");
         supportRatioPanel.add(BaseCheckBox);
-        
+
         attackerRatioPanel.setLayout(new VerticalLayout());
         attackerRatioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Attacker"));
         BaseCheckBox = new JCheckBox("Enforce Attacker Ratio");
@@ -4005,7 +4028,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         minPanel.add(new JLabel("Min aero percent:"));
         minPanel.add(BaseTextField);
         attackerRatioPanel.add(minPanel);
-        
+
         defenderRatioPanel.setLayout(new VerticalLayout());
         defenderRatioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Defender"));
         BaseCheckBox = new JCheckBox("Enforce Defender Ratio");
@@ -4024,16 +4047,16 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         minPanel.add(new JLabel("Min aero percent:"));
         minPanel.add(BaseTextField);
         defenderRatioPanel.add(minPanel);
-        
-        
+
+
         aeroRatioPanel.add(supportRatioPanel);
         aeroRatioPanel.add(attackerRatioPanel);
         aeroRatioPanel.add(defenderRatioPanel);
-        
+
         aeroRatioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Aero Ratios"));
-        
+
         unitRatiosPanel.add(aeroRatioPanel);
-        
+
         ConfigPane.addTab("Buildings", null, buildingsPanel, "Set up buildings for operations.");
         ConfigPane.addTab("Chicken/Leech", null, chickenLeechPanel, "<html>Set up what happens to those that flee and<br>those that don't pay attention to an attack.</html>");
         ConfigPane.addTab("Deployment", null, deploymentPanel, "Set Army Deployment Chances.");
@@ -4052,7 +4075,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         ConfigPane.addTab("Victory Conditions", null, victoryPanel, "Victory Conditions For MegaMek");
         ConfigPane.addTab("Player Flags", null, flagsPanel, "Player Flag settings");
         ConfigPane.addTab("Unit Ratios", null, unitRatiosPanel, "Limit access to op by unit ratios");
-        
+
 
         // Remove the old configpane and add the newly created one!
         pane.remove(0);
@@ -4120,7 +4143,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         dfTable.clear();
         wfTable.clear();
         lfTable.clear();
-        
+
         try {
             FileInputStream fis = new FileInputStream(shortOP);
             BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
@@ -4147,7 +4170,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
             findAndPopulateTextAndCheckBoxes(panel, opValues);
 
         }
-      
+
 
 
     }
@@ -4176,7 +4199,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
 
     public void keyTyped(KeyEvent arg0) {
 
-        if (arg0.getKeyCode() >= 32 && arg0.getKeyCode() <= 126) {
+        if ((arg0.getKeyCode() >= 32) && (arg0.getKeyCode() <= 126)) {
             changesMade = true;
             if (getTitle().indexOf("*") == -1) {
                 setTitle(getTitle() + "*");
@@ -4185,7 +4208,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
     }
 
     public void keyPressed(KeyEvent arg0) {
-        if (arg0.getKeyCode() >= 32 && arg0.getKeyCode() <= 126) {
+        if ((arg0.getKeyCode() >= 32) && (arg0.getKeyCode() <= 126)) {
             changesMade = true;
             if (getTitle().indexOf("*") == -1) {
                 setTitle(getTitle() + "*");
@@ -4194,7 +4217,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
     }
 
     public void keyReleased(KeyEvent arg0) {
-        if (arg0.getKeyCode() >= 32 && arg0.getKeyCode() <= 126) {
+        if ((arg0.getKeyCode() >= 32) && (arg0.getKeyCode() <= 126)) {
             changesMade = true;
             if (getTitle().indexOf("*") == -1) {
                 setTitle(getTitle() + "*");
@@ -4256,7 +4279,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
 
             } else if (field instanceof FlagTable) {
             	FlagTable table = (FlagTable) field;
-            	
+
             	key = table.getName();
             	table.importFlagString(defaultOperationInfo.getDefault(key));
             }// else continue
@@ -4316,13 +4339,13 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
             } else if (field instanceof FlagTable) {
             	FlagTable table = (FlagTable) field;
             	key = table.getName();
-            	
+
             	if (key == null) {
             		System.err.println("Null Flagtable");
             		continue;
             	}
             	table.importFlagString(OperationInfo.getV(key));
-            	
+
             } // else continue
         }
     }
@@ -4349,12 +4372,12 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
                 value = textBox.getText();
                 key = textBox.getName();
 
-                if (key == null || value == null) {
+                if ((key == null) || (value == null)) {
                     continue;
                 }
 
                 // only save to file if the key does not match default.
-                if (!value.equals(defaultOperationInfo.getDefault(key)) && value.length() > 0) {
+                if (!value.equals(defaultOperationInfo.getDefault(key)) && (value.length() > 0)) {
                     p.println(key + "=" + value);
                 }
             } else if (field instanceof JCheckBox) {
@@ -4363,7 +4386,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
                 value = Boolean.toString(checkBox.isSelected());
                 key = checkBox.getName();
 
-                if (key == null || value == null) {
+                if ((key == null) || (value == null)) {
                     continue;
                 }
                 if (Boolean.parseBoolean(value) != Boolean.parseBoolean(defaultOperationInfo.getDefault(key))) {
@@ -4375,7 +4398,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
                 value = Integer.toString(combo.getSelectedIndex());
                 key = combo.getName();
 
-                if (key == null || value == null) {
+                if ((key == null) || (value == null)) {
                     continue;
                 }
                 if (Integer.parseInt(value) != Integer.parseInt(defaultOperationInfo.getDefault(key))) {
