@@ -1106,7 +1106,7 @@ public class ShortOperation implements Comparable<Object> {
             gameOptions.append(true);
 
             boolean useWeather = !CampaignMain.cm.getBooleanConfig("DisableWeather");
-            
+
             // set the temp gravity and vacuum from the terrain configs
             if (useWeather) {
             	aTerrain = playContinent.getAdvancedTerrain().clone();
@@ -1238,9 +1238,9 @@ public class ShortOperation implements Comparable<Object> {
 
 
             	aTerrain.setTemperature(tempToSet);
-            	
+
             }
-            
+
             PlanetaryConditions pc = new PlanetaryConditions();
 
             pc.setAtmosphere(aTerrain.getAtmosphere());
@@ -1248,7 +1248,7 @@ public class ShortOperation implements Comparable<Object> {
             pc.setLight(aTerrain.getLightConditions());
             pc.setWindStrength(aTerrain.getWindStrength());
             pc.setWeather(aTerrain.getWeatherConditions());
-            
+
             intelWeather = aTerrain.getWeatherConditions();
             intelWind = aTerrain.getWindStrength();
         	intelTemp = aTerrain.getTemperature();
@@ -1267,7 +1267,7 @@ public class ShortOperation implements Comparable<Object> {
 
             // Check if this operation is using victory conditions. If so then
             // Send the pertinate data.
-            if (((o.getIntValue("NumberOfVictoryConditions") > 0) && (o.getBooleanValue("UseDestroyEnemyBV"))) || o.getBooleanValue("UseBVRatioPercent") || o.getBooleanValue("UseUnitCommander")) {
+            if (((o.getIntValue("NumberOfVictoryConditions") > 0) && (o.getBooleanValue("UseDestroyEnemyBV"))) || o.getBooleanValue("UseBVRatioPercent") || o.getBooleanValue("UseUnitCommander") || o.getBooleanValue("UseGameTurnLimit") || o.getBooleanValue("UseKillCount")) {
                 gameOptions.append("|check_victory|true");
                 gameOptions.append("|achieve_conditions|");
                 gameOptions.append(o.getValue("NumberOfVictoryConditions"));
@@ -1281,8 +1281,16 @@ public class ShortOperation implements Comparable<Object> {
                 gameOptions.append(o.getValue("BVRatioPercent"));
                 gameOptions.append("|commander_killed|");
                 gameOptions.append(o.getValue("UseUnitCommander"));
+                gameOptions.append("|use_game_turn_limit|");
+                gameOptions.append(o.getValue("UseGameTurnLimit"));
+                gameOptions.append("|game_turn_limit|");
+                gameOptions.append(o.getValue("GameTurnLimit"));
+                gameOptions.append("|use_kill_count|");
+                gameOptions.append(o.getValue("UseKillCount"));
+                gameOptions.append("|game_kill_count|");
+                gameOptions.append(o.getValue("KillCount"));
             } else {
-                gameOptions.append("|check_victory|true|use_bv_destroyed|false|use_bv_ratio|false");
+                gameOptions.append("|check_victory|true|use_bv_destroyed|false|use_bv_ratio|false|use_game_turn_limit|false|use_kill_count|false");
             }
 
             // if your using bots then turn off exclusive db deployment.
