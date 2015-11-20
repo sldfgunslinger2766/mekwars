@@ -1,5 +1,7 @@
 VERSION HISTORY:
 ----------------
+- Reverted new MM 
+  - options are not loading, and we need to troubleshoot that.
 + Added new victory conditions to op editor and actual operations
 R Released Client v0.4.0.5
 + Bug: MinOwnIBD sent but client was never configured to receive
