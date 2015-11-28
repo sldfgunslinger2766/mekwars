@@ -1,5 +1,12 @@
 VERSION HISTORY:
 ----------------
+0.4.0.x
++ Released new Client v0.4.0.6, Server v0.4.0.11
++ New MM v0.41.12-20151128
++ Fixed issue where all options of type String were being detected as Boolean,
+    causing MM to fail
++ Fixed missing defaults for UseKillCount, GameTurnLimit
++ Added missing MM images to client-dist folder
 - Reverted new MM 
   - options are not loading, and we need to troubleshoot that.
 + Added new victory conditions to op editor and actual operations
