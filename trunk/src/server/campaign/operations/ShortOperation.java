@@ -1304,8 +1304,8 @@ public class ShortOperation implements Comparable<Object> {
             // If Server is not using Force Size mod then turn off the option In
             // MM
             // This will allow for closer BV's between MW and MM
-            gameOptions.append("|no_force_size_mod|");
-            gameOptions.append(!CampaignMain.cm.getBooleanConfig("UseOperationsRule"));
+            //gameOptions.append("|no_force_size_mod|");
+            //gameOptions.append(!CampaignMain.cm.getBooleanConfig("UseOperationsRule"));
             gameOptions.append("|year|");
             gameOptions.append(CampaignMain.cm.getIntegerConfig("CampaignYear"));
 

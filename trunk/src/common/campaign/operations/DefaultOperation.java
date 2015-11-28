@@ -1449,6 +1449,10 @@ public class DefaultOperation {
         operationsDefaults.put("UseUnitCommander", "false");
         operationsDefaults.put("MinimumUnitCommanders", "1");
         operationsDefaults.put("MaximumUnitCommanders", "1");
+        operationsDefaults.put("UseGameTurnLimit", "false");
+        operationsDefaults.put("GameTurnLimit", "0");
+        operationsDefaults.put("UseKillCount", "false");
+        operationsDefaults.put("KillCount", "0");
 
         // Deployment
         operationsDefaults.put("RandomDeployment", "false");

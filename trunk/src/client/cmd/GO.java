@@ -21,6 +21,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+import common.CampaignData;
+
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
 import megamek.common.options.Option;
@@ -56,7 +58,6 @@ public class GO extends Command {
 			String option = st.nextToken();
             String value = st.nextToken();
             
-            
             try{
                 gameOption = new Option(new GameOptions(),option,Integer.parseInt(value));
                 optionsHash.put(gameOption.getName(),gameOption);
@@ -66,12 +67,17 @@ public class GO extends Command {
                     optionsHash.put(gameOption.getName(),gameOption);
                 }catch (Exception ex1){
                     try{
-                        gameOption = new Option(new GameOptions(),option,Boolean.parseBoolean(value));
-                        optionsHash.put(gameOption.getName(),gameOption);
+                    	// This was always detecting as boolean - strings were returning false
+                    	if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+                    		gameOption = new Option(new GameOptions(), option, Boolean.parseBoolean(value));
+                            optionsHash.put(gameOption.getName(),gameOption);
+                    	} else {
+                    		gameOption = new Option(new GameOptions(),option,value);
+                            optionsHash.put(gameOption.getName(),gameOption);
+                    	}
                     }catch (Exception ex2){
-                        gameOption = new Option(new GameOptions(),option,value);
-                        optionsHash.put(gameOption.getName(),gameOption);
-                    }
+                    		CampaignData.mwlog.infoLog("Uknown format: " + option + " :: " + value);
+                        }
                 }
             }
 		}//end while
