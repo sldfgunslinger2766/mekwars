@@ -133,6 +133,7 @@ public class CMainFrame extends JFrame {
     JMenuItem jMenuCampaignHouseStatus = new JMenuItem();
     JMenuItem jMenuCampaignCheckAttack = new JMenuItem();
     JMenuItem jMenuCampaignRange = new JMenuItem();
+    JMenuItem jMenuFindContestedPlanets = new JMenuItem(); //BarukKhazad 20151129
 
     JMenuItem jMenuCampaignTransferUnit = new JMenuItem();
     JMenuItem jMenuCampaignTransferMoney = new JMenuItem();
@@ -721,6 +722,15 @@ public class CMainFrame extends JFrame {
                 jMenuCommanderRange_actionPerformed();
             }
         });
+        
+        //BarukKhazad 20151129 - start 1
+        jMenuFindContestedPlanets.setText("Find Contested Planets");
+        jMenuFindContestedPlanets.setMnemonic('Z');
+        jMenuFindContestedPlanets.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jMenuFindContestedPlanets_actionPerformed();
+            }
+        });  //BarukKhazad 20151129 - end 1
 
         jMenuCampaignTransferUnit.setText("Transfer Unit");
         jMenuCampaignTransferUnit.setMnemonic('U');
@@ -1193,6 +1203,7 @@ public class CMainFrame extends JFrame {
         // front-line submenu
         jMenuCampaignSubAttack.add(jMenuCampaignCheckAttack);
         jMenuCampaignSubAttack.add(jMenuCampaignRange);
+        jMenuCampaignSubAttack.add(jMenuFindContestedPlanets); //BarukKhazad 20151129
 
         // send submenu
         jMenuCampaignSubTransfer.add(jMenuCampaignTransferMoney);
@@ -1463,6 +1474,31 @@ public class CMainFrame extends JFrame {
         }
         mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c range#" + range + "#" + faction);
     }
+
+    public void jMenuFindContestedPlanets_actionPerformed() { //BarukKhazad 20151129 - start 2 
+    	String h1=thePlayer.getHouse();
+    	String h2="";
+    	String Perc = "20";
+        Perc = (String)JOptionPane.showInputDialog(getContentPane(),(Object)"Minimum Attacker Planet Percentage? (1 to 100)","",  JOptionPane.PLAIN_MESSAGE, null, null, Perc);
+        if ((Perc == null) || (Perc.length() < 1)) {
+            return;
+        } 
+
+        HouseNameDialog factionDialog = new HouseNameDialog(mwclient, "Target Faction", false, false);
+        factionDialog.setVisible(true);
+        h2 = factionDialog.getHouseName();
+        factionDialog.dispose();
+
+        if ((h2 == null) || (h2.length() < 1)) {
+            return;
+        }
+        if (h1 == h2) {
+            mwclient.addToChat("That is your faction. Target an enemy faction.");
+            return;
+        }
+        //mwclient.addToChat("findcp " + h1 + "#" + h2 + "#" + Perc);
+        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "findcp " + h1 + "#" + h2 + "#" + Perc);
+    }  //BarukKhazad 20151129 - end 2
 
     public void jMenuCommanderTransferMoney_actionPerformed(String name) {
 

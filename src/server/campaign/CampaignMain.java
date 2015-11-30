@@ -1592,6 +1592,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("FLF", new FactionLeaderFluffCommand());
         Commands.put("FACTIONLEADERMUTE", new FactionLeaderMuteCommand());
         Commands.put("FLM", new FactionLeaderMuteCommand());
+        Commands.put("FINDCP", new FindContestedPlanetsCommand()); //BarukKahzad 20151129
         Commands.put("FIRETECHS", new FireTechsCommand());
         Commands.put("FIXAMMO", new FixAmmoCommand());
         Commands.put("FLUFF", new FluffCommand());
