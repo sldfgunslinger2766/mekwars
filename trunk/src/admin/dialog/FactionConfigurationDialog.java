@@ -3456,7 +3456,7 @@ public final class FactionConfigurationDialog implements ActionListener {
 
         baseTextField = new JTextField(5);
         prodMiscPanel.add(new JLabel("Auto Factory Refresh:", SwingConstants.TRAILING));
-        baseTextField.setName("MinPlanetOwnerShip");
+        baseTextField.setName("FactoryRefreshPoints");
         prodMiscPanel.add(baseTextField);
 
         //Check Box Spring
