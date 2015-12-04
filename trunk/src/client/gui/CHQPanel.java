@@ -256,7 +256,13 @@ public class CHQPanel extends JPanel {
 
     // try to remove all armies
     private void btnRemoveAllArmiesActionPerformed(ActionEvent evt) {
-
+    	//no armies... don't bother   		//Baruk Khazad! 20151204 - start block 1
+        if (mwclient.getPlayer().getArmies().size() == 0) 
+        	return;
+        //get confirm
+        int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to remove all of your armies?", "Remove all armies?", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.NO_OPTION) 
+          	return;		//Baruk Khazad! 20151204 - end block 1
         // only remove all if he's logged in, not fighting/active/logout/discon
         if (mwclient.getMyStatus() != MWClient.STATUS_RESERVE) {
             return;
