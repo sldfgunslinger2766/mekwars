@@ -354,13 +354,13 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 
                 //boolean bTechMatch = TechConstants.isLegal(entity.getTechLevel(), atCheck.getTechLevel(year), true);// (entity.getTechLevel()
                 
-                CampaignData.mwlog.debugLog("Checking " + atCheck.getInternalName());
-                CampaignData.mwlog.debugLog("BtechMatch: " + bTechMatch);
-                CampaignData.mwlog.debugLog("Year: " + year);
-                CampaignData.mwlog.debugLog("Legal Level: " + legalLevel);
-                CampaignData.mwlog.debugLog("Ammo Tech Level: " + atCheck.getTechLevel(year));
-                CampaignData.mwlog.debugLog("Game Tech Level: " + mmClient.getGame().getOptions().stringOption("techlevel"));
-                
+//                CampaignData.mwlog.debugLog("Checking " + atCheck.getInternalName());
+//                CampaignData.mwlog.debugLog("BtechMatch: " + bTechMatch);
+//                CampaignData.mwlog.debugLog("Year: " + year);
+//                CampaignData.mwlog.debugLog("Legal Level: " + legalLevel);
+//                CampaignData.mwlog.debugLog("Ammo Tech Level: " + atCheck.getTechLevel(year));
+//                CampaignData.mwlog.debugLog("Game Tech Level: " + mmClient.getGame().getOptions().stringOption("techlevel"));
+               
                 // ==
                 // atCheck.getTechLevel());
                 String munition = Long.toString(atCheck.getMunitionType());
@@ -369,18 +369,18 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 // CampaignData.mwlog.errLog("Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
                 // check banned ammo
                 if (mwclient.getData().getServerBannedAmmo().containsKey(munition) || faction.getBannedAmmo().containsKey(munition) || ((mwclient.getAmmoCost(atCheck.getInternalName()) < 0) && !usingCrits)) {
-                	if(mwclient.getData().getServerBannedAmmo().containsKey(munition))
-                		CampaignData.mwlog.debugLog("Banned at the server level");
-                	if(faction.getBannedAmmo().containsKey(munition))
-                		CampaignData.mwlog.debugLog("Banned at the Faction level");
-                	CampaignData.mwlog.debugLog("Ammo cost: " + mwclient.getAmmoCost(atCheck.getInternalName()));
+                	//if(mwclient.getData().getServerBannedAmmo().containsKey(munition))
+                		//CampaignData.mwlog.debugLog("Banned at the server level");
+                	//if(faction.getBannedAmmo().containsKey(munition))
+                		//CampaignData.mwlog.debugLog("Banned at the Faction level");
+                	//CampaignData.mwlog.debugLog("Ammo cost: " + mwclient.getAmmoCost(atCheck.getInternalName()));
                 	continue;
                 }
 
                 if (usingCrits && (mwclient.getPlayer().getPartsCache().getPartsCritCount(atCheck.getInternalName()) < 1) && !ammoAlreadyLoaded(atCheck) && (// !mwclient.getPlayer().getAutoReorder()
                         // &&
                         mwclient.getBlackMarketEquipmentList().get(atCheck.getInternalName()) == null)) {
-                	CampaignData.mwlog.debugLog("Player out of ammo.");
+                	//CampaignData.mwlog.debugLog("Player out of ammo.");
                 	continue;
                 }
 
@@ -390,17 +390,17 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 // need to show up in this display.
                 if (!bTechMatch && ((entity.getTechLevel() == TechConstants.T_IS_ADVANCED) || (entity.getTechLevel() == TechConstants.T_IS_EXPERIMENTAL)) && (atCheck.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)) {
                 	bTechMatch = true;
-                	CampaignData.mwlog.debugLog("bTechMatch now true, because all L2 units can use L1 ammo");
+                	//CampaignData.mwlog.debugLog("bTechMatch now true, because all L2 units can use L1 ammo");
                 }
 
                 // if is_eq_limits is unchecked allow L1 units to use L2
                 // munitions
-                CampaignData.mwlog.debugLog("Entity Tech Level: " + entity.getTechLevel());
-                CampaignData.mwlog.debugLog("Ammo tech level: " + atCheck.getTechLevel(year));
-                if (!entity.isClan() && entity.getTechLevel() == TechConstants.T_INTRO_BOXSET && (atCheck.getTechLevel(year) == TechConstants.T_IS_TW_NON_BOX || atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED)) {
-                	bTechMatch = true;
-                	CampaignData.mwlog.debugLog("bTechMatch is true, because I said so");
-                }
+//                CampaignData.mwlog.debugLog("Entity Tech Level: " + entity.getTechLevel());
+//                CampaignData.mwlog.debugLog("Ammo tech level: " + atCheck.getTechLevel(year));
+//                if (!entity.isClan() && entity.getTechLevel() == TechConstants.T_INTRO_BOXSET && (atCheck.getTechLevel(year) == TechConstants.T_IS_TW_NON_BOX || atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED)) {
+//                	bTechMatch = true;
+//                	CampaignData.mwlog.debugLog("bTechMatch is true, because I said so");
+//                }
 
                 // Possibly allow level 3 ammos, possibly not.
 //                if ((((atCheck.getTechLevel(year) == TechConstants.T_IS_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED) || (atCheck.getTechLevel(year) == TechConstants.T_IS_UNOFFICIAL)) && (entity.getTechLevel() != TechConstants.T_IS_EXPERIMENTAL) && (entity.getTechLevel() != TechConstants.T_IS_ADVANCED)) || (((atCheck.getTechLevel(year) == TechConstants.T_CLAN_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_ADVANCED) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_UNOFFICIAL)) && (entity.getTechLevel() != TechConstants.T_CLAN_EXPERIMENTAL) && (entity.getTechLevel() != TechConstants.T_CLAN_ADVANCED))) {
@@ -449,7 +449,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 }
 
                 // All other ammo types need to match on rack size and tech.
-                CampaignData.mwlog.debugLog("bTechMatch at end: " + bTechMatch);
+                //CampaignData.mwlog.debugLog("bTechMatch at end: " + bTechMatch);
                 
                 if (bTechMatch) {
                     vTypes.addElement(atCheck);
