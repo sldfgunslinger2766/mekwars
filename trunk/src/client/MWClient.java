@@ -151,6 +151,7 @@ import com.jgoodies.looks.windows.WindowsLookAndFeel;
 import com.l2fprod.gui.plaf.skin.Skin;
 import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
 import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
+
 import common.AdvancedTerrain;
 import common.BMEquipment;
 import common.CampaignData;
@@ -182,7 +183,7 @@ public final class MWClient implements IClient, GameListener {
 
     CConfig Config;
 
-    public static final String CLIENT_VERSION = "0.4.0.6"; // change this with
+    public static final String CLIENT_VERSION = "0.4.0.7"; // change this with
 
     // all client
     // changes @Torren
@@ -3089,11 +3090,11 @@ public final class MWClient implements IClient, GameListener {
     }
 
     public double getAmmoCost(String ammo) {
-
         EquipmentType eq = EquipmentType.get(ammo);
+        
 
         if (eq == null) {
-            return -1;
+			return -1;
         }
 
         if (!getCampaign().getBlackMarketParts().containsKey(
@@ -3902,23 +3903,34 @@ public final class MWClient implements IClient, GameListener {
         while (ST.hasMoreTokens()) {
 
             BMEquipment bme = new BMEquipment();
+            boolean error = false;
+            boolean disallowed = false;
+            try {
+            	error = false;
+            	disallowed = false;
+				bme.setEquipmentInternalName(ST.nextToken());
+				bme.setAmount(Integer.parseInt(ST.nextToken()));
+				bme.setCost(Double.parseDouble(ST.nextToken()));
+				bme.setCostUp(Boolean.parseBoolean(ST.nextToken()));
 
-            bme.setEquipmentInternalName(ST.nextToken());
-            bme.setAmount(Integer.parseInt(ST.nextToken()));
-            bme.setCost(Double.parseDouble(ST.nextToken()));
-            bme.setCostUp(Boolean.parseBoolean(ST.nextToken()));
+				bme.getTech(year);
 
-            bme.getEquipmentName();
-            bme.getTech(year);
+				if (!allowTechCrossOver
+				        && !UnitUtils
+				                .isSameTech(bme.getTechLevel(), houseTechLevel)) {
+					disallowed = true;
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				CampaignData.mwlog.errLog("Exception in Parts BM");
+				CampaignData.mwlog.errLog(e.getLocalizedMessage());
+				error = true;
+			}
 
-            if (!allowTechCrossOver
-                    && !UnitUtils
-                            .isSameTech(bme.getTechLevel(), houseTechLevel)) {
-                continue;
-            }
-
-            getCampaign().getBlackMarketParts().put(
+            if(!error && !disallowed) {
+            	getCampaign().getBlackMarketParts().put(
                     bme.getEquipmentInternalName(), bme);
+            }
         }
 
         getMainFrame().getMainPanel().refreshBME();

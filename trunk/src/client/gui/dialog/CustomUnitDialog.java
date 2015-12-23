@@ -347,24 +347,19 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 boolean bTechMatch = TechConstants.isLegal(entity.getTechLevel(), atCheck.getTechLevel(year), true);// (entity.getTechLevel()
                 // ==
                 // atCheck.getTechLevel());
-CampaignData.mwlog.errLog("IsLegal (" + atCheck.getName() + "): " + bTechMatch + "  [entityTechLevel: " + entity.getTechLevel() + "Ammo TechLevel: " + atCheck.getTechLevel(year));
                 String munition = Long.toString(atCheck.getMunitionType());
                 House faction = mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse());
 
                 // CampaignData.mwlog.errLog("Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
                 // check banned ammo
                 if (mwclient.getData().getServerBannedAmmo().containsKey(munition) || faction.getBannedAmmo().containsKey(munition) || ((mwclient.getAmmoCost(atCheck.getInternalName()) < 0) && !usingCrits)) {
-                    continue;
+                	continue;
                 }
 
-                // CampaignData.mwlog.errLog("2.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
-
-                // System.err.println(atCheck.getName()+"/"+atCheck.getInternalName());
                 if (usingCrits && (mwclient.getPlayer().getPartsCache().getPartsCritCount(atCheck.getInternalName()) < 1) && !ammoAlreadyLoaded(atCheck) && (// !mwclient.getPlayer().getAutoReorder()
                         // &&
                         mwclient.getBlackMarketEquipmentList().get(atCheck.getInternalName()) == null)) {
-                    continue;
-                    // CampaignData.mwlog.errLog("3.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
+                	continue;
                 }
 
                 // allow all lvl2 IS units to use level 1 ammo
@@ -372,27 +367,22 @@ CampaignData.mwlog.errLog("IsLegal (" + atCheck.getName() + "): " + bTechMatch +
                 // because there is no special lvl1 ammo, therefore it doesn't
                 // need to show up in this display.
                 if (!bTechMatch && ((entity.getTechLevel() == TechConstants.T_IS_ADVANCED) || (entity.getTechLevel() == TechConstants.T_IS_EXPERIMENTAL)) && (atCheck.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)) {
-                    bTechMatch = true;
+                	bTechMatch = true;
                 }
 
                 // if is_eq_limits is unchecked allow L1 units to use L2
                 // munitions
                 if (!mmClient.getGame().getOptions().booleanOption("is_eq_limits") && !entity.isClan() && (atCheck.getTechLevel(year) == TechConstants.T_IS_TW_NON_BOX)) {
-                    bTechMatch = true;
+                	bTechMatch = true;
                 }
 
                 // Possibly allow level 3 ammos, possibly not.
-                if (mmClient.getGame().getOptions().booleanOption("allow_advanced_ammo") && !mmClient.getGame().getOptions().booleanOption("is_eq_limits")) {
-                    if (entity.isClan() && ((atCheck.getTechLevel(year) == TechConstants.T_CLAN_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_ADVANCED) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_UNOFFICIAL))) {
-                        bTechMatch = true;
-                    }
-                    if (!entity.isClan() && ((atCheck.getTechLevel(year) == TechConstants.T_IS_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED) || (atCheck.getTechLevel(year) == TechConstants.T_IS_UNOFFICIAL))) {
-                        bTechMatch = true;
-                    }
-                } else if ((((atCheck.getTechLevel(year) == TechConstants.T_IS_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED) || (atCheck.getTechLevel(year) == TechConstants.T_IS_UNOFFICIAL)) && (entity.getTechLevel() != TechConstants.T_IS_EXPERIMENTAL) && (entity.getTechLevel() != TechConstants.T_IS_ADVANCED)) || (((atCheck.getTechLevel(year) == TechConstants.T_CLAN_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_ADVANCED) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_UNOFFICIAL)) && (entity.getTechLevel() != TechConstants.T_CLAN_EXPERIMENTAL) && (entity.getTechLevel() != TechConstants.T_CLAN_ADVANCED))) {
-                    bTechMatch = false;
-                }
+//                if ((((atCheck.getTechLevel(year) == TechConstants.T_IS_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED) || (atCheck.getTechLevel(year) == TechConstants.T_IS_UNOFFICIAL)) && (entity.getTechLevel() != TechConstants.T_IS_EXPERIMENTAL) && (entity.getTechLevel() != TechConstants.T_IS_ADVANCED)) || (((atCheck.getTechLevel(year) == TechConstants.T_CLAN_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_ADVANCED) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_UNOFFICIAL)) && (entity.getTechLevel() != TechConstants.T_CLAN_EXPERIMENTAL) && (entity.getTechLevel() != TechConstants.T_CLAN_ADVANCED))) {
+//                    
+//                	bTechMatch = false;
+//                }
 
+                
                 // allow mixed Tech Mechs to use both IS and Clan Ammo
                 if (entity.isMixedTech()) {
                     bTechMatch = true;

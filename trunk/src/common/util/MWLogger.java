@@ -173,6 +173,15 @@ public final class MWLogger {// final - no extension of the server logger
             errLog.setUseParentHandlers(false);
             errLog.addHandler(errHandler);
 
+            debugHandler = new FileHandler(logDir.getPath() + "/debuglog", normFileSize, rotations, true);
+            debugHandler.setLevel(Level.INFO);
+            debugHandler.setFilter(null);
+            debugHandler.setEncoding("UTF8");
+            debugHandler.setFormatter(mmnetFormatter);
+            debugLog = Logger.getLogger("debugLogger");
+            debugLog.setUseParentHandlers(false);
+            debugLog.addHandler(debugHandler);
+            
             logging = true;
 
         } catch (Exception e) {

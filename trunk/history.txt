@@ -1,6 +1,9 @@
 VERSION HISTORY:
 ----------------
 0.4.0.x
++ Released new Client v0.4.0.7
++ New MM v0.41.12-MW20151223
++ Bug: NPE causing ammo costs not to load, which caused ammo types to not be loadable in units
 + Released new Client v0.4.0.6, Server v0.4.0.11
 + New MM v0.41.12-20151128
 + Fixed issue where all options of type String were being detected as Boolean,
