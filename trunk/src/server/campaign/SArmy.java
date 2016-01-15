@@ -745,7 +745,7 @@ public class SArmy extends Army {
     public void setName(String name) {
         super.setName(name);
 
-        if (name.trim().length() > 0) {
+        if (name.trim().length() >= 0) {
             CampaignMain.cm.toUser("PL|RNA|" + getID() + "#" + name, getPlayerName(), false);
         }
     }
