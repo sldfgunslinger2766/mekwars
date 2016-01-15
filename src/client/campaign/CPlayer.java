@@ -858,6 +858,9 @@ CampaignData.mwlog.infoLog("My Player Flags: " + flags.export());
             int army = TokenReader.readInt(ST);
             String name = TokenReader.readString(ST);
 
+            if (name == "-1") {
+                name = "";
+            }
             if (getArmy(army) != null) {
                 getArmy(army).setName(name);
             }
