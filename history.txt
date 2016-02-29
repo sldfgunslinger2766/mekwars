@@ -1,6 +1,7 @@
 VERSION HISTORY:
 ----------------
 0.4.0.x
++ New MM v0.41.16-MW20160229-b867f65
 + Released new Client v0.4.0.7
 + New MM v0.41.12-MW20151223
 + Bug: NPE causing ammo costs not to load, which caused ammo types to not be loadable in units
