@@ -82,6 +82,11 @@ public class ScrapCommand implements Command {
 			return;
 		}
 		
+        String strConfirm = "";
+        if (command.hasMoreTokens()) {
+            strConfirm = command.nextToken();
+        }
+        
 		SUnit m = p.getUnit(mechid);
 		if (m == null) {
 			CampaignMain.cm.toUser("AM:Could not find a unit with the given ID.", Username, true);
@@ -147,10 +152,19 @@ public class ScrapCommand implements Command {
 			p.addMoney(m.getScrappableFor());
 			CampaignMain.cm.toUser("AM:You scrapped the " + m.getModelName() + " (" + CampaignMain.cm.moneyOrFluMessage(true,true,m.getScrappableFor(),true)+ ").", Username, true);
 		} else {
+			// it was intentional to allow the post-game scrap to process without a confirm... you don't want the guy getting a message "scrap for +1 cbill" then getting "scrapped for -1800cb" because of the time lag 
+            if (!strConfirm.equals("CONFIRM")) {
+                String result = "AM:Quartermaster command will charge you " + CampaignMain.cm.moneyOrFluMessage(true, false, moneyToScrap) + " to scrap #" + m.getId() + " " + m.getModelName() + ".";
+                result += "<br><a href=\"MEKWARS/c scrap#" + m.getId() + "#CONFIRM";
+                result += "\">Click here to scrap the unit.</a>";
+                CampaignMain.cm.toUser(result, Username, true);
+                return;
+            } else {
 			p.addMoney(-moneyToScrap);
 			p.addInfluence(-infToScrap);
 			p.addScrapThisTick();
 			CampaignMain.cm.toUser("AM:You scrapped the " + m.getModelName() + " (" + CampaignMain.cm.moneyOrFluMessage(true,true,-moneyToScrap,true) +  ", " + CampaignMain.cm.moneyOrFluMessage(false,true,-infToScrap,true) + ").", Username, true);
+            }
 		}
 
 		//notify house and, if needed, send warning to mod channel
