@@ -1028,7 +1028,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                     id = h.getId();
                 }
 
-                result.append("<TR><TD><font color=" + color + ">" + name + "</font></TD><TD>" + planet.getInfluence().getInfluence(id) + "%</TD></TR>");
+                result.append("<TR><TD><font color=" + color + ">" + name + "</font></TD><TD>" + Math.floor(100*planet.getInfluence().getInfluence(id)/planet.getConquestPoints()) + "%</TD></TR>");
             }
             result.append("</TABLE></html>");
 
