@@ -1,6 +1,8 @@
 VERSION HISTORY:
 ----------------
 0.4.0.x
++ Bug: UnBanIP command was not working correctly. r1521 in sourceforge.
++ Bug: Updated map's planet tooltip to show % of cp instead of cp.
 + New MM v0.41.16-MW20160229-b867f65
 + Released new Client v0.4.0.7
 + New MM v0.41.12-MW20151223
