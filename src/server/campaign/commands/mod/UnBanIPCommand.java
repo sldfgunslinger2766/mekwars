@@ -49,20 +49,20 @@ public class UnBanIPCommand implements Command {
 		}
         
         try{
-            int id  = Integer.parseInt(command.nextToken());
-        
-            Enumeration<InetAddress> e = CampaignMain.cm.getServer().getBanIps().keys();
-            InetAddress inetAddress = InetAddress.getLocalHost();
-            while (id > 0) {
-                inetAddress = e.nextElement();
-                id--;
-            }
-            CampaignMain.cm.getServer().getBanIps().remove(inetAddress);
+    		//make sure that the an acceptably formatted ip was sent and checks if it is on the list and if yes then delete 
+    		InetAddress ip = null;
+    		String toUnBan = command.nextToken().trim();//ip to unban
+    		ip = InetAddress.getByName(toUnBan);
+    		if (!CampaignMain.cm.getServer().getBanIps().containsKey(ip)) {
+    			CampaignMain.cm.toUser("AM:Value (" + ip + ") not found in banlist.", Username);
+    			return;
+    		}
+            CampaignMain.cm.getServer().getBanIps().remove(ip);
             CampaignMain.cm.getServer().bansUpdate();
-            CampaignMain.cm.toUser("AM:You unbanned: " + inetAddress, Username);
-            CampaignMain.cm.doSendModMail("NOTE",Username + " unbanned " + inetAddress);
+            CampaignMain.cm.toUser("AM:You unbanned: " + ip.toString(), Username);
+            CampaignMain.cm.doSendModMail("NOTE",Username + " unbanned " + ip.toString());
         } catch(Exception ex) {
-            CampaignMain.cm.toUser("AM:Syntax: unbanip (number)<br>Where number corresponds to the number in the ipban list.", Username);
+            CampaignMain.cm.toUser("AM:Syntax: unbanip (IPAddress)<br>Where IPAddress corresponds to the IPAddress in the ipban list like 12.12.12.12.", Username);
         }
 	}
 }
