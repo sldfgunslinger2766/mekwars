@@ -2443,7 +2443,7 @@ public class CHQPanel extends JPanel {
                     else if (mode == 12) {
 
                         Enumeration<Unit> e = currArmy.getUnits().elements();
-                        TreeMap<Float, Integer> unitWeights = new TreeMap<Float, Integer>();
+                        TreeMap<Double, Integer> unitWeights = new TreeMap<Double, Integer>();
                         while (e.hasMoreElements()) {
                             CUnit unit = (CUnit) e.nextElement();
                             if (!unitWeights.containsKey(unit.getEntity().getWeight())) {
@@ -2453,7 +2453,7 @@ public class CHQPanel extends JPanel {
                             }
                         }
 
-                        for (Float weight : unitWeights.keySet()) {
+                        for (Double weight : unitWeights.keySet()) {
                             toSend += " " + Integer.toString(unitWeights.get(weight)) + "x " + weight.intValue() + " tons,";
                         }
                         // replace final comma with a period.
@@ -2466,7 +2466,7 @@ public class CHQPanel extends JPanel {
 
                         toSend += " " + currArmy.getBV() + " BV,";
                         Enumeration<Unit> e = currArmy.getUnits().elements();
-                        TreeMap<Float, Integer> unitWeights = new TreeMap<Float, Integer>();
+                        TreeMap<Double, Integer> unitWeights = new TreeMap<Double, Integer>();
                         while (e.hasMoreElements()) {
                             CUnit unit = (CUnit) e.nextElement();
                             if (!unitWeights.containsKey(unit.getEntity().getWeight())) {
@@ -2476,7 +2476,7 @@ public class CHQPanel extends JPanel {
                             }
                         }
 
-                        for (Float weight : unitWeights.keySet()) {
+                        for (Double weight : unitWeights.keySet()) {
                             toSend += " " + Integer.toString(unitWeights.get(weight)) + "x " + weight.intValue() + " tons,";
                         }
                         // replace final comma with a period.

@@ -257,7 +257,8 @@ public class BattleResolver {
 		ent.setOwner(new Player(1, nameOfPlayer));
 		//Position
 		Game g = new Game();
-		g.setBoard(BoardUtilities.generateRandom(new MapSettings()));
+		MapSettings mapsettings = MapSettings.getInstance();
+		g.setBoard(BoardUtilities.generateRandom(mapsettings));
 		ent.setPosition(new Coords());
 		
 		g.addEntity(1, ent);

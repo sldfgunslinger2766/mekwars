@@ -1,6 +1,14 @@
 VERSION HISTORY:
 ----------------
 0.4.0.x
++ New MM v0.41.18-20160428-e4ffb1a
+  ***********************************
+  * NOTE TO OPERATORS               *
+  *                                 *
+  * This update will require you to *
+  * replace UnitVerifierOptions.xml *
+  * in your clients                 *
+  ***********************************
 + Bug: UnBanIP command was not working correctly. r1521 in sourceforge.
 + Bug: Updated map's planet tooltip to show % of cp instead of cp.
 + New MM v0.41.16-MW20160229-b867f65
