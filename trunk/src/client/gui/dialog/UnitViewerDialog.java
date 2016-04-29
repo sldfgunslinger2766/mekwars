@@ -598,7 +598,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
     private String formatMech(MechSummary ms) {
 
         String result = "";
-        result = makeLength(ms.getModel(), 12) + " " + makeLength(ms.getChassis(), 10) + " " + makeLength(Float.toString(ms.getTons()), 3) + " " + makeLength(Integer.toString(ms.getBV()), 5);
+        result = makeLength(ms.getModel(), 12) + " " + makeLength(ms.getChassis(), 10) + " " + makeLength(Double.toString(ms.getTons()), 3) + " " + makeLength(Integer.toString(ms.getBV()), 5);
 
         if (Boolean.parseBoolean(mwclient.getserverConfigs("UseCalculatedCosts"))) {
             result += makeLength(NumberFormat.getInstance().format(ms.getCost()), 10);

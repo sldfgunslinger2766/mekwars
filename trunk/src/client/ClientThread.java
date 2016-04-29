@@ -194,19 +194,19 @@ public class ClientThread extends Thread implements CloseClientListener {
             // else.
             if ((mwclient.getCurrentEnvironment() != null) && (client.getGame().getPhase() == IGame.Phase.PHASE_LOUNGE)) {
                 // creates the playboard*/
-                MapSettings mySettings = new MapSettings(mwclient.getMapSize().width, mwclient.getMapSize().height, 1, 1);
+                MapSettings mySettings = MapSettings.getInstance();
+                mySettings.setMapSize((int)mwclient.getMapSize().getWidth(),  (int)mwclient.getMapSize().getHeight());
+                
+            	//MapSettings mySettings = new MapSettings(mwclient.getMapSize().width, mwclient.getMapSize().height, 1, 1);
                 // MapSettings mySettings = new MapSettings(16, 17, 2, 2);
                 AdvancedTerrain aTerrain = mwclient.getCurrentAdvancedTerrain();
                 PlanetEnvironment pe = mwclient.getCurrentEnvironment();
                 if ((pe != null) && pe.isStaticMap()) {
+                	mySettings = MapSettings.getInstance();
+                	mySettings.setBoardSize((int)pe.getXBoardSize(), (int)pe.getYBoardSize());
+                	mySettings.setMapSize((int) pe.getXSize(), (int) pe.getYSize());
+                	//mySettings = new MapSettings(pe.getXSize(), pe.getYSize(), pe.getXBoardSize(), pe.getYBoardSize());
 
-                    mySettings = new MapSettings(pe.getXSize(), pe.getYSize(), pe.getXBoardSize(), pe.getYBoardSize());
-
-                    // MMClient.mwClientLog.clientErrLog("Board x:
-                    // "+myClient.getBoardSize().width+"Board y:
-                    // "+myClient.getBoardSize().height+"Map x:
-                    // "+myClient.getMapSize().width+"Map y:
-                    // "+myClient.getMapSize().height);
                     ArrayList<String> boardvec = new ArrayList<String>();
                     if (pe.getStaticMapName().toLowerCase().endsWith("surprise")) {
                         int maxBoards = pe.getXBoardSize() * pe.getYBoardSize();
