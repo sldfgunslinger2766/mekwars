@@ -89,6 +89,11 @@ public class DonateCommand implements Command {
             return;
 		}
 		
+		if (m.isChristmasUnit() && !CampaignMain.cm.getBooleanConfig("Christmas_AllowDonate")) {
+			CampaignMain.cm.toUser("AM:Sorry, you cannot donate Christmas units.  You should play with your new toys.", Username);
+			return;
+		}
+		
         if (m.getModelName().startsWith("Error") || m.getModelName().startsWith("OMG")){
             CampaignMain.cm.toUser("AM:You tried to donate an Error unit. The unit was auto-scrapped and the staff was alerted.",Username,true);
             CampaignMain.cm.doSendModMail("NOTE",Username + " tried to donate an OMG. Unit auto-scrapped. Data: " + m.getProducer());

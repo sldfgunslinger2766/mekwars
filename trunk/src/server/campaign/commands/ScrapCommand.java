@@ -104,6 +104,11 @@ public class ScrapCommand implements Command {
 			return;
 		}
 		
+		if (m.isChristmasUnit() && !CampaignMain.cm.getBooleanConfig("Christmas_AllowScrap")) {
+			CampaignMain.cm.toUser("AM:Scrapping a Christmas gift?  Bad form.", Username);
+			return;
+		}
+		
 		if (p.getAmountOfTimesUnitExistsInArmies(mechid) > 0 && p.getDutyStatus() == SPlayer.STATUS_ACTIVE) {	
 			CampaignMain.cm.toUser("AM:You may not scrap units which are in active armies.", Username, true);
 			return;

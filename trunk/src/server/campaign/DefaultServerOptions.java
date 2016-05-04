@@ -1341,6 +1341,13 @@ public class DefaultServerOptions {
         defaults.setProperty("UseBaseBVForMatching", "false");
 
         defaults.setProperty("UseUnitQuirks", "false");
+        
+        // Merry Christmas
+        defaults.setProperty("Christmas_AllowTransfer", "false");
+        defaults.setProperty("Christmas_AllowDonate", "false");
+        defaults.setProperty("Christmas_AllowScrap", "false");
+        defaults.setProperty("Christmas_AllowBM", "false");
+        defaults.setProperty("Christmas_AllowDirectSell", "false");
     }
 
     /**

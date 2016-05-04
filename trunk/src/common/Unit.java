@@ -93,6 +93,7 @@ public class Unit {
     protected TargetSystem targetSystem = new TargetSystem();
     
     private boolean isSupportUnit = false;
+    private boolean ChristmasUnit = false;
     
     //CONSTRUCTOR
     public Unit(){
@@ -635,6 +636,20 @@ public class Unit {
 	 */
 	public void setSupportUnit(boolean isSupportUnit) {
 		this.isSupportUnit = isSupportUnit;
+	}
+
+	/**
+	 * @return the christmasUnit
+	 */
+	public boolean isChristmasUnit() {
+		return ChristmasUnit;
+	}
+
+	/**
+	 * @param christmasUnit the christmasUnit to set
+	 */
+	public void setChristmasUnit(boolean christmasUnit) {
+		ChristmasUnit = christmasUnit;
 	}
     
 }

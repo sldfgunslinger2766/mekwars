@@ -132,6 +132,11 @@ public class SellCommand implements Command {
 			return;
 		}
 		
+		if(unitToSell.isChristmasUnit() && !CampaignMain.cm.getBooleanConfig("Christmas_AllowBM")) {
+			CampaignMain.cm.toUser("AM:You are not allowed to sell Christmas units.", Username);
+			return;
+		}
+		
 		/*
 		 * Determine the amount of influence the player needs to sell
 		 * this unit (base cost + weight mod), then check amount.

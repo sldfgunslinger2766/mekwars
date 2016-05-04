@@ -40,6 +40,7 @@ import admin.dialog.serverConfigDialogs.ArtilleryPanel;
 import admin.dialog.serverConfigDialogs.AutoProdPanel;
 import admin.dialog.serverConfigDialogs.BattleValuePanel;
 import admin.dialog.serverConfigDialogs.BlackMarketPanel;
+import admin.dialog.serverConfigDialogs.ChristmasPanel;
 import admin.dialog.serverConfigDialogs.CombatPanel;
 import admin.dialog.serverConfigDialogs.DBPanel;
 import admin.dialog.serverConfigDialogs.DefectionPanel;
@@ -152,7 +153,8 @@ public final class ServerConfigurationDialog implements ActionListener {
         AdvancedRepairPanel advancedRepairPanel = new AdvancedRepairPanel();// Advanced Repair
         LossCompensationPanel lossCompensationPanel = new LossCompensationPanel();// battle loss compensation
         PayoutModPanel payoutModPanel = new PayoutModPanel();
-      
+        ChristmasPanel christmasPanel = new ChristmasPanel();
+        
         // Set the actions to generate
         okayButton.setActionCommand(okayCommand);
         cancelButton.setActionCommand(cancelCommand);
@@ -171,10 +173,11 @@ public final class ServerConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Autoproduction", null, autoProdPanel, "Set type and details of factory autoproduction");
         ConfigPane.addTab("Black Market", null, blackMarketPanel, "Black Market access controls");
         ConfigPane.addTab("BV Options", null, battleValuePanel, "Battle Value");
+        ConfigPane.addTab("Christmas Units", null, christmasPanel, "Merry Christmas!");
         ConfigPane.addTab("Combat", null, combatPanel, "Combat");
         ConfigPane.addTab("Database", null, dbPanel, "Database Configuration");
         ConfigPane.addTab("Defection", null, defectionPanel, "Defection configuration");
-        ConfigPane.addTab("Direct Sales", null, directSellPanel, "Units the lifeblood of the game");
+        ConfigPane.addTab("Direct Sales", null, directSellPanel, "Units - the lifeblood of the game");
         ConfigPane.addTab("Disconnection", null, disconnectionPanel, "Disconnection autoresolution settings");
         ConfigPane.addTab("Faction", null, factionPanel, "House Stuff");
         ConfigPane.addTab("Factory Options", null, productionPanel, "Factories That Can Do");
