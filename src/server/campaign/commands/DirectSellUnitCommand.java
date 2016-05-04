@@ -105,6 +105,11 @@ public class DirectSellUnitCommand implements Command {
             return;
         }
 
+        if (m.isChristmasUnit() && !CampaignMain.cm.getBooleanConfig("Christmas_AllowDirectSell")) {
+        	CampaignMain.cm.toUser("AM:You may not sell Christmas units.", Username);
+        	return;
+        }
+        
         // Target has no room?
         if (pBuyer.getFreeBays() < SUnit.getHangarSpaceRequired(m, pBuyer.getMyHouse()) && !usesTechs) {
             // on a tech server, can accept units past limit. theyre just marked

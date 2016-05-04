@@ -122,7 +122,11 @@ public class TransferUnitCommand implements Command {
 			return;
 		}
 
-
+		if ( m.isChristmasUnit() && !CampaignMain.cm.getBooleanConfig("Christmas_AllowTransfer")) {
+			CampaignMain.cm.toUser("AM:No re-gifting!", Username);
+			return;
+		}
+		
 		//check transfer charge configuration
 		float transferPayment = Float.parseFloat(house.getConfig("TransferPayment"));
 		int senderCost = Math.round(transferPayment * player.getCurrentTechPayment());

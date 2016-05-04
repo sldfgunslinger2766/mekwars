@@ -556,6 +556,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
         msg.append(getCurrentRepairCost());
         msg.append(getLifeTimeRepairCost());
+        msg.append(this.isChristmasUnit());
+        
         if (CampaignMain.cm.isUsingMySQL() && !toPlayer) {
         	msg.append(getDBId());
         }
@@ -765,6 +767,9 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             setLastCombatPilot(TokenReader.readInt(ST));
 
             setRepairCosts(TokenReader.readInt(ST), TokenReader.readInt(ST));
+            
+            setChristmasUnit(TokenReader.readBoolean(ST));
+            
             if (CampaignMain.cm.isUsingMySQL() && ST.hasMoreTokens()) {
                 setDBId(TokenReader.readInt(ST));
             }

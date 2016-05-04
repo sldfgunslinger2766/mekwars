@@ -244,6 +244,8 @@ public class CUnit extends Unit {
 
         setRepairCosts(TokenReader.readInt(ST), TokenReader.readInt(ST));
 
+        setChristmasUnit(TokenReader.readBoolean(ST));
+        
         unitEntity.setExternalId(getId());
 
         if (unitDamage != null) {

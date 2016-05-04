@@ -1774,22 +1774,36 @@ public class CHQPanel extends JPanel {
                         }
 
                         JMenu hm = new JMenu("Transactions");
-                        popup.add(hm);
-                        menuItem = new JMenuItem("Donate Unit");
-                        menuItem.setActionCommand("DO|" + cm.getId());
-                        menuItem.addActionListener(this);
-                        hm.add(menuItem);
-                        menuItem = new JMenuItem("Scrap Unit");
-                        menuItem.setActionCommand("S|" + cm.getId());
-                        menuItem.addActionListener(this);
-                        hm.add(menuItem);
-                        menuItem = new JMenuItem("Transfer Unit");
-                        menuItem.setActionCommand("TM|" + cm.getId());
-                        menuItem.addActionListener(this);
-                        hm.add(menuItem);
-
+                        int numItems = 0;
+                        if(!cm.isChristmasUnit() || Boolean.parseBoolean(mwclient.getserverConfigs("Christmas_AllowDonate"))) {
+                        	menuItem = new JMenuItem("Donate Unit");
+                        	menuItem.setActionCommand("DO|" + cm.getId());
+                        	menuItem.addActionListener(this);
+                        	hm.add(menuItem);
+                        	numItems++;
+                        }
+                        if(!cm.isChristmasUnit() || Boolean.parseBoolean(mwclient.getserverConfigs("Christmas_AllowScrap"))) {
+                        	menuItem = new JMenuItem("Scrap Unit");
+                        	menuItem.setActionCommand("S|" + cm.getId());
+                        	menuItem.addActionListener(this);
+                        	hm.add(menuItem);
+                        	numItems++;
+                        }
+                        if (!cm.isChristmasUnit() || Boolean.parseBoolean(mwclient.getserverConfigs("Christmas_AllowTransfer"))) {
+                        	menuItem = new JMenuItem("Transfer Unit");
+                            menuItem.setActionCommand("TM|" + cm.getId());
+                            menuItem.addActionListener(this);
+                            hm.add(menuItem);
+                            numItems++;
+                        }
+                        if(numItems > 0) {
+                            popup.add(hm);
+                        }
                         // Test unit for BM access
                         boolean canSellUnit = true;
+                        if (cm.isChristmasUnit() && !Boolean.parseBoolean(mwclient.getserverConfigs("Christmas_AllowBM"))) {
+                        	canSellUnit = false;
+                        }
                         if ((cm.getType() == Unit.MEK) && !Boolean.parseBoolean(mwclient.getserverConfigs("MeksMayBeSoldOnBM"))) {
                             canSellUnit = false;
                         } else if ((cm.getType() == Unit.VEHICLE) && !Boolean.parseBoolean(mwclient.getserverConfigs("VehsMayBeSoldOnBM"))) {
