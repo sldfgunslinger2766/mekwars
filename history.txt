@@ -7,7 +7,7 @@ VERSION HISTORY:
   *                                 *
   * This update will require you to *
   * replace UnitVerifierOptions.xml *
-  * in your clients                 *
+  * in your clients and server      *
   ***********************************
 + Bug: UnBanIP command was not working correctly. r1521 in sourceforge.
 + Bug: Updated map's planet tooltip to show % of cp instead of cp.
