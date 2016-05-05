@@ -543,6 +543,7 @@ public class DataFetchClient {
         BinReader in = openConnection("All");
         CampaignData data = new CampaignData(in);
         // in.close();
+        getAccessLevels(data);
         this.data = data;
 
         store();
