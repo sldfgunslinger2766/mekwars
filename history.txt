@@ -1,6 +1,7 @@
 VERSION HISTORY:
 ----------------
 0.4.0.x
++ Server will now log duplicate planet IDs to errlog.0 to help troubleshooting
 + New MM v0.41.18-20160428-e4ffb1a
   ***********************************
   * NOTE TO OPERATORS               *

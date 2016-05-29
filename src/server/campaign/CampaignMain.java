@@ -1953,6 +1953,9 @@ public final class CampaignMain implements Serializable {
             }
             p.setOriginalOwner(p.getOwner().getName());
         }
+    	if (CampaignData.cd.getPlanet(p.getId()) != null) {
+    		CampaignData.mwlog.errLog("Duplicate Planet ID: " + CampaignData.cd.getPlanet(p.getId()).getName()  + " and " + p.getName());
+    	}
         data.addPlanet(p);
     }
 
