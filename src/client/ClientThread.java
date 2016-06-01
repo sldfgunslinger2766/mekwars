@@ -195,11 +195,11 @@ public class ClientThread extends Thread implements CloseClientListener {
             if ((mwclient.getCurrentEnvironment() != null) && (client.getGame().getPhase() == IGame.Phase.PHASE_LOUNGE)) {
                 // creates the playboard*/
                 MapSettings mySettings = MapSettings.getInstance();
-                mySettings.setMapSize((int)mwclient.getMapSize().getWidth(),  (int)mwclient.getMapSize().getHeight());
+                mySettings.setBoardSize((int)mwclient.getMapSize().getWidth(), (int)mwclient.getMapSize().getHeight());
+                mySettings.setMapSize(1, 1);  // Note to self: MapSize in MM is boards x boards, not hexes x hexes
                 
-            	//MapSettings mySettings = new MapSettings(mwclient.getMapSize().width, mwclient.getMapSize().height, 1, 1);
-                // MapSettings mySettings = new MapSettings(16, 17, 2, 2);
                 AdvancedTerrain aTerrain = mwclient.getCurrentAdvancedTerrain();
+                
                 PlanetEnvironment pe = mwclient.getCurrentEnvironment();
                 if ((pe != null) && pe.isStaticMap()) {
                 	mySettings = MapSettings.getInstance();
