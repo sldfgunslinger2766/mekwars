@@ -42,14 +42,12 @@ public class AnnounceCommand implements Command {
 				return;
 			}
 		}
-		CampaignMain.cm.toUser("Command: " + command.toString(), Username, true);
 		if (!command.hasMoreTokens()) {
 			CampaignMain.cm.toUser("Invalid Sytax: <br>" + getSyntax(), Username, true);
 			return;
 		}
 		
 		String scope = command.nextToken();
-		CampaignMain.cm.toUser("Scope: " + scope, Username, true);
 		if (scope.equalsIgnoreCase("all")) {
 			// Set for all factions
 			String announcement = "";
