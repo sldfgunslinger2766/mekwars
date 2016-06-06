@@ -94,7 +94,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
     private int initialHouseRanking = 0;
 
     private String motd = "";
-
+    private String announcement = "";
+    
     private PilotQueues pilotQueues = new PilotQueues(getBaseGunnerVect(), getBasePilotVect(), getBasePilotSkillVect());
 
     private boolean inHouseAttacks = false;
@@ -164,14 +165,11 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
         result.append(getLogo());
 
-        /*
-         * USABLE NODE
-         * 
-         * used to store the number of members here in order to read in-line
-         * player saves. these saves have been repalced with seperate PFiles,
-         * and the node can now be used ...
-         */
-        result.append(0);
+        if (getAnnouncement().equals("")) {
+        	result.append(" ");
+        } else {
+        	result.append(stripReturns(getAnnouncement()));
+        }
 
         // Write the Components / BuildingPP's
         result.append("Components");
@@ -255,6 +253,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             result.append(stripReturns(getMotd()));
         }
 
+        
         result.append(getHouseDefectionTo());
 
         for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
@@ -309,7 +308,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         for (SPilot currPilot : PilotList) {
             result.append(currPilot.toFileFormat("#", false));
         }
-
+     
         return result.toString();
     }
 
@@ -717,14 +716,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                 }// end for(4 weight classes)
             }// end if("Use Infantry")
 
-            /*
-             * USABLE NODE
-             * 
-             * used to store the number of members here in order to read in-line
-             * player saves. these saves have been replaced with seperate
-             * PFiles, and the node can now be used ...
-             */
-            TokenReader.readString(ST);// burn the membercount
+            setAnnouncement(TokenReader.readString(ST));
 
             /*
              * Another bad-old-code feature. "Components" will be the next token
@@ -878,7 +870,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             }
 
             setMotd(TokenReader.readString(ST));
-
+            
             setHouseDefectionTo(TokenReader.readBoolean(ST));
 
             try {
@@ -995,6 +987,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                 }
                 ((MercHouse) this).setOutstandingContracts(merctable);
             }
+            
             // if (CampaignMain.cm.isDebugEnabled())
             CampaignData.mwlog.mainLog("House loaded: " + getName());
 
@@ -3256,7 +3249,17 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         forumID = fID;
     }
 
-    public void createNoneHouse() {
+    public String getAnnouncement() {
+		return announcement;
+	}
+
+
+	public void setAnnouncement(String announcement) {
+		this.announcement = announcement;
+	}
+
+
+	public void createNoneHouse() {
         setName("None");
         setId(-1);
         setConquerable(false);
