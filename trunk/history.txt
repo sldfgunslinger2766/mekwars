@@ -1,6 +1,20 @@
 VERSION HISTORY:
 ----------------
 0.4.0.x
++ Added Announce command to add staff announcements to individual or
+    every faction.  
+  ***********************************
+  * NOTE TO OPERATORS               *
+  *                                 *
+  * You will want to run            *
+  * /annnounce all#clear            *
+  * after the first boot when you   *
+  * move to this version, as the    *
+  * faction announcements are       *
+  * stored in a previously unused   *
+  * but populated part of the       *
+  * toString() output               *
+  ***********************************
 + Bug: Error in MapSize being handed to MM causing IndexOutOfBoundsException
 + Bug: Fixed typos in default planets.xml
 + Server will now log duplicate planet IDs to errlog.0 to help troubleshooting

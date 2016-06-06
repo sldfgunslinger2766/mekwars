@@ -53,6 +53,10 @@ public class MOTDCommand implements Command {
 		SPlayer p = CampaignMain.cm.getPlayer(Username);
 		if (p != null && p.getMyHouse().getMotd().trim().length() > 0)
 		    CampaignMain.cm.toUser("(Housemail)<h2><b>MOTD:</b></h2><br>" + p.getMyHouse().getMotd(),Username,true);
+		if (p != null && p.getMyHouse().getAnnouncement().trim().length() > 0) {
+			CampaignMain.cm.toUser("(Housemail)<br /><hr><h3><b>Staff Announcements:</b></h3><br />" + p.getMyHouse().getAnnouncement(), Username, true);
+		}
+			
 		
 	}//end process
 	

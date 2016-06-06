@@ -63,6 +63,7 @@ import server.campaign.commands.leader.SetComponentConversionCommand;
 import server.campaign.commands.leader.ViewFactionPartsCacheCommand;
 import server.campaign.commands.mod.AddLeaderCommand;
 import server.campaign.commands.mod.AddPartsCommand;
+import server.campaign.commands.mod.AnnounceCommand;
 import server.campaign.commands.mod.BanCommand;
 import server.campaign.commands.mod.BanIPCommand;
 import server.campaign.commands.mod.BanListCommand;
@@ -139,7 +140,6 @@ import server.util.AutomaticBackup;
 import server.util.MWPasswd;
 import server.util.RepairTrackingThread;
 import server.util.StringUtil;
-
 import common.CampaignData;
 import common.Equipment;
 import common.House;
@@ -1526,6 +1526,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("ADMINUPLOADBUILDTABLE", new AdminUploadBuildTableCommand());
         Commands.put("ADMINVIEWLOG", new AdminViewLogCommand());
         Commands.put("ALL", new ArmyLowerLimiterCommand());
+        Commands.put("ANNOUNCE", new AnnounceCommand());
         Commands.put("AOFS", new ArmyOpForceSizeCommand());
         Commands.put("AUL", new ArmyUpperLimiterCommand());
         Commands.put("ATTACK", new AttackCommand());
