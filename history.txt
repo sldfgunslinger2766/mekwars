@@ -1,6 +1,8 @@
 VERSION HISTORY:
 ----------------
 0.4.0.x
++ Released Server v0.4.0.12
++ Added AdminResetFactionComponents command
 + Added Announce command to add staff announcements to individual or
     every faction.  
   ***********************************
