@@ -1,5 +1,6 @@
 VERSION HISTORY:
 ----------------
++ Bug: SerializeEntity fix megamek/mekwars for unit UUID/IDs -wildj79's fix submitted by BarukKhazad!    
 0.4.0.x
 + new MegaMek v0.41.21-MW20160710-fa26388
   ***********************************

@@ -38,10 +38,29 @@ public class SerializeEntity{
 		
 		StringBuilder result = new StringBuilder();
 
+		int externalID;
+
+		 /*
+		  * James Allred (wildj79@gmail.com) 2016-08-09
+		  *
+		  * MM was changed to assign a UUID to the externalID field of
+		  * an entity when it was created in MM. This was causing issues
+		  * with Mekwars, because MW uses integers to keep track of Unit ID's
+		  * internally. This block of code would attempt to call Entity.getExternalId
+		  * and would fail because Integer.parse() won't parse a UUID that is stored as
+		  * a string correctly.  The fix is to catch the exception, assign a sane default
+		  * and then let MW go on it's way.
+		  */
+		try {
+			externalID = e.getExternalId();
+		} catch (NumberFormatException ex) {
+			externalID = -1;
+		}
+
 		if (fullStatus) {
 			if ( !(e instanceof MechWarrior))
 			{
-				result.append(e.getExternalId() + "*");
+				result.append(externalID + "*");
 				result.append(e.getOwner().getName().trim() + "*");
 				result.append(e.getCrew().getHits() + "*");
 				
@@ -72,7 +91,15 @@ public class SerializeEntity{
 					result.append(" *");
 				while (en.hasMoreElements()) {
 					Entity kill = en.nextElement();
-					result.append(kill.getExternalId());
+
+					// James Allred (wildj79@gmail.com) 2016-08-09
+					// Same issue as above. UUID's and int's don't mix.
+					try {
+						externalID = kill.getExternalId();
+					} catch (NumberFormatException ex) {
+						externalID = -1;
+					}
+					result.append(externalID);
 					if (en.hasMoreElements())
 						result.append("~");
 					else
@@ -138,7 +165,7 @@ public class SerializeEntity{
 			//else (the entity is a real unit)
 			else {
 				result.append(e.getOwner().getName() + "*");
-				result.append(e.getExternalId() + "*");
+				result.append(externalID + "*");
 				
 				if (forceDevastate)
 					result.append(IEntityRemovalConditions.REMOVE_DEVASTATED + "*");
