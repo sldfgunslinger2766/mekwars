@@ -50,11 +50,6 @@ public class AdminRemoveAllFactoriesCommand implements Command {
 			p.getUnitFactories().clear();
             p.updated();
             
-            if(CampaignMain.cm.isUsingMySQL()) {
-            	CampaignMain.cm.MySQL.deletePlanetFactories(p.getName());
-            	p.toDB();
-            }
-            
 			//server.CampaignData.mwlog.modLog(Username + "  removed " + factoryname + " from " + p.getName() + ".");
 			CampaignMain.cm.doSendModMail("NOTE",Username + "  removed all factories  from " + p.getName() + ".");
 		} catch (Exception ex){

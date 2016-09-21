@@ -27,17 +27,9 @@ package server.campaign.tools.PlanetDatConverter;
 import java.io.Serializable;
 import java.util.Random;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import common.Unit;
 import common.UnitFactory;
-
-import common.CampaignData;
-import server.campaign.pilot.SPilot;
-import server.campaign.BuildTable;
-import server.campaign.SHouse;
-import server.campaign.SUnit;
-import server.mwmysql.JDBCConnectionHandler;
 import common.util.TokenReader;
 
 
@@ -50,8 +42,6 @@ public class SUnitFactoryOld extends UnitFactory implements Serializable {
     // VARIABLES
     private SPlanetOld planet;
     
-    private JDBCConnectionHandler ch = new JDBCConnectionHandler();
-
     // CONSTRUCTORS
     public SUnitFactoryOld() {
         // empty

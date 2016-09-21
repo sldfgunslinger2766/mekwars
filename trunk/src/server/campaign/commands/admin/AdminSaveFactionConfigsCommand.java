@@ -63,10 +63,7 @@ public class AdminSaveFactionConfigsCommand implements Command {
 		h.populateUnitLimits();
 		h.populateBMLimits();
 		
-		if(CampaignMain.cm.isUsingMySQL())
-			h.saveConfigFileToDB();
-		else
-			h.saveConfigFile();
+		h.saveConfigFile();
 		h.setUsedMekBayMultiplier(h.getFloatConfig("UsedPurchaseCostMulti"));
 		CampaignMain.cm.toUser("AM:Status saved!",Username,true);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has saved "+faction+"'s configs");

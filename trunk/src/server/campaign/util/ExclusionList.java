@@ -17,18 +17,11 @@
 package server.campaign.util;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import server.campaign.CampaignMain;
-import server.mwmysql.JDBCConnectionHandler;
-
-import common.CampaignData;
 
 /**
  * @author urgru
@@ -56,8 +49,6 @@ public class ExclusionList{
 	private String owner;
 	private Vector<String> playerExcludes = null;
 	private Vector<String> adminExcludes = null;
-	
-	private JDBCConnectionHandler ch = new JDBCConnectionHandler();
 	
 	public ExclusionList() {
 		
@@ -151,10 +142,7 @@ public class ExclusionList{
 		while (e.hasNext()) {
 			String currName = e.next();
             boolean playerExists = false;
-            if(!CampaignMain.cm.isUsingMySQL())
-                playerExists = new File("./campaign/players/" + currName.toLowerCase() + ".dat").exists();
-            else
-                playerExists = CampaignMain.cm.MySQL.playerExists(currName);
+            playerExists = new File("./campaign/players/" + currName.toLowerCase() + ".dat").exists();
             
             if (!playerExists) {
 				e.remove();
@@ -167,12 +155,9 @@ public class ExclusionList{
 		while (e.hasNext()) {
 			String currName = e.next();
 	         boolean playerExists = false;
-	            if(!CampaignMain.cm.isUsingMySQL())
-	                playerExists = new File("./campaign/players/" + currName.toLowerCase() + ".dat").exists();
-	            else
-	                playerExists = CampaignMain.cm.MySQL.playerExists(currName);
+             playerExists = new File("./campaign/players/" + currName.toLowerCase() + ".dat").exists();
 	            
-	            if (!playerExists) {
+             if (!playerExists) {
 				e.remove();
 				CampaignMain.cm.toUser(currName + " has left the campaign. No-Play list updated.",owner,true);
 			}
@@ -269,36 +254,6 @@ public class ExclusionList{
 		return result.toString();
 	}
 	
-	public void fromDB(int playerID) {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Connection c = ch.getConnection();
-		try {
-			String sql = "SELECT * from noplay_lists WHERE player_id = " + playerID;
-			ps = c.prepareStatement(sql);
-			rs = ps.executeQuery();
-			while(rs.next()) {
-				this.addExclude(rs.getString("admin_exclude").equalsIgnoreCase("y")? true : false, rs.getString("np_name"));
-			}
-			
-		} catch (SQLException e) {
-			CampaignData.mwlog.dbLog("SQLException in ExclusionList.fromDB: " + e.getMessage());
-            CampaignData.mwlog.dbLog(e);
-		} finally {
-			try {
-				if(rs != null)
-					rs.close();
-				if(ps != null)
-					ps.close();
-			} catch (SQLException ex) {
-				CampaignData.mwlog.dbLog("Exception in ExclusionList.fromDB: " + ex.getMessage());
-                CampaignData.mwlog.dbLog(ex);
-			} finally {
-				ch.returnConnection(c);
-			}
-		}
-	}
-	
 	public String playerExcludeToString(String token) {
 		
 		//CampaignData.mwlog.mainLog("** playerExcludeToStringCalled");
@@ -316,56 +271,6 @@ public class ExclusionList{
 		}
 		
 		return result.toString();
-	}
-	
-	public void toDB(int playerID) {
-		PreparedStatement ps = null;
-		String sql = "";
-		Connection c = ch.getConnection();
-		try {
-			sql = "DELETE from noplay_lists where player_id = " + playerID;
-			ps = c.prepareStatement(sql);
-			ps.executeUpdate(sql);
-			ps.close();
-			
-			// player excludes
-			
-			if(playerExcludes.size() > 0) {
-				sql = "REPLACE into noplay_lists set player_id = ?, np_name = ?, admin_exclude = 'n'";
-				ps = c.prepareStatement(sql);
-				for (String currName : playerExcludes) {
-					ps.setInt(1, playerID);
-					ps.setString(2, currName);
-					ps.executeUpdate();
-				}
-				ps.close();
-			}
-			
-			// admin excludes
-			
-			if(adminExcludes.size() > 0) {
-				sql = "INSERT into noplay_lists set player_id = ?, np_name = ?, admin_exclude = 'y'";
-				ps = c.prepareStatement(sql);
-				for (String currName : adminExcludes) {
-					ps.setInt(1, playerID);
-					ps.setString(2, currName);
-					ps.executeUpdate();
-				}
-				ps.close();
-			}
-		} catch(SQLException e) {
-			CampaignData.mwlog.dbLog("SQLException in ExclusionList.toDB: " + e.getMessage());
-			CampaignData.mwlog.dbLog("  -> " + sql);
-			if(ps != null) {
-				CampaignData.mwlog.dbLog("    -> " + ps.toString());
-				try {
-					ps.close();
-				} catch (SQLException ex) {}
-			}
-            CampaignData.mwlog.dbLog(e);
-		} finally {
-			ch.returnConnection(c);
-		}
 	}
 	
 }//end ExcludeList

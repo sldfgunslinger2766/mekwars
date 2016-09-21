@@ -3278,13 +3278,7 @@ public final class FactionConfigurationDialog implements ActionListener {
         baseTextField.setToolTipText("<html>Float field, AR Only<br>Percent of a unit's buy price to charge someone for scrapping an engined unit<br>Negative number will give money to the player<br>.1 = 10%</html>");
         baseTextField.setName("CostToScrapEngined");
         factionSpring2.add(baseTextField);
-        
-        baseTextField = new JTextField(20);
-        factionSpring2.add(new JLabel("Forum Group Name:",SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>Database with phpBB Integration only</html>");
-        baseTextField.setName("ForumGroupName");
-        factionSpring2.add(baseTextField);
-        
+      
         baseTextField = new JTextField(5);
         factionSpring2.add(new JLabel("Days Between Promotions:",SwingConstants.TRAILING));
         baseTextField.setToolTipText("<html>Integer Field, How many days a player has to wait before they can be promoted again<br>after their last promotion/demotion.</html>");

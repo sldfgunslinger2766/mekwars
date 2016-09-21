@@ -204,8 +204,6 @@ public class Market2 {
 				SHouse h = (SHouse) seller;
 				if (destroyFactionUnits) {
 					h.removeUnit(auctionU,false);
-					if(CampaignMain.cm.isUsingMySQL())
-						CampaignMain.cm.MySQL.deleteUnit(auctionU.getDBId());
 				}
 				else
 					CampaignMain.cm.doSendToAllOnlinePlayers(h, "HS|" + h.getHSUnitAdditionString(auctionU), false);
@@ -215,8 +213,6 @@ public class Market2 {
             SUnit auctionU = sellingFaction.getUnit(currAuction.getListedUnitID());
             if (auctionU != null) {
             	sellingFaction.removeUnit(auctionU,false);
-            	if(CampaignMain.cm.isUsingMySQL())
-            		CampaignMain.cm.MySQL.deleteUnit(auctionU.getDBId());
             }
         }
 		

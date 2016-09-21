@@ -21,19 +21,13 @@
 package server.campaign;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import server.campaign.pilot.SPilot;
 import server.campaign.util.SerializedMessage;
-import server.mwmysql.JDBCConnectionHandler;
 
-import common.CampaignData;
 import common.Unit;
 import common.campaign.pilot.Pilot;
 import common.util.TokenReader;
@@ -56,7 +50,6 @@ public class SPersonalPilotQueues implements Serializable {
     private Vector<LinkedList<Pilot>> protoPilots = new Vector<LinkedList<Pilot>>(4, 1);
     private Vector<LinkedList<Pilot>> aeroPilots = new Vector<LinkedList<Pilot>>(4, 1);
     private int playerID = 0;
-    private JDBCConnectionHandler ch = new JDBCConnectionHandler();
    
     // CONSTRUCTOR
     /**
@@ -126,12 +119,6 @@ public class SPersonalPilotQueues implements Serializable {
 
         // add the pilot to the correct weightclass list.
         this.getUnitTypeQueue(p.getUnitType()).get(weightClass).addLast(p);
-
-        if (CampaignMain.cm.isUsingMySQL()) {
-            int type = p.getUnitType();
-            ((SPilot) p).toDB(type, weightClass);
-
-        }
     }
 
     /**
@@ -222,49 +209,6 @@ public class SPersonalPilotQueues implements Serializable {
          */
     }
 
-    /**
-     * Read pilot queue data in from a saved string.
-     * 
-     * @param buffer
-     * @param delimiter
-     */
-
-    public void fromDB(int pID) {
-        int capSize = CampaignMain.cm.getIntegerConfig("MaxAllowedPilotsInQueueToBuyFromHouse");
-        ResultSet rs;
-        Statement stmt;
-        int currentCount = 0;
-        Connection c = ch.getConnection();
-        
-        try {
-            stmt = c.createStatement();
-            rs = stmt.executeQuery("SELECT pilotID, pilotType, pilotSize from pilots WHERE playerID = " + pID);
-            while (rs.next()) {
-                SPilot p = CampaignMain.cm.MySQL.loadPilot(rs.getInt("pilotID"));
-                if (capSize < 1 || currentCount < capSize) {
-                    this.addPilot(p, rs.getInt("pilotType"), rs.getInt("pilotSize"));
-                }
-                currentCount++;
-            }
-            rs.close();
-            stmt.close();
-            for (int weightClass = Unit.LIGHT; weightClass <= Unit.ASSAULT; weightClass++) {
-                while (this.getPilotQueue(Unit.MEK, weightClass).size() > capSize) {
-                    this.getPilot(Unit.MEK, weightClass, CampaignMain.cm.getRandomNumber(this.getPilotQueue(Unit.MEK, weightClass).size()));
-                }
-                while (this.getPilotQueue(Unit.PROTOMEK, weightClass).size() > capSize) {
-                    this.getPilot(Unit.PROTOMEK, weightClass, CampaignMain.cm.getRandomNumber(this.getPilotQueue(Unit.PROTOMEK, weightClass).size()));
-                }
-            }
-
-        } catch (SQLException e) {
-            CampaignData.mwlog.dbLog("SQL Error in SPersonalPilotQueues.fromDB: " + e.getMessage());
-            CampaignData.mwlog.dbLog(e);
-        } finally {
-        	ch.returnConnection(c);
-        }
-
-    }
     public void fromString(String buffer, String delimiter) {
 
             StringTokenizer mainTokenizer = new StringTokenizer(buffer, delimiter);

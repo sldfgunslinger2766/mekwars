@@ -88,10 +88,6 @@ public class AdminRandomlySetPlanetProductionCommand implements Command {
 
             // set updated flag so players' maps refresh
             p.updated();
-
-            if (CampaignMain.cm.isUsingMySQL())
-                p.toDB();
-
         }
 
         if (max == 0) {

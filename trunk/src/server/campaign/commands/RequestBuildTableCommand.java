@@ -83,7 +83,6 @@ public class RequestBuildTableCommand implements Command {
 				toReturn.append(folderDelimiter);
 			}
 			CampaignMain.cm.toUser("BT|PLS|"+ toReturn.toString()+"|"+viewer, Username, false);
-			CampaignData.mwlog.dbLog("Sending: " + toReturn.toString());				
 			
 			return;
 		} else if (subcommand.equalsIgnoreCase("get")) {

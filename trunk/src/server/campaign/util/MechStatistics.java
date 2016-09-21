@@ -16,18 +16,9 @@
 
 package server.campaign.util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
 import server.campaign.SUnit;
-import server.mwmysql.JDBCConnectionHandler;
-
-import common.CampaignData;
 
 /**
  *
@@ -48,7 +39,6 @@ public class MechStatistics implements Cloneable, Comparable<Object> {
   private int currentGamesPlayed = 0;
   private int timesDestroyed = 0;
   private int DBID = 0;
-  private JDBCConnectionHandler ch;
   
   public String getMechFileName() {
     return mechFileName;
@@ -91,122 +81,6 @@ public String toString()
 	  this.DBID = ID;
   }
   
-  public void fromDB(int id) {
-	  ResultSet rs = null;
-	  Connection c = ch.getConnection();
-	  try {
-		  Statement stmt = c.createStatement();
-		  rs = stmt.executeQuery("SELECT * from mechstats WHERE ID = " + id);
-		  if(rs.next()) {
-			    this.mechFileName = rs.getString("mechFileName");
-			    this.mechSize = rs.getInt("mechSize");
-			    this.gamesWon = rs.getInt("gamesWon");
-			    this.gamesPlayed = rs.getInt("gamesPlayed");
-			    this.timesScrapped = rs.getInt("timesScrapped");
-			    this.lastTimeUpdated = rs.getLong("lastTimeUpdated");
-			    this.currentGamesWon = rs.getInt("currentGamesWon");
-			    this.currentGamesPlayed = rs.getInt("currentGamesPlayed");
-			    this.OriginalBV = rs.getInt("originalBV");
-			    this.timesDestroyed = rs.getInt("timesDestroyed");
-			    this.setDBId(id);
-			    rs.close();
-			    stmt.close();
-		  }
-	  } catch(SQLException e){
-		  CampaignData.mwlog.dbLog("SQL Error in MechStatistics.fromDB: " + e.getMessage());
-          CampaignData.mwlog.dbLog(e);
-	  } finally {
-		  ch.returnConnection(c);
-	  }
-  }
-  
-  public void toDB() {
-	 PreparedStatement ps = null;
-	 ResultSet rs = null;
-	 StringBuffer sql = new StringBuffer();
-	 Connection c = ch.getConnection();
-	 if(getDBId()==0) {
-		 // It's an insert
-		 sql.append("INSERT into mechstats set ");
-		 sql.append("mechFileName = ?, ");
-		 sql.append("mechSize = ?, ");
-		 sql.append("gamesWon = ?, ");
-		 sql.append("gamesPlayed = ?, ");
-		 sql.append("timesScrapped = ?, ");
-		 sql.append("currentGamesWon = ?, ");
-		 sql.append("currentGamesPlayed = ?, ");
-		 sql.append("originalBV = ?, ");
-		 sql.append("timesDestroyed = ?, ");
-		 sql.append("lastTimeUpdated = ?");
-		 try {
-			 ps = c.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
-			 ps.setString(1, this.mechFileName);
-			 ps.setInt(2, this.mechSize);
-			 ps.setInt(3, this.gamesWon);
-			 ps.setInt(4, this.gamesPlayed);
-			 ps.setInt(5, this.timesScrapped);
-			 ps.setInt(6, this.currentGamesWon);
-			 ps.setInt(7, this.currentGamesPlayed);
-			 ps.setInt(8, this.OriginalBV);
-			 ps.setInt(9, this.timesDestroyed);
-			 ps.setLong(10, this.lastTimeUpdated);
-			 
-			 ps.executeUpdate();
-			 rs = ps.getGeneratedKeys();
-			 if(rs.next()) {
-				 this.setDBId(rs.getInt(1));
-			 }	
-			 rs.close();
-			 ps.close();
-		 } catch (SQLException e) {
-			 CampaignData.mwlog.dbLog("SQLException in MechStatistics.toDB: " + e.getMessage());
-             CampaignData.mwlog.dbLog(e);
-		 }
-		 
-	 } else {
-		 // It's an update
-		 sql.append("UPDATE mechstats set ");
-		 sql.append("mechFileName = ?, ");
-		 sql.append("mechSize = ?, ");
-		 sql.append("gamesWon = ?, ");
-		 sql.append("gamesPlayed = ?, ");
-		 sql.append("timesScrapped = ?, ");
-		 sql.append("currentGamesWon = ?, ");
-		 sql.append("currentGamesPlayed = ?, ");
-		 sql.append("originalBV = ?, ");
-		 sql.append("timesDestroyed = ?, ");
-		 sql.append("lastTimeUpdated = ? ");
-		 sql.append("WHERE ID = ?");
-		 try {
-			 ps = c.prepareStatement(sql.toString());
-			 ps.setString(1, this.mechFileName);
-			 ps.setInt(2, this.mechSize);
-			 ps.setInt(3, this.gamesWon);
-			 ps.setInt(4, this.gamesPlayed);
-			 ps.setInt(5, this.timesScrapped);
-			 ps.setInt(6, this.currentGamesWon);
-			 ps.setInt(7, this.currentGamesPlayed);
-			 ps.setInt(8, this.OriginalBV);
-			 ps.setInt(9, this.timesDestroyed);
-			 ps.setLong(10, this.lastTimeUpdated);
-			 ps.setInt(11, this.getDBId());
-			 ps.executeUpdate();
-			 ps.close();
-		 } catch (SQLException e) {
-			 CampaignData.mwlog.dbLog("SQLException in MechStatistics.toDB: " + e.getMessage());
-             CampaignData.mwlog.dbLog(e);
-		 }
-	 }
-	 ch.returnConnection(c);
-  }
-  
-  public MechStatistics()
-  {
-	  if (CampaignMain.cm.isUsingMySQL()) {
-		  ch = new JDBCConnectionHandler();
-	  }
-  }
-
   public MechStatistics(String Filename,int mechsize)
   {
     this.mechFileName = Filename;
@@ -214,10 +88,6 @@ public String toString()
     this.gamesPlayed = 0;
     this.gamesWon = 0;
     this.timesDestroyed = 0;
-	  if (CampaignMain.cm.isUsingMySQL()) {
-		  ch = new JDBCConnectionHandler();
-	  }
-    
   }
 
   public MechStatistics(String s)
@@ -238,19 +108,8 @@ public String toString()
       this.OriginalBV = Integer.parseInt(ST.nextToken());
     if (ST.hasMoreElements())
         this.timesDestroyed = Integer.parseInt(ST.nextToken());
-	  if (CampaignMain.cm.isUsingMySQL()) {
-		  ch = new JDBCConnectionHandler();
-	  }
   }
 
-  public MechStatistics(int id) {
-	  if (CampaignMain.cm.isUsingMySQL()) {
-		  ch = new JDBCConnectionHandler();
-	  }
-
-	  this.fromDB(id);
-  }
-  
   public int getBV()
   {
   	int baseBV = 0;

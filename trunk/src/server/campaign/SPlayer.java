@@ -21,11 +21,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,7 +41,6 @@ import server.campaign.pilot.SPilot;
 import server.campaign.util.ExclusionList;
 import server.campaign.util.OpponentListHelper;
 import server.campaign.util.SerializedMessage;
-import server.mwmysql.JDBCConnectionHandler;
 import server.util.MWPasswdRecord;
 
 import common.CampaignData;
@@ -138,7 +132,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private String subFaction = "";
 
     private long lastPromoted = 0;
-    private JDBCConnectionHandler ch = new JDBCConnectionHandler();
 
     public volatile int leechCount = 0;
     
@@ -288,10 +281,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), name, false);
             CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), name, false);
         }
-        if (CampaignMain.cm.isUsingMySQL()) {
-            m.toDB();
-            CampaignMain.cm.MySQL.linkUnitToPlayer(m.getDBId(), getDBId());
-        }
+
         // make sure to save the player, with his fancy new unit ...
         setSave();
 
@@ -346,10 +336,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      *            the ID of the unit to remove
      */
     public void removeUnit(int unitid, boolean sendArmyUpdate) {
-        if (CampaignMain.cm.isUsingMySQL()) {
-            CampaignMain.cm.MySQL.unlinkUnit(CampaignMain.cm.MySQL.getUnitDBIdFromMWId(unitid));
-        }
-
         SUnit Mech = null;
         synchronized (units) {
         	for (int i = 0; i < units.size(); i++) {
@@ -823,9 +809,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
          */
         for (SUnit destroyedU : unitsToDestroy) {
             this.removeUnit(destroyedU.getId(), false);
-            if (CampaignMain.cm.isUsingMySQL()) {
-                CampaignMain.cm.MySQL.deleteUnit(destroyedU.getDBId());
-            }
         }
 
     }// end doMaintainance()
@@ -1572,18 +1555,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      *            which send status on its own after granting new units.
      */
     public void stripOfAllUnits(boolean sendStatus) {
-        if (CampaignMain.cm.isUsingMySQL()) {
-            // We have to remove them from the database, or we'll have stale
-            // data
-            // We also have to remove the armies.
-            CampaignMain.cm.MySQL.clearArmies(getDBId());
-            for (SUnit currU : units) {
-                SPilot p = (SPilot) currU.getPilot();
-                CampaignMain.cm.MySQL.deletePilot(p.getPilotId());
-                CampaignMain.cm.MySQL.deleteUnit(currU.getDBId());
-            }
-        }
-
         units = new Vector<SUnit>(1, 1);
         armies = new Vector<SArmy>(1, 1);
 
@@ -2033,9 +2004,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 i.remove();
                 break;
             }
-        }
-        if (CampaignMain.cm.isUsingMySQL()) {
-            CampaignMain.cm.MySQL.deleteArmy(getDBId(), armyID);
         }
         CampaignMain.cm.toUser("PL|RA|" + armyID, name, false);
     }
@@ -2762,11 +2730,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
          * 9.30.06
          */
         if (!toClient) {
-            if (CampaignMain.cm.isUsingMySQL()) {
-                result.append(getDBId());
-            } else {
-                result.append("0");
-            }
+            result.append("0");
             result.append(0);
         }
         result.append(myHouse.getName() + " ");
@@ -2834,273 +2798,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         return result.getMessage();
     }
 
-    public void toDB() {
-        if (isLoading) {
-            return;
-        }
-        PreparedStatement ps = null;
-        StringBuffer sql = new StringBuffer();
-        ResultSet rs = null;
-        Connection c = ch.getConnection();
-
-        try {
-            if (getDBId() == 0) {
-                // Not in the database - INSERT it
-                sql.setLength(0);
-                sql.append("INSERT into players set ");
-                sql.append("playerName = ?, ");
-                sql.append("playerMoney = ?, ");
-                sql.append("playerExperience = ?, ");
-                sql.append("playerHouseName = ?, ");
-                sql.append("playerLastOnline = ?, ");
-                sql.append("playerTotalBays = ?, ");
-                sql.append("playerFreeBays = ?, ");
-                sql.append("playerRating = ?, ");
-                sql.append("playerInfluence = ?, ");
-                sql.append("playerFluff = ?, ");
-                if (CampaignMain.cm.isUsingAdvanceRepair()) {
-                    sql.append("playerBaysOwned = ?, playerTechnicians = NULL, ");
-                } else {
-                    sql.append("playerBaysOwned = NULL, playerTechnicians = ?, ");
-                }
-                sql.append("playerRP = ?, ");
-                sql.append("playerXPToReward = ?, ");
-                sql.append("playerTotalTechsString = ?, ");
-                sql.append("playerAvailableTechsString = ?, ");
-                sql.append("playerLogo = ?, ");
-                sql.append("playerLastAFR = ?, ");
-                sql.append("playerGroupAllowance = ?, ");
-                sql.append("playerLastISP = ?, ");
-                sql.append("playerIsInvisible = ?, ");
-
-                sql.append("playerUnitParts = ?, ");
-                sql.append("playerAccess = ?, ");
-                sql.append("playerAutoReorder = ?, ");
-                sql.append("playerTeamNumber = ?, ");
-
-                sql.append("playerSubFactionName = ?, ");
-                sql.append("playerForumID = ?, ");
-                sql.append("playerLastPromoted = ?, ");
-                sql.append("playerValidated = ?, ");
-                sql.append("playerString = ?");
-                ps = c.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, getName());
-                ps.setInt(2, getMoney());
-                ps.setInt(3, getExperience());
-                ps.setString(4, getMyHouse().getName());
-                ps.setLong(5, getLastOnline());
-                ps.setInt(6, getTotalMekBays());
-                ps.setInt(7, getFreeBays());
-                ps.setDouble(8, getRating());
-                ps.setInt(9, getInfluence());
-                ps.setString(10, getFluffText());
-                if (CampaignMain.cm.isUsingAdvanceRepair()) {
-                    ps.setInt(11, getBaysOwned());
-                } else {
-                    ps.setInt(11, getTechnicians());
-                }
-                ps.setInt(12, getReward());
-                ps.setInt(13, getXPToReward());
-                if (CampaignMain.cm.isUsingAdvanceRepair()) {
-                    ps.setString(14, totalTechsToString());
-                    ps.setString(15, availableTechsToString());
-                } else {
-                    ps.setString(14, "");
-                    ps.setString(15, "");
-                }
-                if (getMyLogo().length() > 0) {
-                    ps.setString(16, getMyLogo());
-                } else {
-                    ps.setString(16, "");
-                }
-                ps.setDouble(17, getLastAttackFromReserve());
-                ps.setInt(18, getGroupAllowance());
-                ps.setString(19, getLastISP());
-                ps.setBoolean(20, isInvisible());
-                ps.setString(21, getUnitParts().toString());
-                if (getPassword() != null) {
-                    ps.setInt(22, getPassword().getAccess());
-                } else {
-                    ps.setInt(22, 1);
-                }
-                ps.setBoolean(23, getAutoReorder());
-                ps.setInt(24, getTeamNumber());
-
-                ps.setString(25, getSubFactionName().trim().length() < 1 ? " " : getSubFactionName());
-                ps.setInt(26, getForumID());
-                ps.setLong(27, getLastPromoted());
-                ps.setBoolean(28, isValidated());
-                ps.setString(29, toString(false));
-
-                ps.executeUpdate();
-                rs = ps.getGeneratedKeys();
-                rs.next();
-                setDBId(rs.getInt(1));
-                rs.close();
-
-            } else {
-                // Already in the database - UPDATE it
-                sql.setLength(0);
-                sql.append("UPDATE players set ");
-                sql.append("playerName = ?, ");
-                sql.append("playerMoney = ?, ");
-                sql.append("playerExperience = ?, ");
-                sql.append("playerHouseName = ?, ");
-                sql.append("playerLastOnline = ?, ");
-                sql.append("playerTotalBays = ?, ");
-                sql.append("playerFreeBays = ?, ");
-                sql.append("playerRating = ?, ");
-                sql.append("playerInfluence = ?, ");
-                sql.append("playerFluff = ?, ");
-                if (CampaignMain.cm.isUsingAdvanceRepair()) {
-                    sql.append("playerBaysOwned = ?, playerTechnicians = NULL, ");
-                } else {
-                    sql.append("playerTechnicians = ?, playerBaysOwned = NULL, ");
-                }
-                sql.append("playerRP = ?, ");
-                sql.append("playerXPToReward = ?, ");
-                sql.append("playerTotalTechsString = ?, ");
-                sql.append("playerAvailableTechsString = ?, ");
-                sql.append("playerLogo = ?, ");
-                sql.append("playerLastAFR = ?, ");
-                sql.append("playerGroupAllowance = ?, ");
-                sql.append("playerLastISP = ?, ");
-                sql.append("playerIsInvisible = ?, ");
-                sql.append("playerAccess = ?, ");
-                sql.append("playerUnitParts = ?, ");
-                sql.append("playerAutoReorder = ?, ");
-                sql.append("playerPassword= ?, ");
-                sql.append("playerPassTime= ?, ");
-                sql.append("playerTeamNumber= ?, ");
-
-                sql.append("playerSubFactionName = ?, ");
-                sql.append("playerForumID = ?, ");
-                sql.append("playerLastPromoted = ?, ");
-                sql.append("playerValidated = ?, ");
-                sql.append("playerString = ? ");
-                sql.append("WHERE playerID = ?");
-
-                ps = c.prepareStatement(sql.toString());
-                ps.setString(1, getName());
-                ps.setInt(2, getMoney());
-                ps.setInt(3, getExperience());
-                ps.setString(4, getMyHouse().getName());
-                ps.setLong(5, getLastOnline());
-                ps.setInt(6, getTotalMekBays());
-                ps.setInt(7, getFreeBays());
-                ps.setDouble(8, getRating());
-                ps.setInt(9, getInfluence());
-                ps.setString(10, getFluffText());
-                if (CampaignMain.cm.isUsingAdvanceRepair()) {
-                    ps.setInt(11, getBaysOwned());
-                } else {
-                    ps.setInt(11, getTechnicians());
-                }
-                ps.setInt(12, getReward());
-                ps.setInt(13, getXPToReward());
-                if (CampaignMain.cm.isUsingAdvanceRepair()) {
-                    ps.setString(14, totalTechsToString());
-                    ps.setString(15, availableTechsToString());
-
-                } else {
-                    ps.setString(14, "");
-                    ps.setString(15, "");
-
-                }
-                if (getMyLogo().length() > 0) {
-                    ps.setString(16, getMyLogo());
-                } else {
-                    ps.setString(16, "");
-                }
-                ps.setDouble(17, getLastAttackFromReserve());
-                ps.setInt(18, getGroupAllowance());
-                ps.setString(19, getLastISP());
-                ps.setBoolean(20, isInvisible());
-                if (getPassword() != null) {
-                    ps.setInt(21, getPassword().getAccess());
-                } else {
-                    ps.setInt(21, 1);
-                }
-                ps.setString(22, getUnitParts().toString());
-                ps.setBoolean(23, getAutoReorder());
-                if (getPassword() != null) {
-                    ps.setString(24, password.getPasswd());
-                } else {
-                    ps.setString(24, "");
-                }
-                if (getPassword() != null) {
-                    ps.setLong(25, password.getTime());
-                } else {
-                    ps.setLong(25, 0);
-                }
-                ps.setInt(26, getTeamNumber());
-
-                ps.setString(27, (getSubFactionName().trim().length() < 1) ? " " : getSubFactionName());
-                ps.setInt(28, getForumID());
-                ps.setLong(29, getLastPromoted());
-                ps.setBoolean(30, isValidated());
-                ps.setString(31, toString(false));
-                ps.setInt(32, getDBId());
-                ps.executeUpdate();
-
-            }
-            ps.close();
-
-            // Save Exclude Lists
-            getExclusionList().toDB(getDBId());
-
-            // Save Units
-            //should be synch so we don't have concurrent issues on Units during a save
-            //java.util.ConcurrentModificationException is thrown when that happens
-             synchronized (this) {
-				 if (getUnits().size() > 0) {
-					for (SUnit currU : getUnits()) {
-						SPilot pilot = (SPilot) currU.getPilot();
-						pilot.setCurrentFaction(getMyHouse().getName());
-						if((pilot != null) && (pilot.getGunnery() != 99) && (pilot.getPiloting() != 99)) {
-							pilot.toDB(currU.getType(), currU.getWeightclass());
-						}
-						currU.toDB();
-					}
-				}
-			}
-                ps.close();
-                ps = c.prepareStatement("DELETE from playerarmies WHERE playerID = " + getDBId());
-                ps.executeUpdate();
-
-                // Save Personal Pilots Queues
-            for (int weightClass = Unit.LIGHT; weightClass < Unit.ASSAULT; weightClass++) {
-                Iterator<Pilot> mekList = getPersonalPilotQueue().getPilotQueue(Unit.MEK, weightClass).iterator();
-                while (mekList.hasNext()) {
-                    SPilot pilot = (SPilot) mekList.next();
-                    pilot.toDB(Unit.MEK, weightClass);
-                }
-                Iterator<Pilot> protoList = getPersonalPilotQueue().getPilotQueue(Unit.PROTOMEK, weightClass).iterator();
-                while (protoList.hasNext()) {
-                    SPilot pilot = (SPilot) protoList.next();
-                    pilot.toDB(Unit.PROTOMEK, weightClass);
-                }
-            }
-            ps.close();
-            CampaignData.mwlog.dbLog("Player " + getName() + " saved");
-        } catch (SQLException e) {
-            CampaignData.mwlog.dbLog("SQL error in SPlayer.toDB: " + e.getMessage());
-            CampaignData.mwlog.dbLog(e);
-        } finally {
-        	if (rs != null) {
-        		try {
-        			rs.close();
-        		} catch (SQLException e) {}
-        	}
-        	if (ps != null) {
-        		try {
-        		ps.close();
-        		} catch (SQLException e) {}
-        	}
-        }
-        ch.returnConnection(c);
-    }
-
     /**
      * @author jtighe
      * @param s
@@ -3133,10 +2830,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
              * @urgru 4.2.05
              */
             exclusionList.setOwnerName(name);
-            if (CampaignMain.cm.isUsingMySQL()) {
-                int dbId = CampaignMain.cm.MySQL.getPlayerIDByName(name);
-                setDBId(dbId);
-            }
 
             money = TokenReader.readInt(ST);
             experience = TokenReader.readInt(ST);
@@ -3213,12 +2906,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
              * reclaimed soon-ish, as no server used the feature. @urgru 9/30/06
              */
 
-            if (CampaignMain.cm.isUsingMySQL()) {
-                setDBId(TokenReader.readInt(ST));
-            } else {
-                TokenReader.readString(ST);
-            }
-
+            TokenReader.readString(ST);
             TokenReader.readString(ST);
 
             // TODO: Remove this after the next few updates from 0.1.51.2
@@ -3364,197 +3052,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             isLoading = false;
         }
     }
-
-    public void fromDB(int playerID) {
-        if (isLoading) {
-            return;
-        }
-        isLoading = true;
-        Connection c = ch.getConnection();
-
-        try {
-            ResultSet rs = null, rs1 = null;
-            Statement stmt = c.createStatement();
-            Statement stmt1 = c.createStatement();
-            rs = stmt.executeQuery("SELECT * from players WHERE playerID = " + playerID);
-            if (rs.next()) {
-            	String pString = rs.getString("playerString");
-            	if((pString != null) && (pString.trim().length() > 0)) {
-            		// player is using the newer save type
-            		fromString(rs.getString("playerString"));
-            		forumID = rs.getInt("playerForumID");
-            		rs.close();
-            		stmt.close();
-            		stmt1.close();
-            		CampaignData.mwlog.dbLog("Player " + getName() + " loaded");
-            		isLoading = false;
-            		ch.returnConnection(c);
-            		return;
-            	}
-                armies.clear();
-
-                name = rs.getString("playerName");
-                CampaignData.mwlog.dbLog("Loading player " + name);
-                exclusionList.setOwnerName(name);
-                setDBId(playerID);
-                money = rs.getInt("playerMoney");
-                experience = rs.getInt("playerExperience");
-
-                units = new Vector<SUnit>(1, 1);
-                forumID = rs.getInt("playerForumID");
-
-                rs1 = stmt1.executeQuery("SELECT ID from units WHERE uplayerID = " + playerID);
-                while (rs1.next()) {
-                    SUnit m = new SUnit();
-                    m.fromDB(rs1.getInt("ID"));
-                    units.add(m);
-                    CampaignMain.cm.toUser("PL|HD|" + m.toString(true), name, false);
-                }
-                rs1.close();
-                rs1 = stmt1.executeQuery("SELECT * from playerarmies WHERE playerID = " + playerID);
-                while (rs1.next()) {
-                    SArmy a = new SArmy(name);
-                    a.fromString(rs1.getString("armyString"), "%", this);
-                    if (armies.size() < a.getID()) {
-                        armies.add(a);
-                    } else {
-                        armies.add(a.getID(), a);
-                    }
-
-                    CampaignMain.cm.toUser("PL|SAD|" + a.toString(true, "%"), name, false);
-                }
-
-                setMyHouse(CampaignMain.cm.getHouseFromPartialString(rs.getString("playerHouseName"), null));
-
-                lastOnline = rs.getLong("playerLastOnline");
-
-                rating = rs.getDouble("playerRating");
-                influence = rs.getInt("playerInfluence");
-                fluffText = rs.getString("playerFluff").trim();
-                setTeamNumber(rs.getInt("playerTeamNumber"));
-
-                if (CampaignMain.cm.isUsingAdvanceRepair()) {
-                    addBays(rs.getInt("playerBaysOwned"));
-                } else {
-                    technicians = rs.getInt("playerTechnicians");
-                }
-
-                currentReward = rs.getInt("playerRP");
-
-                myHouse = CampaignMain.cm.getHouseFromPartialString(rs.getString("playerHouseName"), getName());
-                setXPToReward(rs.getInt("playerXPToReward"));
-
-                getPersonalPilotQueue().fromDB(getDBId());
-
-                getExclusionList().fromDB(getDBId());
-
-                try {
-                    if (CampaignMain.cm.isUsingAdvanceRepair()) {
-                        updateTotalTechs(rs.getString("playerTotalTechsString"));
-                        updateAvailableTechs(rs.getString("playerAvailableTechsString"));
-                    } else {
-                        // allow servers to go back and forth using Bays as
-                        // techs since bays are what techs are.
-                        if (technicians <= 0) {
-                            technicians = rs.getInt("playerTechnicians");
-                        }
-                    }
-                }
-                // Had alot of problems with advanced repair so lets just use
-                // this.
-                catch (Exception ex) {
-                }
-
-                myLogo = rs.getString("playerLogo");
-
-                try {
-                    setLastAttackFromReserve(rs.getLong("playerLastAFR"));
-
-                    setGroupAllowance(rs.getInt("playerGroupAllowance"));
-
-                    setLastISP(rs.getString("playerLastISP"));
-
-                    setInvisible(rs.getBoolean("playerIsInvisible"));
-
-                    setGroupAllowance(rs.getInt("playerGroupAllowance"));
-                } catch (Exception ex) {
-                }
-
-                try {
-                    int access = rs.getInt("playerAccess");
-                    String passwd = rs.getString("playerPassword");
-                    long time = System.currentTimeMillis();
-                    if (access >= 2) {
-                        password = new MWPasswdRecord(name, access, passwd, time, "");
-                    }
-                } catch (Exception ex) {
-                }
-
-                if (CampaignMain.cm.getBooleanConfig("UsePartsRepair")) {
-                    unitParts.fromString(rs.getString("playerUnitParts"),"|");
-                }
-
-                subFaction = rs.getString("playerSubfactionName");
-
-                setAutoReorder(rs.getBoolean("playerAutoReorder"));
-                setLastPromoted(rs.getLong("playerLastPromoted"));
-                setUserValidated(rs.getBoolean("playerValidated"));
-
-                if ((password != null) && (password.getPasswd().trim().length() <= 2)) {
-                    password.setAccess(IAuthenticator.GUEST);
-                }
-
-                CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), name, false);
-                CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), name, false);
-                if (CampaignMain.cm.isUsingAdvanceRepair()) {
-
-                    if (!this.hasRepairingUnits()) {
-                        CampaignMain.cm.toUser("PL|UTT|" + totalTechsToString(), name, false);
-                        CampaignMain.cm.toUser("PL|UAT|" + totalTechsToString(), name, false);
-                        updateAvailableTechs(totalTechsToString());// make
-                        // sure
-                        // techs
-                        // are
-                        // in
-                        // synch
-                    } else {
-                        CampaignMain.cm.toUser("PL|UTT|" + totalTechsToString(), name, false);
-                        CampaignMain.cm.toUser("PL|UAT|" + availableTechsToString(), name, false);
-                    }
-                }
-
-                healAllPilots();
-
-                /*
-                 * Check all units for bad ammo or illegal/mis-set vacant
-                 * pilots. This was being done at the same time as the units are
-                 * unstrung, but caused a null b/c fixAmmo() uses .myHouse(),
-                 * which is null at that point in the unstring.
-                 *
-                 * If the units are changed as a result of the checks, a PL|UU
-                 * is sent, as well as a PL|SAD for each army that includes the
-                 * unit.
-                 */
-                for (SUnit currU : units) {
-                    fixPilot(currU);
-                }
-            }
-            rs.close();
-            if (rs1 != null) {
-                rs1.close();
-            }
-            stmt.close();
-            stmt1.close();
-            CampaignData.mwlog.dbLog("Player " + getName() + " loaded");
-        } catch (SQLException e) {
-            CampaignData.mwlog.dbLog("SQL Error in SPlayer.fromDB: " + e.getMessage());
-            CampaignData.mwlog.dbLog(e);
-        } finally {
-            isLoading = false;
-            ch.returnConnection(c);
-        }
-    }
-
 
     /**
      * Issue with vacant pilots getting placed in !Mek and !Proto Units This

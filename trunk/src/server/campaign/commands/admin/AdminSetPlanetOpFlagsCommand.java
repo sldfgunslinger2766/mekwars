@@ -73,8 +73,5 @@ public class AdminSetPlanetOpFlagsCommand implements Command {
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has set the op flags for "+planet.getName());
 		
         planet.updated();
-        
-        if(CampaignMain.cm.isUsingMySQL())
-        	planet.toDB();
 	}
 }

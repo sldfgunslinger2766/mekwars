@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,8 +44,6 @@ import server.campaign.pilot.skills.SPilotSkill;
 import server.campaign.pilot.skills.TraitSkill;
 import server.campaign.pilot.skills.WeaponSpecialistSkill;
 import server.campaign.util.SerializedMessage;
-import server.mwmysql.JDBCConnectionHandler;
-
 import common.CampaignData;
 import common.campaign.pilot.Pilot;
 import common.campaign.pilot.skills.PilotSkill;
@@ -62,8 +61,6 @@ public class SPilot extends Pilot {
     private int pickedUpID;
     private boolean death = false;
     private boolean is_saving = false;
-    
-    private JDBCConnectionHandler ch = new JDBCConnectionHandler();
 
     public SPilot(String name, int gunnery, int piloting) {
         super(name, gunnery, piloting);
@@ -482,120 +479,10 @@ public class SPilot extends Pilot {
         }
 
         if (!toPlayer) {
-            if (CampaignMain.cm.isUsingMySQL()) {
-                result.append(getDBId());
-            } else {
-                result.append(0);// unused var
-            }
+            result.append(0);// unused var
         }
 
         return result.toString();
-    }
-
-    public void toDB(int unitType, int unitSize) {
-    	if (is_saving)
-    		return;
-    	
-    	is_saving = true;
-    	Connection c = null;
-    	
-    	PreparedStatement ps = null;
-    	try {
-            if (getName().equalsIgnoreCase("Vacant")) {
-            	is_saving = false;
-                return;
-            }
-            if (getPilotId() == -1) {
-            	// Pilot hasn't been assigned an ID yet.
-            	setPilotId(CampaignMain.cm.getAndUpdateCurrentPilotID());
-            	CampaignData.mwlog.dbLog("Getting new Pilot ID: " + getPilotId());
-            }
-            StringBuffer sql = new StringBuffer();
-            
-            c = ch.getConnection();
-            
-            if (getDBId() < 1) {
-                // No pilot with this id, so INSERT
-                sql.setLength(0);
-
-                ps = c.prepareStatement("INSERT into pilots set MWID=?, pilotName=?, pilotExp=?, pilotGunnery=?, pilotPiloting=?, pilotKills=?, pilotCurrentFaction=?, pilotHits=?, pilotSize = ?, pilotType = ?", PreparedStatement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, getPilotId());
-                ps.setString(2, getName());
-                ps.setInt(3, getExperience());
-                ps.setInt(4, getGunnery());
-                ps.setInt(5, getPiloting());
-                ps.setInt(6, getKills());
-                ps.setString(7, getCurrentFaction());
-                ps.setInt(8, getHits());
-                ps.setInt(9, unitSize);
-                ps.setInt(10, unitType);
-                ps.executeUpdate();
-                ResultSet rs = ps.getGeneratedKeys();
-                rs.next();
-                //CampaignData.mwlog.dbLog("New Pilot ID " + rs.getInt(1) + " for pilot " + getName());
-                setDBId(rs.getInt(1));
-            } else {
-                // Pilot already saved, so UPDATE
-                sql.setLength(0);
-
-                ps = c.prepareStatement("UPDATE pilots set pilotName=?, pilotExp=?, pilotGunnery=?, pilotPiloting=?, pilotKills=?, pilotCurrentFaction=?, pilotHits=?, pilotSize = ?, pilotType = ?, MWID=? WHERE pilotID=?");
-                ps.setString(1, getName());
-                ps.setInt(2, getExperience());
-                ps.setInt(3, getGunnery());
-                ps.setInt(4, getPiloting());
-                ps.setInt(5, getKills());
-                ps.setString(6, getCurrentFaction());
-                ps.setInt(7, getHits());
-                ps.setInt(8, unitSize);
-                ps.setInt(9, unitType);
-                ps.setInt(10, getPilotId());
-                ps.setInt(11, getDBId());
-                ps.executeUpdate();
-            }
-            // stmt.executeUpdate(sql.toString());
-
-            // Update pilot skills
-            sql.setLength(0);
-            sql.append("DELETE from pilotskills WHERE pilotID = " + getDBId());
-            ps.executeUpdate(sql.toString());
-
-            if (getSkills().size() > 0) {
-                for (PilotSkill skill : getSkills().getPilotSkills()) {
-                    SPilotSkill sk = (SPilotSkill) skill;
-                    sql.setLength(0);
-                    sql.append("REPLACE into pilotskills set ");
-                    sql.append("pilotID = " + getDBId() + ", ");
-                    sql.append("SkillNum = " + sk.getId() + ", ");
-                    sql.append("SkillLevel = " + sk.getLevel());
-                    if (sk instanceof WeaponSpecialistSkill) {
-                        sql.append(", skillData = '" + getWeapon() + "'");
-                    }
-                    if (sk instanceof TraitSkill) {
-                        sql.append(", skillData = '" + getTraitName() + "'");
-                    }
-                    if (sk instanceof EdgeSkill) {
-                        sql.append(", skillData = '" + ((EdgeSkill) sk).getTac() + "$");
-                        sql.append(((EdgeSkill) sk).getKO() + "$");
-                        sql.append(((EdgeSkill) sk).getHeadHit() + "$");
-                        sql.append(((EdgeSkill) sk).getExplosion() + "'");
-                    }
-                    ps.executeUpdate(sql.toString());
-
-                }
-            }
-            ps.close();
-        } catch (SQLException e) {
-            CampaignData.mwlog.dbLog("SQL Error in PilotHandler.savePilot: " + e.getMessage());
-            CampaignData.mwlog.dbLog(e);
-            try {
-                if(ps != null)
-                	ps.close();         	
-            } catch (SQLException ex) {}
-        } finally {
-        	is_saving = false;
-        	ch.returnConnection(c);
-        }
-        
     }
 
     public void fromFileFormat(String s, String delimiter) {
@@ -655,11 +542,7 @@ public class SPilot extends Pilot {
 
             setHits(TokenReader.readInt(ST));
 
-            if (CampaignMain.cm.isUsingMySQL()) {
-                setDBId(TokenReader.readInt(ST));
-            } else {
-                TokenReader.readString(ST);
-            }
+            TokenReader.readString(ST);
 
             /*
              * some times a pilot doesn't get assigned a skill this code fixes
@@ -743,7 +626,7 @@ public class SPilot extends Pilot {
      * @return String
      */
     public String getPilotCaptureMessageToOwner(SUnit unit) {
-
+    	BufferedReader dis = null; 
         try {
 
             File folder = new File("./data/pilotmessages");
@@ -755,7 +638,7 @@ public class SPilot extends Pilot {
             String scrapFile = "/pilotcapturemessagestoowner.txt";
             // CampaignData.mwlog.errLog(folder.getPath()+scrapFile);
             FileInputStream fis = new FileInputStream(folder.getPath() + scrapFile);
-            BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+            dis = new BufferedReader(new InputStreamReader(fis));
             int messages = Integer.parseInt(dis.readLine());
             Random rand = new Random();
             int id = rand.nextInt(messages);
@@ -775,7 +658,17 @@ public class SPilot extends Pilot {
         } catch (Exception e) {
             CampaignData.mwlog.errLog("A problem occured with your pilotcapturemessagestoowner File!");
             return getName() + " was captured by enemy forces after fleeing the " + unit.getModelName() + ".";
-        }// end catch
+        } finally {
+        	if (dis != null) {
+        		try {
+					dis.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					CampaignData.mwlog.errLog("Unable to close reader in GetPilotCaptureMessageToOwner");
+					CampaignData.mwlog.errLog(e.getMessage());
+				}
+        	}
+        }
 
     }
 
@@ -785,7 +678,7 @@ public class SPilot extends Pilot {
      * @return String
      */
     public String getPilotCaptureAndDefectedMessage(SUnit unit, SHouse house) {
-
+    	BufferedReader dis = null;
         try {
 
             File folder = new File("./data/pilotmessages");
@@ -797,7 +690,7 @@ public class SPilot extends Pilot {
             String scrapFile = "/pilotcaptureanddefectedmessages.txt";
             // CampaignData.mwlog.errLog(folder.getPath()+scrapFile);
             FileInputStream fis = new FileInputStream(folder.getPath() + scrapFile);
-            BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+            dis = new BufferedReader(new InputStreamReader(fis));
             int messages = Integer.parseInt(dis.readLine());
             Random rand = new Random();
             int id = rand.nextInt(messages);
@@ -818,8 +711,17 @@ public class SPilot extends Pilot {
         } catch (Exception e) {
             CampaignData.mwlog.errLog("A problem occured with your pilotcapturemessagesdefect File!");
             return getName() + " was rescued from his unit by our infantry and has decided to join " + house.getColoredNameAsLink() + ".";
-        }// end catch
-
+        } finally {
+        	if (dis != null) {
+        		try {
+					dis.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					CampaignData.mwlog.errLog("Unable to close reader in GetPilotCaptureAndDefectedMessage");
+					CampaignData.mwlog.errLog(e.getMessage());
+				}
+        	}
+        }
     }
 
     /**
@@ -828,7 +730,7 @@ public class SPilot extends Pilot {
      * @return String
      */
     public String getPilotCaptureAndRemovedMessage(SUnit unit) {
-
+    	BufferedReader dis = null;
         try {
 
             File folder = new File("./data/pilotmessages");
@@ -840,7 +742,7 @@ public class SPilot extends Pilot {
             String scrapFile = "/pilotcaptureandremovedmessages.txt";
             // CampaignData.mwlog.errLog(folder.getPath()+scrapFile);
             FileInputStream fis = new FileInputStream(folder.getPath() + scrapFile);
-            BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+            dis = new BufferedReader(new InputStreamReader(fis));
             int messages = Integer.parseInt(dis.readLine());
             Random rand = new Random();
             int id = rand.nextInt(messages);
@@ -860,7 +762,17 @@ public class SPilot extends Pilot {
         } catch (Exception e) {
             CampaignData.mwlog.errLog("A problem occured with your pilotcapturemessagesdefect File!");
             return getName() + " captured by our infantry transferred to HQ for interrogation.";
-        }// end catch
+        } finally {
+        	if (dis != null) {
+        		try {
+					dis.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					CampaignData.mwlog.errLog("Unable to close reader in GetPilotCaptureAndRemoveMessage");
+					CampaignData.mwlog.errLog(e.getMessage());
+				}
+        	}
+        }
 
     }
 
@@ -870,7 +782,7 @@ public class SPilot extends Pilot {
      * @return String
      */
     public String getPilotRescueMessage(SUnit unit) {
-
+    	BufferedReader dis = null;
         try {
 
             File folder = new File("./data/pilotmessages");
@@ -882,7 +794,7 @@ public class SPilot extends Pilot {
             String scrapFile = "/pilotrescuemessages.txt";
             // CampaignData.mwlog.errLog(folder.getPath()+scrapFile);
             FileInputStream fis = new FileInputStream(folder.getPath() + scrapFile);
-            BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+            dis = new BufferedReader(new InputStreamReader(fis));
             int messages = Integer.parseInt(dis.readLine());
             Random rand = new Random();
             int id = rand.nextInt(messages);
@@ -902,7 +814,17 @@ public class SPilot extends Pilot {
         } catch (Exception e) {
             CampaignData.mwlog.errLog("A problem occured with your pilotcapturemessages File!");
             return getName() + " hiked back to base.";
-        }// end catch
+        } finally {
+        	if (dis != null) {
+        		try {
+					dis.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					CampaignData.mwlog.errLog("Unable to close reader in GetPilotRescueMessage");
+					CampaignData.mwlog.errLog(e.getMessage());
+				}
+        	}
+        }
 
     }
 
@@ -915,10 +837,11 @@ public class SPilot extends Pilot {
      */
     public static String getRandomPilotName(Random r) {
         String result = "John Doe";
+        BufferedReader dis = null;
         try {
             File configFile = new File("./data/pilotnames/Pilotnames.txt");
             FileInputStream fis = new FileInputStream(configFile);
-            BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+            dis = new BufferedReader(new InputStreamReader(fis));
             int names = Integer.parseInt(dis.readLine());
             int pilotid = r.nextInt(names);
             while (dis.ready()) {
@@ -932,6 +855,16 @@ public class SPilot extends Pilot {
             }
         } catch (Exception e) {
             CampaignData.mwlog.errLog("A problem occured with your Pilotnames File!");
+        } finally {
+        	if (dis != null) {
+        		try {
+					dis.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					CampaignData.mwlog.errLog("Unable to close reader in GetRandomPilotName");
+					CampaignData.mwlog.errLog(e.getMessage());
+				}
+        	}
         }
         return result;
     }

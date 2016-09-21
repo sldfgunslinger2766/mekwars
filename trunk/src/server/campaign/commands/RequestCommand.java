@@ -30,7 +30,6 @@ import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.SUnitFactory;
 import server.campaign.pilot.SPilot;
-import server.mwmysql.HistoryHandler;
 
 import common.CampaignData;
 import common.Unit;
@@ -123,12 +122,6 @@ public class RequestCommand implements Command {
             unit.setPilot(pilot);
             p.addUnit(unit, true);
             CampaignMain.cm.toUser("AM:High Command has given you a new unit from its welfare rolls to help you get back on your feet!", Username, true);
-            if (CampaignMain.cm.isKeepingUnitHistory()) {
-                CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_UNIT, unit.getDBId(), HistoryHandler.UNIT_CREATED, unit.getProducer());
-                CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_UNIT, unit.getDBId(), HistoryHandler.UNIT_PRODUCED_BY_WELFARE, "Activated from garrison duty and assigned to combat duty.");
-                CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_PILOT, pilot.getDBId(), HistoryHandler.PILOT_ASSIGNED, "Assigned to " + unit.getModelName());
-                CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_UNIT, unit.getDBId(), HistoryHandler.PILOT_ASSIGNED, pilot.getName() + " assigned to unit");
-            }
             return;
         }
 
@@ -365,13 +358,6 @@ public class RequestCommand implements Command {
             }
 
             SPilot pilot = playerHouse.getNewPilot(type_id);
-            CampaignData.mwlog.dbLog("Pulled pilot: " + pilot.toFileFormat("$", false) + " (DBId: " + pilot.getDBId() + ")");
-
-            if (CampaignMain.cm.isUsingMySQL()) {
-                pilot.toDB(type_id, -1);
-            }
-
-            CampaignData.mwlog.dbLog("Pilot saved: " + pilot.toFileFormat("$", false) + " (DBId: " + pilot.getDBId() + ")");
 
             Vector<SUnit> mechs = factory.getMechProduced(type_id, pilot);
             StringBuffer results = new StringBuffer();
@@ -406,12 +392,6 @@ public class RequestCommand implements Command {
                 p.addUnit(mech, true);// give the actual unit...
                 results.append(mech.getModelName());
                 results.append(", ");
-
-                // Add unit history, if it's being kept
-                if (CampaignMain.cm.isKeepingUnitHistory()) {
-                    CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_UNIT, mech.getDBId(), HistoryHandler.UNIT_CREATED, mech.getProducer());
-                    CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_UNIT, mech.getDBId(), HistoryHandler.UNIT_BOUGHT_FROM_FACTORY, "Purchased from " + factory.getName() + " on " + factory.getPlanet().getName());
-                }
             }
 
             results.delete(results.length() - 2, results.length());

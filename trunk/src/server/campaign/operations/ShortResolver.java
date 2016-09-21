@@ -50,7 +50,6 @@ import server.campaign.mercenaries.ContractInfo;
 import server.campaign.mercenaries.MercHouse;
 import server.campaign.pilot.SPilot;
 import server.campaign.util.ELORanking;
-import server.mwmysql.HistoryHandler;
 
 import common.CampaignData;
 import common.House;
@@ -2140,10 +2139,6 @@ public class ShortResolver {
 
             // remove the unit from the player's hangar.
             oldOwner.removeUnit(currU.getId(), false);
-            // Remove it from the database
-            if (CampaignMain.cm.isUsingMySQL()) {
-                CampaignMain.cm.MySQL.deleteUnit(currU.getDBId());
-            }
 
             /*
              * Tell the player if his pilot was killed, saved or captured.
@@ -3808,9 +3803,6 @@ public class ShortResolver {
             boolean personalQueues = CampaignMain.cm.getBooleanConfig("AllowPersonalPilotQueues");
             boolean isPilotChangeable = unit.isSinglePilotUnit();
 
-            if (CampaignMain.cm.isUsingMySQL()) {
-                CampaignMain.cm.MySQL.deletePilot(((SPilot) unit.getPilot()).getPilotId());
-            }
             if (isPilotChangeable && personalQueues) {
                 SPilot pilot = new SPilot("Vacant", 99, 99);
                 unit.setPilot(pilot);
@@ -4589,16 +4581,6 @@ public class ShortResolver {
                 if (bvForBonusXP > 0) {
                     totalXPforUnit += Math.floor(killedUnit.getBVForMatch() / bvForBonusXP);
                 }
-
-                if (CampaignMain.cm.isKeepingUnitHistory()) {
-                    String model = killedUnit.getModelName();
-                    String insertString = "Killed " + model;
-                    int unitID = currU.getDBId();
-                    int pilotID = ((SPilot) currU.getPilot()).getDBId();
-                    CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_UNIT, unitID, HistoryHandler.UNIT_KILLED_UNIT, insertString);
-                    CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_PILOT, pilotID, HistoryHandler.PILOT_KILLED_UNIT, insertString);
-                }
-
                 // add the kill
                 realKills++;
             }

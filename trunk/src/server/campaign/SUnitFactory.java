@@ -26,21 +26,14 @@ package server.campaign;
 
 import java.io.File;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import server.campaign.pilot.SPilot;
 import server.campaign.util.SerializedMessage;
-import server.mwmysql.JDBCConnectionHandler;
 
 import common.CampaignData;
-import common.Planet;
 import common.Unit;
 import common.UnitFactory;
 import common.util.TokenReader;
@@ -55,8 +48,6 @@ public class SUnitFactory extends UnitFactory implements Serializable {
     // VARIABLES
     private SPlanet planet;
     
-    private JDBCConnectionHandler ch = new JDBCConnectionHandler();
-
     // CONSTRUCTORS
     public SUnitFactory() {
         // empty
@@ -101,112 +92,6 @@ public class SUnitFactory extends UnitFactory implements Serializable {
         result.append(isLocked());
         result.append(getAccessLevel());
         return result.toString();
-    }
-
-    public void toDB() {
-        Statement stmt = null;
-        ResultSet rs = null;
-        StringBuffer sql = new StringBuffer();
-        Planet pl = getPlanet();
-        PreparedStatement ps = null;
-        int fid = 0;
-        Connection c = ch.getConnection();
-        try {
-            stmt = c.createStatement();
-            sql.setLength(0);
-            sql.append("SELECT FactoryID from factories WHERE FactoryID = '");
-            sql.append(getID());
-            sql.append("'");
-            rs = stmt.executeQuery(sql.toString());
-            if (!rs.next()) {
-                // This doesn't exist, so INSERT it
-                sql.setLength(0);
-                sql.append("INSERT into factories set ");
-                sql.append("FactoryName = ?, ");
-                sql.append("FactorySize = ?, ");
-                sql.append("FactoryFounder = ?, ");
-                sql.append("FactoryTicks = ?, ");
-                sql.append("FactoryRefreshSpeed = ?, ");
-                sql.append("FactoryType = ?, ");
-                sql.append("FactoryPlanet = ?, ");
-                sql.append("FactoryisLocked = ?, ");
-                sql.append("FactoryBuildTableFolder = ?, ");
-                sql.append("FactoryAccessLevel = ?");
-
-                ps = c.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
-                ps.setString(1, getName());
-                ps.setString(2, getSize());
-                ps.setString(3, getFounder());
-                ps.setInt(4, getTicksUntilRefresh());
-                ps.setInt(5, getRefreshSpeed());
-                ps.setInt(6, getType());
-                ps.setString(7, pl.getName());
-                ps.setString(8, Boolean.toString(isLocked()));
-                ps.setString(9, getBuildTableFolder());
-                ps.setInt(10, getAccessLevel());
-
-                ps.executeUpdate();
-                rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    fid = rs.getInt(1);
-                    setID(fid);
-                }
-            } else {
-                // It already exists, so UPDATE it
-                fid = rs.getInt("FactoryID");
-                sql.setLength(0);
-                sql.append("UPDATE factories set ");
-                sql.append("FactoryName = ?, ");
-                sql.append("FactorySize = ?, ");
-                sql.append("FactoryPlanet = ?, ");
-                sql.append("FactoryFounder = ?, ");
-                sql.append("FactoryTicks = ?, ");
-                sql.append("FactoryRefreshSpeed = ?, ");
-                sql.append("FactoryType = ?, ");
-                sql.append("FactoryisLocked = ?, ");
-                sql.append("FactoryBuildTableFolder = ?, ");
-                sql.append("FactoryAccessLevel = ? ");
-                sql.append("WHERE FactoryID = ?");
-
-                ps = c.prepareStatement(sql.toString());
-                ps.setString(1, getName());
-                ps.setString(2, getSize());
-                ps.setString(3, pl.getName());
-                ps.setString(4, getFounder());
-                ps.setInt(5, getTicksUntilRefresh());
-                ps.setInt(6, getRefreshSpeed());
-                ps.setInt(7, getType());
-                ps.setString(8, Boolean.toString(isLocked()));
-                ps.setString(9, getBuildTableFolder());
-                ps.setInt(10, getAccessLevel());
-                ps.setInt(11, getID());
-
-                ps.executeUpdate();
-            }
-            rs.close();
-            ps.close();
-            stmt.close();
-        } catch (SQLException e) {
-            CampaignData.mwlog.dbLog("SQL ERROR in SUnitFactory.toDB: " + e.getMessage());
-            CampaignData.mwlog.dbLog(e);
-        } finally {
-        	if (rs != null) {
-        		try {
-        			rs.close();
-        		} catch (SQLException e) {}
-        	}
-        	if (ps != null) {
-        		try {
-        			ps.close();
-        		} catch (SQLException e) {}
-        	}
-        	if (stmt != null) {
-        		try {
-        			stmt.close();
-        		} catch (SQLException e) {}
-        	}
-        	ch.returnConnection(c);
-        }
     }
 
     /**
@@ -403,18 +288,6 @@ public class SUnitFactory extends UnitFactory implements Serializable {
 
         // Build the fluff text for the mek
         String Filename = "";
-        String producer = "Built by ";
-        if (this.getPlanet().getOwner() != null)
-            producer += this.getPlanet().getOwner().getName();
-        else
-            producer += this.getFounder();
-
-        /*
-         * add a production location to the fluff, if from a normal planet. null
-         * planet will normally be reward point production.
-         */
-        if (this.getPlanet().getName() != null)
-            producer += " on " + this.getPlanet().getName();
 
         String unitSize = getSize();
         if (CampaignMain.cm.getBooleanConfig("UseOnlyOneVehicleSize") && type_id == Unit.VEHICLE)

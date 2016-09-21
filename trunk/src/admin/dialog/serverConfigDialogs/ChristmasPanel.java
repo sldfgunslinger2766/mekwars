@@ -28,9 +28,7 @@ public class ChristmasPanel extends JPanel {
 	
 	public ChristmasPanel() {
 		super();
-        /*
-         * Database Configuration Panel Construction
-         */
+
         JPanel dbSpring = new JPanel(new SpringLayout());
 
         BaseCheckBox = new JCheckBox("Allow Scrapping");

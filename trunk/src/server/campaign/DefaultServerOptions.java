@@ -1069,11 +1069,6 @@ public class DefaultServerOptions {
         // Require players to have attack-capable armies to activate
         defaults.setProperty("RequireAttackCapableArmiesForActivation", "false");
 
-        // Only used when commands are saved to the DB
-        defaults.setProperty("ServerOptionsSavedToDB", "false");
-
-        defaults.setProperty("StoreUnitHistoryInDatabase", "false");
-
         // Mod Mail Message of the Day
         defaults.setProperty("MMOTD", "");
 
@@ -1085,9 +1080,6 @@ public class DefaultServerOptions {
         defaults.setProperty("UsePartsBlackMarket", "false");
         defaults.setProperty("UsePartsRepair", "false");
         defaults.setProperty("AllowCrossOverTech", "false");
-
-        defaults.setProperty("ForumGroupName", "");
-        defaults.setProperty("REQUIREEMAILFORREGISTRATION", "false");
 
         // Victory Condition Kill Unit Commanders Settings.
         defaults.setProperty("allowUnitCommanderMek", "true");

@@ -50,15 +50,11 @@ public void process(StringTokenizer command,String Username) {
 		}
 		
 		p.setName(newName);
+		File fp = new File("./campaign/planets/" + oldName.toLowerCase().trim() + ".dat");
+		if (fp.exists())
+			fp.delete();
+		CampaignMain.cm.savePlanetData();
 		
-		if (CampaignMain.cm.isUsingMySQL()) {
-			p.toDB();
-		} else {
-			File fp = new File("./campaign/planets/" + oldName.toLowerCase().trim() + ".dat");
-			if (fp.exists())
-				fp.delete();
-			CampaignMain.cm.savePlanetData();
-		}
 		CampaignMain.cm.updateHousePlanetUpdate();
 		CampaignMain.cm.doSendModMail("NOTE",Username + " renamed " + oldName + " to " + newName);
 		

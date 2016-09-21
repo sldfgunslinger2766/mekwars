@@ -68,9 +68,6 @@ public class DeleteAccountCommand implements Command {
 		p.getMyHouse().removePlayer(p,!scrapUnits);
 		
 		//delete the pfile
-		if(CampaignMain.cm.isUsingMySQL())
-			CampaignMain.cm.MySQL.deletePlayer(p);
-		
 		File fp = new File("./campaign/players/" + p.getName().toLowerCase() + ".dat");
 		if (fp.exists())
 			fp.delete();

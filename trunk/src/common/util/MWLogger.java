@@ -60,7 +60,6 @@ public final class MWLogger {// final - no extension of the server logger
     private Logger tickLog; // Log for tick events (rankings, production, player
                             // stats)
     private Logger ipLog; // Log connecting IPs.
-    private Logger dbLog; // Log MySQL Database issues
     private Logger testLog; // Log test code
     private Logger debugLog; // for all debug messages
 
@@ -81,7 +80,6 @@ public final class MWLogger {// final - no extension of the server logger
     private FileHandler modHandler;
     private FileHandler tickHandler;
     private FileHandler ipHandler;
-    private FileHandler dbHandler;
     private FileHandler testHandler;
     private FileHandler debugHandler;
 
@@ -301,16 +299,7 @@ public final class MWLogger {// final - no extension of the server logger
             ipLog = Logger.getLogger("ipLogger");
             ipLog.setUseParentHandlers(false);
             ipLog.addHandler(ipHandler);
-
-            dbHandler = new FileHandler(logDir.getPath() + "/dblog", 104857600, rotations, true);
-            dbHandler.setLevel(Level.INFO);
-            dbHandler.setFilter(null);
-            dbHandler.setFormatter(mmnetFormatter);
-            dbHandler.setEncoding("UTF8");
-            dbLog = Logger.getLogger("dbLogger");
-            dbLog.setUseParentHandlers(false);
-            dbLog.addHandler(dbHandler);
-            
+        
             testHandler = new FileHandler(logDir.getPath() + "/testlog", 104857600, rotations, true);
             testHandler.setLevel(Level.INFO);
             testHandler.setFilter(null);
@@ -481,27 +470,6 @@ public final class MWLogger {// final - no extension of the server logger
         if (logging) {
             ipLog.info(s);
             ipHandler.flush();
-        }
-    }
-
-    public void dbLog(String s) {
-        if (logging) {
-            dbLog.info(s);
-            dbHandler.flush();
-        }
-    }
-
-    public void dbLog(Exception e) {
-        if (logging) {
-            dbLog.warning("[" + e.toString() + "]");
-            dbHandler.flush();
-            StackTraceElement[] t = e.getStackTrace();
-            for (int i = 0; i < t.length; i++) {
-                dbLog.warning("   " + t[i].toString());
-                dbHandler.flush();
-                if (isServer && server.campaign.CampaignMain.cm != null)
-                    server.campaign.CampaignMain.cm.doSendErrLog("   " + t[i].toString());
-            }
         }
     }
 

@@ -121,18 +121,14 @@ public class OperationReporter {
 	public void commit() {
 		opData.setEndTime(System.currentTimeMillis());
 				
-		if(CampaignMain.cm.isUsingMySQL()) {
-			CampaignMain.cm.MySQL.commitBattleReport(opData);
-			return;
-		} 
-			CampaignData.mwlog.resultsLog("Operation Finished: ");
-			CampaignData.mwlog.resultsLog("  OpType: " + opData.getOpType());
-			CampaignData.mwlog.resultsLog("  Planet: " + opData.getPlanet() + ", Terrain: " + opData.getTerrain() + ", Theme: " + opData.getTheme());
-			CampaignData.mwlog.resultsLog("  Attacker(s): " + opData.getAttackers() + " (" + opData.getAttackerSize() + " units)  --  Defender(s): " + opData.getDefenders() + " (" + opData.getDefenderSize() + " units)");
-			CampaignData.mwlog.resultsLog("  BVs: Attacker: " + opData.getAttackerStartBV() + " / " + opData.getAttackerEndBV() + "  --  Defender: " + opData.getDefenderStartBV() + " / " + opData.getDefenderEndBV());
-			CampaignData.mwlog.resultsLog("  Attacker Won: " + Boolean.toString(opData.attackerIsWinner()));
-			CampaignData.mwlog.resultsLog("  Winner(s): " + opData.getWinners() + "  --  Loser(s): " + opData.getLosers());
-			CampaignData.mwlog.resultsLog("  Game Length: " + opData.getHumanReadableGameLength());
+		CampaignData.mwlog.resultsLog("Operation Finished: ");
+		CampaignData.mwlog.resultsLog("  OpType: " + opData.getOpType());
+		CampaignData.mwlog.resultsLog("  Planet: " + opData.getPlanet() + ", Terrain: " + opData.getTerrain() + ", Theme: " + opData.getTheme());
+		CampaignData.mwlog.resultsLog("  Attacker(s): " + opData.getAttackers() + " (" + opData.getAttackerSize() + " units)  --  Defender(s): " + opData.getDefenders() + " (" + opData.getDefenderSize() + " units)");
+		CampaignData.mwlog.resultsLog("  BVs: Attacker: " + opData.getAttackerStartBV() + " / " + opData.getAttackerEndBV() + "  --  Defender: " + opData.getDefenderStartBV() + " / " + opData.getDefenderEndBV());
+		CampaignData.mwlog.resultsLog("  Attacker Won: " + Boolean.toString(opData.attackerIsWinner()));
+		CampaignData.mwlog.resultsLog("  Winner(s): " + opData.getWinners() + "  --  Loser(s): " + opData.getLosers());
+		CampaignData.mwlog.resultsLog("  Game Length: " + opData.getHumanReadableGameLength());
 	}
 	
 	public void closeOperation(boolean draw, boolean attackerWon) {
@@ -188,7 +184,6 @@ public class OperationReporter {
 		for(Unit currU : army.getUnits()) {
 			int ID = currU.getId();
 			String model = ((SUnit)currU).getModelName();
-			CampaignData.mwlog.dbLog("Adding Unit " + ID + ": " + model);
 			if(attackerArmy)
 				attackerUnits.put(ID, model);
 			else

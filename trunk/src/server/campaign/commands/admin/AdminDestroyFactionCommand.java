@@ -33,12 +33,10 @@ public class AdminDestroyFactionCommand implements Command {
 		 * 2) Reassign players
 		 * 3) Take care of house bay units
 		 * 4) Reassign factories to new build tables
-		 * 5) Remove faction forum access
-		 * 6) Remove subfaction affiliations
-		 * 7) Remove faction / subfaction access from operations
-		 * 8) Update clients to remove faction
-		 * 9) Remove faction from memory
-		 * 10) Remove faction from database
+		 * 5) Remove subfaction affiliations
+		 * 6) Remove faction / subfaction access from operations
+		 * 7) Update clients to remove faction
+		 * 8) Remove faction from memory
 		 * 
 		 */
 

@@ -89,9 +89,6 @@ public class AdminUpdatePlanetOwnershipCommand implements Command {
 		planet.getInfluence().updateHouse(id, ownerShip);
 		planet.updated();
 		
-        if(CampaignMain.cm.isUsingMySQL())
-        	planet.toDB();
-		
 		CampaignMain.cm.doSendModMail("NOTE",Username + " updated "+houseName+" ownership of "+ planet.getName()+" to "+ownerShip+".");
 	}
 }

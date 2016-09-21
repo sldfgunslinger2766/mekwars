@@ -27,7 +27,6 @@ import server.campaign.pilot.SPilot;
 import server.campaign.pilot.SPilotSkills;
 import server.campaign.pilot.skills.SPilotSkill;
 import server.campaign.pilot.skills.TraitSkill;
-import server.mwmysql.HistoryHandler;
 
 // syntanx /c createunit#filename#flavortext#gunnery#pilot#skill1,skill2,skill3
 public class CreateUnitCommand implements Command {
@@ -104,10 +103,5 @@ public class CreateUnitCommand implements Command {
 		CampaignMain.cm.toUser("Unit created: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+pilot.getSkillString(true) + ". ID #" + cm.getId(),Username,true);
 		//server.CampaignData.mwlog.modLog(Username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+pilot.getSkillString(true));	
 		CampaignMain.cm.doSendModMail("NOTE",Username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+pilot.getSkillString(true));
-		if(CampaignMain.cm.isKeepingUnitHistory()) {
-			CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_UNIT, cm.getDBId(), HistoryHandler.UNIT_CREATED, cm.getProducer());
-			CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_PILOT, pilot.getDBId(), HistoryHandler.PILOT_ASSIGNED, "Assigned to " + cm.getModelName());
-			CampaignMain.cm.MySQL.addHistoryEntry(HistoryHandler.HISTORY_TYPE_UNIT, cm.getDBId(), HistoryHandler.PILOT_ASSIGNED, pilot.getName() + " assigned to unit");
-		}
 	}
 }

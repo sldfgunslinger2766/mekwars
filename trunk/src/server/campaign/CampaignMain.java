@@ -113,7 +113,6 @@ import server.campaign.commands.mod.UnBanCommand;
 import server.campaign.commands.mod.UnBanIPCommand;
 import server.campaign.commands.mod.UnlockLancesCommand;
 import server.campaign.commands.mod.UpdateServerUnitsCacheCommand;
-import server.campaign.commands.mod.ValidateUserCommand;
 import server.campaign.commands.mod.ViewPlayerPartsCommand;
 import server.campaign.commands.mod.ViewPlayerPersonalPilotQueueCommand;
 import server.campaign.commands.mod.ViewPlayerUnitCommand;
@@ -135,11 +134,11 @@ import server.campaign.util.XMLPlanetDataParser;
 import server.campaign.util.XMLTerrainDataParser;
 import server.campaign.votes.VoteManager;
 import server.dataProvider.Server;
-import server.mwmysql.mysqlHandler;
 import server.util.AutomaticBackup;
 import server.util.MWPasswd;
 import server.util.RepairTrackingThread;
 import server.util.StringUtil;
+
 import common.CampaignData;
 import common.Equipment;
 import common.House;
@@ -223,10 +222,6 @@ public final class CampaignMain implements Serializable {
 
     private Random r = new Random(System.currentTimeMillis());
 
-    public mysqlHandler MySQL = null;
-
-    private boolean validBBVersion = true;
-
     private Date housePlanetDate = new Date();
 
     private HashMap<String, ChatRoom> chatRooms = new HashMap<String, ChatRoom>();
@@ -305,16 +300,6 @@ public final class CampaignMain implements Serializable {
             CampaignMain.cm.saveConfigureFile(config, CampaignMain.cm.getServer().getConfigParam("CAMPAIGNCONFIG"));
             // Now, in theory, there is no cruft for next boot.  Let's test.
             
-            
-            if (isUsingMySQL()) {
-                if (Boolean.parseBoolean(getServer().getConfigParam("MYSQL_SYNCHPHPBB"))) {
-                    config.put("REQUIREEMAILFORREGISTRATION", "true");
-                } else {
-                    config.put("REQUIREEMAILFORREGISTRATION", "false");
-                }
-            } else {
-                config.put("REQUIREEMAILFORREGISTRATION", "false");
-            }
         } catch (Exception ex) {
             CampaignData.mwlog.errLog("Problems with loading campaign config");
             CampaignData.mwlog.errLog(ex);
@@ -340,9 +325,6 @@ public final class CampaignMain implements Serializable {
          * implementation does not save a .dat file. While saving the status was
          * a nice idea, it was creating dupes and NPEs after crashes.
          */
-
-        //TODO: That one is bad. IT has side effects and has to be called although it looks like a simple getter method...
-        cm.isUsingMySQL();
 
         market = new Market2();
         partsmarket = new PartsMarket();
@@ -404,23 +386,20 @@ public final class CampaignMain implements Serializable {
         }
 
         // Load the Mech-Statistics
-        if (CampaignMain.cm.isUsingMySQL()) {
-            //loadMechStatsFromDB();
-        } else {
-            try {
-                MekwarsFileReader dis = new MekwarsFileReader("./campaign/mechstat.dat");
-                while (dis.ready()) {
-                    String line = dis.readLine();
-                    MechStatistics m = new MechStatistics(line);
-                    MechStats.put(m.getMechFileName(), m);
-                }
-                dis.close();
-            } catch (Exception ex) {
-                CampaignData.mwlog.errLog("Problems reading unit statistics data");
-                CampaignData.mwlog.errLog(ex);
-                CampaignData.mwlog.mainLog("No Mech Statistic Data found");
+        try {
+            MekwarsFileReader dis = new MekwarsFileReader("./campaign/mechstat.dat");
+            while (dis.ready()) {
+                String line = dis.readLine();
+                MechStatistics m = new MechStatistics(line);
+                MechStats.put(m.getMechFileName(), m);
             }
+            dis.close();
+        } catch (Exception ex) {
+            CampaignData.mwlog.errLog("Problems reading unit statistics data");
+            CampaignData.mwlog.errLog(ex);
+            CampaignData.mwlog.mainLog("No Mech Statistic Data found");
         }
+        
         if (Boolean.parseBoolean(getConfig("HTMLOUTPUT"))) {
             Statistics.doRanking();
         }
@@ -570,35 +549,27 @@ public final class CampaignMain implements Serializable {
             // Save Mech-Stats
             FileOutputStream out = new FileOutputStream("./campaign/mechstat.dat");
             PrintStream p = new PrintStream(out);
-            if (CampaignMain.cm.isUsingMySQL()) {
-                for (MechStatistics currStats : MechStats.values()) {
-                    currStats.toDB();
+            for (MechStatistics currStats : MechStats.values()) {
+                p.println(currStats.toString());
+            }
+            p.close();
+            out.close();
+
+            try {
+                // Save the Readable Mechstats
+
+                out = new FileOutputStream(getConfig("MechstatPath"));
+                p = new PrintStream(out);
+                p.println("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"format.css\"><style type=\"text/css\"></style></head><body><font face=\"Verdana, Arial, Helvetica, sans-serif\">");
+                for (int i = 0; i <= 3; i++) {
+                    p.println(Statistics.doGetMechStats(i));
+                    p.println("<br>");
                 }
-            } else {
-                for (MechStatistics currStats : MechStats.values()) {
-                    p.println(currStats.toString());
-                }
+                p.println("</font></body></style></html>");
                 p.close();
                 out.close();
-            }
-
-            if (!CampaignMain.cm.isUsingMySQL()) {
-                try {
-                    // Save the Readable Mechstats
-
-                    out = new FileOutputStream(getConfig("MechstatPath"));
-                    p = new PrintStream(out);
-                    p.println("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"format.css\"><style type=\"text/css\"></style></head><body><font face=\"Verdana, Arial, Helvetica, sans-serif\">");
-                    for (int i = 0; i <= 3; i++) {
-                        p.println(Statistics.doGetMechStats(i));
-                        p.println("<br>");
-                    }
-                    p.println("</font></body></style></html>");
-                    p.close();
-                    out.close();
-                } catch (FileNotFoundException efnf) {
-                    // ignore
-                }
+            } catch (FileNotFoundException efnf) {
+                // ignore
             }
 
             CampaignData.mwlog.mainLog("STATUS SAVED");
@@ -1353,18 +1324,6 @@ public final class CampaignMain implements Serializable {
             MekwarsFileReader dis = null;
 
             try {
-                if (CampaignMain.cm.isUsingMySQL()) {
-                    if (CampaignMain.cm.MySQL.playerExists(name)) {
-                        SPlayer p = new SPlayer();
-                        int pid = CampaignMain.cm.MySQL.getPlayerIDByName(name);
-                        p.fromDB(pid);
-                        return p;
-                    }
-                    if (!name.toLowerCase().startsWith("nobody") && !name.equals("SERVER") && !name.toLowerCase().startsWith("war bot") && !name.toLowerCase().startsWith("[dedicated]")) {
-                        CampaignData.mwlog.errLog("Player not in database: " + name);
-                    }
-                    return null;
-                }
                 // log the load attempt & create readers
                 CampaignData.mwlog.mainLog("Loading pfile for: " + name);
 
@@ -1783,8 +1742,6 @@ public final class CampaignMain implements Serializable {
         Commands.put("UNITPOSITION", new UnitPositionCommand());
         Commands.put("UNLOCKLANCES", new UnlockLancesCommand());
         Commands.put("USEREWARDPOINTS", new UseRewardPointsCommand());
-        Commands.put("VALIDATEEMAIL", new ValidateEmailCommand());
-        Commands.put("VALIDATEUSER", new ValidateUserCommand());
         Commands.put("VIEWFACTIONPARTSCACHE", new ViewFactionPartsCacheCommand());
         Commands.put("VIEWPLAYERPARTS", new ViewPlayerPartsCommand());
         Commands.put("VIEWPLAYERPERSONALPILOTQUEUE", new ViewPlayerPersonalPilotQueueCommand());
@@ -1869,7 +1826,7 @@ public final class CampaignMain implements Serializable {
         }
 
         // No SHouse Data yet? Parse the XML file and creathe them
-        if ((!CampaignMain.cm.isUsingMySQL() && data.getAllHouses().size() == 0) || (cm.isUsingMySQL() && cm.MySQL.countFactions() == 0)) {
+        if (data.getAllHouses().size() == 0) {
             try {
                 XMLFactionDataParser parser = new XMLFactionDataParser("./data/factions.xml");
                 for (SHouse h : parser.getFactions()) {
@@ -2037,10 +1994,6 @@ public final class CampaignMain implements Serializable {
     }
 
     public void addMechStat(String Filename, int mechsize, int gameplayed, int gamewon, int scrapped, int destroyed) {
-    	if (CampaignMain.cm.isUsingMySQL()) {
-    		CampaignMain.cm.MySQL.addMechstat(Filename, mechsize, gameplayed, gamewon, scrapped, destroyed);
-    		return;
-    	}
     	MechStatistics m = null;
         if (MechStats.get(Filename) == null) {
             m = new MechStatistics(Filename, mechsize);
@@ -2499,45 +2452,8 @@ public final class CampaignMain implements Serializable {
         return null;
     }
 
-    public boolean isUsingMySQL() {
-        boolean isUsing = Boolean.parseBoolean(myServer.getConfigParam("USEMYSQL"));
-
-        if (isUsing && MySQL == null) {
-            MySQL = new mysqlHandler();
-        } else if (!isUsing && MySQL != null) {
-            MySQL.closeMySQL();
-            MySQL = null;
-        }
-        return isUsing;
-    }
-
     public boolean isUsingIncreasedTechs() {
         return (CampaignMain.cm.getBooleanConfig("UseNonFactionUnitsIncreasedTechs") && !CampaignMain.cm.isUsingAdvanceRepair());
-    }
-
-    public boolean isSynchingBB() {
-
-        if (!validBBVersion) {
-            return false;
-        }
-
-        if (isUsingMySQL()) {
-            return MySQL.isSynchingBB();
-        }
-
-        return false;
-    }
-
-    public boolean requireEmailForRegistration() {
-        return (isUsingMySQL() && isSynchingBB() && cm.getBooleanConfig("REQUIREEMAILFORREGISTRATION"));
-    }
-
-    public boolean isKeepingUnitHistory() {
-        return (isUsingMySQL() && CampaignMain.cm.getBooleanConfig("StoreUnitHistoryInDatabase") && isUsingMySQL());
-    }
-
-    public void turnOffBBSynch() {
-        validBBVersion = false;
     }
 
     /*
@@ -2886,10 +2802,6 @@ public final class CampaignMain implements Serializable {
     private void savePlayerFile(SPlayer p) {
 
         try {
-            if (CampaignMain.cm.isUsingMySQL()) {
-                p.toDB();
-                return;
-            }
             String fileName = p.getName().toLowerCase();
             FileOutputStream pout = new FileOutputStream("./campaign/players/" + fileName.toLowerCase() + ".dat");
             PrintStream pfile = new PrintStream(pout);
@@ -3148,11 +3060,6 @@ public final class CampaignMain implements Serializable {
         long days = Long.parseLong(CampaignMain.cm.getConfig("PurgePlayerFilesDays"));
         // Turn purging off by setting it to 0 or less days
         if (days <= 0) {
-            return;
-        }
-
-        if (CampaignMain.cm.isUsingMySQL()) {
-            CampaignMain.cm.MySQL.purgeStalePlayers(days);
             return;
         }
 
@@ -3880,10 +3787,6 @@ public final class CampaignMain implements Serializable {
     }
 
     public void loadFactionData() {
-        if (CampaignMain.cm.isUsingMySQL()) {
-            CampaignMain.cm.MySQL.loadFactions(data);
-            return;
-        }
         File factionFile = new File("./campaign/factions");
 
         // Check for new faction save location
@@ -3974,21 +3877,6 @@ public final class CampaignMain implements Serializable {
 
     // Save Houses
     public void saveFactionData() {
-
-        if (CampaignMain.cm.isUsingMySQL()) {
-            for (House currH : data.getAllHouses()) {
-                SHouse h = (SHouse) currH;
-                h.toDB();
-
-                // For right now, we're going to save units to the faction file
-                // I can save them fine to the database, but they're not
-                // loading.
-
-            }
-            return;
-        }
-
-        // Standard faction saves
         File factionFile = new File("./campaign/factions");
         if (!factionFile.exists()) {
             factionFile.mkdir();
@@ -4083,40 +3971,29 @@ public final class CampaignMain implements Serializable {
         FilenameFilter filter = new datFileFilter();
 
         // Check for faction save dir & ensure dat files exist therein
-        if (!CampaignMain.cm.isUsingMySQL() && (!planetFile.exists() || planetFile.listFiles(filter).length == 0)) {
+        if (!planetFile.exists() || planetFile.listFiles(filter).length == 0) {
             CampaignData.mwlog.errLog("Unable to find and load /planets, or /planets is empty.");
             CampaignData.mwlog.errLog("Planets will be read from XML during init().");
             return;
-        } else if (CampaignMain.cm.isUsingMySQL() && CampaignMain.cm.MySQL.countPlanets() == 0) {
-            CampaignData.mwlog.errLog("Empty planet database.");
-            CampaignData.mwlog.errLog("Planets will be read from XML during init().");
-            return;
-        }
-        // If we're using the database, load the planets here.
+        } 
+        // dir and files exist. read them.
+        File[] planetFileList = planetFile.listFiles(filter);
+        for (File planet : planetFileList) {
 
-        if (CampaignMain.cm.isUsingMySQL()) {
-            CampaignMain.cm.MySQL.loadPlanets(data);
-        } else {
-
-            // dir and files exist. read them.
-            File[] planetFileList = planetFile.listFiles(filter);
-            for (File planet : planetFileList) {
-
-                try {
-                    MekwarsFileReader dis = new MekwarsFileReader(planet);
-                    String line = dis.readLine();
-                    SPlanet p;
-                    if (line.startsWith("[N]")) {
-                        line = line.substring(3);
-                    }
-                    p = new SPlanet();
-                    p.fromString(line, r, data);
-                    addPlanet(p);
-                    dis.close();
-                } catch (Exception ex) {
-                    CampaignData.mwlog.errLog("Unable to load " + planet.getName());
-                    CampaignData.mwlog.errLog(ex);
+            try {
+                MekwarsFileReader dis = new MekwarsFileReader(planet);
+                String line = dis.readLine();
+                SPlanet p;
+                if (line.startsWith("[N]")) {
+                    line = line.substring(3);
                 }
+                p = new SPlanet();
+                p.fromString(line, r, data);
+                addPlanet(p);
+                dis.close();
+            } catch (Exception ex) {
+                CampaignData.mwlog.errLog("Unable to load " + planet.getName());
+                CampaignData.mwlog.errLog(ex);
             }
         }
     }
@@ -4161,49 +4038,40 @@ public final class CampaignMain implements Serializable {
 
     // Save Planets
     public void savePlanetData() {
+        savePlanetOpFlags();
+        File planetFile = new File("./campaign/planets");
+        if (!planetFile.exists()) {
+            planetFile.mkdir();
+        }
+        synchronized (data.getAllPlanets()) {
 
-        if (cm.isUsingMySQL()) {
             for (Planet currP : data.getAllPlanets()) {
                 SPlanet p = (SPlanet) currP;
-                p.toDB();
-            }
-        } else {
-            savePlanetOpFlags();
-            File planetFile = new File("./campaign/planets");
-            if (!planetFile.exists()) {
-                planetFile.mkdir();
-            }
-            synchronized (data.getAllPlanets()) {
+                String saveName = p.getName().toLowerCase().trim() + ".dat";
+                String backupName = p.getName().toLowerCase().trim() + ".bak";
+                try {
+                    File planet = new File("./campaign/planets/" + saveName);
 
-                for (Planet currP : data.getAllPlanets()) {
-                    SPlanet p = (SPlanet) currP;
-                    String saveName = p.getName().toLowerCase().trim() + ".dat";
-                    String backupName = p.getName().toLowerCase().trim() + ".bak";
-                    try {
-                        File planet = new File("./campaign/planets/" + saveName);
+                    if (planet.exists()) {
 
-                        if (planet.exists()) {
-
-                            File backupFile = new File("./campaign/planets/" + backupName);
-                            if (backupFile.exists()) {
-                                backupFile.delete();
-                            }
-
-                            planet.renameTo(backupFile);
+                        File backupFile = new File("./campaign/planets/" + backupName);
+                        if (backupFile.exists()) {
+                            backupFile.delete();
                         }
 
-                        FileOutputStream out = new FileOutputStream("./campaign/planets/" + saveName);
-                        PrintStream ps = new PrintStream(out);
-                        ps.println(p.toString());
-                        ps.close();
-                        out.close();
-                    } catch (Exception ex) {
-                        CampaignData.mwlog.errLog("Unable to save planet: " + saveName);
-                        CampaignData.mwlog.errLog(ex);
+                        planet.renameTo(backupFile);
                     }
+
+                    FileOutputStream out = new FileOutputStream("./campaign/planets/" + saveName);
+                    PrintStream ps = new PrintStream(out);
+                    ps.println(p.toString());
+                    ps.close();
+                    out.close();
+                } catch (Exception ex) {
+                    CampaignData.mwlog.errLog("Unable to save planet: " + saveName);
+                    CampaignData.mwlog.errLog(ex);
                 }
             }
-
         }
     }
 
