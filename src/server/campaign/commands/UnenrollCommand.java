@@ -100,9 +100,6 @@ public class UnenrollCommand implements Command {
 		}
 		
 		//checks passed. do the actual removal.
-		if(CampaignMain.cm.isSynchingBB()) {
-			CampaignMain.cm.MySQL.removeUserFromHouseForum(p.getForumID(), hisfaction.getForumID());
-		}
 		hisfaction.removePlayer(p, CampaignMain.cm.getBooleanConfig("DonateUnitsUponUnenrollment"));
 
 		
@@ -114,10 +111,7 @@ public class UnenrollCommand implements Command {
 		File fp = new File("./campaign/players/" + p.getName().toLowerCase() + ".dat");
 		if (fp.exists())
 			fp.delete();
-		if(CampaignMain.cm.isUsingMySQL()) {
-			CampaignMain.cm.MySQL.deletePlayer(p, false);
-		}
-		
+
 		//tell the mods and add to iplog.0
 		InetAddress ip = CampaignMain.cm.getServer().getIP(Username);
 		//CampaignData.mwlog.modLog(Username + " unenrolled from the campaign (IP: " + ip + ").");

@@ -34,7 +34,6 @@ import megamek.common.Mounted;
 import megamek.common.Protomech;
 import megamek.common.Tank;
 import megamek.common.VTOL;
-import server.mwmysql.JDBCConnectionHandler;
 
 import common.Army;
 import common.CampaignData;
@@ -54,8 +53,6 @@ public class SArmy extends Army {
     private Vector<SArmy> opponents = new Vector<SArmy>(1, 1);
     private TreeMap<String, String> legalOperations = new TreeMap<String, String>();
     private String playerName = "";
-    private boolean isLoading = false;
-    private JDBCConnectionHandler ch = new JDBCConnectionHandler();
 
     // CONSTRUCTORS
     public SArmy(String ownerName) {
@@ -71,70 +68,17 @@ public class SArmy extends Army {
         playerName = ownerName;
     }
 
-    public void toDB() {
-    	if(isLoading) {
-            return;
-        }
-        deleteFromDB();
-        PreparedStatement ps = null;
-        Connection c = ch.getConnection();
-        try {
-            StringBuffer sql = new StringBuffer();
-            sql.append("INSERT into playerarmies set playerID = " + CampaignMain.cm.MySQL.getPlayerIDByName(playerName) + ", armyID = " + getID() + ", armyString = ?");
-            ps = c.prepareStatement(sql.toString());
-            ps.setString(1, super.toString(false, "%"));
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException e) {
-            CampaignData.mwlog.dbLog("SQLException in SArmy.toDB: " + e.getMessage());
-            CampaignData.mwlog.dbLog(e);
-            if (ps != null) {
-            	try {
-            		ps.close();
-            	} catch (SQLException ex) {}
-            }
-        }
-        ch.returnConnection(c);
-    }
-
-    public void deleteFromDB() {
-    	PreparedStatement ps = null;
-    	Connection c = ch.getConnection();
-        try {
-            ps = c.prepareStatement("DELETE from playerarmies WHERE playerID = ? AND armyID = ?");
-            ps.setInt(1, CampaignMain.cm.MySQL.getPlayerIDByName(playerName));
-            ps.setInt(2, getID());
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException e) {
-            CampaignData.mwlog.dbLog("SQLException in SArmy.deleteFromDB: " + e.getMessage());
-            CampaignData.mwlog.dbLog(e);
-            if (ps != null) {
-            	try {
-            		ps.close();
-            	} catch (SQLException ex) {}
-            }
-        }
-        ch.returnConnection(c);
-    }
-
     // METHODS
     public void addUnit(SUnit u) {
         super.addUnit(u);
         super.setBV(0);
         setRawForceSize(0);
-        if (CampaignMain.cm.isUsingMySQL()) {
-            toDB();
-        }
     }
 
     public void addUnit(SUnit u, int position) {
         super.addUnit(u, position);
         super.setBV(0);
         setRawForceSize(0);
-        if (CampaignMain.cm.isUsingMySQL()) {
-            toDB();
-        }
     }
 
     public void removeUnit(int id) {
@@ -151,9 +95,6 @@ public class SArmy extends Army {
         super.setBV(0);
         setRawForceSize(0);
         removeCommander(id);
-        if (CampaignMain.cm.isUsingMySQL()) {
-            toDB();
-        }
     }
 
     public int getUnitPosition(int id) {
@@ -646,7 +587,6 @@ public class SArmy extends Army {
     }
 
     public void fromString(String s, String delimiter, SPlayer p) {
-        isLoading = true;
         StringTokenizer ST = new StringTokenizer(s, delimiter);
         setID(TokenReader.readInt(ST));
         setName(TokenReader.readString(ST));
@@ -686,8 +626,6 @@ public class SArmy extends Army {
         } else {
             enableArmy();
         }
-
-        isLoading = false;
     }
 
     public String getMinimalInfo() {

@@ -73,40 +73,6 @@ public class AdminPurgeHouseBaysCommand implements Command {
             return;
         }
 
-        // Delete them from the database
-        if (CampaignMain.cm.isUsingMySQL()) {
-            if (strType.equalsIgnoreCase("ALL")) {
-                for (int type = Unit.MEK; type < Unit.MAXBUILD; type++) {
-                    for (int i = 0; i < 4; i++) {
-                        Vector<SUnit> tmpVec = h.getHangar(type).elementAt(i);
-                        tmpVec.trimToSize();
-                        for (SUnit currU : tmpVec) {
-                            CampaignMain.cm.MySQL.deleteUnit(currU.getDBId());
-                        }
-                    }
-                }
-            } else {
-                strClass = command.nextToken();
-                unitType = Integer.parseInt(strType);
-                if (strClass.equalsIgnoreCase("ALL")) {
-                    for (int i = 0; i < 4; i++) {
-                        Vector<SUnit> tmpVec = h.getHangar(unitType).elementAt(i);
-                        tmpVec.trimToSize();
-                        for (SUnit currU : tmpVec) {
-                            CampaignMain.cm.MySQL.deleteUnit(currU.getDBId());
-                        }
-                    }
-                } else {
-                    unitClass = Integer.parseInt(strClass);
-                    Vector<SUnit> tmpVec = h.getHangar(unitType).elementAt(unitClass);
-                    tmpVec.trimToSize();
-                    for (SUnit currU : tmpVec) {
-                        CampaignMain.cm.MySQL.deleteUnit(currU.getDBId());
-                    }
-                }
-            }
-        }
-
         try {
             if (strType.equalsIgnoreCase("ALL")) {
                 for (Vector<Vector<SUnit>> hangers : h.getHangar().values()) {
@@ -116,9 +82,7 @@ public class AdminPurgeHouseBaysCommand implements Command {
                 }
             }// else select a unit type
             else {
-                if (!CampaignMain.cm.isUsingMySQL()) {
-                    strClass = command.nextToken();
-                }
+                strClass = command.nextToken();
                 unitType = Integer.parseInt(strType);
                 Vector<Vector<SUnit>> hanger = h.getHangar(unitType);
 
@@ -128,9 +92,7 @@ public class AdminPurgeHouseBaysCommand implements Command {
                     }
                 }// else one unit size
                 else {
-                    if (!CampaignMain.cm.isUsingMySQL()) {
-                        unitClass = Integer.parseInt(strClass);
-                    }
+                    unitClass = Integer.parseInt(strClass);
                     hanger.elementAt(unitClass).clear();
                 }
             }

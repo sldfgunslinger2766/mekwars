@@ -54,13 +54,10 @@ public class RegisterCommand implements Command {
             StringTokenizer str = new StringTokenizer(command.nextToken(), ",");
         	String regname = "";
             String pw = "";  
-            String email = "";
             SPlayer player = null;
             
             try{
                 regname = str.nextToken().trim().toLowerCase();
-                if(CampaignMain.cm.requireEmailForRegistration())
-                	email = str.nextToken();
                 pw = str.nextToken();
             }catch (Exception ex){
                 CampaignData.mwlog.errLog("Failure to register: "+regname);
@@ -93,13 +90,6 @@ public class RegisterCommand implements Command {
             	CampaignMain.cm.toUser("AM:Passwords must be between 4 and 10 characters!", Username);
             	return;
             }
-            
-            // Check for phpBB integration - there are a lot of possible outcomes here.
-            if(CampaignMain.cm.isSynchingBB()) 
-            	if(!CampaignMain.cm.MySQL.addUserToForum(Username, pw, email)) {
-            		CampaignMain.cm.doSendModMail("NOTE","Server was unable to send registration email to " + Username + ".  Staff will need to give him his activation key.");
-            		CampaignMain.cm.toUser("AM: The server was unable to send your registration email.  Please ask staff for assistance.", Username, true);
-            	}
                 	
             //change userlevel
             int level = -1;
@@ -120,15 +110,7 @@ public class RegisterCommand implements Command {
             if (player != null){
             	CampaignMain.cm.doSendToAllOnlinePlayers("PI|DA|" + CampaignMain.cm.getPlayerUpdateString(player),false);
             }
-            if(CampaignMain.cm.isUsingMySQL() && player != null) {
-            	CampaignMain.cm.MySQL.setPlayerPassword(CampaignMain.cm.MySQL.getPlayerIDByName(Username), pw);
-            	CampaignMain.cm.MySQL.setPlayerAccess(CampaignMain.cm.MySQL.getPlayerIDByName(Username), level);
-            	if(CampaignMain.cm.isSynchingBB()) {
-           			//CampaignMain.cm.MySQL.addUserToForum(Username, pw, email);
-           			player.setForumID(CampaignMain.cm.MySQL.getUserForumID(Username, email));
-           			CampaignMain.cm.MySQL.addUserToHouseForum(player.getForumID(), player.getMyHouse().getForumID());
-            	}
-            }
+
             //acknowledge registration
             CampaignMain.cm.toUser("AM:\"" + regname + "\" successfully registered.", Username);
             CampaignData.mwlog.modLog("New nickname registered: " + regname);

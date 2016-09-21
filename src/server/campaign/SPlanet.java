@@ -16,11 +16,6 @@
 package server.campaign;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +26,6 @@ import java.util.Vector;
 
 import server.campaign.data.TimeUpdatePlanet;
 import server.campaign.util.SerializedMessage;
-import server.mwmysql.JDBCConnectionHandler;
 
 import common.AdvancedTerrain;
 import common.CampaignData;
@@ -45,7 +39,6 @@ import common.util.Position;
 import common.util.TokenReader;
 
 public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparable<Object> {
-private JDBCConnectionHandler ch = new JDBCConnectionHandler();
 
     /**
      * 
@@ -125,201 +118,6 @@ private JDBCConnectionHandler ch = new JDBCConnectionHandler();
         return result.toString();
     }
 
-    public void toDB() {
-    	Statement stmt = null;
-    	PreparedStatement ps = null;
-    	ResultSet rs = null;
-    	Connection c = ch.getConnection();
-        try {
-            if (getDBID() == 0) {
-                // It's a new planet, INSERT it.
-                stmt = c.createStatement();
-                StringBuffer sql = new StringBuffer();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-
-                sql.append("INSERT into planets set pCompProd = ?, ");
-                sql.append("pXpos = ?, ");
-                sql.append("pYpos = ?, ");
-                sql.append("pDesc = ?, ");
-                sql.append("pBays = ?, ");
-                sql.append("pIsConquerable = ?, ");
-                sql.append("pLastChanged = ?, ");
-                sql.append("pMWID = ?, ");
-                sql.append("pMapSizeWidth = ?, ");
-                sql.append("pMapSizeHeight = ?, ");
-                sql.append("pBoardSizeWidth = ?, ");
-                sql.append("pBoardSizeHeight = ?, ");
-                sql.append("pTempWidth = ?, ");
-                sql.append("pTempHeight = ?, ");
-                sql.append("pGravity = ?, ");
-                sql.append("pVacuum = ?, ");
-                sql.append("pNightChance = ?, ");
-                sql.append("pNightTempMod = ?, ");
-                sql.append("pMinPlanetOwnership = ?, ");
-                sql.append("pIsHomeworld = ?, ");
-                sql.append("pOriginalOwner = ?, ");
-                sql.append("pMaxConquestPoints = ?, ");
-                sql.append("pName = ?, ");
-                sql.append("pString = ?");
-
-                ps = c.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, getCompProduction());
-                ps.setDouble(2, getPosition().getX());
-                ps.setDouble(3, getPosition().getY());
-                ps.setInt(5, getBaysProvided());
-                ps.setBoolean(6, isConquerable());
-                ps.setString(7, sdf.format(getLastChanged()));
-                ps.setInt(8, getId());
-                ps.setInt(9, getMapSize().width);
-                ps.setInt(10, getMapSize().height);
-                ps.setInt(11, getBoardSize().width);
-                ps.setInt(12, getBoardSize().height);
-                ps.setInt(19, getMinPlanetOwnerShip());
-                ps.setBoolean(20, isHomeWorld());
-                ps.setString(21, getOriginalOwner());
-                ps.setInt(22, getConquestPoints());
-                ps.setString(23, getName());
-                ps.setString(24, toString());
-
-                ps.executeUpdate();
-
-                rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    int pid = rs.getInt(1);
-                    setDBID(pid);
-
-                    /**
-                     * If it didn't get us an ID, there's not much point in doing the following: Now, we need to save all the vectors: Factories Influence Environments planet flags
-                     */
-                    if (getUnitFactories() != null) {
-                        for (int i = 0; i < getUnitFactories().size(); i++) {
-                            SUnitFactory MF = (SUnitFactory) getUnitFactories().get(i);
-                            MF.toDB();
-                        }
-                    }
-                    // Save Influences
-                    CampaignMain.cm.MySQL.saveInfluences(this);
-
-                    // Save Environments
-
-                    CampaignMain.cm.MySQL.saveEnvironments(this);
-
-                    // Save Planet Flags
-                    if (getPlanetFlags().size() > 0)
-                        CampaignMain.cm.MySQL.savePlanetFlags(this);
-
-                }
-                rs.close();
-                ps.close();
-                if (stmt != null)
-                    stmt.close();
-            } else {
-                // It's already in the database, UPDATE it
-                stmt = c.createStatement();
-                StringBuffer sql = new StringBuffer();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-
-                sql.append("UPDATE planets set pCompProd = ?, ");
-                sql.append("pXpos = ?, ");
-                sql.append("pYpos = ?, ");
-                sql.append("pDesc = ?, ");
-                sql.append("pBays = ?, ");
-                sql.append("pIsConquerable = ?, ");
-                sql.append("pLastChanged = ?, ");
-                sql.append("pMWID = ?, ");
-                sql.append("pMapSizeWidth = ?, ");
-                sql.append("pMapSizeHeight = ?, ");
-                sql.append("pBoardSizeWidth = ?, ");
-                sql.append("pBoardSizeHeight = ?, ");
-                sql.append("pTempWidth = ?, ");
-                sql.append("pTempHeight = ?, ");
-                sql.append("pGravity = ?, ");
-                sql.append("pVacuum = ?, ");
-                sql.append("pNightChance = ?, ");
-                sql.append("pNightTempMod = ?, ");
-                sql.append("pMinPlanetOwnership = ?, ");
-                sql.append("pIsHomeworld = ?, ");
-                sql.append("pOriginalOwner = ?, ");
-                sql.append("pMaxConquestPoints = ?, ");
-                sql.append("pName = ?, ");
-                sql.append("pString = ? ");
-                sql.append("WHERE PlanetID = ?");
-
-                ps = c.prepareStatement(sql.toString());
-
-                ps.setInt(1, getCompProduction());
-                ps.setDouble(2, getPosition().getX());
-                ps.setDouble(3, getPosition().getY());
-                ps.setString(4, getDescription());
-                ps.setInt(5, getBaysProvided());
-                ps.setBoolean(6, isConquerable());
-                ps.setString(7, sdf.format(getLastChanged()));
-                ps.setInt(8, getId());
-                ps.setInt(9, getMapSize().width);
-                ps.setInt(10, getMapSize().height);
-                ps.setInt(11, getBoardSize().width);
-                ps.setInt(12, getBoardSize().height);
-
-                ps.setInt(19, getMinPlanetOwnerShip());
-                ps.setBoolean(20, isHomeWorld());
-                ps.setString(21, getOriginalOwner());
-                ps.setInt(22, getConquestPoints());
-                ps.setString(23, getName());
-                ps.setString(24, toString());
-                ps.setInt(25, getDBID());
-
-                //Temporary - we're erroring and I need to know why - something having to do with bays
-                //CampaignData.mwlog.dbLog(ps.toString());
-                
-                ps.executeUpdate();
-
-                /**
-                 * Now, we need to save all the vectors: Factories Influence Environments planet flags
-                 */
-//                if (getUnitFactories() != null) {
-//                    for (int i = 0; i < getUnitFactories().size(); i++) {
-//                        SUnitFactory MF = (SUnitFactory) getUnitFactories().get(i);
-//                        MF.toDB();
-//                    }
-//                }
-//                // Save Influences
-//                CampaignMain.cm.MySQL.saveInfluences(this);
-//
-//                // Save Environments
-//
-//                CampaignMain.cm.MySQL.saveEnvironments(this);
-//
-//                // Save Planet Flags
-//                if (getPlanetFlags().size() > 0)
-//                    CampaignMain.cm.MySQL.savePlanetFlags(this);
-                ps.close();
-                if (stmt != null)
-                    stmt.close();
-            }
-        } catch (SQLException e) {
-            CampaignData.mwlog.dbLog(e.getMessage());
-            CampaignData.mwlog.dbLog(e);
-        } finally {
-        	if (rs != null) {
-        		try {
-        			rs.close();
-        		} catch (SQLException e) {}
-        	}
-        	if (stmt != null) {
-        		try {
-        			stmt.close();
-        		} catch (SQLException e) {}
-        	}
-        	if (ps != null) {
-        		try {
-        			ps.close();
-        		} catch (SQLException e) {}
-        	}
-        	ch.returnConnection(c);
-        }
-
-    }
-
     /**
      * 
      */
@@ -333,22 +131,15 @@ private JDBCConnectionHandler ch = new JDBCConnectionHandler();
         setName(TokenReader.readString(ST));
         setCompProduction(TokenReader.readInt(ST));
         // Read Factories
-        if (!CampaignMain.cm.isUsingMySQL()) {
-            int hasMF = TokenReader.readInt(ST);
-            for (int i = 0; i < hasMF; i++) {
-                SUnitFactory mft = new SUnitFactory();
-                mft.fromString(TokenReader.readString(ST), this, r);
-                if (singleFaction && CampaignMain.cm.getHouseFromPartialString(mft.getFounder()) == null)
-                    continue;
-                getUnitFactories().add(mft);
-            }
-        } else {
-            // Load from the database
-            CampaignMain.cm.MySQL.loadFactories(this);
-            int hasMF = TokenReader.readInt(ST);
-            for (int i = 0; i < hasMF; i++)
-                TokenReader.readString(ST);
+        int hasMF = TokenReader.readInt(ST);
+        for (int i = 0; i < hasMF; i++) {
+            SUnitFactory mft = new SUnitFactory();
+            mft.fromString(TokenReader.readString(ST), this, r);
+            if (singleFaction && CampaignMain.cm.getHouseFromPartialString(mft.getFounder()) == null)
+                continue;
+            getUnitFactories().add(mft);
         }
+
         setPosition(new Position(TokenReader.readDouble(ST), TokenReader.readDouble(ST)));
 
 //        int Infcount = 0;

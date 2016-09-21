@@ -199,18 +199,6 @@ public class MercHouse extends SHouse {
 		return result.toString();
 	}
 	
-	public void toDB() {
-		super.toDB();
-		Enumeration<ContractInfo> e = getOutstandingContracts().elements();
-		while (e.hasMoreElements()) {
-			ContractInfo ci = e.nextElement();
-			if(!ci.isLegal()) {
-				getOutstandingContracts().remove(ci.getOfferingPlayerName().toLowerCase());
-			}
-			ci.toDB();
-		}
-	}
-	
 	public Hashtable<String,ContractInfo> getOutstandingContracts(){
 		return OutstandingContracts;
 	}

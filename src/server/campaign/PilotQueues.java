@@ -105,12 +105,6 @@ public class PilotQueues {
 		}
 		else {//skip the skill adjustmebnt
 			queues.get(type).addLast(p);
-			if(CampaignMain.cm.isUsingMySQL()) {
-				if (!p.getName().equalsIgnoreCase("Vacant")){
-						p.toDB(type, -1);
-				}
-			}
-			
 		}//end else(bypass the adjustmenbt)
 	}
 	
@@ -207,12 +201,6 @@ public class PilotQueues {
 		}//end if(downgrade elites)
 		
 		queues.get(type).addLast(p);
-		
-		if(CampaignMain.cm.isUsingMySQL()) {
-			if (!p.getName().equalsIgnoreCase("Vacant")){
-					p.toDB(type, -1);
-			}
-		}
 
 	}//end void addPilot()
 	

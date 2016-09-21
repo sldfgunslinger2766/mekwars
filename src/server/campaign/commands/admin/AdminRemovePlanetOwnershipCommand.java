@@ -73,9 +73,6 @@ public class AdminRemovePlanetOwnershipCommand implements Command {
 		planet.getInfluence().removeHouse(removingHouse);
 		planet.updated();
 		
-		if(CampaignMain.cm.isUsingMySQL())
-			planet.toDB();
-		
 		CampaignMain.cm.doSendModMail("NOTE",Username + " removed "+removingHouse.getName()+" as an owner of "+ planet.getName()+".");
 	}
 }

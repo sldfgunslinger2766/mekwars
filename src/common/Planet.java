@@ -23,7 +23,6 @@ package common;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -140,14 +139,6 @@ public class Planet implements Comparable<Object>, MutableSerializable {
      */
     private int maxConquestPoints = 100;
 
-    /*
-     * Planet Database ID, used in saving and retreiving the planet from the
-     * database. Set this to zero, which will queue the initial save routine
-     * that it needs to insert rather than update. The save routine will then
-     * assign it a dbID.
-     */
-    private int DBID = 0;
-
     // CONSTRUCTORS
     public Planet(int id, String name, Position position, Influences influence) {
         setId(id);
@@ -184,14 +175,6 @@ public class Planet implements Comparable<Object>, MutableSerializable {
      */
     public void setBaysProvided(int baysProvided) {
         this.baysProvided = baysProvided;
-    }
-
-    public int getDBID() {
-        return DBID;
-    }
-
-    public void setDBID(int ID) {
-        DBID = ID;
     }
 
     /**

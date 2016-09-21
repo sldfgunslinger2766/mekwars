@@ -89,8 +89,6 @@ public class Statistics {
 	}
 
 	public static void doRanking() {
-		if(CampaignMain.cm.isUsingMySQL())
-			return;
 		try{
 		    //String result = "<html><body bgcolor=\"#000000\" text=\"#009900\">";
 		    StringBuilder result = new StringBuilder();

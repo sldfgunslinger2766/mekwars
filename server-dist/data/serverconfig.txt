@@ -33,13 +33,6 @@ TRACKERADDRESS=example.com
 TRACKERLINK=http://www.myserver.net
 TRACKERDESC=A test server.
 
-#CYCLOPS SETUP
-#-------------
-USECYCLOPS=false
-CYCLOPSIP=muposerver.dyndns.org
-CYCLOPSURL=http://muposerver.dyndns.org/devel/cyclops/XMLRPC/
-CYCLOPSDEBUG=false
-
 #CAMPAIGN CONFIG PATH
 #
 #Path to the campaign configuration files for READING. The server
@@ -59,27 +52,4 @@ CAMPAIGNCONFIG=./data/campaignconfig.txt
 #in order for the Java.Properties to read it in correctly.
 #-----------------------
 INFOMESSAGE=<a href="http://www.sourceforge.net/projects/mekwars">Click here to visit the MekWars project page.</a> This is a default message.<br> to make yourself an admin register your player name and then type in the following commands: /adminpassword level#your name#200<br>/Adminsetcommandlevel adminpassword#200<br>/Adminsavecommandlevels Server admins --- you may edit this message in serverconfig.txt
-
-#MYSQL DataBase setup
-#
-#These settings are used to allow the server to connect to
-#the MYSQL DB.
-#--------------------
-USEMYSQL=false
-MYSQLUSER=sa
-MYSQLPASS=master
-MYSQLHOST=localhost
-MYSQLDB=mekwars
-MYSQL_SYNCHPHPBB=false
-PHPBB_USER=sa
-PHPBB_PASS=master
-PHPBB_HOST=localhost
-PHPBB_DB=phpbb
-PHPBB_MAJOR_VERSION=2
-PHPBB_TABLE_PREFIX=phpbb_
-PHPBB_URL=http://localhost/phpbb/index.php
-MAILHOST=localhost
-MAILPASSREQUIRED=false
-MAILUSER=mailuser
-MAILPASS=mailpassword
 

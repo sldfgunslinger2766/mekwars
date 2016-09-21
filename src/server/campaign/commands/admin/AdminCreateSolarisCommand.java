@@ -63,9 +63,6 @@ public class AdminCreateSolarisCommand implements Command {
         SPlanet newbieP = new SPlanet(0, "Solaris VII", new Influences(solFlu), 0, 0, -3, -2);
         CampaignMain.cm.addPlanet(newbieP);
 
-        if (CampaignMain.cm.isUsingMySQL())
-            newbieP.toDB();
-
         solaris.addPlanet(newbieP);
         CampaignMain.cm.toUser(CampaignMain.cm.getConfig("NewbieHouseName"), Username, true);
         CampaignMain.cm.doSendModMail("NOTE", Username + " has created " + CampaignMain.cm.getConfig("NewbieHouseName"));

@@ -204,10 +204,6 @@ public class ScrapCommand implements Command {
 		//add PP to the faction for the scrapped unit. 1/4th of original components.
 		int initialPP = p.getMyHouse().getPPCost(m.getWeightclass(), m.getType());
 		p.getMyHouse().addPP(m.getWeightclass(), m.getType(), initialPP/4, true);
-		
-		// Remove from database
-		if(CampaignMain.cm.isUsingMySQL())
-			CampaignMain.cm.MySQL.deleteUnit(m.getDBId());
 	}//end process()
 
 }//end ScrapCommand

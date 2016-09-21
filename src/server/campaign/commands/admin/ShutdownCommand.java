@@ -53,8 +53,6 @@ public class ShutdownCommand implements Command {
 		CampaignMain.cm.forceSavePlayers(Username);
         CampaignMain.cm.saveBannedAmmo();
         CampaignMain.cm.getDefaultPlayerFlags().save();
-        if ( CampaignMain.cm.isUsingMySQL() )
-        	CampaignMain.cm.MySQL.closeMySQL();
         CampaignMain.cm.toUser("AM:You halted the server. Have a nice day.", Username,true);
         CampaignData.mwlog.infoLog(Username + " halted the server. Have a nice day!");
         CampaignMain.cm.addToNewsFeed("Server halted!");

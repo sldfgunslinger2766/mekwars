@@ -88,11 +88,8 @@ public class ModNoPlayCommand implements Command {
 		if (mode.equals("add")) {
 			
             boolean playerExists = false;
-            if(!CampaignMain.cm.isUsingMySQL())
-                playerExists = new File("./campaign/players/" + excludeName.toLowerCase() + ".dat").exists();
-            else
-                playerExists = CampaignMain.cm.MySQL.playerExists(excludeName);
-            
+            playerExists = new File("./campaign/players/" + excludeName.toLowerCase() + ".dat").exists();
+          
             if (!playerExists) {
                 CampaignMain.cm.toUser(excludeName + " does not have a player file. cannot add to your no-play list.", Username, true);
                 return;

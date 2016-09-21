@@ -60,9 +60,7 @@ public class AdminCreateFactoryCommand implements Command {
 		String faction = command.nextToken();
 		String buildTableFolder = "0";
 		int accessLevel = 0;
-		if(CampaignMain.cm.isUsingMySQL()) {
-			fid = CampaignMain.cm.MySQL.getFactoryIdByNameAndPlanet(name, planet.getName());			
-		}
+
 		int type = Integer.parseInt(command.nextToken());
 		
 		if ( command.hasMoreElements() )
@@ -80,8 +78,6 @@ public class AdminCreateFactoryCommand implements Command {
 			planet.getOwner().addPlanet(planet);
 		}
         planet.updated();
-	if(CampaignMain.cm.isUsingMySQL())
-		fac.toDB();
 
 		CampaignMain.cm.toUser("Factory created!",Username,true);
 

@@ -1,7 +1,0 @@
-<tr>
-	<td><?php echo $currentRank; ?></td>
-	<td><?php echo $player['name']; ?></td>
-	<td><?php echo $player['exp']; ?></td>
-	<td><?php echo $player['house']; ?></td>
-	<td><?php echo $player['fluff']; ?></td>
-</tr>

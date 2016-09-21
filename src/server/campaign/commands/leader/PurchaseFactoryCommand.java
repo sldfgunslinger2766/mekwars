@@ -164,11 +164,6 @@ public class PurchaseFactoryCommand implements Command {
         house.updated();
         planet.updated();
         
-        if (CampaignMain.cm.isUsingMySQL()) {
-            fac.setID(CampaignMain.cm.MySQL.getFactoryIdByNameAndPlanet(name, planet.getName()));
-            fac.toDB();
-        }
-
         CampaignMain.cm.toUser("AM:You have purchased a factory, "+name+", on planet "+planet.getName()+" for "+CampaignMain.cm.moneyOrFluMessage(true, true, (int) cost) + " and "+CampaignMain.cm.moneyOrFluMessage(false, true, (int) flu), Username, true);
         CampaignMain.cm.doSendHouseMail(house,"NOTE", Username+" has purchased a factory, "+name+", on planet "+planet.getName()+".");
     }

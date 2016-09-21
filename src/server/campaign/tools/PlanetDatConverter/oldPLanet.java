@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import megamek.common.PlanetaryConditions;
-
 import common.AdvancedTerrain;
 import common.CampaignData;
 import common.Continent;
@@ -129,14 +127,6 @@ public class oldPLanet implements Comparable<Object>, MutableSerializable {
      */
     private int maxConquestPoints = 100;
 
-    /*
-     * Planet Database ID, used in saving and retreiving the planet from the
-     * database. Set this to zero, which will queue the initial save routine
-     * that it needs to insert rather than update. The save routine will then
-     * assign it a dbID.
-     */
-    private int DBID = 0;
-
     // CONSTRUCTORS
     public oldPLanet(int id, String name, Position position, Influences influence) {
         setId(id);
@@ -216,14 +206,6 @@ public class oldPLanet implements Comparable<Object>, MutableSerializable {
      */
     public void setBaysProvided(int baysProvided) {
         this.baysProvided = baysProvided;
-    }
-
-    public int getDBID() {
-        return DBID;
-    }
-
-    public void setDBID(int ID) {
-        DBID = ID;
     }
 
     /**

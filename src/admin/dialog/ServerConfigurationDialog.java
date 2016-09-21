@@ -42,7 +42,6 @@ import admin.dialog.serverConfigDialogs.BattleValuePanel;
 import admin.dialog.serverConfigDialogs.BlackMarketPanel;
 import admin.dialog.serverConfigDialogs.ChristmasPanel;
 import admin.dialog.serverConfigDialogs.CombatPanel;
-import admin.dialog.serverConfigDialogs.DBPanel;
 import admin.dialog.serverConfigDialogs.DefectionPanel;
 import admin.dialog.serverConfigDialogs.DirectSellPanel;
 import admin.dialog.serverConfigDialogs.DisconnectionPanel;
@@ -70,6 +69,7 @@ import admin.dialog.serverConfigDialogs.UnitsCardPanel;
 import admin.dialog.serverConfigDialogs.UnitsPanel;
 import admin.dialog.serverConfigDialogs.VotingPanel;
 import client.MWClient;
+
 import common.CampaignData;
 
 public final class ServerConfigurationDialog implements ActionListener {
@@ -149,7 +149,6 @@ public final class ServerConfigurationDialog implements ActionListener {
         DisconnectionPanel disconnectionPanel = new DisconnectionPanel();
         PilotsPanel pilotsPanel = new PilotsPanel(mwclient);// allows SO's set up pilot options and personal pilot queue options
         NoPlayPanel noPlayPanel = new NoPlayPanel(mwclient);
-        DBPanel dbPanel = new DBPanel(); // Database configuration
         AdvancedRepairPanel advancedRepairPanel = new AdvancedRepairPanel();// Advanced Repair
         LossCompensationPanel lossCompensationPanel = new LossCompensationPanel();// battle loss compensation
         PayoutModPanel payoutModPanel = new PayoutModPanel();
@@ -175,7 +174,6 @@ public final class ServerConfigurationDialog implements ActionListener {
         ConfigPane.addTab("BV Options", null, battleValuePanel, "Battle Value");
         ConfigPane.addTab("Christmas Units", null, christmasPanel, "Merry Christmas!");
         ConfigPane.addTab("Combat", null, combatPanel, "Combat");
-        ConfigPane.addTab("Database", null, dbPanel, "Database Configuration");
         ConfigPane.addTab("Defection", null, defectionPanel, "Defection configuration");
         ConfigPane.addTab("Direct Sales", null, directSellPanel, "Units - the lifeblood of the game");
         ConfigPane.addTab("Disconnection", null, disconnectionPanel, "Disconnection autoresolution settings");

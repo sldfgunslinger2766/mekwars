@@ -1,3 +1,0 @@
-ALTER TABLE `mechstats` ENGINE = InnoDB;
-
-UPDATE config set config_value='24' WHERE config_key='mekwars_database_version';

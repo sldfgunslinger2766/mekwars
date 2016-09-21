@@ -187,10 +187,7 @@ public class RetirePilotCommand implements Command {
 			
 			//tell the user about the retirement
 			CampaignMain.cm.toUser(toReturn,Username,true);
-			
-            if (CampaignMain.cm.isUsingMySQL())
-            	CampaignMain.cm.MySQL.deletePilot(((SPilot)m.getPilot()).getPilotId());
-            
+
 			//now, handle the pilot. if PPQs are in use leave the unit vacant,
 			//otherwise add a new pilot from the faction queue.
 			boolean allowPPQs = new Boolean(CampaignMain.cm.getConfig("AllowPersonalPilotQueues")).booleanValue();

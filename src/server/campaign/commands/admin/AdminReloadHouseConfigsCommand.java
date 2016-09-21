@@ -55,10 +55,7 @@ public class AdminReloadHouseConfigsCommand implements Command {
 		    return;
 
 		h.getConfig().clear();
-		if(CampaignMain.cm.isUsingMySQL())
-			h.loadConfigFileFromDB();
-		else
-			h.loadConfigFile();
+		h.loadConfigFile();
 		h.updated();
         CampaignMain.cm.doSendModMail("NOTE",Username+" has reloaded campaign configs for "+h.getName());
 	}

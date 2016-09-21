@@ -73,9 +73,6 @@ public class SetAdvancedPlanetTerrainCommand implements Command {
 		planet.setEnvironments(changedPe);
 		planet.updated();
 		
-        if(CampaignMain.cm.isUsingMySQL())
-        	planet.toDB();
-		
 		CampaignMain.cm.toUser("Advanced Terrain set for terrain: "+CampaignMain.cm.getData().getTerrain(id).getName() + "(" + AT.getName()+") on planet "+planet.getName(),Username,true);
 		//server.CampaignData.mwlog.modLog(Username + " set Advanced Terrain for terrain: "+aTerrain.getDisplayName()+" on planet "+planet.getName());
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has set Advanced Terrain for terrain: "+CampaignMain.cm.getData().getTerrain(id).getName() + "(" + AT.getName()+") on planet "+planet.getName());

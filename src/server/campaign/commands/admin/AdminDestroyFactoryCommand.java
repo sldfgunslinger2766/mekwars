@@ -70,10 +70,6 @@ public class AdminDestroyFactoryCommand implements Command {
 				return;
 			}
 			
-			
-			// Remove it from the database
-			if(CampaignMain.cm.isUsingMySQL())
-				CampaignMain.cm.MySQL.deleteFactory(foundFactory.getID());
 			p.getUnitFactories().removeElement(foundFactory);
 			p.getUnitFactories().trimToSize();
 			

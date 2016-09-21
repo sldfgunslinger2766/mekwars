@@ -90,11 +90,6 @@ public class DefectCommand implements Command {
                 return;
             }
 
-            if (CampaignMain.cm.isSynchingBB() && !p.isValidated()) {
-                CampaignMain.cm.toUser("AM:You are not allowed to defect until you validate your account.  You received an email when you registered, please use the validateemail command to enter the required code.", Username, true);
-                return;
-            }
-
             if (!isSingleFaction && CampaignMain.cm.getData().getHouseByName(HouseName) == null) {
                 CampaignMain.cm.toUser("AM:Could not find a faction with that name. Try again?", Username, true);
                 return;
@@ -557,14 +552,7 @@ public class DefectCommand implements Command {
 
                 toReturn += ".";
             }
-            // Logging in prior to saving will cause an error if the player has
-            // lost
-            // Units and those units were in armies. Clear the armies prior to
-            // this if
-            // using the database to prevent this.
 
-            if (CampaignMain.cm.isUsingMySQL())
-                CampaignMain.cm.MySQL.clearArmies(p.getDBId());
             /*
              * All returns passed, and command confirmed.
              * 
@@ -575,10 +563,7 @@ public class DefectCommand implements Command {
             p.getMyHouse().removeLeader(p.getName());
 
             String clientVersion = p.getPlayerClientVersion();
-            if (CampaignMain.cm.isSynchingBB()) {
-                CampaignMain.cm.MySQL.removeUserFromHouseForum(p.getForumID(), p.getMyHouse().getForumID());
-                CampaignMain.cm.MySQL.addUserToHouseForum(p.getForumID(), newHouse.getForumID());
-            }
+
             p.getMyHouse().removePlayer(p, false);
             p.setMyHouse(newHouse);
             p.setSubFaction(newHouse.getZeroLevelSubFaction());
@@ -616,14 +601,6 @@ public class DefectCommand implements Command {
              * silly to make him redo /c login when we can duplicate the login
              * process right here.
              */
-
-            // Logging in prior to saving will cause an error if the player has
-            // lost
-            // Units and those units were in armies. Clear the armies prior to
-            // this if
-            // using the database to prevent this.
-            if (CampaignMain.cm.isUsingMySQL())
-                CampaignMain.cm.MySQL.clearArmies(p.getDBId());
 
             CampaignMain.cm.forceSavePlayer(p);
             CampaignMain.cm.doLoginPlayer(Username);

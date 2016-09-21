@@ -94,7 +94,6 @@ public class AdminRequestBuildTableCommand implements Command {
                 toReturn.append(folderDelimiter);
             }
             CampaignMain.cm.toUser("BT|LS|" + toReturn.toString()+"|"+viewer, Username, false);
-            CampaignData.mwlog.dbLog("Sending: " + toReturn.toString());
 
             return;
         } else if (subcommand.equalsIgnoreCase("get")) {

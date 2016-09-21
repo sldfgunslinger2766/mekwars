@@ -78,10 +78,5 @@ public class SetPlanetWareHouseCommand implements Command {
 		CampaignMain.cm.toUser(planet.getName()+" has had its number of warehouses set to "+planet.getBaysProvided(),Username,true);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has set planet " + PlanetName+" warehouses to "+planet.getBaysProvided());
 		planet.updated();        
-		
-		if(CampaignMain.cm.isUsingMySQL())
-        	planet.toDB();
-		
-		
 	}//end process
 }//end class

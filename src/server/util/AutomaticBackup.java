@@ -70,10 +70,6 @@ public class AutomaticBackup extends Thread{
         CampaignData.mwlog.mainLog("Archiving Started at "+time);
         CampaignMain.cm.setArchiving(true);
         
-        if(CampaignMain.cm.isUsingMySQL()) {
-        	CampaignMain.cm.MySQL.backupDB(time);
-        }
-        
         SimpleDateFormat sDF = new SimpleDateFormat(dateTimeFormat);
         Date date = new Date(time);
 
@@ -89,38 +85,36 @@ public class AutomaticBackup extends Thread{
         playerZipFileName = "./campaign/backup/players"+dateTime+".zip";
         dataZipFileName = "./campaign/backup/data"+dateTime+".zip";
         
-        if(!CampaignMain.cm.isUsingMySQL()) {
-        	try{
-	        	out = new FileOutputStream(factionZipFileName);
-	        	zipFile = new ZipOutputStream(out);
-	        	zipBackupFactions();
-	        	zipFile.close();
-        	}
-        	catch(Exception ex){
-            	CampaignData.mwlog.errLog("Unable to create factions zip file");
-            	CampaignData.mwlog.errLog(ex);
-        	}
+    	try{
+        	out = new FileOutputStream(factionZipFileName);
+        	zipFile = new ZipOutputStream(out);
+        	zipBackupFactions();
+        	zipFile.close();
+    	}
+    	catch(Exception ex){
+        	CampaignData.mwlog.errLog("Unable to create factions zip file");
+        	CampaignData.mwlog.errLog(ex);
+    	}
 
-        	try{
-            	out = new FileOutputStream(planetZipFileName);
-            	zipFile = new ZipOutputStream(out);
-            	zipBackupPlanets();
-            	zipFile.close();
-        	}
-        	catch(Exception ex){
-            	CampaignData.mwlog.errLog("Unable to create planets zip file");
-            	CampaignData.mwlog.errLog(ex);
-        	}
-            try{
-    	        out = new FileOutputStream(playerZipFileName);
-    	        zipFile = new ZipOutputStream(out);
-    	        zipBackupPlayers();
-    	        zipFile.close();
-            }
-            catch(Exception ex){
-                CampaignData.mwlog.errLog("Unable to create player zip file");
-                CampaignData.mwlog.errLog(ex);
-            }
+    	try{
+        	out = new FileOutputStream(planetZipFileName);
+        	zipFile = new ZipOutputStream(out);
+        	zipBackupPlanets();
+        	zipFile.close();
+    	}
+    	catch(Exception ex){
+        	CampaignData.mwlog.errLog("Unable to create planets zip file");
+        	CampaignData.mwlog.errLog(ex);
+    	}
+        try{
+	        out = new FileOutputStream(playerZipFileName);
+	        zipFile = new ZipOutputStream(out);
+	        zipBackupPlayers();
+	        zipFile.close();
+        }
+        catch(Exception ex){
+            CampaignData.mwlog.errLog("Unable to create player zip file");
+            CampaignData.mwlog.errLog(ex);
         }
 
         try{
