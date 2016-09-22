@@ -36,6 +36,10 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.impl.StdSchedulerFactory;
+
 import megamek.MegaMek;
 import megamek.client.Client;
 import megamek.common.CriticalSlot;
@@ -138,7 +142,6 @@ import server.util.AutomaticBackup;
 import server.util.MWPasswd;
 import server.util.RepairTrackingThread;
 import server.util.StringUtil;
-
 import common.CampaignData;
 import common.Equipment;
 import common.House;
@@ -237,6 +240,8 @@ public final class CampaignMain implements Serializable {
     private Vector<String> supportUnits = new Vector<String>();
     
     private PlayerFlags defaultPlayerFlags = new PlayerFlags();
+    
+    private Scheduler scheduler;
 
     // CONSTRUCTOR
     public CampaignMain(MWServ serv) {
@@ -484,6 +489,14 @@ public final class CampaignMain implements Serializable {
         isUsingAdvanceRepair();
 
 
+        try {
+			scheduler = StdSchedulerFactory.getDefaultScheduler();
+			scheduler.start();
+		} catch (SchedulerException e) {
+			CampaignData.mwlog.errLog(e);
+			System.out.print("Unable to start scheduler!");
+		}
+        
 
         // finally, announce restart in news feed.
         this.addToNewsFeed("MekWars Server Started!");
@@ -4137,6 +4150,20 @@ public final class CampaignMain implements Serializable {
 	 */
 	public PlayerFlags getDefaultPlayerFlags() {
 		return defaultPlayerFlags;
+	}
+
+	/**
+	 * @return the scheduler
+	 */
+	public Scheduler getScheduler() {
+		return scheduler;
+	}
+
+	/**
+	 * @param scheduler the scheduler to set
+	 */
+	public void setScheduler(Scheduler scheduler) {
+		this.scheduler = scheduler;
 	}
 
 }
