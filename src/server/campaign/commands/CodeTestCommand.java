@@ -16,6 +16,12 @@
 
 package server.campaign.commands;
 
+import static org.quartz.CronScheduleBuilder.cronSchedule;
+import static org.quartz.DateBuilder.evenMinuteDate;
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.TriggerBuilder.newTrigger;
+import static org.quartz.impl.matchers.GroupMatcher.jobGroupEquals;
+
 import java.util.Date;
 import java.util.StringTokenizer;
 
@@ -26,24 +32,10 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
-import static org.quartz.JobBuilder.*;
-import static org.quartz.TriggerBuilder.*;
-import static org.quartz.SimpleScheduleBuilder.*;
-import static org.quartz.CronScheduleBuilder.*;
-import static org.quartz.CalendarIntervalScheduleBuilder.*;
-import static org.quartz.JobKey.*;
-import static org.quartz.TriggerKey.*;
-import static org.quartz.DateBuilder.*;
-import static org.quartz.impl.matchers.KeyMatcher.*;
-import static org.quartz.impl.matchers.GroupMatcher.*;
-import static org.quartz.impl.matchers.AndMatcher.*;
-import static org.quartz.impl.matchers.OrMatcher.*;
-import static org.quartz.impl.matchers.EverythingMatcher.*;
-import common.CampaignData;
-
-
 import server.campaign.CampaignMain;
 import server.campaign.util.scheduler.RepeatingJob;
+
+import common.CampaignData;
 
 public class CodeTestCommand implements Command {
 	
