@@ -12,17 +12,27 @@
 
 package server.campaign.commands;
 
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.quartz.TriggerBuilder.newTrigger;
+
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import megamek.common.Mech;
+
+import org.quartz.JobDetail;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+
 import server.MWServ;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.operations.OperationManager;
+import server.campaign.util.scheduler.ActivityJob;
 
 import common.CampaignData;
 import common.Unit;
@@ -237,10 +247,36 @@ public class ActivateCommand implements Command {
 
         // p.resetWeightedArmyNumber();
         p.getWeightedArmyNumber();
+        
+        JobDetail job = newJob(ActivityJob.class)
+        					.withIdentity(Username, "ActivityGroup")
+        					.build();
+        
+        Trigger trigger = newTrigger()
+        					.withIdentity(Username + "_activityTrigger", "ActivityGroup")
+        					.startNow()
+        					.withSchedule(simpleSchedule()
+        							.withIntervalInSeconds(10)
+        							.repeatForever())
+        					.build();
+        
+        // pass initialization parameters into the job
+        job.getJobDataMap().put(ActivityJob.ARMY_WEIGHT, Double.toString(p.getWeightedArmyNumber()));
+        job.getJobDataMap().put(ActivityJob.FACTION_NAME, p.getHouseFightingFor().getName());
+        job.getJobDataMap().put(ActivityJob.PLAYER_NAME, p.getName());
+        
+		try {
+			CampaignMain.cm.getScheduler().scheduleJob(job, trigger);
+		} catch (SchedulerException e) {
+			CampaignData.mwlog.errLog(e);
+		}
+        
         p.setActive(true);
 
         CampaignMain.cm.toUser("AM:[!] You're on your way to the front lines.", Username, true);
         CampaignMain.cm.sendPlayerStatusUpdate(p, !new Boolean(CampaignMain.cm.getConfig("HideActiveStatus")).booleanValue());
+        
+        
 
         // set up a thread which will do an auto /c ca once the minactivetime expires
         int threadLenth = CampaignMain.cm.getIntegerConfig("MinActiveTime") * 1000;
