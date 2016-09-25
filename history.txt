@@ -1,5 +1,6 @@
 VERSION HISTORY:
 ----------------
++ added a wrap to the html of the house factories display to avoid offscreen icons. 
 0.5.0.x
 - Removed all traces of MySQL integration.  I will redo it later and better.
 0.4.0.x
