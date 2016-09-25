@@ -534,8 +534,9 @@ public class CHSPanel extends JPanel {
         boolean usingAdvanceRepairs = mwclient.isUsingAdvanceRepairs();
         int playerAccessLevel = mwclient.getPlayer().getSubFactionAccess();
         result.append("<TABLE Border=\"1\"><TR><TH>" + HouseName + "</TH><TH>" + mwclient.getserverConfigs("LightFactoryTypeTitle") + "</TH><TH>" + mwclient.getserverConfigs("MediumFactoryTypeTitle") + "</TH><TH>" + mwclient.getserverConfigs("HeavyFactoryTypeTitle") + "</TH><TH>" + mwclient.getserverConfigs("AssaultFactoryTypeTitle") + "</TH></TR>");
+        int factoryGifCounter;
         for (int type_id = 0; type_id < Unit.TOTALTYPES; type_id++) {
-
+        	
             // hide unit types that aren't in use on the server
             String useIt = "Use" + Unit.getTypeClassDesc(type_id);
 
@@ -548,6 +549,7 @@ public class CHSPanel extends JPanel {
 
             String factoryTitle = mwclient.getserverConfigs(Unit.getTypeClassDesc(type_id) + "FactoryClassTitle");
             result.append("<TR><TD VALIGN=MIDDLE><b>" + factoryTitle + "</b></TD>");
+
             for (int weight = 0; weight < 4; weight++) {
 
                 String buyNew = "CanBuyNew" + Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type_id);
@@ -569,6 +571,7 @@ public class CHSPanel extends JPanel {
                         boolean hasOpen = false;
                         int minrefresh = Integer.MAX_VALUE;
 
+                        factoryGifCounter = 0; 
                         for (String Fac : facs.values()) {
 
                             ST = new StringTokenizer(Fac, "$");
@@ -591,7 +594,11 @@ public class CHSPanel extends JPanel {
                                 hasOpen = true;
                                 continue;
                             }
-
+                            factoryGifCounter++; 
+                            if (factoryGifCounter == 11) {
+                            	result.append("<br>");
+                            	factoryGifCounter = 1;
+                            			}
                             if (refreshTime == 0) {
 
                                 House foundH = mwclient.getData().getHouseByName(founder);
