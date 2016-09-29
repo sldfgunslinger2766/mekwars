@@ -22,6 +22,7 @@ import megamek.common.Aero;
 import megamek.common.BattleArmor;
 import megamek.common.BipedMech;
 import megamek.common.CriticalSlot;
+import megamek.common.EjectedCrew;
 import megamek.common.Entity;
 import megamek.common.IEntityRemovalConditions;
 import megamek.common.Mech;
@@ -29,7 +30,6 @@ import megamek.common.MechWarrior;
 import megamek.common.Protomech;
 import megamek.common.QuadMech;
 import megamek.common.Tank;
-
 import common.Unit;
 import common.util.UnitUtils;
 
@@ -58,7 +58,7 @@ public class SerializeEntity{
 		}
 
 		if (fullStatus) {
-			if ( !(e instanceof MechWarrior))
+			if ( !(e instanceof MechWarrior) && !(e instanceof EjectedCrew))
 			{
 				result.append(externalID + "*");
 				result.append(e.getOwner().getName().trim() + "*");
