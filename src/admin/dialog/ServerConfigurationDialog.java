@@ -60,6 +60,7 @@ import admin.dialog.serverConfigDialogs.PilotsPanel;
 import admin.dialog.serverConfigDialogs.ProductionPanel;
 import admin.dialog.serverConfigDialogs.RepodPanel;
 import admin.dialog.serverConfigDialogs.RewardPanel;
+import admin.dialog.serverConfigDialogs.SchedulerPanel;
 import admin.dialog.serverConfigDialogs.SinglePlayerFactionPanel;
 import admin.dialog.serverConfigDialogs.TechnicianPanel;
 import admin.dialog.serverConfigDialogs.TechnologyResearchPanel;
@@ -69,7 +70,6 @@ import admin.dialog.serverConfigDialogs.UnitsCardPanel;
 import admin.dialog.serverConfigDialogs.UnitsPanel;
 import admin.dialog.serverConfigDialogs.VotingPanel;
 import client.MWClient;
-
 import common.CampaignData;
 
 public final class ServerConfigurationDialog implements ActionListener {
@@ -153,6 +153,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         LossCompensationPanel lossCompensationPanel = new LossCompensationPanel();// battle loss compensation
         PayoutModPanel payoutModPanel = new PayoutModPanel();
         ChristmasPanel christmasPanel = new ChristmasPanel();
+        SchedulerPanel schedulerPanel = new SchedulerPanel();
         
         // Set the actions to generate
         okayButton.setActionCommand(okayCommand);
@@ -190,6 +191,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Pilot Skills", null, pilotSkillsPanel, "Server Configurable Pilot Skills");
         ConfigPane.addTab("Repodding", null, repodPanel, "Repod");
         ConfigPane.addTab("Rewards", null, rewardPanel, "Reward Points");
+        ConfigPane.addTab("Scheduler",  null, schedulerPanel, "Repeating Tasks");
         ConfigPane.addTab("Single Player", null, singlePlayerFactionPanel, "Single Player Faction Configuration");
         ConfigPane.addTab("SOL Units", null, newbieHousePanel, "SOL Units and Attack Limits");
         ConfigPane.addTab("Support Units", null, artilleryPanel, "Artillery and Gun Emplacements and Mines oh my!");

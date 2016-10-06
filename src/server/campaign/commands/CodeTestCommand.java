@@ -16,24 +16,16 @@
 
 package server.campaign.commands;
 
-import static org.quartz.CronScheduleBuilder.cronSchedule;
-import static org.quartz.DateBuilder.evenMinuteDate;
-import static org.quartz.JobBuilder.newJob;
-import static org.quartz.TriggerBuilder.newTrigger;
 import static org.quartz.impl.matchers.GroupMatcher.jobGroupEquals;
 
-import java.util.Date;
 import java.util.StringTokenizer;
 
-import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
 import server.campaign.CampaignMain;
-import server.campaign.util.scheduler.RepeatingJob;
 
 import common.CampaignData;
 
@@ -79,22 +71,22 @@ public class CodeTestCommand implements Command {
 		switch (action) {
 		case ACTION_START:
 						
-			JobDetail job = newJob(RepeatingJob.class)
-							  .withIdentity("job1", "group1")
-							  .build();
-			Date runTime = evenMinuteDate(new Date());
-			
-			Trigger trigger = newTrigger()
-								.withIdentity("trigger1", "group1")
-								.withSchedule(cronSchedule("0/5 * * * * ?"))
-								.startAt(runTime)
-								.build();
-			
-			try {
-				CampaignMain.cm.getScheduler().scheduleJob(job, trigger);
-			} catch (SchedulerException e) {
-				CampaignData.mwlog.errLog(e);
-			}
+//			JobDetail job = newJob(RepeatingJob.class)
+//							  .withIdentity("job1", "group1")
+//							  .build();
+//			Date runTime = evenMinuteDate(new Date());
+//			
+//			Trigger trigger = newTrigger()
+//								.withIdentity("trigger1", "group1")
+//								.withSchedule(cronSchedule("0/5 * * * * ?"))
+//								.startAt(runTime)
+//								.build();
+//			
+//			try {
+//				CampaignMain.cm.getScheduler().scheduleJob(job, trigger);
+//			} catch (SchedulerException e) {
+//				CampaignData.mwlog.errLog(e);
+//			}
 			
 			break;
 		case ACTION_STOP:

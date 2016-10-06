@@ -2081,15 +2081,6 @@ public final class CampaignMain implements Serializable {
             // load max idle time, converted to ms
             long maxIdleTime = Long.parseLong(CampaignMain.cm.getConfig("MaxIdleTime")) * 60000;
 
-            // for reserve players, we only check idleness
-/*
-             if (maxIdleTime > 0) {
-
-                for (SPlayer currP : currH.getReservePlayers().values()) {
-                	checkAndRemoveIdle(currP, maxIdleTime);
-                }
-            }
-*/
  			CampaignData.mwlog.infoLog("Slice #" + sliceID + " house: " + currH.getName() + " reservePlayers");
             for (SPlayer currP : currH.getReservePlayers().values()) {
             	if (maxIdleTime > 0) {
@@ -2116,7 +2107,6 @@ public final class CampaignMain implements Serializable {
                     if(!currP.isInvisible()) {
                         who.addPlayer(currP);
                     }
-                    this.toUser(currP.addInfluenceAtSlice(), currP.getName(), true);
                     if (maxIdleTime > 0) {
                         checkAndRemoveIdle(currP, maxIdleTime);
                     }

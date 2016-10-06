@@ -16,10 +16,6 @@
 
 package server.campaign;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -27,7 +23,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -58,6 +53,11 @@ import common.util.UnitUtils;
  * A class representing a Player DOCU is not finished
  *
  * @author Helge Richter (McWizard)
+ * @author Bob Eldred (Spork)
+ * @version 2016.10.06
+ * 
+ * Modifications:
+ * - Moved slice flu generation to a Quartz task
  */
 
 public final class SPlayer extends Player implements Comparable<Object>, IBuyer, ISeller {
@@ -1017,141 +1017,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         myHouse.getFightingPlayers().put(lowerName, this);
         CampaignMain.cm.toUser("CS|" + +SPlayer.STATUS_FIGHTING, name, false);
     }
-
-    /**
-     * A method which grants influence to players. Called from CampaignMain on
-     * slices if the player meets various and sundry activity requirements. This
-     * should only be called from CampaignMain, and only on a slice. Any other
-     * grant of influence should use addInfluence(int). Post-game adds are now
-     * handled by the ShortResolver (whereas the old Tasks code granted flu for
-     * as many slices as the player was busy, to a max). Alot of ugly casting to
-     * reduce rounding errors when multiplying/dividing with ints imported from
-     * config, and because getting an evenly distributed, declared range double
-     * from java.util.Random isnt possible.
-     *
-     * @param p
-     *            - player to have influence granted
-     * @return String - random message and influence information
-     */
-    protected String addInfluenceAtSlice() {
-
-        CampaignData.mwlog.debugLog("Starting addInfluenceAtSlice for " + getName());
-
-        // cant get any inf beyond ceiling, so no reason to do the math
-        int fluCeiling = Integer.parseInt(getMyHouse().getConfig("InfluenceCeiling"));
-        CampaignData.mwlog.debugLog("getting max flu");
-        if (influence >= fluCeiling) {
-            CampaignData.mwlog.debugLog("returning");
-            return "";
-        }
-
-        CampaignData.mwlog.debugLog("checking for merc house");
-        // mercs who are active but w/o contract get no flu
-        if (getHouseFightingFor().isMercHouse()) {
-            return "";
-        }
-        CampaignData.mwlog.debugLog("not in merc house");
-        /*
-         * Passed simple returns. Now check the player's activity time and make
-         * sure he has at least 1 (after weighting) eligible army.
-         */
-        double weightedNumArmies = getWeightedArmyNumber();
-        boolean activeLongEnough = (System.currentTimeMillis() - activeSince) > Integer.parseInt(getMyHouse().getConfig("InfluenceTimeMin"));
-
-        CampaignData.mwlog.debugLog("check active status, army number/weight, activelong enough");
-        if ((getDutyStatus() == STATUS_ACTIVE) && (weightedNumArmies > 0) && activeLongEnough) {
-
-            CampaignData.mwlog.debugLog(getName() + " is active!");
-            // if player has been on long enough to get influece,
-            // do all of the math to determine influence grant amount
-            double totalInfluenceGrant = 0;
-            double baseFlu = Double.parseDouble(getMyHouse().getConfig("BaseInfluence"));
-            totalInfluenceGrant = (baseFlu * weightedNumArmies);
-
-            /*
-             * reduce flu gain for folks who have alot of flu already. 80% yeild
-             * above 100, 60% above 150.
-             */
-            if ((influence > (fluCeiling * .5)) && (influence < (fluCeiling * .75))) {
-                totalInfluenceGrant = totalInfluenceGrant * .80;
-            } else if (influence >= fluCeiling * .75) {
-                totalInfluenceGrant = totalInfluenceGrant * .60;
-            }
-
-            // cast totalflu back as an int
-            int intFluToAdd = (int) totalInfluenceGrant;
-
-            // Check the flu cap and adjust the grant downwards if necessary.
-            int newFlu = influence + intFluToAdd;
-            if (newFlu > fluCeiling) {
-                intFluToAdd -= (newFlu - fluCeiling);
-            }
-
-            CampaignData.mwlog.debugLog("Adding Flue");
-            // then give him the flu
-            addInfluence(intFluToAdd);
-
-            // flu added. send the player a nice fluffy message about it.
-            try {
-                CampaignData.mwlog.debugLog("staring up flu message");
-                String fileName = "";
-                CampaignData.mwlog.debugLog("getting house");
-                SHouse faction = getHouseFightingFor();
-
-                CampaignData.mwlog.debugLog("getting flu message file");
-                if (faction == null) {
-                    fileName = "./data/influencemessages/CommonInfluenceMessages.txt";
-                } else {
-                    fileName = "./data/influencemessages/" + faction.getHouseFluFile() + "InfluenceMessages.txt";
-                }
-
-                File messageFile = new File(fileName);
-                if (!messageFile.exists()) {
-                    fileName = "./data/influencemessages/CommonInfluenceMessages.txt";
-                    messageFile = new File(fileName);
-                    if (!messageFile.exists()) {
-                        CampaignData.mwlog.errLog("A problem occured with your CommonInfluenceMessages File!");
-                        return "";
-                    }
-                }
-
-                FileInputStream fis = new FileInputStream(messageFile);
-                BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
-
-                CampaignData.mwlog.debugLog("getting random flu message");
-                int messages = Integer.parseInt(dis.readLine());
-                Random rand = new Random();
-                int messageLine = rand.nextInt(messages);
-                String fluMessage = "";
-                while (dis.ready()) {
-                    fluMessage = dis.readLine();
-                    if (messageLine <= 0) {
-                        break;
-                    }
-                    messageLine--;
-                }
-
-                dis.close();
-                fis.close();
-
-                int unitId = rand.nextInt(units.size());// random
-                SUnit unitForMessages = units.elementAt(unitId);
-                CampaignData.mwlog.debugLog("Adding Subs for unitid: " + unitId);
-                String fluMessageWithPilotName = fluMessage.replaceAll("PILOT", unitForMessages.getPilot().getName());
-                String fluMessageWithModelName = fluMessageWithPilotName.replaceAll("UNIT", unitForMessages.getModelName());
-                String fluMessageWithPlayerName = fluMessageWithModelName.replaceAll("PLAYER", name);
-
-                fluMessageWithPlayerName += " (" + CampaignMain.cm.moneyOrFluMessage(false, false, intFluToAdd, true) + ")";
-                CampaignData.mwlog.debugLog("returning [" + fluMessageWithPlayerName + "] for " + getName());
-                return fluMessageWithPlayerName;
-
-            } catch (Exception e) {
-                CampaignData.mwlog.errLog("A problem occured with your CommonInfluenceMessages File!");
-                return "";
-            }
-        }
-        return "";
-    }// end payInfluence(Player p)
 
     /**
      * Method that determines the weighted number or armies a player has active.
