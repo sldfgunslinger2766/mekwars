@@ -23,6 +23,7 @@ import common.CampaignData;
 /**
  * @author Torren Oct 22, 2004 Loads the default settings for the server config If any configs are added please add them to this function as well as
  *         createConfig().
+ * @version 2016.10.06
  */
 public class DefaultServerOptions {
     private Properties defaults; // default server config
@@ -32,8 +33,8 @@ public class DefaultServerOptions {
 
         defaults.setProperty("CampaignYear", "3145"); // Base year of campaign
 
-        defaults.setProperty("TickTime", "90000000"); // Had to change this, as it's measured in milliseconds now
-        defaults.setProperty("SliceTime", "18000000"); // Had to change this, as it's measured in milliseconds now
+        defaults.setProperty("TickTime", "900000"); // Had to change this, as it's measured in milliseconds now
+        defaults.setProperty("SliceTime", "180000"); // Had to change this, as it's measured in milliseconds now
 
         defaults.setProperty("HTMLOUTPUT", "true");
 
@@ -1340,6 +1341,11 @@ public class DefaultServerOptions {
         defaults.setProperty("Christmas_AllowScrap", "false");
         defaults.setProperty("Christmas_AllowBM", "false");
         defaults.setProperty("Christmas_AllowDirectSell", "false");
+        
+        // Quartz Scheduler defaults
+        defaults.setProperty("Scheduler_PlayerActivity_comps", "900");
+        defaults.setProperty("Scheduler_PlayerActivity_flu", "300");
+        defaults.setProperty("Scheduler_FactionSave", "900");
     }
 
     /**

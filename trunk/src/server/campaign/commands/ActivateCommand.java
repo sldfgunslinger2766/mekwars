@@ -12,27 +12,19 @@
 
 package server.campaign.commands;
 
-import static org.quartz.JobBuilder.newJob;
-import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
-import static org.quartz.TriggerBuilder.newTrigger;
-
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import megamek.common.Mech;
-
-import org.quartz.JobDetail;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-
 import server.MWServ;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.operations.OperationManager;
-import server.campaign.util.scheduler.ActivityJob;
+import server.campaign.util.scheduler.UserActivityComponentsJob;
+import server.campaign.util.scheduler.UserActivityInfluenceJob;
 
 import common.CampaignData;
 import common.Unit;
@@ -247,29 +239,10 @@ public class ActivateCommand implements Command {
 
         // p.resetWeightedArmyNumber();
         p.getWeightedArmyNumber();
-        
-        JobDetail job = newJob(ActivityJob.class)
-        					.withIdentity(Username, "ActivityGroup")
-        					.build();
-        
-        Trigger trigger = newTrigger()
-        					.withIdentity(Username + "_activityTrigger", "ActivityGroup")
-        					.startNow()
-        					.withSchedule(simpleSchedule()
-        							.withIntervalInSeconds(10)
-        							.repeatForever())
-        					.build();
-        
-        // pass initialization parameters into the job
-        job.getJobDataMap().put(ActivityJob.ARMY_WEIGHT, Double.toString(p.getWeightedArmyNumber()));
-        job.getJobDataMap().put(ActivityJob.FACTION_NAME, p.getHouseFightingFor().getName());
-        job.getJobDataMap().put(ActivityJob.PLAYER_NAME, p.getName());
-        
-		try {
-			CampaignMain.cm.getScheduler().scheduleJob(job, trigger);
-		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
-		}
+
+        // Start the Activity Jobs in Quartz to generate flu and components
+        UserActivityInfluenceJob.submit(p.getName(), p.getWeightedArmyNumber(), p.getHouseFightingFor().getName());
+        UserActivityComponentsJob.submit(p.getName(), p.getWeightedArmyNumber(), p.getHouseFightingFor().getName());
         
         p.setActive(true);
 

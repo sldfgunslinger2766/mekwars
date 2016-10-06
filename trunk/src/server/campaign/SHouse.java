@@ -49,7 +49,6 @@ import server.campaign.mercenaries.MercHouse;
 import server.campaign.operations.ShortOperation;
 import server.campaign.pilot.SPilot;
 import server.campaign.util.SerializedMessage;
-
 import common.BMEquipment;
 import common.CampaignData;
 import common.Planet;
@@ -62,11 +61,18 @@ import common.util.TokenReader;
 import common.util.UnitComponents;
 import common.util.UnitUtils;
 
+/**
+ * A class holding a server-side representation of a House
+ * @author Helge Richter (McWizard)
+ * @author Torren
+ * @author Bob Eldred (Spork)
+ * @version 2016.10.06
+ * 
+ * Modifications:
+ * - Moved component prodution to addActivityPP to enable access from a Quartz task
+ */
 public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISeller, IBuyer, Serializable {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -1558672678021355218L;
     // store all online players in *THREE* hashes, one for each primary status
     private ConcurrentHashMap<String, SPlayer> reservePlayers = new ConcurrentHashMap<String, SPlayer>();
@@ -937,7 +943,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
         double result = 0;
         boolean showOutput = Boolean.parseBoolean(this.getConfig("ShowOutputMultiplierOnTick"));
-        CampaignData.mwlog.debugLog("Staring getNumberOfPlayersWhoCountForProduction");
+        CampaignData.mwlog.debugLog("Starting getNumberOfPlayersWhoCountForProduction");
         // loop through all of the active players
         for (SPlayer currP : getActivePlayers().values()) {
 
@@ -1039,78 +1045,6 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         CampaignData.mwlog.debugLog("     -> " + tickworth);
 
         CampaignData.mwlog.debugLog("Calculating refresh points");
-        double cComp = getComponentProduction();
-        int componentsToAdd = (int) (tickworth * cComp);
-        int refreshToAdd = (int) Math.ceil(tickworth);
-
-        if (getIntegerConfig("FactoryRefreshPoints") > -1) {
-            // Allow Servers to refresh factories without having active players.
-            refreshToAdd = getIntegerConfig("FactoryRefreshPoints");
-        }
-
-        CampaignData.mwlog.debugLog("     -> " + refreshToAdd);
-
-        CampaignData.mwlog.debugLog("Getting planet income and refreshing factories");
-        // Get income, and refresh factories
-        Iterator<SPlanet> e = getPlanets().values().iterator();
-        while (e.hasNext()) {// loop through all planets which the faction
-            // has territory on
-            SPlanet p = e.next();
-            if (equals(p.getOwner())) {
-                CampaignData.mwlog.debugLog("Updating planet " + p.getName());
-                hsUpdates.append(p.tick(refreshToAdd));// call the planetary
-                // tick
-            }
-        }
-
-        // then add to the faction PP pools
-        boolean useMekPP = Boolean.parseBoolean(this.getConfig("UseMek"));
-        boolean useVehiclePP = Boolean.parseBoolean(this.getConfig("UseVehicle"));
-        boolean useInfantryPP = Boolean.parseBoolean(this.getConfig("UseInfantry"));
-        boolean useProtoMekPP = Boolean.parseBoolean(this.getConfig("UseProtoMek"));
-        boolean useBattleArmorPP = Boolean.parseBoolean(this.getConfig("UseBattleArmor"));
-        boolean useAeroPP = Boolean.parseBoolean(this.getConfig("UseAero"));
-
-        for (int i = 0; i < 4; i++) {// loop through each weight class,
-            // adding PP
-            if (useMekPP) {
-                CampaignData.mwlog.debugLog("Updating House Mek Parts: " + i);
-                hsUpdates.append(addPP(i, Unit.MEK, componentsToAdd, false));
-                addComponentsProduced(Unit.MEK, componentsToAdd);
-            }
-
-            if (useVehiclePP) {
-                CampaignData.mwlog.debugLog("Updating House Vehicle Parts: " + i);
-                hsUpdates.append(addPP(i, Unit.VEHICLE, componentsToAdd, false));
-                addComponentsProduced(Unit.VEHICLE, componentsToAdd);
-            }
-
-            if (useInfantryPP) {
-                CampaignData.mwlog.debugLog("Updating House Infantry: " + i);
-                if (!Boolean.parseBoolean(this.getConfig("UseOnlyLightInfantry")) || i == Unit.LIGHT) {
-                    hsUpdates.append(addPP(i, Unit.INFANTRY, componentsToAdd, false));
-                }
-                addComponentsProduced(Unit.INFANTRY, componentsToAdd);
-            }
-
-            if (useProtoMekPP) {
-                CampaignData.mwlog.debugLog("Updating House ProtoMek: " + i);
-                hsUpdates.append(addPP(i, Unit.PROTOMEK, componentsToAdd, false));
-                addComponentsProduced(Unit.PROTOMEK, componentsToAdd);
-            }
-
-            if (useBattleArmorPP) {
-                CampaignData.mwlog.debugLog("Updating House BA: " + i);
-                hsUpdates.append(addPP(i, Unit.BATTLEARMOR, componentsToAdd, false));
-                addComponentsProduced(Unit.BATTLEARMOR, componentsToAdd);
-            }
-
-            if (useAeroPP) {
-                CampaignData.mwlog.debugLog("Updating House Aero: " + i);
-                hsUpdates.append(addPP(i, Unit.AERO, componentsToAdd, false));
-                addComponentsProduced(Unit.AERO, componentsToAdd);
-            }
-        }
 
         /*
          * Loop throuhgh all hangars and component vectors, looking for
@@ -1571,6 +1505,86 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         return result;
     }
 
+    /**
+     * A method to generate components due to player activity.  Called from a PlayerActivityComponentJob
+     * @param armyWeight
+     */
+    public void addActivityPP(Double armyWeight) {
+        double cComp = getComponentProduction();
+        int componentsToAdd = (int) (armyWeight * cComp);
+        int refreshToAdd = (int) Math.ceil(armyWeight);
+
+        if (getIntegerConfig("FactoryRefreshPoints") > -1) {
+            // Allow Servers to refresh factories without having active players.
+            refreshToAdd = getIntegerConfig("FactoryRefreshPoints");
+        }
+        // Get income, and refresh factories
+        Iterator<SPlanet> e = getPlanets().values().iterator();
+        while (e.hasNext()) {// loop through all planets which the faction
+            // has territory on
+            SPlanet p = e.next();
+            if (equals(p.getOwner())) {
+                p.tick(refreshToAdd);// call the planetary
+                // tick
+            }
+        }
+
+        // then add to the faction PP pools
+        boolean useMekPP = Boolean.parseBoolean(this.getConfig("UseMek"));
+        boolean useVehiclePP = Boolean.parseBoolean(this.getConfig("UseVehicle"));
+        boolean useInfantryPP = Boolean.parseBoolean(this.getConfig("UseInfantry"));
+        boolean useProtoMekPP = Boolean.parseBoolean(this.getConfig("UseProtoMek"));
+        boolean useBattleArmorPP = Boolean.parseBoolean(this.getConfig("UseBattleArmor"));
+        boolean useAeroPP = Boolean.parseBoolean(this.getConfig("UseAero"));
+
+        StringBuilder hsUpdates = new StringBuilder();
+        
+        for (int i = 0; i < 4; i++) {// loop through each weight class,
+            // adding PP
+            if (useMekPP) {
+                CampaignData.mwlog.debugLog("Updating House Mek Parts: " + i);
+                hsUpdates.append(addPP(i, Unit.MEK, componentsToAdd, true));
+                addComponentsProduced(Unit.MEK, componentsToAdd);
+            }
+
+            if (useVehiclePP) {
+                CampaignData.mwlog.debugLog("Updating House Vehicle Parts: " + i);
+                hsUpdates.append(addPP(i, Unit.VEHICLE, componentsToAdd, true));
+                addComponentsProduced(Unit.VEHICLE, componentsToAdd);
+            }
+
+            if (useInfantryPP) {
+                CampaignData.mwlog.debugLog("Updating House Infantry: " + i);
+                if (!Boolean.parseBoolean(this.getConfig("UseOnlyLightInfantry")) || i == Unit.LIGHT) {
+                	hsUpdates.append(addPP(i, Unit.INFANTRY, componentsToAdd, true));
+                }
+                addComponentsProduced(Unit.INFANTRY, componentsToAdd);
+            }
+
+            if (useProtoMekPP) {
+                CampaignData.mwlog.debugLog("Updating House ProtoMek: " + i);
+                hsUpdates.append(addPP(i, Unit.PROTOMEK, componentsToAdd, true));
+                addComponentsProduced(Unit.PROTOMEK, componentsToAdd);
+            }
+
+            if (useBattleArmorPP) {
+                CampaignData.mwlog.debugLog("Updating House BA: " + i);
+                hsUpdates.append(addPP(i, Unit.BATTLEARMOR, componentsToAdd, true));
+                addComponentsProduced(Unit.BATTLEARMOR, componentsToAdd);
+            }
+
+            if (useAeroPP) {
+                CampaignData.mwlog.debugLog("Updating House Aero: " + i);
+                hsUpdates.append(addPP(i, Unit.AERO, componentsToAdd, false));
+                addComponentsProduced(Unit.AERO, componentsToAdd);
+            }
+        }
+        // send house updates, if not empty
+        if (hsUpdates.length() > 0) {
+            CampaignMain.cm.doSendToAllOnlinePlayers(this, "HS|" + hsUpdates.toString(), false);
+        }
+    }
+    
     /**
      * A method which adds a specified number of PP to Stores of the given
      * weight class. Can send house status updates, but also returns cmd to be
@@ -3173,4 +3187,5 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
     	bmLimits[Unit.AERO][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultAero");
 
     }
+    
 }// end SHouse.java

@@ -20,7 +20,13 @@ import java.util.StringTokenizer;
 
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
+import server.campaign.util.scheduler.UserActivityComponentsJob;
+import server.campaign.util.scheduler.UserActivityInfluenceJob;
 
+/**
+ * A command that takes a player out of active status.
+ * @version 2016.10.06
+ */
 public class DeactivateCommand implements Command {
 	
 	int accessLevel = 0;
@@ -60,6 +66,10 @@ public class DeactivateCommand implements Command {
 			CampaignMain.cm.toUser("AM:You haven't even reached the front yet! (Must meet minimum activity requirement before deactivating)",Username,true);
 			return;
 		}
+
+		// Stop the Activity Jobs
+		UserActivityInfluenceJob.stop(p.getName());
+		UserActivityComponentsJob.stop(p.getName());
 		
 		p.setActive(false);
 		p.leechCount = 0;
