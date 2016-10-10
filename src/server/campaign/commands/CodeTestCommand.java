@@ -16,18 +16,9 @@
 
 package server.campaign.commands;
 
-import static org.quartz.impl.matchers.GroupMatcher.jobGroupEquals;
-
 import java.util.StringTokenizer;
 
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.TriggerKey;
-
 import server.campaign.CampaignMain;
-
-import common.CampaignData;
 
 public class CodeTestCommand implements Command {
 	
@@ -90,18 +81,18 @@ public class CodeTestCommand implements Command {
 			
 			break;
 		case ACTION_STOP:
-			try {
-				CampaignMain.cm.getScheduler().unscheduleJob(new TriggerKey("trigger1", "group1"));
-				Scheduler sc = CampaignMain.cm.getScheduler();
-				for (String group : sc.getJobGroupNames()) {
-					for(JobKey jobKey : sc.getJobKeys(jobGroupEquals(group))) {
-						CampaignMain.cm.doSendModMail("SERVER", "Found Job Identified by: " + jobKey);
-					}
-				}
-				
-			} catch (SchedulerException e) {
-				CampaignData.mwlog.errLog(e);
-			}
+//			try {
+//				CampaignMain.cm.getScheduler().unscheduleJob(new TriggerKey("trigger1", "group1"));
+//				Scheduler sc = CampaignMain.cm.getScheduler();
+//				for (String group : sc.getJobGroupNames()) {
+//					for(JobKey jobKey : sc.getJobKeys(jobGroupEquals(group))) {
+//						CampaignMain.cm.doSendModMail("SERVER", "Found Job Identified by: " + jobKey);
+//					}
+//				}
+//				
+//			} catch (SchedulerException e) {
+//				CampaignData.mwlog.errLog(e);
+//			}
 			break;
 		}
 	}

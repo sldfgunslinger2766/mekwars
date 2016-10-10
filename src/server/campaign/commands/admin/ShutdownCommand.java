@@ -18,12 +18,12 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
-import org.quartz.SchedulerException;
-
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
+import server.campaign.util.scheduler.MWScheduler;
 import server.util.MWPasswd;
+
 import common.CampaignData;
 
 
@@ -49,12 +49,8 @@ public class ShutdownCommand implements Command {
 				return;
 			}
 		}
-		try {
-			CampaignMain.cm.getScheduler().shutdown();
-		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
-			System.out.print("Unable to stop scheduler");
-		}
+		MWScheduler.getInstance().shutdown();
+		
         CampaignMain.cm.getMarket().removeAllListings();
 		CampaignMain.cm.toFile();
 		CampaignMain.cm.forceSavePlayers(Username);

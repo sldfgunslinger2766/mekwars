@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
+import server.campaign.util.scheduler.MWScheduler;
 import server.campaign.util.scheduler.UserActivityComponentsJob;
 import server.campaign.util.scheduler.UserActivityInfluenceJob;
 
@@ -68,9 +69,8 @@ public class DeactivateCommand implements Command {
 		}
 
 		// Stop the Activity Jobs
-		UserActivityInfluenceJob.stop(p.getName());
-		UserActivityComponentsJob.stop(p.getName());
-		
+		MWScheduler.getInstance().deactivateUser(p.getName());
+
 		p.setActive(false);
 		p.leechCount = 0;
 		CampaignMain.cm.toUser("AM:[*] You've left active duty and are now in reserve.",Username,true);

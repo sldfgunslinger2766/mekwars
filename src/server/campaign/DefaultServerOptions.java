@@ -1336,11 +1336,14 @@ public class DefaultServerOptions {
         defaults.setProperty("UseUnitQuirks", "false");
         
         // Merry Christmas
+        defaults.setProperty("Celebrate_Christmas", "false");
         defaults.setProperty("Christmas_AllowTransfer", "false");
         defaults.setProperty("Christmas_AllowDonate", "false");
         defaults.setProperty("Christmas_AllowScrap", "false");
         defaults.setProperty("Christmas_AllowBM", "false");
         defaults.setProperty("Christmas_AllowDirectSell", "false");
+        defaults.setProperty("Christmas_StartDate", "2016-12-01");
+        defaults.setProperty("Christmas_EndDate",  "2017-01-01");
         
         // Quartz Scheduler defaults
         defaults.setProperty("Scheduler_PlayerActivity_comps", "900");
