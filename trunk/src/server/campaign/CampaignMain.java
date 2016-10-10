@@ -128,6 +128,7 @@ import server.campaign.operations.OperationManager;
 import server.campaign.operations.ShortOperation;
 import server.campaign.pilot.SPilotSkills;
 import server.campaign.util.ChatRoom;
+import server.campaign.util.ChristmasHandler;
 import server.campaign.util.HouseRankingHelpContainer;
 import server.campaign.util.MechStatistics;
 import server.campaign.util.Statistics;
@@ -136,6 +137,8 @@ import server.campaign.util.XMLAdvancedTerrainDataParser;
 import server.campaign.util.XMLFactionDataParser;
 import server.campaign.util.XMLPlanetDataParser;
 import server.campaign.util.XMLTerrainDataParser;
+import server.campaign.util.scheduler.ScheduleHandler;
+import server.campaign.util.scheduler.MWScheduler;
 import server.campaign.votes.VoteManager;
 import server.dataProvider.Server;
 import server.util.AutomaticBackup;
@@ -241,7 +244,9 @@ public final class CampaignMain implements Serializable {
     
     private PlayerFlags defaultPlayerFlags = new PlayerFlags();
     
-    private Scheduler scheduler;
+    private MWScheduler scheduler;
+    
+    private ChristmasHandler christmas;
 
     // CONSTRUCTOR
     public CampaignMain(MWServ serv) {
@@ -425,44 +430,15 @@ public final class CampaignMain implements Serializable {
         
         // Load the default player flags
         defaultPlayerFlags.loadFromDisk();
-
-        /*
-         * Load all players in ./campaign/players and create SmallPlayers. This
-         * makes /c lastonline returns accurate, and allows the creation of two
-         * different rankings - one for people active within the last week, and
-         * another which lists all players. Force a save cycle after the load in
-         * order to null the offline players.
-         */
-        // int pFilesLoaded = 0;
-        // File playersDir = new File("./campaign/players/");
-        // File[] players = playersDir.listFiles();
-        // for (File currF : players) {
-        //	
-        // //load pfile directly and determine player's house
-        // SPlayer currP = this.loadPlayerFile(currF.getName(), true);
-        // SHouse currH = currP.getMyHouse();
-        //	
-        // //add small player to the house hash
-        // SmallPlayer smallp = new SmallPlayer(currP.getExperience(),
-        // currP.getLastOnline(), currP.getRating(), currP.getName(),
-        // currP.getFluffText(), currH);
-        // currH.getSmallPlayers().put(currP.getName().toLowerCase(), smallp);
-        //	
-        // //explicity null the player, and periodically GC
-        // currP = null;
-        // if (pFilesLoaded >= 100) {
-        // System.gc();
-        // pFilesLoaded = 0;
-        // } else {
-        // pFilesLoaded++;
-        // }
-        //	
-        // try {
-        // Thread.sleep(50);
-        // } catch (InterruptedException e) {
-        // Thread.yield();
-        // }
-        // }
+        
+        //Load the scheduler
+        scheduler = MWScheduler.getInstance();
+        scheduler.start();
+       
+        // Load the Christmas Handler and set the start and end dates
+        christmas = ChristmasHandler.getInstance();
+        christmas.schedule();
+        
         // create & start a data provider
         int dataport = -1;
         try {
@@ -487,16 +463,6 @@ public final class CampaignMain implements Serializable {
 
         // start Advanced Repair, if enabled
         isUsingAdvanceRepair();
-
-
-        try {
-			scheduler = StdSchedulerFactory.getDefaultScheduler();
-			scheduler.start();
-		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
-			System.out.print("Unable to start scheduler!");
-		}
-        
 
         // finally, announce restart in news feed.
         this.addToNewsFeed("MekWars Server Started!");
@@ -4145,14 +4111,14 @@ public final class CampaignMain implements Serializable {
 	/**
 	 * @return the scheduler
 	 */
-	public Scheduler getScheduler() {
+	public MWScheduler getScheduler() {
 		return scheduler;
 	}
 
 	/**
 	 * @param scheduler the scheduler to set
 	 */
-	public void setScheduler(Scheduler scheduler) {
+	public void setScheduler(MWScheduler scheduler) {
 		this.scheduler = scheduler;
 	}
 

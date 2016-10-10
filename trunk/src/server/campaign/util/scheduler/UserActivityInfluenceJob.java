@@ -35,8 +35,6 @@ import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
@@ -44,16 +42,15 @@ import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-
 import common.CampaignData;
 
 /**
  * A class to handle distribution of Influence due to player activity
  * 
  * @author Spork
- * @version 2016.10.06
+ * @version 2016.10.10
  */
-public class UserActivityInfluenceJob implements Job {
+public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentifiableByUser {
 
 	// parameter names specific to this job
     public static final String PLAYER_NAME = "player name";
@@ -92,18 +89,16 @@ public class UserActivityInfluenceJob implements Job {
 	}
 
 	/**
-	 * A method to build the Influence Job and get it into the scheduler.  Called when the user
-	 * issues an Activate command
+	 * A method to build the Influence Job with a specified interval
 	 * @param userName - the name of the user going active
 	 * @param weightedArmyValue the value of the player's armies
 	 * @param factionName the faction the player fights for
+	 * @Wparam frequency how often (in seconds) the player is granted flu
 	 */
-	public static void submit(String userName, Double weightedArmyValue, String factionName) {
+	public static void submit(String userName, Double weightedArmyValue, String factionName, int frequency) {
 		JobDetail job = newJob(UserActivityInfluenceJob.class)
 				.withIdentity(userName + "_flu", "ActivityGroup")
 				.build();
-		
-		int frequency = CampaignMain.cm.getIntegerConfig("Scheduler_PlayerActivity_flu");
 		
 		Trigger trigger = newTrigger()
 				.withIdentity(userName + "_fluTrigger", "ActivityGroup")
@@ -118,11 +113,20 @@ public class UserActivityInfluenceJob implements Job {
         job.getJobDataMap().put(UserActivityComponentsJob.FACTION_NAME, factionName);
         job.getJobDataMap().put(UserActivityComponentsJob.PLAYER_NAME, userName);
         
-		try {
-			CampaignMain.cm.getScheduler().scheduleJob(job, trigger);
-		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
-		}
+		MWScheduler.getInstance().scheduleJob(job, trigger);
+	}
+	
+	/**
+	 * A method to build the Influence Job and get it into the scheduler.  Called when the user
+	 * issues an Activate command
+	 * @param userName - the name of the user going active
+	 * @param weightedArmyValue the value of the player's armies
+	 * @param factionName the faction the player fights for
+	 */
+	public static void submit(String userName, Double weightedArmyValue, String factionName) {
+		int frequency = CampaignMain.cm.getIntegerConfig("Scheduler_PlayerActivity_flu");
+		
+		submit(userName, weightedArmyValue, factionName, frequency);
 	}
 	
 	/**
@@ -130,15 +134,8 @@ public class UserActivityInfluenceJob implements Job {
 	 * @param userName
 	 */
 	public static void stop(String userName) {
-		try {
-			Scheduler scheduler = CampaignMain.cm.getScheduler();
-			TriggerKey key = new TriggerKey(userName + "_fluTrigger", "ActivityGroup");
-			scheduler.unscheduleJob(key);
-		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
-		} finally {
-			
-		}
+		TriggerKey key = new TriggerKey(userName + "_fluTrigger", "ActivityGroup");
+		MWScheduler.getInstance().unscheduleJob(key);
 	}
 	
 	/**
@@ -290,5 +287,66 @@ public class UserActivityInfluenceJob implements Job {
 
         fluMessageWithPlayerName += " (" + CampaignMain.cm.moneyOrFluMessage(false, false, flu, true) + ")";
         return fluMessageWithPlayerName;
+	}
+
+
+	/**
+	 * A method to reschedule the job given a JobExecutionContext and a flexible time constraint
+	 * @param frequency the number of intervals at which the job will fire
+	 * @param interval how long (second, hour, day, etc) each interval is
+	 * @param context the JobExecutionContext containins the information required by the job
+	 */
+	@Override
+	public void reschedule(int frequency, int interval, JobExecutionContext context) {
+		if (interval == ScheduleHandler.INTERVAL_SECONDS) {
+			rescheduleByContext(frequency, context);
+		}
+	}
+
+	/**
+	 * A method to reschedule the job given a JobExecutionContext
+	 * @param seconds the frequency of the job
+	 * @param context the JobExecutionContext containins the information required by the job
+	 */
+	@Override
+	public void rescheduleByContext(int seconds, JobExecutionContext context) {
+		JobDataMap data = context.getJobDetail().getJobDataMap();
+        String playerName = data.getString(PLAYER_NAME);
+        String factionName = data.getString(FACTION_NAME);
+        Double armyWeight = data.getDoubleFromString(ARMY_WEIGHT);
+        
+        UserActivityInfluenceJob.stop(playerName);
+        UserActivityInfluenceJob.submit(playerName, armyWeight, factionName, seconds);
+	}
+
+	/**
+	 * A method to get the TriggerKey identifying the influence job for a particular user
+	 * 
+	 * @param userName the name of the user we're searching for
+	 * @return TriggerKey
+	 */
+	@Override
+	public TriggerKey getKey(String userName) {
+		return new TriggerKey(userName + "_fluTrigger", "ActivityGroup");
+	}
+	
+	/**
+	 * A method to reschedule a particular user's influence job at a given frequency
+	 * This is called if the admin changes the influence frequency, so users
+	 * are not forced inactive.
+	 * 
+	 * @param frequency the new frequency in seconds
+	 * @param userName the name of the user to change the job for
+	 */
+	public void rescheduleJob(int frequency, String userName) {
+		TriggerKey key = getKey(userName);
+		Trigger trigger = newTrigger()
+				.withIdentity(userName + "_fluTrigger", "ActivityGroup")
+				.startAt(new Date(Calendar.getInstance().getTimeInMillis() + frequency*1000))
+				.withSchedule(simpleSchedule()
+						.withIntervalInSeconds(frequency)
+						.repeatForever())
+				.build();
+		MWScheduler.getInstance().rescheduleJob(key, trigger);
 	}
 }

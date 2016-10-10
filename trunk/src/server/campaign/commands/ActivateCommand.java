@@ -23,8 +23,7 @@ import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.operations.OperationManager;
-import server.campaign.util.scheduler.UserActivityComponentsJob;
-import server.campaign.util.scheduler.UserActivityInfluenceJob;
+import server.campaign.util.scheduler.MWScheduler;
 
 import common.CampaignData;
 import common.Unit;
@@ -241,8 +240,7 @@ public class ActivateCommand implements Command {
         p.getWeightedArmyNumber();
 
         // Start the Activity Jobs in Quartz to generate flu and components
-        UserActivityInfluenceJob.submit(p.getName(), p.getWeightedArmyNumber(), p.getHouseFightingFor().getName());
-        UserActivityComponentsJob.submit(p.getName(), p.getWeightedArmyNumber(), p.getHouseFightingFor().getName());
+        MWScheduler.getInstance().activateUser(p.getName(), p.getWeightedArmyNumber(), p.getHouseFightingFor().getName());
         
         p.setActive(true);
 

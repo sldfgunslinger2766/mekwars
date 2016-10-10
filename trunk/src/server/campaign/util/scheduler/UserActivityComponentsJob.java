@@ -28,16 +28,15 @@ import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
+import server.campaign.operations.ShortOperation;
 
-import common.CampaignData;
+import common.campaign.operations.Operation;
 
 
 /**
@@ -46,7 +45,7 @@ import common.CampaignData;
  * @author Spork
  * @version 2016.10.06
  */
-public class UserActivityComponentsJob implements Job {
+public class UserActivityComponentsJob implements Job, MWRepeatingJob, JobIdentifiableByUser {
 
 	// parameter names specific to this job
     public static final String PLAYER_NAME = "player name";
@@ -69,25 +68,50 @@ public class UserActivityComponentsJob implements Job {
         JobDataMap data = context.getJobDetail().getJobDataMap();
         String playerName = data.getString(PLAYER_NAME);
         //String factionName = data.getString(FACTION_NAME);
-        Double armyWeight = data.getDoubleFromString(ARMY_WEIGHT);
-        
-        //CampaignMain.cm.toUser("ActivityJob: " + jobKey + " executing at " + new Date() + ": You are " + playerName + " fighting for Faction " + factionName + ". Your armies have an effective weight of " + armyWeight + ".", playerName, false);
-        //String message = "ComponentJob: " + jobKey + " executing at " + new Date() + ": Generating Components for " + factionName;
-        //CampaignMain.cm.toUser(message, playerName);
-        //CampaignData.mwlog.infoLog(message);
+        //Double armyWeight = data.getDoubleFromString(ARMY_WEIGHT);
+
         SPlayer p = CampaignMain.cm.getPlayer(playerName);
         SHouse house = p.getMyHouse();
         
         if (playerCountsForProduction(p)) {
-        	house.addActivityPP(armyWeight);
-            String toShow = "AM:You counted towards production";
+        	Double value = howMuch(p);
             DecimalFormat myFormatter = new DecimalFormat("###.##");
-            String output = myFormatter.format(armyWeight);
-            toShow += " (" + output + " points worth)";
-            CampaignMain.cm.toUser(toShow + ".", p.getName(), true);        	
+            String output = myFormatter.format(value);
+            String toShow = "AM:You counted towards production (" + output + " points worth)";
+            CampaignMain.cm.toUser(toShow + ".", p.getName(), true);
+        	house.addActivityPP(value);
         }
         
 	}
+    
+	/**
+	 * A method to build the Components Job with a specified interval
+	 * @param userName - the name of the user going active
+	 * @param weightedArmyValue the value of the player's armies
+	 * @param factionName the faction the player fights for
+	 * @param frequency how often (in seconds) a player counts for production
+	 */
+	public static void submit(String userName, Double weightedArmyValue, String factionName, int frequency) {
+		JobDetail job = newJob(UserActivityComponentsJob.class)
+				.withIdentity(userName + "_comps", "ActivityGroup")
+				.build();
+		
+		Trigger trigger = newTrigger()
+				.withIdentity(userName + "_compsTrigger", "ActivityGroup")
+				.startAt(new Date(Calendar.getInstance().getTimeInMillis() + frequency*1000))
+				.withSchedule(simpleSchedule()
+						.withIntervalInSeconds(frequency)
+						.repeatForever())
+				.build();
+		
+		// pass initialization parameters into the job
+        job.getJobDataMap().put(UserActivityComponentsJob.ARMY_WEIGHT, Double.toString(weightedArmyValue));
+        job.getJobDataMap().put(UserActivityComponentsJob.FACTION_NAME, factionName);
+        job.getJobDataMap().put(UserActivityComponentsJob.PLAYER_NAME, userName);
+        
+        MWScheduler.getInstance().scheduleJob(job, trigger);
+ 	}
+    
 
 	/**
 	 * A method to build the Components Job and get it into the scheduler.  Called when the user
@@ -97,29 +121,8 @@ public class UserActivityComponentsJob implements Job {
 	 * @param factionName the faction the player fights for
 	 */
     public static void submit(String userName, Double weightedArmyValue, String factionName) {
-        JobDetail job = newJob(UserActivityComponentsJob.class)
-				.withIdentity(userName + "_comps", "ActivityGroup")
-				.build();
-        
         int frequency = CampaignMain.cm.getIntegerConfig("Scheduler_PlayerActivity_comps");
-        
-		Trigger trigger = newTrigger()
-				.withIdentity(userName + "_compsTrigger", "ActivityGroup")
-				.startAt(new Date(Calendar.getInstance().getTimeInMillis() + frequency*1000))
-				.withSchedule(simpleSchedule()
-						.withIntervalInSeconds(frequency)
-						.repeatForever())
-				.build();
-		
-        job.getJobDataMap().put(UserActivityComponentsJob.ARMY_WEIGHT, Double.toString(weightedArmyValue));
-        job.getJobDataMap().put(UserActivityComponentsJob.FACTION_NAME, factionName);
-        job.getJobDataMap().put(UserActivityComponentsJob.PLAYER_NAME, userName);
-        
-		try {
-			CampaignMain.cm.getScheduler().scheduleJob(job, trigger);
-		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
-		}
+		submit(userName, weightedArmyValue, factionName, frequency);
 	}
 	
 	/**
@@ -127,15 +130,8 @@ public class UserActivityComponentsJob implements Job {
 	 * @param userName
 	 */
     public static void stop(String userName) {
-		try {
-			Scheduler scheduler = CampaignMain.cm.getScheduler();
-			TriggerKey key = new TriggerKey(userName + "_compsTrigger", "ActivityGroup");
-			scheduler.unscheduleJob(key);
-		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
-		} finally {
-			
-		}
+		TriggerKey key = new TriggerKey(userName + "_compsTrigger", "ActivityGroup");
+		MWScheduler.getInstance().unscheduleJob(key);
 	}
 	
 	/**
@@ -152,6 +148,98 @@ public class UserActivityComponentsJob implements Job {
             return false;
         }
         
+        if ((p.getDutyStatus() != SPlayer.STATUS_ACTIVE) 
+        		&& (p.getDutyStatus() != SPlayer.STATUS_FIGHTING)) {
+        	return false;
+        }
+       
 		return true;
 	}
+    
+    /**
+     * A method to determine how much a player is worth
+     * @param p the Player
+     * @return how much he is worth in Component Generation
+     */
+    private double howMuch(SPlayer p) {
+    	if (p.getDutyStatus() == SPlayer.STATUS_ACTIVE) {
+    		return p.getWeightedArmyNumber();
+    	}
+    	
+    	if (p.getDutyStatus() == SPlayer.STATUS_FIGHTING) {
+            ShortOperation so = CampaignMain.cm.getOpsManager().getShortOpForPlayer(p);
+            if (so == null) {
+            	return 0.0;
+            }
+            
+            Operation o = CampaignMain.cm.getOpsManager().getOperation(so.getName());
+            double value = o.getDoubleValue("CountGameForProduction");
+            if (value < 0) {
+                value = 0.0;
+            }
+            return value;
+    	}
+    	return 0.0;
+    }
+
+	/**
+	 * A method to reschedule the job given a JobExecutionContext and a flexible time constraint
+	 * @param frequency the number of intervals at which the job will fire
+	 * @param interval how long (second, hour, day, etc) each interval is
+	 * @param context the JobExecutionContext containins the information required by the job
+	 */
+	@Override
+	public void reschedule(int frequency, int interval,
+			JobExecutionContext context) {
+		if (interval == ScheduleHandler.INTERVAL_SECONDS) {
+			rescheduleByContext(frequency, context);
+		}
+	}
+	
+	/**
+	 * A method to reschedule the job given a JobExecutionContext
+	 * @param seconds the frequency of the job
+	 * @param context the JobExecutionContext containins the information required by the job
+	 */
+	public void rescheduleByContext(int seconds, JobExecutionContext context) {
+        JobDataMap data = context.getJobDetail().getJobDataMap();
+        String playerName = data.getString(PLAYER_NAME);
+        String factionName = data.getString(FACTION_NAME);
+        Double armyWeight = data.getDoubleFromString(ARMY_WEIGHT);
+        
+        
+        
+        UserActivityComponentsJob.stop(playerName);
+        UserActivityComponentsJob.submit(playerName, armyWeight, factionName, seconds);
+
+	}
+
+	/**
+	 * A method to reschedule a player's component job at a given frequency
+	 * This is called when the admin changes the frequency of the jobs, so the
+	 * users do not have to be deactivated.
+	 * @param frequency how often (in seconds) the player will count for production
+	 * @param userName the user we are rescheduling
+	 */
+	public void rescheduleJob(int frequency, String userName) {
+		TriggerKey key = getKey(userName);
+		Trigger trigger = newTrigger()
+				.withIdentity(userName + "_compsTrigger", "ActivityGroup")
+				.startAt(new Date(Calendar.getInstance().getTimeInMillis() + frequency*1000))
+				.withSchedule(simpleSchedule()
+						.withIntervalInSeconds(frequency)
+						.repeatForever())
+				.build();
+		MWScheduler.getInstance().rescheduleJob(key, trigger);
+	}
+
+	/**
+	 * A method to find the TriggerKey identifying the components job for a particular player
+	 * @param userName the player we're searching for
+	 * @return the TriggerKey identifying the player's components job
+	 */
+	public TriggerKey getKey(String userName) {
+		return new TriggerKey(userName + "_compsTrigger", "ActivityGroup");
+	}
+	
 }

@@ -69,7 +69,10 @@ import common.util.UnitUtils;
  * @version 2016.10.06
  * 
  * Modifications:
+ * - Changed addActivityPP to just keep track of PP, which is then used at the tick.
+ *   Looping through the planets was taking way too long.
  * - Moved component prodution to addActivityPP to enable access from a Quartz task
+ * 
  */
 public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISeller, IBuyer, Serializable {
 
@@ -107,6 +110,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
     private int[][] unitLimits = new int[6][4];
     private boolean[][] bmLimits = new boolean[6][4];
+    
+    private double activityPP = 0.0;
     
     @Override
     public String toString() {
@@ -941,73 +946,43 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
      */
     private double getNumberOfPlayersWhoCountForProduction() {
 
-        double result = 0;
-        boolean showOutput = Boolean.parseBoolean(this.getConfig("ShowOutputMultiplierOnTick"));
-        CampaignData.mwlog.debugLog("Starting getNumberOfPlayersWhoCountForProduction");
-        // loop through all of the active players
-        for (SPlayer currP : getActivePlayers().values()) {
+        double result = activityPP;
 
-            CampaignData.mwlog.debugLog("Counting " + currP.getName());
-            if (System.currentTimeMillis() < currP.getActiveSince() + Long.parseLong(this.getConfig("InfluenceTimeMin"))) {
-                continue;
-            }
-            CampaignData.mwlog.debugLog("Getting army weight");
-            // move on to the next player if value is 0.
-            double value = currP.getWeightedArmyNumber();
-            if (value <= 0) {
-                continue;
-            }
-
-            // add the players weight to the total faction multiplier
-            result += value;
-
-            CampaignData.mwlog.debugLog("Showing output");
-            // if enabled, show the player his personal worth
-            if (showOutput) {
-                String toShow = "AM:You counted towards production this tick";
-                DecimalFormat myFormatter = new DecimalFormat("###.##");
-                String output = myFormatter.format(value);
-                toShow += " (" + output + " points worth)";
-                CampaignMain.cm.toUser(toShow + ".", currP.getName(), true);
-            }
-
-        }// end for(active players)
-
-        CampaignData.mwlog.debugLog("Getting all fighting players");
-        // now loop through all of the fighting players
-        for (SPlayer currP : getFightingPlayers().values()) {
-
-            /*
-             * Get the player's short op. He's fighing, so there should always
-             * be one, but check for a null just in case.
-             */
-            CampaignData.mwlog.debugLog("checking short operation for " + currP.getName());
-            ShortOperation so = CampaignMain.cm.getOpsManager().getShortOpForPlayer(currP);
-            if (so == null) {
-                continue;
-            }
-
-            CampaignData.mwlog.debugLog("Getting data for op " + so.getName() + " for player " + currP.getName());
-            Operation o = CampaignMain.cm.getOpsManager().getOperation(so.getName());
-            double value = o.getDoubleValue("CountGameForProduction");
-            if (value < 0) {
-                value = 0;
-            }
-
-            CampaignData.mwlog.debugLog("adding value.");
-            // add the players weight to the total faction multiplier
-            result += value;
-
-            CampaignData.mwlog.debugLog("Showing output");
-            // if enabled, show the player his personal worth
-            if (value > 0 && showOutput) {
-                String toReturn = "AM:You counted towards production this tick";
-                DecimalFormat myFormatter = new DecimalFormat("###.##");
-                String output = myFormatter.format(value);
-                toReturn += " (" + output + " points worth)";
-                CampaignMain.cm.toUser(toReturn + ".", currP.getName(), true);
-            }
-        }// end for(fighting players)
+//        CampaignData.mwlog.debugLog("Getting all fighting players");
+//        // now loop through all of the fighting players
+//        for (SPlayer currP : getFightingPlayers().values()) {
+//
+//            /*
+//             * Get the player's short op. He's fighing, so there should always
+//             * be one, but check for a null just in case.
+//             */
+//            CampaignData.mwlog.debugLog("checking short operation for " + currP.getName());
+//            ShortOperation so = CampaignMain.cm.getOpsManager().getShortOpForPlayer(currP);
+//            if (so == null) {
+//                continue;
+//            }
+//
+//            CampaignData.mwlog.debugLog("Getting data for op " + so.getName() + " for player " + currP.getName());
+//            Operation o = CampaignMain.cm.getOpsManager().getOperation(so.getName());
+//            double value = o.getDoubleValue("CountGameForProduction");
+//            if (value < 0) {
+//                value = 0;
+//            }
+//
+//            CampaignData.mwlog.debugLog("adding value.");
+//            // add the players weight to the total faction multiplier
+//            result += value;
+//
+//            CampaignData.mwlog.debugLog("Showing output");
+//            // if enabled, show the player his personal worth
+////            if (value > 0 && showOutput) {
+////                String toReturn = "AM:You counted towards production this tick";
+////                DecimalFormat myFormatter = new DecimalFormat("###.##");
+////                String output = myFormatter.format(value);
+////                toReturn += " (" + output + " points worth)";
+////                CampaignMain.cm.toUser(toReturn + ".", currP.getName(), true);
+////            }
+//        }// end for(fighting players)
 
         CampaignData.mwlog.debugLog("returning with results.");
         // pass back the aggregate value.
@@ -1041,6 +1016,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         } else {
             // if real, get the weighted number of valid players
             tickworth = getNumberOfPlayersWhoCountForProduction();
+            resetActivityPP(); // Now that we have it, we need to clear it so they don't get counted twice.
         }
         CampaignData.mwlog.debugLog("     -> " + tickworth);
 
@@ -1506,10 +1482,18 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
     }
 
     /**
-     * A method to generate components due to player activity.  Called from a PlayerActivityComponentJob
+     * A method to keep track of Production Points due to player activity.  Called from a PlayerActivityComponentJob
      * @param armyWeight
      */
     public void addActivityPP(Double armyWeight) {
+    	activityPP += armyWeight;
+    }
+    
+    public void resetActivityPP() {
+    	activityPP = 0;
+    }
+    
+    public void calcActivityPP(Double armyWeight) {
         double cComp = getComponentProduction();
         int componentsToAdd = (int) (armyWeight * cComp);
         int refreshToAdd = (int) Math.ceil(armyWeight);

@@ -22,7 +22,9 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -34,6 +36,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import org.jdatepicker.impl.JDatePickerImpl;
 
 import admin.dialog.serverConfigDialogs.AdvancedRepairPanel;
 import admin.dialog.serverConfigDialogs.ArtilleryPanel;
@@ -70,6 +74,7 @@ import admin.dialog.serverConfigDialogs.UnitsCardPanel;
 import admin.dialog.serverConfigDialogs.UnitsPanel;
 import admin.dialog.serverConfigDialogs.VotingPanel;
 import client.MWClient;
+
 import common.CampaignData;
 
 public final class ServerConfigurationDialog implements ActionListener {
@@ -258,7 +263,7 @@ public final class ServerConfigurationDialog implements ActionListener {
 
             Object field = panel.getComponent(fieldPos);
 
-            if (field instanceof JPanel) {
+            if (field instanceof JPanel && !(field instanceof JDatePickerImpl)) {
                 findAndPopulateTextAndCheckBoxes((JPanel) field);
             } else if (field instanceof JTextField) {
                 JTextField textBox = (JTextField) field;
@@ -302,7 +307,35 @@ public final class ServerConfigurationDialog implements ActionListener {
                 }
                 radioButton.setSelected(Boolean.parseBoolean(mwclient.getserverConfigs(key)));
 
-            }// else continue
+            } else if (field instanceof JDatePickerImpl) {
+            	JDatePickerImpl picker = (JDatePickerImpl) field;
+            	
+            	key = picker.getName();
+            	if (key == null) {
+            		CampaignData.mwlog.errLog("Null JDatePickerImpl: " + picker.getToolTipText());
+            		continue;
+            	}
+            	String s = mwclient.getserverConfigs(key);
+            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            	Date date = new Date();
+				try {
+					date = sdf.parse(s);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	Calendar cal = Calendar.getInstance();
+            	cal.setTime(date);
+            	int year = cal.get(Calendar.YEAR);
+            	int month = cal.get(Calendar.MONTH);
+            	int day = cal.get(Calendar.DAY_OF_MONTH);
+            	
+            	picker.getModel().setYear(year);
+            	picker.getModel().setMonth(month);
+            	picker.getModel().setDay(day);
+            	picker.getModel().setSelected(true);
+            	
+            } // else continue
         }
     }
 
@@ -320,7 +353,7 @@ public final class ServerConfigurationDialog implements ActionListener {
             Object field = panel.getComponent(fieldPos);
 
             // found another JPanel keep digging!
-            if (field instanceof JPanel) {
+            if (field instanceof JPanel && !(field instanceof JDatePickerImpl)) {
                 findAndSaveConfigs((JPanel) field);
             } else if (field instanceof JTextField) {
                 JTextField textBox = (JTextField) field;
@@ -368,7 +401,15 @@ public final class ServerConfigurationDialog implements ActionListener {
                 if (!mwclient.getserverConfigs(key).equalsIgnoreCase(value)) {
                     mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
                 }
-            }// else continue
+            } else if (field instanceof JDatePickerImpl) {
+            	JDatePickerImpl picker = (JDatePickerImpl) field;
+            	value = picker.getJFormattedTextField().getText();
+            	key = picker.getName();
+            	// reduce bandwidth only send things that have changed.
+                if (!mwclient.getserverConfigs(key).equalsIgnoreCase(value)) {
+                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
+                }            	
+            } // else continue
         }
 
     }

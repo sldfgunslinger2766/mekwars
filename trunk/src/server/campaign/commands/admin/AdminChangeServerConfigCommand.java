@@ -26,6 +26,7 @@ import java.util.StringTokenizer;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
+import server.campaign.util.scheduler.MWScheduler;
 
 public class AdminChangeServerConfigCommand implements Command {
 	
@@ -50,6 +51,19 @@ public class AdminChangeServerConfigCommand implements Command {
 		
 		//make setting change
 		CampaignMain.cm.getConfig().setProperty(config,arg);
+		
+		// Check for Schedule changes here
+		if (config.equalsIgnoreCase("Christmas_StartDate")) {
+			
+		} else if (config.equalsIgnoreCase("Christmas_EndDate")) {
+			
+		} else if (config.equalsIgnoreCase("Scheduler_FactionSave")) {
+			
+		} else if (config.equalsIgnoreCase("Scheduler_PlayerActivity_flu")) {
+			MWScheduler.getInstance().rescheduleAllActivePlayers();
+		} else if (config.equalsIgnoreCase("Scheduler_PlayerActivity_comps")) {
+			MWScheduler.getInstance().rescheduleAllActivePlayers();
+		}
 		
 		//NOTE:
 		//NO MODMAIL for setting changes. Server Config GUI would spam too much.
