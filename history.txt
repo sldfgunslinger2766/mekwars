@@ -1,5 +1,14 @@
 VERSION HISTORY:
 ----------------
+0.6.0.x
++ new MegaMek v0.41.24-MW20161013-f18015c
+$ Released Server, Ded, Client v0.6.0.1
+  ***********************************
+  * NOTE TO OPERATORS               *
+  *                                 *
+  * This update will force you to   *
+  * change to Java 1.8              *
+  ***********************************
 0.5.0.x
 R Released Server v0.5.0.2, Client v0.5.0.1
 + Created Interfaces for Quartz jobs
