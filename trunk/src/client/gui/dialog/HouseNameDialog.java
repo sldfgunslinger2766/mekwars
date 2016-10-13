@@ -42,7 +42,6 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import client.MWClient;
-
 import common.House;
 import common.util.SpringLayoutHelper;
 //util imports
@@ -73,7 +72,7 @@ public class HouseNameDialog extends JDialog implements ActionListener {
 	private final Collection<House> factions;
 	private final TreeSet<String> factionNames;
 	
-	private JList matchingHousesList;
+	private JList<String> matchingHousesList;
 	private JScrollPane scrollPane;//holds the JList
 	private JTextField nameField;//input field
 	private final JButton okayButton = new JButton("OK");
@@ -104,10 +103,10 @@ public class HouseNameDialog extends JDialog implements ActionListener {
 				continue;
             factionNames.add(house.getName());
 		}
-		final Object[] allHouseNames = factionNames.toArray();
+		final String[] allHouseNames = factionNames.toArray(new String[factionNames.size()]);
 		
 		//construct the faction name list
-		matchingHousesList = new JList(allHouseNames);
+		matchingHousesList = new JList<String>(allHouseNames);
 		matchingHousesList.setVisibleRowCount(10);
 		matchingHousesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
@@ -131,7 +130,7 @@ public class HouseNameDialog extends JDialog implements ActionListener {
 							if (curHouse.toLowerCase().indexOf(text) != -1)
 								possibleHouses.add(curHouse);
 						}
-						matchingHousesList.setListData(possibleHouses.toArray());
+						matchingHousesList.setListData(possibleHouses.toArray(new String[possibleHouses.size()]));
 						
 						/*
 						 * Try to select a faction with a STARTING string which matched

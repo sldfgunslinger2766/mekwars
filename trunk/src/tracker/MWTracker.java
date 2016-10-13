@@ -31,6 +31,8 @@ import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.CampaignData;
+
 /**
  * Starts a server which listens for information
  * from running MekWarsServers and periodically
@@ -233,9 +235,10 @@ public final class MWTracker {
 			 * processing threads which handle communications
 			 * over discrete sockets.
 			 */
+			ServerSocket server = null;
 			try {
 				tracker.addToLog("attempt to open a serversocket on port " + listenPort);
-				ServerSocket server = new ServerSocket(listenPort,0,InetAddress.getLocalHost());
+				server = new ServerSocket(listenPort,0,InetAddress.getLocalHost());
 				while(true){//always listen for calls
 					Socket sock = server.accept();
 					tracker.addToLog("lthread: connection accepted from " + sock.getInetAddress() + ", being processing.");
@@ -244,6 +247,12 @@ public final class MWTracker {
 			} catch (IOException e) {
 				tracker.addToLog("Server socket creation failed. Exiting.");
 				System.exit(0);
+			} finally {
+				try {
+					server.close();
+				} catch (IOException e) {
+					CampaignData.mwlog.errLog(e);
+				}
 			}
 			
 		}//end run()    	

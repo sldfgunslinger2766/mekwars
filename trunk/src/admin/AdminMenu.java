@@ -949,7 +949,7 @@ public class AdminMenu extends JMenu {
             names.add(UF.getName());
         }
 
-        JComboBox combo = new JComboBox(names.toArray());
+        JComboBox<String> combo = new JComboBox<String>(names.toArray(new String[names.size()]));
         combo.setEditable(true);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
@@ -996,7 +996,7 @@ public class AdminMenu extends JMenu {
          * JOptionPane.showInputDialog(mwclient.getMainFrame(),"Terrain Type");
          */
 
-        JComboBox combo = new JComboBox(names.toArray());
+        JComboBox<String> combo = new JComboBox<String>(names.toArray(new String[names.size()]));
         combo.setEditable(false);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
@@ -1271,7 +1271,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        JComboBox techCombo = new JComboBox(TechConstants.T_NAMES);
+        JComboBox<String> techCombo = new JComboBox<String>(TechConstants.T_NAMES);
         techCombo.setEditable(false);
 
         JOptionPane jop = new JOptionPane(techCombo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
@@ -1509,7 +1509,7 @@ public class AdminMenu extends JMenu {
             names.add(UF.getName());
         }
 
-        JComboBox combo = new JComboBox(names.toArray());
+        JComboBox<String> combo = new JComboBox<String>(names.toArray(new String[names.size()]));
         combo.setEditable(true);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 

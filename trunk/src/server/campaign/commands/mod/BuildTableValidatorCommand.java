@@ -19,6 +19,7 @@ package server.campaign.commands.mod;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.StringTokenizer;
 
 import megamek.common.Entity;
@@ -26,7 +27,6 @@ import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SUnit;
 import server.campaign.commands.Command;
-
 import common.CampaignData;
 
 
@@ -101,11 +101,11 @@ public class BuildTableValidatorCommand implements Command {
 
 			if (!fileList[i].isFile())
 				continue;
-
+			BufferedReader dis = null;
 			try {
 				
 				FileReader fis = new FileReader(fileList[i]);
-				BufferedReader dis = new BufferedReader(fis);
+				dis = new BufferedReader(fis);
 				while (dis.ready()) {
 
 					//check for blank lines, which can throw off counts
@@ -146,6 +146,12 @@ public class BuildTableValidatorCommand implements Command {
 			} catch (Exception e) {
 				CampaignData.mwlog.errLog(e);
 				return "Error from FileReader of BufferedReader while opening files. Check permissions.";
+			} finally {
+				try {
+					dis.close();
+				} catch (IOException e) {
+					CampaignData.mwlog.errLog(e);
+				}
 			}
 		}
 

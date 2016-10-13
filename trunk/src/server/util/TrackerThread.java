@@ -16,12 +16,12 @@
 
 package server.util;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 import server.MWServ;
 import server.campaign.CampaignMain;
-
 import common.CampaignData;
 
 public class TrackerThread extends Thread {
@@ -54,7 +54,7 @@ public class TrackerThread extends Thread {
 		/*
 		 * Immediately send core info to tracker.
 		 */
-		Socket sock;
+		Socket sock = null;
 		try {
 			CampaignData.mwlog.infoLog("TrackerThread attempting to send ServerStart information.");
 			sock = new Socket(trackerAddress, 13731);//fixed port
@@ -69,6 +69,12 @@ public class TrackerThread extends Thread {
 			CampaignData.mwlog.errLog("Could not contact tracker. Shutting down trackerthread.");
 			CampaignData.mwlog.errLog(e);
 			return;
+		} finally {
+			try {
+				sock.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
 		}
 		
 		/*

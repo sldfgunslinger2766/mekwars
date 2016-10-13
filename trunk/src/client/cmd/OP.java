@@ -29,8 +29,6 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.swing.JOptionPane;
-
 import client.MWClient;
 import client.gui.dialog.opviewer.OperationViewerDialog;
 

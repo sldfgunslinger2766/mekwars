@@ -130,21 +130,21 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
     private long m_nLastSearch = 0;
 
     private JLabel labelType = new JLabel("Tech: ", SwingConstants.RIGHT);
-    private JComboBox chType = new JComboBox();
+    private JComboBox<String> chType = new JComboBox<String>();
     private JLabel labelUnitType = new JLabel("Type: ", SwingConstants.RIGHT);
-    private JComboBox chUnitType = new JComboBox();
+    private JComboBox<String> chUnitType = new JComboBox<String>();
     private JLabel labelWeightClass = new JLabel("Class: ", SwingConstants.RIGHT);
-    private JComboBox chWeightClass = new JComboBox();
+    private JComboBox<String> chWeightClass = new JComboBox<String>();
     private JLabel labelSort = new JLabel("Sort: ", SwingConstants.RIGHT);
-    private JComboBox chSort = new JComboBox();
+    private JComboBox<String> chSort = new JComboBox<String>();
     private JPanel pParams = new JPanel();
     private JPanel textBoxSpring = new JPanel(new SpringLayout());
     private JPanel springHolder = new JPanel(new SpringLayout());
     private JPanel fluffBoxSpring = new JPanel(new SpringLayout());
 
-    DefaultListModel defaultModel = null;
+    DefaultListModel<String> defaultModel = null;
     ListSelectionModel listSelectionModel = null;
-    JList mechList = null;
+    JList<String> mechList = null;
     JScrollPane listScrollPane = null;
     JScrollPane leftScrollPane = null;
     JScrollPane rightScrollPane = null;
@@ -171,18 +171,18 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
     private JButton m_bToggleAdvanced = new JButton("< Show Advanced Search >");
     private JPanel m_pSouthParams = new JPanel();
 
-    private JComboBox m_cWalk = new JComboBox();
+    private JComboBox<String> m_cWalk = new JComboBox<String>();
     private JTextField m_tWalk = new JTextField(2);
-    private JComboBox m_cJump = new JComboBox();
+    private JComboBox<String> m_cJump = new JComboBox<String>();
     private JTextField m_tJump = new JTextField(2);
-    private JComboBox m_cArmor = new JComboBox();
+    private JComboBox<String> m_cArmor = new JComboBox<String>();
     private JTextField m_tWeapons1 = new JTextField(2);
-    private JComboBox m_cWeapons1 = new JComboBox();
-    private JComboBox m_cOrAnd = new JComboBox();
+    private JComboBox<String> m_cWeapons1 = new JComboBox<String>();
+    private JComboBox<String> m_cOrAnd = new JComboBox<String>();
     private JTextField m_tWeapons2 = new JTextField(2);
-    private JComboBox m_cWeapons2 = new JComboBox();
+    private JComboBox<String> m_cWeapons2 = new JComboBox<String>();
     private JCheckBox m_chkEquipment = new JCheckBox();
-    private JComboBox m_cEquipment = new JComboBox();
+    private JComboBox<String> m_cEquipment = new JComboBox<String>();
     private JButton m_bSearch = new JButton("Search");
     private JButton m_bReset = new JButton("Reset");
     private JLabel m_lCount = new JLabel();
@@ -216,8 +216,8 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
         unitFluff.setContentType("text/html");
 
         // construct a model and list
-        defaultModel = new DefaultListModel();
-        mechList = new JList(defaultModel);
+        defaultModel = new DefaultListModel<String>();
+        mechList = new JList<String>(defaultModel);
         listSelectionModel = mechList.getSelectionModel();
         mechList.setVisibleRowCount(17);// give the list same number of rows as
         // the text boxes

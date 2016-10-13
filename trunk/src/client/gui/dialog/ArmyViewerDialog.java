@@ -64,7 +64,6 @@ import client.MWClient;
 import client.campaign.CArmy;
 import client.campaign.CPlayer;
 import client.campaign.CUnit;
-
 import common.CampaignData;
 import common.Unit;
 import common.util.SpringLayoutHelper;
@@ -82,9 +81,9 @@ public class ArmyViewerDialog extends JDialog implements ActionListener, ListSel
     private static final long serialVersionUID = -3851019509649287454L;
 
 
-	private DefaultListModel defaultModel = null;
+	private DefaultListModel<String> defaultModel = null;
 	private ListSelectionModel listSelectionModel= null;
-	private JList armyList = null;
+	private JList<String> armyList = null;
 	private JScrollPane listScrollPane = null;
 	private JScrollPane leftScrollPane = null;
 	
@@ -93,7 +92,7 @@ public class ArmyViewerDialog extends JDialog implements ActionListener, ListSel
 	
 	private JTextArea armyView = null;
 	
-	private JComboBox teamBox = new JComboBox();
+	private JComboBox<String> teamBox = new JComboBox<String>();
 	
 	private CPlayer player = null;
 	private String opName = null;
@@ -141,8 +140,8 @@ public class ArmyViewerDialog extends JDialog implements ActionListener, ListSel
 		armyView = new JTextArea(15,38);
 		armyView.setAutoscrolls(true);
 		//construct a model and list
-		defaultModel = new DefaultListModel();
-		armyList = new JList(defaultModel);
+		defaultModel = new DefaultListModel<String>();
+		armyList = new JList<String>(defaultModel);
         
 		listSelectionModel = armyList.getSelectionModel();
 		armyList.setVisibleRowCount(5);

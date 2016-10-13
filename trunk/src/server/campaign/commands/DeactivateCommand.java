@@ -21,8 +21,6 @@ import java.util.StringTokenizer;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.util.scheduler.MWScheduler;
-import server.campaign.util.scheduler.UserActivityComponentsJob;
-import server.campaign.util.scheduler.UserActivityInfluenceJob;
 
 /**
  * A command that takes a player out of active status.

@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.JFileChooser;
+
+import common.CampaignData;
 
 import updaters.utils.IOUtil;
 
@@ -236,11 +239,13 @@ public class VersionManifest {
             long crc32 = IOUtil.getCRC32(new BufferedInputStream(new FileInputStream(line)));
             System.out.println(line + separator + line + separator + crc32);
         }
+        manifestList.close();
     }
 
     private static void createManifestFile(String outPutFileName) {
-        try {
-            BufferedReader manifestList = new BufferedReader(new FileReader(outPutFileName));
+    	BufferedReader manifestList = null;
+    	try {
+            manifestList = new BufferedReader(new FileReader(outPutFileName));
 
             String manifestFileName = outPutFileName.substring(0, outPutFileName.indexOf("files.txt")) + "Manifest.txt";
             FileOutputStream out = new FileOutputStream(manifestFileName);
@@ -276,6 +281,12 @@ public class VersionManifest {
              */
         } catch (Exception ex) {
             ex.printStackTrace();
+        } finally {
+        	try {
+				manifestList.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
         }
     }
 

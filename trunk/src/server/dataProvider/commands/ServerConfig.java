@@ -46,5 +46,7 @@ public class ServerConfig implements ServerCommand {
         while (config.ready()) {
             out.println(config.readLine(),"ConfigLine");
         }
+        
+        config.close();
     }
 }

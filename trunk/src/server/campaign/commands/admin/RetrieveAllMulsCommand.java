@@ -19,8 +19,11 @@ package server.campaign.commands.admin;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
+
+import common.CampaignData;
 
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
@@ -52,7 +55,7 @@ public class RetrieveAllMulsCommand implements Command {
 			return;
 		}
 		String fileName = "./data/armies/";
-
+		BufferedReader br = null;
 		try {
 			
 			
@@ -63,7 +66,7 @@ public class RetrieveAllMulsCommand implements Command {
 			for ( File mul : mulFolder.listFiles() ){
 				StringBuffer sendData = new StringBuffer("PL|RMF|");
 				FileInputStream fis = new FileInputStream(mul);
-				BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+				br = new BufferedReader(new InputStreamReader(fis));
 				
 				sendData.append(mul.getName());
 				sendData.append("#");
@@ -77,13 +80,16 @@ public class RetrieveAllMulsCommand implements Command {
 				
 				CampaignMain.cm.toUser(sendData.toString(), Username,false);
 			}
+			CampaignMain.cm.doSendModMail("NOTE", Username+" has retrived all mul files");
 		}
 		catch ( Exception ex){
 			CampaignMain.cm.toUser("File Not found",Username,true);
-			return;
-		}
-		
-		CampaignMain.cm.doSendModMail("NOTE", Username+" has retrived all mul files");
-		
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
+		}		
 	}
 }

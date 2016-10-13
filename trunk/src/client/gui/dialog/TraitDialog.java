@@ -24,6 +24,7 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -42,7 +43,6 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import client.MWClient;
-
 import common.CampaignData;
 import common.House;
 import common.campaign.pilot.skills.PilotSkill;
@@ -111,8 +111,8 @@ public final class TraitDialog implements ActionListener, KeyListener{
     private final JTextField giftedText = new JTextField(3);
     private final JTextField medtechText = new JTextField(3);
 
-	private JComboBox factionComboBox = new JComboBox();
-	private JComboBox traitComboBox = new JComboBox();
+	private JComboBox<String> factionComboBox = new JComboBox<String>();
+	private JComboBox<String> traitComboBox = new JComboBox<String>();
 	
 	//STOCK DIALOUG AND PANE
 	private JDialog dialog;
@@ -131,7 +131,7 @@ public final class TraitDialog implements ActionListener, KeyListener{
 		for (Iterator<House> factions = mwclient.getData().getAllHouses().iterator(); factions.hasNext();)
 			names.add( factions.next().getName());
 		
-		factionComboBox = new JComboBox(names.toArray());
+		factionComboBox = new JComboBox<String>(names.toArray(new String[names.size()]));
 		traitComboBox.setEditable(!player);
 		
 		//stored values.
@@ -377,20 +377,27 @@ public final class TraitDialog implements ActionListener, KeyListener{
 	    TreeSet<String> names = new TreeSet<String>();
 	    if ( traitComboBox.getItemCount() > 0)
 	        traitComboBox.removeAllItems();
+	    BufferedReader dis = null;
 	    try{	
 	        FileInputStream fis = new FileInputStream(traitFile);
-	        BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+	        dis = new BufferedReader(new InputStreamReader(fis));
 	        while (dis.ready()){
 	            StringTokenizer traitName = new StringTokenizer(dis.readLine(),delimiter);
 	            names.add(traitName.nextToken());
 	        }
 	        //names.add(" ");
-	        Object[] tempArray = names.toArray();
+	        String[] tempArray = names.toArray(new String[names.size()]);
 	        for ( int i =0; i < tempArray.length; i++)
 	            traitComboBox.addItem(tempArray[i]);
 	    }catch (Exception ex){
 	        CampaignData.mwlog.errLog("Unable to load faction "+faction);
 	        CampaignData.mwlog.errLog(ex);
+	    } finally {
+	    	try {
+				dis.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
 	    }
 	    if ( traitComboBox.getItemCount() > 0 )
 	        traitComboBox.setSelectedIndex(0);
@@ -422,10 +429,10 @@ public final class TraitDialog implements ActionListener, KeyListener{
         giftedText.setText("0");
         quickStudyText.setText("0");
         medtechText.setText("0");
-
+        BufferedReader dis = null;
 		try{
 	        FileInputStream fis = new FileInputStream(traitFile);
-	        BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+	        dis = new BufferedReader(new InputStreamReader(fis));
 	        while (dis.ready()){
 	            StringTokenizer traitNames = new StringTokenizer(dis.readLine(),delimiter);
 	            String traitName = traitNames.nextToken();
@@ -477,6 +484,12 @@ public final class TraitDialog implements ActionListener, KeyListener{
 	    }catch (Exception ex){
 	        CampaignData.mwlog.errLog("populate Traits error");
 	        CampaignData.mwlog.errLog(ex);
+        } finally {
+        	try {
+				dis.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
         }
 	}
 	

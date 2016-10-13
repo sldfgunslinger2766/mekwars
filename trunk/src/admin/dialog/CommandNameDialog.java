@@ -75,7 +75,7 @@ public class CommandNameDialog extends JDialog implements ActionListener {
 	private final Collection<String> commands;
 	private final TreeSet<String> CommandNames;
     
-	private JList matchingCommandList;
+	private JList<String> matchingCommandList;
 	private JScrollPane scrollPane;//holds the JList
 	private JTextField nameField;//input field
 	private final JButton okayButton = new JButton("OK");
@@ -108,10 +108,10 @@ public class CommandNameDialog extends JDialog implements ActionListener {
                 CommandNames.add(command.substring(0,1)+command.substring(1).toLowerCase());
             
         }
-		final Object[] allCommandNames = CommandNames.toArray();
+		final String[] allCommandNames = CommandNames.toArray(new String[CommandNames.size()]);
 
 		//construct the command name list
-        matchingCommandList = new JList(allCommandNames);
+        matchingCommandList = new JList<String>(allCommandNames);
         matchingCommandList.setVisibleRowCount(10);
         matchingCommandList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -135,7 +135,7 @@ public class CommandNameDialog extends JDialog implements ActionListener {
 							if (curCommand.toLowerCase().indexOf(text) != -1)
 								possibleCommands.add(curCommand.substring(0,1)+curCommand.substring(1).toLowerCase());
 						}
-						matchingCommandList.setListData(possibleCommands.toArray());
+						matchingCommandList.setListData(possibleCommands.toArray(new String[possibleCommands.size()]));
 						
 						/*
 						 * Try to select a command with a STARTING string which matched

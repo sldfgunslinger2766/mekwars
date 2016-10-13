@@ -19,6 +19,7 @@ package server.campaign.commands.admin;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -28,7 +29,7 @@ import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.commands.Command;
-
+import common.CampaignData;
 import common.House;
 
 public class SingASongCommand implements Command {
@@ -121,9 +122,10 @@ public class SingASongCommand implements Command {
 		File songList = new File("./data/songs.txt");
 		CampaignMain.cm.toUser("SM|Current song List",user,false);
         CampaignMain.cm.toUser("SM|teapot",user,false);
-		try{
+        BufferedReader dis = null;
+        try{
 			FileInputStream fis = new FileInputStream(songList);
-			BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+			dis = new BufferedReader(new InputStreamReader(fis));
 			while (dis.ready()){
 				StringTokenizer song = new StringTokenizer(dis.readLine(),"|");
 				CampaignMain.cm.toUser("SM|"+song.nextToken(),user,false);
@@ -132,6 +134,12 @@ public class SingASongCommand implements Command {
 		catch(Exception ex){
 			//No song list found;
 			return;
+		} finally {
+			try {
+				dis.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
 		}
 		
 	}
@@ -143,9 +151,10 @@ public class SingASongCommand implements Command {
 		if ( songName.equalsIgnoreCase("teapot") )
 			return Song;
 		File songList = new File("./data/songs.txt");
+		BufferedReader dis = null;
 		try{
 			FileInputStream fis = new FileInputStream(songList);
-			BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+			dis = new BufferedReader(new InputStreamReader(fis));
 			while (dis.ready()){
 				StringTokenizer song = new StringTokenizer(dis.readLine(),"|");
 				if ( song.nextToken().equalsIgnoreCase(songName) ){
@@ -156,6 +165,12 @@ public class SingASongCommand implements Command {
 		}
 		catch(Exception ex){
             return null;
+		} finally {
+			try {
+				dis.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
 		}
 		
 		return null;

@@ -19,13 +19,13 @@ package server.campaign.commands.mod;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-
 import common.CampaignData;
 
 public class GetModLogCommand implements Command {
@@ -43,11 +43,11 @@ public class GetModLogCommand implements Command {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;
 		}
-		
+		BufferedReader dis = null;
 		try {
 			File configFile = new File("./logs/modlog.0");
 			FileInputStream fis = new FileInputStream(configFile);
-			BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+			dis = new BufferedReader(new InputStreamReader(fis));
 			String total = "";
 			while (dis.ready()) {
 				String line = dis.readLine();
@@ -57,7 +57,13 @@ public class GetModLogCommand implements Command {
 			CampaignMain.cm.doSendModMail("NOTE",Username + " read the modlog.");
 		} catch (Exception ex) {
 		    CampaignData.mwlog.errLog(ex);
-		}//end catch
+		} finally {
+			try {
+				dis.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
+		}
 		
 		
 		

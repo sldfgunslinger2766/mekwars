@@ -26,8 +26,6 @@ import java.util.Properties;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import server.campaign.CampaignMain;
-
 import megamek.common.AmmoType;
 
 import common.util.BinReader;

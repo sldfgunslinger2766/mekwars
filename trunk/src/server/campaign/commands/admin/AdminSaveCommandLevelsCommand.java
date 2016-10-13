@@ -49,7 +49,7 @@ public class AdminSaveCommandLevelsCommand implements Command {
 		}
 		
 		TreeMap<String,Command> commandTable = new TreeMap<String, Command>(CampaignMain.cm.getServerCommands());
-        
+		PrintStream p = null;
         try{
 		    
 		    File fp = new File("./data/commands");
@@ -57,7 +57,7 @@ public class AdminSaveCommandLevelsCommand implements Command {
 		        fp.mkdir();
 		    
 			FileOutputStream out = new FileOutputStream("./data/commands/commands.dat");
-			PrintStream p = new PrintStream(out);
+			p = new PrintStream(out);
 			
             String commandName = "";
 			for(Iterator<String> i = commandTable.keySet().iterator(); i.hasNext(); commandName = (String)i.next() )
@@ -71,6 +71,8 @@ public class AdminSaveCommandLevelsCommand implements Command {
 		catch (Exception ex){
 		    CampaignData.mwlog.errLog(ex);
 		    CampaignData.mwlog.errLog("Unable to save command levels");
+		} finally {
+			p.close();
 		}
 		CampaignMain.cm.toUser("AM:Command levels saved!",Username,true);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has saved the command levels to file.");

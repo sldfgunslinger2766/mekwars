@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
@@ -59,7 +60,6 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import client.CConfig;
 import client.CUser;
 import client.MWClient;
-
 import common.CampaignData;
 import common.util.StringUtils;
 
@@ -360,13 +360,13 @@ public class CUserListPanel extends JPanel implements ActionListener{
                      * a handful have access to. 
                      */
                     if (mwclient.isMod()) {
-                        
+                        URLClassLoader loader = null;
                         try {
                             File loadJar = new File("./MekWarsAdmin.jar");
                             if (!loadJar.exists())
                                 CampaignData.mwlog.errLog("StaffUserlistPopupMenu creation skipped. No MekWarsAdmin.jar present.");
                             else {
-                                URLClassLoader loader = new URLClassLoader(new URL[] {loadJar.toURI().toURL()});
+                                loader = new URLClassLoader(new URL[] {loadJar.toURI().toURL()});
                                 Class<?> c = loader.loadClass("admin.StaffUserlistPopupMenu");
                                 Object o = c.newInstance();
                                 c.getDeclaredMethod("createMenu", new Class[] {MWClient.class, CUser.class}).invoke(o,
@@ -376,6 +376,12 @@ public class CUserListPanel extends JPanel implements ActionListener{
                         } catch (Exception ex) {
                             CampaignData.mwlog.errLog("StaffUserlistPopupMenu creation FAILED!");
                             CampaignData.mwlog.errLog(ex);
+                        } finally {
+                        	try {
+								loader.close();
+							} catch (IOException e1) {
+								CampaignData.mwlog.errLog(e1);
+							}
                         }
                     
                         popup.addSeparator();

@@ -15,9 +15,6 @@
  */
 package server.campaign;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;

@@ -38,7 +38,6 @@ import javax.swing.event.CaretListener;
 
 import client.CUser;
 import client.MWClient;
-
 import common.util.SpringLayoutHelper;
 //util imports
 //swing imports
@@ -60,7 +59,7 @@ public class PlayerNameDialog extends JDialog implements ActionListener {
      */
     private static final long serialVersionUID = -2185532842152633162L;
     //variables
-	private JList matchingPlayersList;
+	private JList<String> matchingPlayersList;
 	private JScrollPane scrollPane;//holds the JList
 	private JTextField nameField;//input field
 	
@@ -119,11 +118,11 @@ public class PlayerNameDialog extends JDialog implements ActionListener {
 		Collections.sort(factionPlayers);
 		
 		//setup the a list of names to feed into a list
-		final Object[] playerNames = factionPlayers.toArray();
+		final String[] playerNames = factionPlayers.toArray(new String[factionPlayers.size()]);
 		
 		
 		//construct the faction name list
-		matchingPlayersList = new JList(playerNames);
+		matchingPlayersList = new JList<String>(playerNames);
 		matchingPlayersList.setVisibleRowCount(10);
 		matchingPlayersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
@@ -151,7 +150,7 @@ public class PlayerNameDialog extends JDialog implements ActionListener {
 								possiblePlayers.add(currPlayer);
 						}
 						
-						matchingPlayersList.setListData(possiblePlayers.toArray());
+						matchingPlayersList.setListData(possiblePlayers.toArray(new String[possiblePlayers.size()]));
 						
 						/*
 						 * Try to select a player with a STARTING string which matched

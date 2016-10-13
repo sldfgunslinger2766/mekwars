@@ -36,10 +36,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.impl.StdSchedulerFactory;
-
 import megamek.MegaMek;
 import megamek.client.Client;
 import megamek.common.CriticalSlot;
@@ -137,7 +133,6 @@ import server.campaign.util.XMLAdvancedTerrainDataParser;
 import server.campaign.util.XMLFactionDataParser;
 import server.campaign.util.XMLPlanetDataParser;
 import server.campaign.util.XMLTerrainDataParser;
-import server.campaign.util.scheduler.ScheduleHandler;
 import server.campaign.util.scheduler.MWScheduler;
 import server.campaign.votes.VoteManager;
 import server.dataProvider.Server;
@@ -145,6 +140,7 @@ import server.util.AutomaticBackup;
 import server.util.MWPasswd;
 import server.util.RepairTrackingThread;
 import server.util.StringUtil;
+
 import common.CampaignData;
 import common.Equipment;
 import common.House;

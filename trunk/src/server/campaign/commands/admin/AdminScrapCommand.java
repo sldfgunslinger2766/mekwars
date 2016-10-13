@@ -23,7 +23,6 @@ import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.commands.Command;
-import server.campaign.pilot.SPilot;
 
 import common.campaign.pilot.Pilot;
 

@@ -46,15 +46,14 @@ import server.campaign.market2.IBuyer;
 import server.campaign.market2.ISeller;
 import server.campaign.mercenaries.ContractInfo;
 import server.campaign.mercenaries.MercHouse;
-import server.campaign.operations.ShortOperation;
 import server.campaign.pilot.SPilot;
 import server.campaign.util.SerializedMessage;
+
 import common.BMEquipment;
 import common.CampaignData;
 import common.Planet;
 import common.SubFaction;
 import common.Unit;
-import common.campaign.operations.Operation;
 import common.util.ComponentToCritsConverter;
 import common.util.StringUtils;
 import common.util.TokenReader;

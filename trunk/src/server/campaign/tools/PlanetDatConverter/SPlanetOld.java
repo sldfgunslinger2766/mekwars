@@ -15,6 +15,7 @@
 
 package server.campaign.tools.PlanetDatConverter;
 
+import java.awt.Dimension;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,7 +24,10 @@ import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
-import java.awt.Dimension;
+
+//import server.campaign.CampaignMain;
+import server.campaign.SHouse;
+import server.campaign.data.TimeUpdatePlanet;
 
 import common.CampaignData;
 import common.Continent;
@@ -32,12 +36,6 @@ import common.Influences;
 import common.Terrain;
 import common.util.Position;
 import common.util.TokenReader;
-
-//import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SUnitFactory;
-import server.campaign.data.TimeUpdatePlanet;
 
 public class SPlanetOld extends TimeUpdatePlanet implements Serializable, Comparable<Object> {
 /**

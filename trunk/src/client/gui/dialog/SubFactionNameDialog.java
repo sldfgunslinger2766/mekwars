@@ -59,7 +59,7 @@ public class SubFactionNameDialog extends JDialog implements ActionListener {
 	private final TreeSet<String>subFactionNames;
 	private House faction = null;
 	
-	private JList matchingHousesList;
+	private JList<String> matchingHousesList;
 	private JScrollPane scrollPane;//holds the JList
 	private JTextField nameField;//input field
 	private final JButton okayButton = new JButton("OK");
@@ -90,10 +90,10 @@ public class SubFactionNameDialog extends JDialog implements ActionListener {
 		for (String subFaction : faction.getSubFactionList().keySet()) {
 			subFactionNames.add(subFaction);
 		}
-		final Object[] allSubFactionNames = subFactionNames.toArray();
+		final String[] allSubFactionNames = subFactionNames.toArray(new String[subFactionNames.size()]);
 		
 		//construct the faction name list
-		matchingHousesList = new JList(allSubFactionNames);
+		matchingHousesList = new JList<String>(allSubFactionNames);
 		matchingHousesList.setVisibleRowCount(10);
 		matchingHousesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
@@ -116,7 +116,7 @@ public class SubFactionNameDialog extends JDialog implements ActionListener {
 							if (subFaction.toLowerCase().indexOf(text) != -1)
 								possibleHouses.add(subFaction);
 						}
-						matchingHousesList.setListData(possibleHouses.toArray());
+						matchingHousesList.setListData(possibleHouses.toArray(new String[possibleHouses.size()]));
 						
 						/*
 						 * Try to select a faction with a STARTING string which matched
