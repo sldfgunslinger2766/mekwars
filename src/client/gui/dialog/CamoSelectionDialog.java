@@ -49,7 +49,6 @@ import client.CConfig;
 import client.MWClient;
 import client.campaign.CUnit;
 import client.gui.MechInfo;
-
 import common.CampaignData;
 import common.util.UnitUtils;
 
@@ -67,8 +66,8 @@ public class CamoSelectionDialog extends JDialog implements ListSelectionListene
     private static final long serialVersionUID = 491308053668750747L;
     // IVARS
     private TreeMap<String, Object> camos;
-    private JList camoList;
-    private DefaultListModel listModel;
+    private JList<String> camoList;
+    private DefaultListModel<String> listModel;
     private MechInfo oldCamo;// mechinfo is a JPanel extension
     private MechInfo newCamo;// mechinfo is a JPanel extension
     private JScrollPane scrollPane;// holds the JList
@@ -131,7 +130,7 @@ public class CamoSelectionDialog extends JDialog implements ListSelectionListene
         cancelButton.addActionListener(this);
 
         // Create a list model and add NO CAMO
-        listModel = new DefaultListModel();
+        listModel = new DefaultListModel<String>();
         listModel.addElement(Player.NO_CAMO);
 
         // Get camo file names.
@@ -198,7 +197,7 @@ public class CamoSelectionDialog extends JDialog implements ListSelectionListene
         iconPanel.add(newPanel);
 
         // create the actual list and put it in a scroll pane
-        camoList = new JList(listModel);
+        camoList = new JList<String>(listModel);
         camoList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         camoList.setLayoutOrientation(JList.VERTICAL);
         camoList.setVisibleRowCount(-1);

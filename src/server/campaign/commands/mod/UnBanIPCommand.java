@@ -17,7 +17,6 @@
 package server.campaign.commands.mod;
 
 import java.net.InetAddress;
-import java.util.Enumeration;
 import java.util.StringTokenizer;
 
 import server.MWChatServer.auth.IAuthenticator;

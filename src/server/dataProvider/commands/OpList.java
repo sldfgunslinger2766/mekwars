@@ -38,6 +38,8 @@ public class OpList implements ServerCommand {
         BufferedReader config = new BufferedReader(new InputStreamReader(configFile));
         while (config.ready())
             out.println(config.readLine(),"ListLine");
+        
+        config.close();
     }
     
 }

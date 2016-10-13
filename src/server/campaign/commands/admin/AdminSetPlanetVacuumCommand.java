@@ -20,10 +20,7 @@ import java.util.StringTokenizer;
 
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
-import server.campaign.SPlanet;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
 
 // AdminSetPlanetVacuum#Planet#true/false
 public class AdminSetPlanetVacuumCommand implements Command {

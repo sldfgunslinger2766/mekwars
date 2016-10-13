@@ -6,7 +6,6 @@ import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.commands.Command;
-import server.campaign.pilot.SPilot;
 
 import common.Unit;
 

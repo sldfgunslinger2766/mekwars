@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -28,7 +29,6 @@ import java.util.StringTokenizer;
 
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
-
 import common.BMEquipment;
 import common.CampaignData;
 import common.Equipment;
@@ -202,6 +202,7 @@ public class PartsMarket {
 
 	private void loadParts(){
 		int year = CampaignMain.cm.getIntegerConfig("CampaignYear");
+		BufferedReader dis = null;
 		try{
 	        File bmFile = new File("./data/partsblackmarket.dat");
 	        
@@ -209,7 +210,7 @@ public class PartsMarket {
 	        	return;
 	        
 			FileInputStream fis = new FileInputStream(bmFile);
-			BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+			dis = new BufferedReader(new InputStreamReader(fis));
 
 			if ( dis.ready() ) {
 				String line = dis.readLine();
@@ -230,6 +231,12 @@ public class PartsMarket {
 			
 		}catch (Exception ex){
 			CampaignData.mwlog.errLog(ex);
+		} finally {
+			try {
+				dis.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
 		}
 	}
 	

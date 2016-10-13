@@ -19,13 +19,13 @@ package server.campaign.commands;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 import megamek.common.Entity;
 import server.campaign.CampaignMain;
 import server.campaign.SUnit;
-
 import common.CampaignData;
 
 
@@ -54,6 +54,7 @@ public class BuildTableListCommand implements Command {
 		if ( command.hasMoreTokens() )
 		    filePath = command.nextToken();
 		
+	    BufferedReader dis = null;
 		try{
 		    File file = new File(filePath);
 		    String results = "Files in "+filePath+"<br>";
@@ -64,7 +65,7 @@ public class BuildTableListCommand implements Command {
 		    }
 		    if ( file.isFile() ){
 		        FileInputStream fis = new FileInputStream(file);
-		        BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+		        dis = new BufferedReader(new InputStreamReader(fis));
 		        while (dis.ready()) {
 					String line = dis.readLine();
 					if ( line.length() <= 1 )
@@ -101,6 +102,12 @@ public class BuildTableListCommand implements Command {
 		    CampaignData.mwlog.errLog("Error with build table list");
 		    CampaignData.mwlog.errLog(ex);
 		    return;
+		} finally {
+			try {
+				dis.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
 		}
 		
 

@@ -26,10 +26,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Random;
 import java.util.StringTokenizer;
 
@@ -44,6 +40,7 @@ import server.campaign.pilot.skills.SPilotSkill;
 import server.campaign.pilot.skills.TraitSkill;
 import server.campaign.pilot.skills.WeaponSpecialistSkill;
 import server.campaign.util.SerializedMessage;
+
 import common.CampaignData;
 import common.campaign.pilot.Pilot;
 import common.campaign.pilot.skills.PilotSkill;
@@ -60,7 +57,6 @@ public class SPilot extends Pilot {
     private int originalID;
     private int pickedUpID;
     private boolean death = false;
-    private boolean is_saving = false;
 
     public SPilot(String name, int gunnery, int piloting) {
         super(name, gunnery, piloting);

@@ -36,6 +36,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
@@ -3936,7 +3937,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         mapParamsPanel2.add(BaseTextField);
 
         String[] mediumNames = { "Ground", "Atmosphere", "Space" };
-        BaseComboBox = new JComboBox(mediumNames);
+        BaseComboBox = new JComboBox<String>(mediumNames);
         mapParamsPanel2.add(new JLabel("Map Medium:", SwingConstants.TRAILING));
         BaseComboBox.setToolTipText("<html>Ground, Space, Atmosphere</html>");
         BaseComboBox.setName("MapMedium");
@@ -4143,10 +4144,10 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         dfTable.clear();
         wfTable.clear();
         lfTable.clear();
-
+        BufferedReader dis = null;
         try {
             FileInputStream fis = new FileInputStream(shortOP);
-            BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+            dis = new BufferedReader(new InputStreamReader(fis));
             while (dis.ready()) {
                 String values = "";
                 try {
@@ -4163,6 +4164,12 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         } catch (Exception ex) {
             System.err.println("Error loading file " + filePathName);
             CampaignData.mwlog.errLog(ex);
+        } finally {
+        	try {
+				dis.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
         }
 
         for (int pos = ConfigPane.getComponentCount() - 1; pos >= 0; pos--) {
@@ -4267,7 +4274,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
                 checkBox.setSelected(Boolean.parseBoolean(defaultOperationInfo.getDefault(key)));
                 checkBox.addKeyListener(this);
             } else if (field instanceof JComboBox) {
-                JComboBox combo = (JComboBox) field;
+                JComboBox<String> combo = (JComboBox<String>) field;
 
                 key = combo.getName();
 
@@ -4326,7 +4333,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
                 checkBox.setSelected(Boolean.parseBoolean(OperationInfo.getV(key)));
 
             } else if (field instanceof JComboBox) {
-                JComboBox combo = (JComboBox) field;
+                JComboBox<String> combo = (JComboBox) field;
 
                 key = combo.getName();
 
@@ -4393,7 +4400,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
                     p.println(key + "=" + value);
                 }
             } else if (field instanceof JComboBox) {
-                JComboBox combo = (JComboBox) field;
+                JComboBox<String> combo = (JComboBox) field;
 
                 value = Integer.toString(combo.getSelectedIndex());
                 key = combo.getName();

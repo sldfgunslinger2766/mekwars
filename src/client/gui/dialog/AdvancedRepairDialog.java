@@ -62,7 +62,6 @@ import megamek.common.Tank;
 import megamek.common.TechConstants;
 import client.MWClient;
 import client.campaign.CUnit;
-
 import common.House;
 import common.campaign.pilot.Pilot;
 import common.campaign.pilot.skills.PilotSkill;
@@ -120,7 +119,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
     private SpinnerNumberModel numberOfRetriesEditor = new SpinnerNumberModel();
     private JSpinner numberOfRetriesField = new JSpinner(numberOfRetriesEditor);
 
-    private JComboBox techComboBox = new JComboBox();
+    private JComboBox<String> techComboBox = new JComboBox<String>();
 
     JTabbedPane ConfigPane = new JTabbedPane(SwingConstants.TOP);
 
@@ -326,7 +325,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
     public void mousePressed(MouseEvent arg0) {
 
         if (arg0.getComponent() instanceof JList) {
-            JList templist = (JList) arg0.getComponent();
+            JList<String> templist = (JList<String>) arg0.getComponent();
             if (arg0.getButton() == MouseEvent.BUTTON3) {
                 String component = (String) templist.getSelectedValue();
 
@@ -506,7 +505,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
     public void mouseClicked(MouseEvent arg0) {
 
         if (arg0.getComponent() instanceof JList) {
-            JList templist = (JList) arg0.getComponent();
+            JList<String> templist = (JList<String>) arg0.getComponent();
             if (templist.getName().startsWith("armor")) {
                 critLocation = Integer.parseInt(templist.getName().substring(5));
                 selectedSlot = templist.getSelectedIndex();
@@ -633,7 +632,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                     armorDamage = true;
                 }
 
-                JList ArmorSlotList = new JList(armorNames);
+                JList<String> ArmorSlotList = new JList<String>(armorNames);
                 ArmorSlotList.addMouseListener(this);
                 ArmorSlotList.addKeyListener(this);
                 ArmorSlotList.setVisibleRowCount(armorNames.size());
@@ -779,7 +778,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                         }
                     }
                 }
-                JList CriticalSlotList = new JList(critNames);
+                JList<String> CriticalSlotList = new JList<String>(critNames);
                 CriticalSlotList.addMouseListener(this);
                 CriticalSlotList.addKeyListener(this);
                 CriticalSlotList.setVisibleRowCount(critNames.size());
@@ -935,7 +934,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             techString.add(UnitUtils.techDescription(UnitUtils.TECH_REWARD_POINTS));
         }
 
-        techComboBox = new JComboBox(techString);
+        techComboBox = new JComboBox<String>(techString);
         techComboBox.addActionListener(this);
         techComboBox.setActionCommand(techComboCommand);
 
@@ -1166,7 +1165,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
 
         if (arg0.getComponent() instanceof JList) {
             critLocation = ConfigPane.getSelectedIndex();
-            JList templist = (JList) arg0.getComponent();
+            JList<String> templist = (JList<String>) arg0.getComponent();
             selectedSlot = templist.getSelectedIndex();
             setCost();
             setBaseRoll();

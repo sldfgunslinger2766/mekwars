@@ -19,8 +19,11 @@ package server.campaign.commands.admin;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
+
+import common.CampaignData;
 
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
@@ -52,7 +55,7 @@ public class RetrieveMulCommand implements Command {
 			return;
 		}
 		String fileName = "./data/armies/" + command.nextToken();
-
+		BufferedReader br = null;
 		try {
 			File mul = new File(fileName);
 			if(!mul.exists()) {
@@ -60,7 +63,7 @@ public class RetrieveMulCommand implements Command {
 			}
 			StringBuffer sendData = new StringBuffer("PL|RMF|");
 			FileInputStream fis = new FileInputStream(mul);
-			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+			br = new BufferedReader(new InputStreamReader(fis));
 			
 			sendData.append(mul.getName());
 			sendData.append("#");
@@ -71,13 +74,25 @@ public class RetrieveMulCommand implements Command {
 					sendData.append(" ");
 				sendData.append("#");
 			}
-			
 			CampaignMain.cm.toUser(sendData.toString(), Username,false);
 			
 		}
 		catch ( Exception ex){
 			CampaignMain.cm.toUser("File Not found",Username,true);
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					CampaignData.mwlog.errLog(e);
+				}
+			}
 			return;
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				CampaignData.mwlog.errLog(e);
+			}
 		}
 		
 		CampaignMain.cm.doSendModMail("NOTE", Username+" has retrived mul file "+fileName);

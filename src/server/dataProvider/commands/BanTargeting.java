@@ -49,5 +49,6 @@ public class BanTargeting implements ServerCommand {
         while (config.ready()) {
             out.println(config.readLine(), "BanTargeting");
         }
+        config.close();
     }
 }

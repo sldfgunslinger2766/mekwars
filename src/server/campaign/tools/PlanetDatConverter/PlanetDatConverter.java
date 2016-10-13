@@ -13,11 +13,9 @@ import java.util.Vector;
 import server.campaign.BuildTable;
 import server.campaign.NewbieHouse;
 import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SUnitFactory;
 import server.campaign.mercenaries.MercHouse;
-import server.campaign.tools.PlanetDatConverter.datFileFilter;
 import server.campaign.util.SerializedMessage;
+
 import common.CampaignData;
 import common.Continent;
 import common.House;

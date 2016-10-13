@@ -62,7 +62,6 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLEditorKit;
 
 import client.MWClient;
-
 import common.CampaignData;
 import common.util.StringUtils;
 

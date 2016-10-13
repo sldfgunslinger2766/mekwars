@@ -43,7 +43,6 @@ import javax.swing.event.CaretListener;
 
 import client.MWClient;
 import client.gui.InnerStellarMap;
-
 import common.Planet;
 import common.util.SpringLayoutHelper;
 //util imports
@@ -71,7 +70,7 @@ public class PlanetSearchDialog extends JDialog implements ActionListener {
 	private final Collection<Planet> planets;
 	private final TreeSet<String> planetNames;
 	
-	private JList matchingPlanetsList;
+	private JList<String> matchingPlanetsList;
 	private JScrollPane scrollPane;//holds the JList
 	private JTextField nameField;//input field
 	private final JButton okayButton = new JButton("OK");
@@ -95,10 +94,10 @@ public class PlanetSearchDialog extends JDialog implements ActionListener {
 		planetNames = new TreeSet<String>();//tree to alpha sort
 		for (Iterator<Planet> it = planets.iterator(); it.hasNext();)
             planetNames.add(it.next().getName());
-		final Object[] allPlanetNames = planetNames.toArray();
+		final String[] allPlanetNames = planetNames.toArray(new String[planetNames.size()]);
 		
 		//construct the planet name list
-		matchingPlanetsList = new JList(allPlanetNames);
+		matchingPlanetsList = new JList<String>(allPlanetNames);
 		matchingPlanetsList.setVisibleRowCount(20);
 		matchingPlanetsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
@@ -122,7 +121,7 @@ public class PlanetSearchDialog extends JDialog implements ActionListener {
 							if (curPlanet.toLowerCase().indexOf(text) != -1)
 								possiblePlanets.add(curPlanet);
 						}
-						matchingPlanetsList.setListData(possiblePlanets.toArray());
+						matchingPlanetsList.setListData(possiblePlanets.toArray(new String[possiblePlanets.size()]));
 						
 						/*
 						 * Try to select a planet with a STARTING string which matched

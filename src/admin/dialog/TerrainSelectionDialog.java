@@ -75,7 +75,7 @@ public class TerrainSelectionDialog extends JDialog implements ActionListener {
     //variables
 	private final TreeSet<String> names;
     
-	private JList matchingCommandList;
+	private JList<String> matchingCommandList;
 	private JScrollPane scrollPane;//holds the JList
 	private JTextField nameField;//input field
 	private final JButton okayButton = new JButton("OK");
@@ -98,10 +98,10 @@ public class TerrainSelectionDialog extends JDialog implements ActionListener {
         for (Terrain it : mwclient.getData().getAllTerrains())
             names.add(it.getName());
 
-        final Object[] allCommandNames = names.toArray();
+        final String[] allCommandNames = names.toArray(new String[names.size()]);
 
 		//construct the command name list
-        matchingCommandList = new JList(allCommandNames);
+        matchingCommandList = new JList<String>(allCommandNames);
         matchingCommandList.setVisibleRowCount(10);
         matchingCommandList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -125,7 +125,7 @@ public class TerrainSelectionDialog extends JDialog implements ActionListener {
 							if (curCommand.toLowerCase().indexOf(text) != -1)
 								possibleCommands.add(curCommand.substring(0,1)+curCommand.substring(1).toLowerCase());
 						}
-						matchingCommandList.setListData(possibleCommands.toArray());
+						matchingCommandList.setListData(possibleCommands.toArray(new String[possibleCommands.size()]));
 						
 						/*
 						 * Try to select a command with a STARTING string which matched

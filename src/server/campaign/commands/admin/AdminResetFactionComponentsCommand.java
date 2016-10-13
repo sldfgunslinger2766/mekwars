@@ -16,16 +16,13 @@
 
 package server.campaign.commands.admin;
 
-import java.util.Hashtable;
 import java.util.StringTokenizer;
-import java.util.Vector;
-
-import javax.swing.JOptionPane;
 
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.commands.Command;
+
 import common.CampaignData;
 import common.House;
 import common.Unit;
