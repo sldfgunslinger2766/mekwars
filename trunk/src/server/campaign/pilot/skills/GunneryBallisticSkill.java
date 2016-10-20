@@ -77,42 +77,31 @@ public class GunneryBallisticSkill extends SPilotSkill {
     	if (CampaignMain.cm.getBooleanConfig("USEFLATGUNNERYBALLISTICMODIFIER")) {
     		return getBVModFlat(unit);
     	}
-        double ballisticBV = 0;
-        double gunneryBallisticBVBaseMod = megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() - 1, unit.getCrew().getPiloting());
-
+    	//new bv cost for GunneryX and Weapon Specialist skills, 
+    	//also known as "if it gets a 1 better gunnery with all its weapons then it should pay for the full level of gunnery" 
+    	//the formula applies the "PilotBVSkillMultiplier" delta to (bv% of effected weapons verse all weapons) 
+    	//parallel code is used in GunneryLaserSkill.java, GunneryMissileSkill.java, GunneryBallisticsSkill.java, and WeaponSpecialistSkill.java  
+    	double sumWeaponBV = 0;
+    	double effectedWeaponBV = 0;
+        double bvSkillDelta = 
+        		megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() - 1, unit.getCrew().getPiloting())
+        		/megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() , unit.getCrew().getPiloting())
+        		;
         for (Mounted weapon : unit.getWeaponList()) {
-            if (weapon.getType().hasFlag(WeaponType.F_BALLISTIC)) {
-                ballisticBV += weapon.getType().getBV(unit);
+        	sumWeaponBV += weapon.getType().getBV(unit);
+        	if (weapon.getType().hasFlag(WeaponType.F_BALLISTIC) && !weapon.getType().hasFlag(WeaponType.F_AMS)) {
+        		effectedWeaponBV += weapon.getType().getBV(unit);
             }
         }
-        return (int) (ballisticBV * gunneryBallisticBVBaseMod);
+        CampaignData.mwlog.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
+        		" sumWeaponBV=" + sumWeaponBV);
+        return (int) ((effectedWeaponBV /sumWeaponBV) * bvSkillDelta);
     }
-
+    
     @Override
     public int getBVMod(Entity unit, SPilot p) {
-    	if (CampaignMain.cm.getBooleanConfig("USEFLATGUNNERYBALLISTICMODIFIER")) {
-    		return getBVModFlat(unit);
-    	}
-
-    	double ballisticBV = 0;
-        double gunneryBallisticBVBaseMod = megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() - 1, unit.getCrew().getPiloting());
-        double originalBallisticBV = 0;
-
-        for (Mounted weapon : unit.getWeaponList()) {
-            if (weapon.getType().hasFlag(WeaponType.F_BALLISTIC)) {
-                ballisticBV += weapon.getType().getBV(unit);
-                originalBallisticBV += weapon.getType().getBV(unit);
-            }
-        }
-        // This is adding the base BV of the weapon twice - once originally, and once here.
-        // Need to back out the original cost so that it only gets added once.
-        CampaignData.mwlog.debugLog("Ballistic BV: " + ballisticBV);
-        CampaignData.mwlog.debugLog("Original Ballistic BV: " + originalBallisticBV);
-        CampaignData.mwlog.debugLog("Mod: " + (int) ((ballisticBV * gunneryBallisticBVBaseMod) - originalBallisticBV));
-
-        return (int) ((ballisticBV * gunneryBallisticBVBaseMod) - originalBallisticBV);
+        return getBVMod(unit);
     }
-
 
 	public int getBVModFlat(Entity unit){
         int numberOfGuns = 0;

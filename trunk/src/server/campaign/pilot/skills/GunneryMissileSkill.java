@@ -27,6 +27,7 @@ import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.pilot.SPilot;
 
+import common.CampaignData;
 import common.MegaMekPilotOption;
 import common.Unit;
 import common.campaign.pilot.Pilot;
@@ -76,26 +77,30 @@ public class GunneryMissileSkill extends SPilotSkill {
     	if (CampaignMain.cm.getBooleanConfig("USEFLATGUNNERYMISSILEMODIFIER")) {
     		return getBVModFlat(unit);
     	}
-        double missileBV = 0;
-        double gunneryMissileBVBaseMod = megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() - 1, unit.getCrew().getPiloting());
-        double originalMissileBV = 0;
-
+    	//new bv cost for GunneryX and Weapon Specialist skills, 
+    	//also known as "if it gets a 1 better gunnery with all its weapons then it should pay for the full level of gunnery" 
+    	//the formula applies the "PilotBVSkillMultiplier" delta to (bv% of effected weapons verse all weapons) 
+    	//parallel code is used in GunneryLaserSkill.java, GunneryMissileSkill.java, GunneryBallisticsSkill.java, and WeaponSpecialistSkill.java  
+    	double sumWeaponBV = 0;
+    	double effectedWeaponBV = 0;
+        double bvSkillDelta = 
+        		megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() - 1, unit.getCrew().getPiloting())
+        		/megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() , unit.getCrew().getPiloting())
+        		;
         for (Mounted weapon : unit.getWeaponList()) {
-            if (weapon.getType().hasFlag(WeaponType.F_MISSILE)) {
-                missileBV += weapon.getType().getBV(unit);
-                originalMissileBV += weapon.getType().getBV(unit);
+        	sumWeaponBV += weapon.getType().getBV(unit);
+        	if (weapon.getType().hasFlag(WeaponType.F_MISSILE) && !weapon.getType().hasFlag(WeaponType.F_AMS)) {
+        		effectedWeaponBV += weapon.getType().getBV(unit);
             }
         }
-        // This is adding the base BV of the weapon twice - once originally, and once here.
-        // Need to back out the original cost so that it only gets added once.
-        return (int) ((missileBV * gunneryMissileBVBaseMod) - originalMissileBV);
+        CampaignData.mwlog.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
+        		" sumWeaponBV=" + sumWeaponBV);
+        return (int) ((effectedWeaponBV /sumWeaponBV) * bvSkillDelta);
     }
-
     @Override
     public int getBVMod(Entity unit, SPilot p) {
         return getBVMod(unit);
     }
-
 
 	public int getBVModFlat(Entity unit){
         int numberOfGuns = 0;
