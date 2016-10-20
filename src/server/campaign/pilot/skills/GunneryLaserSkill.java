@@ -75,25 +75,27 @@ public class GunneryLaserSkill extends SPilotSkill {
     @Override
     public int getBVMod(Entity unit) {
     	if (CampaignMain.cm.getBooleanConfig("USEFLATGUNNERYLASERMODIFIER")) {
-    		CampaignData.mwlog.debugLog("Using Flat GL Mod");
     		return getBVModFlat(unit);
     	}
-        double laserBV = 0;
-        double gunneryLaserBVBaseMod = megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() - 1, unit.getCrew().getPiloting());
-        double originalLaserBV = 0;
+    	//new bv cost for GunneryX and Weapon Specialist skills, 
+    	//also known as "if it gets a 1 better gunnery with all its weapons then it should pay for the full level of gunnery" 
+    	//the formula applies the "PilotBVSkillMultiplier" delta to (bv% of effected weapons verse all weapons) 
+    	//parallel code is used in GunneryLaserSkill.java, GunneryMissileSkill.java, GunneryBallisticsSkill.java, and WeaponSpecialistSkill.java  
+    	double sumWeaponBV = 0;
+    	double effectedWeaponBV = 0;
+        double bvSkillDelta = 
+        		megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() - 1, unit.getCrew().getPiloting())
+        		/megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() , unit.getCrew().getPiloting())
+        		;
         for (Mounted weapon : unit.getWeaponList()) {
-            if (weapon.getType().hasFlag(WeaponType.F_ENERGY)) {
-                laserBV += weapon.getType().getBV(unit);
-                originalLaserBV += weapon.getType().getBV(unit);
+        	sumWeaponBV += weapon.getType().getBV(unit);
+        	if (weapon.getType().hasFlag(WeaponType.F_ENERGY) && !weapon.getType().hasFlag(WeaponType.F_AMS)) {
+        		effectedWeaponBV += weapon.getType().getBV(unit);
             }
         }
-        // This is adding the base BV of the weapon twice - once originally, and once here.
-        // Need to back out the original cost so that it only gets added once.
-        CampaignData.mwlog.debugLog("Laser BV: " + laserBV);
-        CampaignData.mwlog.debugLog("Original Laser BV: " + originalLaserBV);
-        CampaignData.mwlog.debugLog("Mod: " + (int) ((laserBV * gunneryLaserBVBaseMod) - originalLaserBV));
-
-        return (int) ((laserBV * gunneryLaserBVBaseMod) - originalLaserBV);
+        CampaignData.mwlog.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
+        		" sumWeaponBV=" + sumWeaponBV);
+        return (int) ((effectedWeaponBV /sumWeaponBV) * bvSkillDelta);
     }
 
     @Override

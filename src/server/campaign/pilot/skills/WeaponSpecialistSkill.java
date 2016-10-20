@@ -30,6 +30,7 @@ import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.pilot.SPilot;
 
+import common.CampaignData;
 import common.MegaMekPilotOption;
 import common.Unit;
 import common.campaign.pilot.Pilot;
@@ -76,24 +77,33 @@ public class WeaponSpecialistSkill extends SPilotSkill {
 
 	@Override
 	public int getBVMod(Entity unit){
+		//no weapon spec skill for non-meks
 		return 0;
 	}
 
-	@Override
-	public int getBVMod(Entity unit, SPilot pilot){
-		double totalWeaponBV = 0;
-		double weaponSpecialistBVBaseMod = megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery()-2, unit.getCrew().getPiloting());
-
-		for (Mounted weapons : unit.getWeaponList()){
-			WeaponType weapon = (WeaponType)weapons.getType();
-
-			if ( weapon.getName().equalsIgnoreCase(pilot.getWeapon()) ) {
-				totalWeaponBV += weapon.getBV(unit);
-			}
-		}
-		return (int)(totalWeaponBV * weaponSpecialistBVBaseMod);
-	}
-
+    @Override
+    public int getBVMod(Entity unit, SPilot pilot) {
+    	//new bv cost for GunneryX and Weapon Specialist skills, 
+    	//also known as "if it gets a 1 better gunnery with all its weapons then it should pay for the full level of gunnery" 
+    	//the formula applies the "PilotBVSkillMultiplier" delta to (bv% of effected weapons verse all weapons) 
+    	//parallel code is used in GunneryLaserSkill.java, GunneryMissileSkill.java, GunneryBallisticsSkill.java, and WeaponSpecialistSkill.java  
+    	double sumWeaponBV = 0;
+    	double effectedWeaponBV = 0;
+        double bvSkillDelta = 
+        		megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() - 2, unit.getCrew().getPiloting())
+        		/megamek.common.Crew.getBVSkillMultiplier(unit.getCrew().getGunnery() , unit.getCrew().getPiloting())
+        		;
+        for (Mounted weapon : unit.getWeaponList()) {
+        	sumWeaponBV += weapon.getType().getBV(unit);
+        	if (weapon.getName().equalsIgnoreCase(pilot.getWeapon()) ) {
+        		effectedWeaponBV += weapon.getType().getBV(unit);
+            }
+        }
+        CampaignData.mwlog.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
+        		" sumWeaponBV=" + sumWeaponBV);
+        return (int) ((effectedWeaponBV /sumWeaponBV) * bvSkillDelta);
+    }
+    
 	public void assignWeapon(Entity entity, Pilot pilot){
 		Hashtable<String, Boolean> uniqueWeapons = new Hashtable<String, Boolean>();
 		String bannedWeapons = CampaignMain.cm.getConfig("BannedWSWeapons");

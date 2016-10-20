@@ -1,5 +1,6 @@
 VERSION HISTORY:
 ----------------
++bv calc mods for some pilot skills
 0.6.0.x
 + new MegaMek v0.41.24-MW20161013-f18015c
 $ Released Server, Ded, Client v0.6.0.1
