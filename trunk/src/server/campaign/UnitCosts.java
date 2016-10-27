@@ -31,6 +31,9 @@ import megamek.common.MechSummaryCache;
 import common.CampaignData;
 import common.Unit;
 
+/**
+ * @version 2016.10.26
+ */
 public class UnitCosts {
 
     Vector<Vector<Double>> minCostUnitList = new Vector<Vector<Double>>(4, 1);
@@ -112,7 +115,7 @@ public class UnitCosts {
             return;
         }
         try {
-            FileInputStream in = new FileInputStream("./data/unitfiles/Meks.zip");
+            FileInputStream in = new FileInputStream("./data/mechfiles/Meks.zip");
             ZipInputStream zipFile = new ZipInputStream(in);
 
             while (zipFile.available() == 1) {
@@ -149,7 +152,7 @@ public class UnitCosts {
         }
 
         try {
-            FileInputStream in = new FileInputStream("./data/unitfiles/Vehicles.zip");
+            FileInputStream in = new FileInputStream("./data/mechfiles/Vehicles.zip");
             ZipInputStream zipFile = new ZipInputStream(in);
 
             while (zipFile.available() == 1) {
@@ -182,7 +185,7 @@ public class UnitCosts {
         }
 
         try {
-            FileInputStream in = new FileInputStream("./data/unitfiles/Infantry.zip");
+            FileInputStream in = new FileInputStream("./data/mechfiles/Infantry.zip");
             ZipInputStream zipFile = new ZipInputStream(in);
 
             while (zipFile.available() == 1) {

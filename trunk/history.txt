@@ -1,7 +1,26 @@
 VERSION HISTORY:
 ----------------
-+bv calc mods for some pilot skills
 0.6.0.x
+  ***********************************
+  * NOTE TO OPERATORS               *
+  *                                 *
+  * If you have a directory         *
+  * data/unitfiles, please rename   *
+  * it to data/mechfiles.  The      *
+  * cache loader stopped working    *
+  * with the old location.  I       *
+  * suspect something in MegaMek    *
+  * changed.                        *
+  ***********************************
+R Released Server v0.6.0.2
++ New MegaMek v0.41.26-MW20161026-035e953
++ Changed references to ./data/unitfiles to ./data/mechfiles
+    to come into alignment with MM.  Also, server-side unit
+    cache was failing because of it
++ Implemented the Christmas gift program
+    See http://www.mekwars.org/wiki/index.php/Christmas_Season
+    for more information
++ bv calc mods for some pilot skills
 + new MegaMek v0.41.24-MW20161013-f18015c
 $ Released Server, Ded, Client v0.6.0.1
   ***********************************

@@ -382,11 +382,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
          * require techs. Protos get special point-based handling. They're
          * counted and passed off to this.getTechRequiredForProtos(), which
          * determines exactly how many techs are needed for any ProtoMek
-         * grouping.
+         * grouping.  Christmas gifts are excluded from cost.
          */
         for (SUnit currU : units) {
 
-            if ((currU.getStatus() == Unit.STATUS_OK) || (currU.getStatus() == Unit.STATUS_FORSALE)) {
+            if (((currU.getStatus() == Unit.STATUS_OK) || (currU.getStatus() == Unit.STATUS_FORSALE)) && (!currU.isChristmasUnit())) {
                 if (CampaignMain.cm.isUsingIncreasedTechs()) {
                     free -= SUnit.getHangarSpaceRequired(currU, getMyHouse().houseSupportsUnit(currU.getUnitFilename()), getMyHouse());
                 } else {

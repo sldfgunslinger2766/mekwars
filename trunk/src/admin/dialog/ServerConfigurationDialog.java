@@ -33,7 +33,9 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -74,7 +76,6 @@ import admin.dialog.serverConfigDialogs.UnitsCardPanel;
 import admin.dialog.serverConfigDialogs.UnitsPanel;
 import admin.dialog.serverConfigDialogs.VotingPanel;
 import client.MWClient;
-
 import common.CampaignData;
 
 public final class ServerConfigurationDialog implements ActionListener {
@@ -335,6 +336,16 @@ public final class ServerConfigurationDialog implements ActionListener {
             	picker.getModel().setDay(day);
             	picker.getModel().setSelected(true);
             	
+            } else if (field instanceof JScrollPane) {
+            	JScrollPane pane = (JScrollPane) field;            	
+            	JTextArea area = (JTextArea)pane.getViewport().getView();
+            	key = area.getName();
+            	if(key == null) {
+            		continue;
+            	}
+            	String s = mwclient.getserverConfigs(key);
+            	String text = s.replace('$', '\n');
+            	area.setText(text);
             } // else continue
         }
     }
@@ -409,9 +420,17 @@ public final class ServerConfigurationDialog implements ActionListener {
                 if (!mwclient.getserverConfigs(key).equalsIgnoreCase(value)) {
                     mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
                 }            	
-            } // else continue
+            } else if (field instanceof JScrollPane) {
+            	JScrollPane pane = (JScrollPane) field;            	
+            	JTextArea area = (JTextArea)pane.getViewport().getView();
+            	value = area.getText();
+            	key = area.getName();
+            	if (!mwclient.getserverConfigs(key).equalsIgnoreCase(value)) {
+            		String toSend = value.replace('\n', '$');
+            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + toSend + "#CONFIRM");
+            	}
+            } // else continue            	
         }
-
     }
 
     public void actionPerformed(ActionEvent e) {

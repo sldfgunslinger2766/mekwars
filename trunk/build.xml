@@ -422,6 +422,11 @@
 			todir="dist\client"
 		>
 		</copy>
+		<copy
+			file="MekWarsDed.jar"
+			todir="dist\client"
+		>
+		</copy>
 	</target>
 	<target
 		depends="server-jar"
