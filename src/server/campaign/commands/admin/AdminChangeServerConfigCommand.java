@@ -26,8 +26,17 @@ import java.util.StringTokenizer;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
+import server.campaign.util.ChristmasHandler;
 import server.campaign.util.scheduler.MWScheduler;
 
+/**
+ * Allows the administrator to change configs.  Used by Server Config dialog.
+ * 
+ * Starting at v2016.10.26, added some catches for specific config changes to restart
+ * services that would otherwise require a server restart
+ * 
+ * @version 2016.10.26
+ */
 public class AdminChangeServerConfigCommand implements Command {
 	
 	int accessLevel = IAuthenticator.ADMIN;
@@ -54,15 +63,31 @@ public class AdminChangeServerConfigCommand implements Command {
 		
 		// Check for Schedule changes here
 		if (config.equalsIgnoreCase("Christmas_StartDate")) {
-			
+			ChristmasHandler.getInstance().reschedule();
 		} else if (config.equalsIgnoreCase("Christmas_EndDate")) {
-			
+			ChristmasHandler.getInstance().reschedule();
 		} else if (config.equalsIgnoreCase("Scheduler_FactionSave")) {
 			
 		} else if (config.equalsIgnoreCase("Scheduler_PlayerActivity_flu")) {
 			MWScheduler.getInstance().rescheduleAllActivePlayers();
 		} else if (config.equalsIgnoreCase("Scheduler_PlayerActivity_comps")) {
 			MWScheduler.getInstance().rescheduleAllActivePlayers();
+		} else if (config.equalsIgnoreCase("Christmas_Units_Method_OneOfEach")) {
+			if(arg.equalsIgnoreCase("true")) {
+				ChristmasHandler.getInstance().setUnitMethod(ChristmasHandler.UNIT_METHOD_ONEOFEACH);
+			}
+		} else if (config.equalsIgnoreCase("Christmas_Units_Method_XOfEach")) {
+			if(arg.equalsIgnoreCase("true")) {
+				ChristmasHandler.getInstance().setUnitMethod(ChristmasHandler.UNIT_METHOD_XOFEACH);
+			}
+		} else if (config.equalsIgnoreCase("Christmas_Units_Method_XTotal")) {
+			if(arg.equalsIgnoreCase("true")) {
+				ChristmasHandler.getInstance().setUnitMethod(ChristmasHandler.UNIT_METHOD_XTOTAL);
+			}
+		} else if (config.equalsIgnoreCase("Christmas_Units_X")) {
+			ChristmasHandler.getInstance().setNumberOfUnits(Integer.parseInt(arg));
+		} else if (config.equalsIgnoreCase("Celebrate_Christmas")) {
+			ChristmasHandler.getInstance().setCelebrateChristmas(Boolean.parseBoolean(arg));
 		}
 		
 		//NOTE:

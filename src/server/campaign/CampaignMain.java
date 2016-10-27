@@ -140,7 +140,6 @@ import server.util.AutomaticBackup;
 import server.util.MWPasswd;
 import server.util.RepairTrackingThread;
 import server.util.StringUtil;
-
 import common.CampaignData;
 import common.Equipment;
 import common.House;
@@ -1115,7 +1114,19 @@ public final class CampaignMain implements Serializable {
 
             // Send him the Tick Counter
             CampaignMain.cm.toUser("CC|NT|" + TThread.getRemainingSleepTime() + "|" + false, Username, false);
-
+            
+            // Check for Christmas
+            if(ChristmasHandler.getInstance().isItChristmas()) {
+            	// Check if the user has received his Christmas Gifts
+            	if (!ChristmasHandler.getInstance().userHasReceivedGifts(Username)) {
+            		// He needs his presents!!!
+            		ChristmasHandler.getInstance().sendChristmasGifts(this.getPlayer(Username));
+            	} else {
+            		// No presents for you!
+            		// CampaignMain.cm.toUser("AM:You have already received presents", Username, true);
+            	}
+            }
+            
         }
     }// end CampaignMain.doLogin(String userName)
 
@@ -1515,6 +1526,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("EHM", new EmployeeHouseMailCommand());
         Commands.put("EMPLOYEEHOUSEMAIL", new EmployeeHouseMailCommand());
         //
+        Commands.put("ENDCHRISTMAS", new EndChristmasCommand());
         Commands.put("ENROLL", new EnrollCommand());
         // Double EXU
         Commands.put("EXCHANGEUNIT", new ExchangeUnitCommand());
@@ -1566,6 +1578,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("INCHARACTER", new InCharacterCommand());
         Commands.put("IC", new InCharacterCommand());
         Commands.put("INVIS", new InvisCommand());
+        Commands.put("ISITCHRISTMAS", new IsItChristmasCommand());
         // ISS
         Commands.put("ISSTATUS", new ISStatusCommand());// legace commands for
         // the client
@@ -1697,6 +1710,7 @@ public final class CampaignMain implements Serializable {
         // Double SingASong
         Commands.put("SINGASONG", new SingASongCommand());
         Commands.put("SAS", new SingASongCommand());
+        Commands.put("STARTCHRISTMAS", new StartChristmasCommand());
         Commands.put("STOPREPAIRJOB", new StopRepairJobCommand());
         Commands.put("STRIPALLPARTSCACHE", new StripAllPartsCacheCommand());
         Commands.put("STRIPUNITS", new StripUnitsCommand());

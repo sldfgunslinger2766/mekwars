@@ -45,9 +45,9 @@ import megamek.common.options.PilotOptions;
 import server.campaign.pilot.SPilot;
 import server.campaign.pilot.SPilotSkills;
 import server.campaign.pilot.skills.SPilotSkill;
+import server.campaign.pilot.skills.TraitSkill;
 import server.campaign.pilot.skills.WeaponSpecialistSkill;
 import server.campaign.util.SerializedMessage;
-
 import common.CampaignData;
 import common.MegaMekPilotOption;
 import common.Unit;
@@ -250,7 +250,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         if (typeid == Unit.PROTOMEK) {
             return 0;
         }
-
+        
         if ((typeid == Unit.INFANTRY) && CampaignMain.cm.getBooleanConfig("FootInfTakeNoBays")) {
 
             // check types
@@ -1084,17 +1084,17 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
         // look for a mek first
         try {
-            ent = new MechFileParser(new File("./data/unitfiles/Meks.zip"), Filename).getEntity();
+            ent = new MechFileParser(new File("./data/mechfiles/Meks.zip"), Filename).getEntity();
         } catch (Exception ex) {
 
             // not a mek, see if file is a vehicle...
             try {
-                ent = new MechFileParser(new File("./data/unitfiles/Vehicles.zip"), Filename).getEntity();
+                ent = new MechFileParser(new File("./data/mechfiles/Vehicles.zip"), Filename).getEntity();
             } catch (Exception exe) {
 
                 // neither mek nor veh. look for infantry.
                 try {
-                    ent = new MechFileParser(new File("./data/unitfiles/Infantry.zip"), Filename).getEntity();
+                    ent = new MechFileParser(new File("./data/mechfiles/Infantry.zip"), Filename).getEntity();
                 } catch (Exception exei) {
 
                     /*
@@ -1107,9 +1107,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
                     try {
                         ent = UnitUtils.createOMG();// new MechFileParser(new
-                        // File("./data/unitfiles/Meks.zip"),
-                        // "Error
-                        // OMG-UR-FD.hmp").getEntity();
                     } catch (Exception exep) {
 
                         /*
@@ -1397,5 +1394,58 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
     	}
 
 		return false;
+	}
+	
+	/**
+	 * Creates a unit
+	 * <p>
+	 * create() takes a number of variables and creates a unit.  This is called by both the Christmas code
+	 * and the /CreateUnit command.
+	 * @param filename     The file name of the unit
+	 * @param fluff        Any flavor text
+	 * @param gunnery      Gunnery skill of the pilot
+	 * @param piloting     Piloting skill of the pilot
+	 * @param weight       Weight class to be used (note: why?  Why can't we get rid of this?)
+	 * @param skillTokens  Pilot skills
+	 * @return             the created unit
+	 */
+	public static SUnit create(String filename, String fluff, int gunnery, int piloting, Integer weight, String skillTokens) {
+		
+		if (weight == null) {
+			weight = SUnit.LIGHT;
+		}
+		
+		SUnit cm = new SUnit(fluff,filename,weight);
+		
+		SPilot pilot = null;
+		if ( gunnery == 99 || piloting == 99 )
+		    pilot = new SPilot("Vacant",99,99);
+		else
+		    pilot = new SPilot(SPilot.getRandomPilotName(CampaignMain.cm.getR()),gunnery,piloting);
+		
+        pilot.setCurrentFaction("Common");
+
+		if(skillTokens != null) {
+			StringTokenizer skillList = new StringTokenizer(skillTokens,",");
+			while (skillList.hasMoreTokens()){
+				String skill = skillList.nextToken();
+				SPilotSkill pSkill = null; 
+				if ( skill.equalsIgnoreCase("random") )
+					pSkill = SPilotSkills.getRandomSkill(pilot, cm.getType() );
+				else					
+					pSkill = SPilotSkills.getPilotSkill(skill);
+				
+				if ( pSkill != null ){
+	                if ( pSkill instanceof TraitSkill){
+	                    ((TraitSkill)pSkill).assignTrait(pilot);
+	                }
+	                pSkill.addToPilot(pilot);
+	                pSkill.modifyPilot(pilot);
+	            }
+			}
+		}
+			
+		cm.setPilot(pilot);
+		return cm;
 	}
 }

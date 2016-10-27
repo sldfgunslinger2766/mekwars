@@ -28,7 +28,13 @@ import server.campaign.pilot.SPilotSkills;
 import server.campaign.pilot.skills.SPilotSkill;
 import server.campaign.pilot.skills.TraitSkill;
 
-// syntanx /c createunit#filename#flavortext#gunnery#pilot#skill1,skill2,skill3
+/**
+ * A command to create a unit
+ * <p>
+ * This command allows an admin to create a unit, which is then dropped into his hangar
+ * 
+ * @version 2016.10.26
+ */
 public class CreateUnitCommand implements Command {
 	
 	int accessLevel = IAuthenticator.ADMIN;
@@ -51,6 +57,7 @@ public class CreateUnitCommand implements Command {
 		String FlavorText;
 		String gunnery;
 		String piloting;
+		String skillTokens = null;
 
 		try {
 			filename = command.nextToken();
@@ -66,42 +73,15 @@ public class CreateUnitCommand implements Command {
 		
 		if ( command.hasMoreElements() )
 			weight = Integer.parseInt(command.nextToken());
-		
-		SUnit cm = new SUnit(FlavorText,filename,weight);
-		
-		SPilot pilot = null;
-		if ( gunnery.equals("99") || piloting.equals("99") )
-		    pilot = new SPilot("Vacant",99,99);
-		else
-		    pilot = new SPilot(SPilot.getRandomPilotName(CampaignMain.cm.getR()),Integer.parseInt(gunnery),Integer.parseInt(piloting));
-		
-        pilot.setCurrentFaction("Common");
+
 		if (command.hasMoreTokens()){
-			String skillTokens = command.nextToken();
-			StringTokenizer skillList = new StringTokenizer(skillTokens,",");
-			
-			while (skillList.hasMoreTokens()){
-				String skill = skillList.nextToken();
-				SPilotSkill pSkill = null; 
-				if ( skill.equalsIgnoreCase("random") )
-					pSkill = SPilotSkills.getRandomSkill(pilot, cm.getType() );
-				else					
-					pSkill = SPilotSkills.getPilotSkill(skill);
-				
-				if ( pSkill != null ){
-                    if ( pSkill instanceof TraitSkill){
-                        ((TraitSkill)pSkill).assignTrait(pilot);
-                    }
-                    pSkill.addToPilot(pilot);
-                    pSkill.modifyPilot(pilot);
-                }
-			}
+			skillTokens = command.nextToken();
 		}
-		cm.setPilot(pilot);
-		
+		//cm.setPilot(pilot);
+		SUnit cm = SUnit.create(filename, FlavorText, Integer.parseInt(gunnery), Integer.parseInt(piloting), weight, skillTokens);
 		p.addUnit(cm, true);
-		CampaignMain.cm.toUser("Unit created: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+pilot.getSkillString(true) + ". ID #" + cm.getId(),Username,true);
+		CampaignMain.cm.toUser("Unit created: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+cm.getPilot().getSkillString(true) + ". ID #" + cm.getId(),Username,true);
 		//server.CampaignData.mwlog.modLog(Username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+pilot.getSkillString(true));	
-		CampaignMain.cm.doSendModMail("NOTE",Username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+pilot.getSkillString(true));
+		CampaignMain.cm.doSendModMail("NOTE",Username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+cm.getPilot().getSkillString(true));
 	}
 }

@@ -1344,11 +1344,19 @@ public class DefaultServerOptions {
         defaults.setProperty("Christmas_AllowDirectSell", "false");
         defaults.setProperty("Christmas_StartDate", "2016-12-01");
         defaults.setProperty("Christmas_EndDate",  "2017-01-01");
+        defaults.setProperty("Christmas_List", "");
+        defaults.setProperty("Christmas_Units_Method_OneOfEach", "false");
+        defaults.setProperty("Christmas_Units_Method_XOfEach", "false");
+        defaults.setProperty("Christmas_Units_Method_XTotal", "false");
+        defaults.setProperty("Christmas_Units_X", "1");
+        defaults.setProperty("Christmas_ManuallyStarted", "false");
+        
         
         // Quartz Scheduler defaults
         defaults.setProperty("Scheduler_PlayerActivity_comps", "900");
         defaults.setProperty("Scheduler_PlayerActivity_flu", "300");
         defaults.setProperty("Scheduler_FactionSave", "900");
+        
     }
 
     /**
