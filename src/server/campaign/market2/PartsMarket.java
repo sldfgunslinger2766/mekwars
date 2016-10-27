@@ -233,6 +233,7 @@ public class PartsMarket {
 			CampaignData.mwlog.errLog(ex);
 		} finally {
 			try {
+				if (dis!=null)
 				dis.close();
 			} catch (IOException e) {
 				CampaignData.mwlog.errLog(e);
