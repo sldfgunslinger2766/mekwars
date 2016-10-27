@@ -93,9 +93,9 @@ public class GunneryBallisticSkill extends SPilotSkill {
         		effectedWeaponBV += weapon.getType().getBV(unit);
             }
         }
-        CampaignData.mwlog.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
-        		" sumWeaponBV=" + sumWeaponBV);
-        return (int) ((effectedWeaponBV /sumWeaponBV) * bvSkillDelta);
+        //CampaignData.mwlog.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
+        //		" sumWeaponBV=" + sumWeaponBV);
+        return (int) (unit.getBaseBV() * (effectedWeaponBV /sumWeaponBV) * (bvSkillDelta - 1));
     }
     
     @Override

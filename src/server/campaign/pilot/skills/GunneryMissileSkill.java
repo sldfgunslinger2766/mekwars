@@ -93,9 +93,10 @@ public class GunneryMissileSkill extends SPilotSkill {
         		effectedWeaponBV += weapon.getType().getBV(unit);
             }
         }
-        CampaignData.mwlog.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
-        		" sumWeaponBV=" + sumWeaponBV);
-        return (int) ((effectedWeaponBV /sumWeaponBV) * bvSkillDelta);
+        //CampaignData.mwlog.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
+        //		" sumWeaponBV=" + sumWeaponBV);
+        
+        return (int) (unit.calculateBattleValue(false, true) *  (effectedWeaponBV /sumWeaponBV) * (bvSkillDelta - 1));
     }
     @Override
     public int getBVMod(Entity unit, SPilot p) {
