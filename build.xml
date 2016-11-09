@@ -404,6 +404,14 @@
 			dir="dist/client"
 		>
 		</mkdir>
+		<mkdir
+			dir="dist/client/logs"
+		>
+		</mkdir>
+		<mkdir 
+			dir="dist/server/logs"
+		>
+		</mkdir>
 		<copy
 			todir="dist\client"
 			file="MegaMek.jar"
