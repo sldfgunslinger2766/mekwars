@@ -946,10 +946,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             myHouse.getActivePlayers().remove(lowerName);
             myHouse.getFightingPlayers().put(lowerName, this);
             
-            // Unschedule his activity jobs
-            UserActivityComponentsJob.stop(getName());
-            UserActivityInfluenceJob.stop(getName());
-
             // send status update to the user
             CampaignMain.cm.toUser("CS|" + +SPlayer.STATUS_FIGHTING, name, false);
 
@@ -970,6 +966,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             activeSince = 0;
             myHouse.getFightingPlayers().remove(lowerName);
             myHouse.getReservePlayers().put(lowerName, this);
+            // Unschedule his activity jobs
+            UserActivityComponentsJob.stop(getName());
+            UserActivityInfluenceJob.stop(getName());
         }
 
         else {
