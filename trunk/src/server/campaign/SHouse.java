@@ -1017,10 +1017,15 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             tickworth = getNumberOfPlayersWhoCountForProduction();
             resetActivityPP(); // Now that we have it, we need to clear it so they don't get counted twice.
         }
+        
+        
         CampaignData.mwlog.debugLog("     -> " + tickworth);
 
         CampaignData.mwlog.debugLog("Calculating refresh points");
-
+        
+        // Refresh factories
+        calcActivityPP(tickworth);   
+        
         /*
          * Loop throuhgh all hangars and component vectors, looking for
          * overages. Remove units (destroy or sell) and components (destroy or
@@ -1281,7 +1286,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         } else {
             addShowProductionCountNext(-1);
         }
-
+        
         CampaignData.mwlog.debugLog("Send House Updates: ");
         CampaignData.mwlog.debugLog("     -> " + hsUpdates.toString());
         // send house updates, if not empty
