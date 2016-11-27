@@ -113,6 +113,9 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
         job.getJobDataMap().put(UserActivityComponentsJob.FACTION_NAME, factionName);
         job.getJobDataMap().put(UserActivityComponentsJob.PLAYER_NAME, userName);
         
+        // Bug: jobs not getting removed after games - check if there is one hanging out
+        stop(userName);
+        
 		MWScheduler.getInstance().scheduleJob(job, trigger);
 	}
 	

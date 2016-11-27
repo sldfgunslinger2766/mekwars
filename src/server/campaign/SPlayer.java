@@ -36,6 +36,8 @@ import server.campaign.pilot.SPilot;
 import server.campaign.util.ExclusionList;
 import server.campaign.util.OpponentListHelper;
 import server.campaign.util.SerializedMessage;
+import server.campaign.util.scheduler.UserActivityComponentsJob;
+import server.campaign.util.scheduler.UserActivityInfluenceJob;
 import server.util.MWPasswdRecord;
 
 import common.CampaignData;
@@ -943,6 +945,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
              */
             myHouse.getActivePlayers().remove(lowerName);
             myHouse.getFightingPlayers().put(lowerName, this);
+            
+            // Unschedule his activity jobs
+            UserActivityComponentsJob.stop(getName());
+            UserActivityInfluenceJob.stop(getName());
 
             // send status update to the user
             CampaignMain.cm.toUser("CS|" + +SPlayer.STATUS_FIGHTING, name, false);

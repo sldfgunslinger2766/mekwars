@@ -1,6 +1,8 @@
 VERSION HISTORY:
 ----------------
 0.6.0.x
++ Bug: activity jobs not being stopped after games.
+R Released Server v0.6.0.2
   ***********************************
   * NOTE TO OPERATORS               *
   *                                 *
@@ -12,7 +14,6 @@ VERSION HISTORY:
   * suspect something in MegaMek    *
   * changed.                        *
   ***********************************
-R Released Server v0.6.0.2
 + New MegaMek v0.41.26-MW20161026-035e953
 + Changed references to ./data/unitfiles to ./data/mechfiles
     to come into alignment with MM.  Also, server-side unit
