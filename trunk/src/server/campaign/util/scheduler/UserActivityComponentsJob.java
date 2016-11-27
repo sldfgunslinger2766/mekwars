@@ -109,6 +109,9 @@ public class UserActivityComponentsJob implements Job, MWRepeatingJob, JobIdenti
         job.getJobDataMap().put(UserActivityComponentsJob.FACTION_NAME, factionName);
         job.getJobDataMap().put(UserActivityComponentsJob.PLAYER_NAME, userName);
         
+        // Bug: jobs not being stopped after games - check if there is one hanging out
+        stop(userName);
+        
         MWScheduler.getInstance().scheduleJob(job, trigger);
  	}
     
