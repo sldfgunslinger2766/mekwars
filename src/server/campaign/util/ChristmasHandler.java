@@ -284,6 +284,10 @@ public class ChristmasHandler {
 		if(!doWeCelebrateChristmas()) {
 			return true;
 		}
+		if(CampaignMain.cm.getPlayer(userName).getMyHouse().isNewbieHouse()) {
+			// I suspect that Christmas Units will mess up a defection from Solaris
+			return true;
+		}
 		if(gifts.containsKey(userName)) {
 			return gifts.get(userName);
 		}
