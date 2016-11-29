@@ -1491,6 +1491,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
      */
     public void addActivityPP(Double armyWeight) {
     	activityPP += armyWeight;
+    	CampaignData.mwlog.debugLog("Adding " + armyWeight + " in production. " + getName() + " total now " + activityPP);
     }
     
     public void resetActivityPP() {
@@ -1512,6 +1513,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             // has territory on
             SPlanet p = e.next();
             if (equals(p.getOwner())) {
+            	CampaignData.mwlog.debugLog("Calling tick on " + p.getName() + " to add " + refreshToAdd + " refresh");
                 p.tick(refreshToAdd);// call the planetary
                 // tick
             }
