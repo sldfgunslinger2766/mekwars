@@ -1507,6 +1507,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             // Allow Servers to refresh factories without having active players.
             refreshToAdd = getIntegerConfig("FactoryRefreshPoints");
         }
+        
+        StringBuilder hsUpdates = new StringBuilder();
         // Get income, and refresh factories
         Iterator<SPlanet> e = getPlanets().values().iterator();
         while (e.hasNext()) {// loop through all planets which the faction
@@ -1514,7 +1516,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             SPlanet p = e.next();
             if (equals(p.getOwner())) {
             	CampaignData.mwlog.debugLog("Calling tick on " + p.getName() + " to add " + refreshToAdd + " refresh");
-                p.tick(refreshToAdd);// call the planetary
+                hsUpdates.append(p.tick(refreshToAdd));// call the planetary
                 // tick
             }
         }
@@ -1527,8 +1529,6 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         boolean useBattleArmorPP = Boolean.parseBoolean(this.getConfig("UseBattleArmor"));
         boolean useAeroPP = Boolean.parseBoolean(this.getConfig("UseAero"));
 
-        StringBuilder hsUpdates = new StringBuilder();
-        
         for (int i = 0; i < 4; i++) {// loop through each weight class,
             // adding PP
             if (useMekPP) {
