@@ -3278,7 +3278,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         // Actually count them now
         int count = 0;
         for (SUnit u : units) {
-            if ((u.getType() == uType) && (u.getWeightclass() == uWeightClass)) {
+            if (!u.isChristmasUnit() && (u.getType() == uType) && (u.getWeightclass() == uWeightClass)) {
                 count++;
             }
         }
