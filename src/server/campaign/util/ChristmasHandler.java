@@ -289,7 +289,7 @@ public class ChristmasHandler {
 			return true;
 		}
 		if(gifts.containsKey(userName.toLowerCase())) {
-			return gifts.get(userName);
+			return gifts.get(userName.toLowerCase());
 		}
 		return false;
 	}
