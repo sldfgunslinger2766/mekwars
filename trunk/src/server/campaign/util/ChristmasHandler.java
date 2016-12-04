@@ -288,7 +288,7 @@ public class ChristmasHandler {
 			// I suspect that Christmas Units will mess up a defection from Solaris
 			return true;
 		}
-		if(gifts.containsKey(userName)) {
+		if(gifts.containsKey(userName.toLowerCase())) {
 			return gifts.get(userName);
 		}
 		return false;
@@ -345,10 +345,10 @@ public class ChristmasHandler {
 	 * @param p the user in question
 	 */
 	private void setUserReceivedGifts(SPlayer p) {
-		if(gifts.containsKey(p.getName())) {
+		if(gifts.containsKey(p.getName().toLowerCase())) {
 			return;
 		}
-		gifts.put(p.getName(), true);
+		gifts.put(p.getName().toLowerCase(), true);
 		saveGiftList();
 	}
 	
@@ -361,7 +361,7 @@ public class ChristmasHandler {
 			scanner = new Scanner(new File(giftRecipientsFile));
 			gifts = new ConcurrentHashMap<String, Boolean>();
 			while (scanner.hasNextLine()) {
-				gifts.put(scanner.nextLine(), true);
+				gifts.put(scanner.nextLine().toLowerCase(), true);
 			}
 		} catch (FileNotFoundException e) {
 			CampaignData.mwlog.errLog(e);
@@ -384,7 +384,7 @@ public class ChristmasHandler {
 		try {
 			writer = new BufferedWriter( new FileWriter(giftRecipientsFile));
 			for (String s : gifts.keySet()) {
-				writer.write(s + "\n");
+				writer.write(s.toLowerCase() + "\n");
 			}
 		} catch (IOException e) {
 			CampaignData.mwlog.errLog(e);
