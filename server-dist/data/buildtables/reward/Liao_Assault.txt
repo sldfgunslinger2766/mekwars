@@ -2,9 +2,9 @@
 1 Rare
 2 Davion
 2 Marik
-5 Charger CGR-1A5.blk
-1 Charger CGR-1L.blk
-5 Banshee BNC-3L.hmp
-3 Battlemaster BLR-1L.hmp
-5 Victor VTR-9B.blk
-5 Striker STC-2C.blk
+5 Charger CGR-1A5.mtf
+1 Charger CGR-1L.mtf
+5 Banshee BNC-3L.mtf
+3 Battlemaster BLR-1L.mtf
+5 Victor VTR-9B.mtf
+5 Striker STC-2C.mtf
