@@ -5,5 +5,5 @@
 2 Liao
 2 Kurita
 2 Davion
-5 Merlin MLN-1A.blk
-5 Merlin MLN-1B.blk
+5 Merlin MLN-1A.mtf
+5 Merlin MLN-1B.mtf

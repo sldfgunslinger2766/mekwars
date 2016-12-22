@@ -2,8 +2,8 @@
 1 Rare
 2 Steiner
 2 Liao
-5 Banshee BNC-3M.blk
-5 Banshee BNC-3Q.blk
-5 Awesome AWS-8M.hmp
-5 Awesome AWS-8Q.blk
-5 Stalker STK-3F.blk
+5 Banshee BNC-3M.mtf
+5 Banshee BNC-3Q.mtf
+5 Awesome AWS-8M.mtf
+5 Awesome AWS-8Q.mtf
+5 Stalker STK-3F.mtf
