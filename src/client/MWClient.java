@@ -4063,7 +4063,6 @@ public final class MWClient implements IClient, GameListener {
 
     @Override
     public void gamePhaseChange(GamePhaseChangeEvent e) {
-
         try {
 
             /*
