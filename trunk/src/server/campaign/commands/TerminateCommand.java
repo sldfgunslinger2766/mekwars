@@ -93,6 +93,15 @@ public class TerminateCommand implements Command {
 		
 		so.getCancelledPlayers().add(Username.toLowerCase());
 		
+		// Check if opponents are offline.  Otherwise, this game cannot be cancelled by a user who has been disconnected on
+		for (String currPlayerName : so.getAllPlayerNames()) {
+			if(CampaignMain.cm.getPlayer(currPlayerName).getDutyStatus() == SPlayer.STATUS_LOGGEDOUT) {
+				if (!so.getCancelledPlayers().contains(currPlayerName.toLowerCase())) {
+						so.getCancelledPlayers().add(currPlayerName.toLowerCase());
+				}
+			}
+		}
+		
 		if ( so.getCancelledPlayers().size() >= so.getAllPlayerNames().size() ){
 			
 			String msg = "Cancelling Operation "+so.getName();
