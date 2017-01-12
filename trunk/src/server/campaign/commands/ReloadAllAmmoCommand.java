@@ -79,7 +79,7 @@ public class ReloadAllAmmoCommand implements Command {
                 //Single shot weapons should only cost 1 shot
                 if ( ammo.getLocation() == Entity.LOC_NONE ){
                     refillShots = 1;
-                }//Parital Reloads
+                }//Partial Reloads
                 else if ( refillShots != ammo.getUsableShotsLeft() ){
                     refillShots -= ammo.getUsableShotsLeft();
 
