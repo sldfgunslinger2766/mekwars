@@ -174,7 +174,7 @@ public class ActivateCommand implements Command {
             }
 
             if (!CampaignMain.cm.getBooleanConfig("AllowUnitsToActivateWithPartialBins") && armiesPartialAmmoBinUnits(p.getArmies())) {
-                CampaignMain.cm.toUser("AM:You may not activate while units in your armies have parital ammo bins.", Username, true);
+                CampaignMain.cm.toUser("AM:You may not activate while units in your armies have partial ammo bins.", Username, true);
                 return;
             }
             

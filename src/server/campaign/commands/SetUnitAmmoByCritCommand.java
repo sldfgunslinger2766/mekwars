@@ -148,7 +148,7 @@ public class SetUnitAmmoByCritCommand implements Command {
             
             if (mWeapon.getLocation() == Entity.LOC_NONE) {
                 refillShots = 1;
-            }// Parital Reloads
+            }// Partial Reloads
             else {
                 refillShots -= shotsLeft;
                 ammoCharge *= refillShots;

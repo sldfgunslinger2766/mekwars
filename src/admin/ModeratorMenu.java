@@ -468,7 +468,7 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModListCommands_actionPerformed(ActionEvent e) {
-        String name = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Parital Command");
+        String name = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Partial Command");
         if (name == null) {
             return;
         }
