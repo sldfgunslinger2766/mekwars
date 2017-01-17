@@ -1870,6 +1870,7 @@ public class ShortOperation implements Comparable<Object> {
     public void addInProgressUpdate(String s) {
 
         StringTokenizer tokenizer = new StringTokenizer(s, "*");
+        CampaignData.mwlog.debugLog("IPU Sent: " + s);
 
         // see if we're dealing with a pilot or unit
         if (s.startsWith("MW*")) {

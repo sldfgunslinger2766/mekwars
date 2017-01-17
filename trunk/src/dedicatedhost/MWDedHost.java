@@ -1918,16 +1918,26 @@ public final class MWDedHost implements IClient, GameListener {
         // Only send data for units currently on the board.
         // any units removed from play will have already sent thier final
         // update.
-    	Iterator<Entity> en = myServer.getGame().getEntities();
+        Iterator<Entity> en = myServer.getGame().getEntities();
         while (en.hasNext()) {
             Entity ent = en.next();
-            if (ent.getOwner().getName().startsWith("War Bot") || (!(ent instanceof MechWarrior) && !UnitUtils.hasArmorDamage(ent) && !UnitUtils.hasISDamage(ent) && !UnitUtils.hasCriticalDamage(ent) && !UnitUtils.hasLowAmmo(ent) && !UnitUtils.hasEmptyAmmo(ent))) {
+            if (ent.getOwner().getName().startsWith("War Bot")
+                    || (!(ent instanceof MechWarrior)
+                            && !UnitUtils.hasArmorDamage(ent)
+                            && !UnitUtils.hasISDamage(ent)
+                            && !UnitUtils.hasCriticalDamage(ent)
+                            && !UnitUtils.hasLowAmmo(ent) && !UnitUtils
+                                .hasEmptyAmmo(ent))) {
                 continue;
             }
             if ((ent instanceof Mech) && (ent.getInternal(Mech.LOC_CT) <= 0)) {
-                serverSend("IPU|" + SerializeEntity.serializeEntity(ent, true, true, isUsingAdvanceRepairs()));
+                serverSend("IPU|"
+                        + SerializeEntity.serializeEntity(ent, true, true,
+                                isUsingAdvanceRepairs()));
             } else {
-                serverSend("IPU|" + SerializeEntity.serializeEntity(ent, true, false, isUsingAdvanceRepairs()));
+                serverSend("IPU|"
+                        + SerializeEntity.serializeEntity(ent, true, false,
+                                isUsingAdvanceRepairs()));
             }
         }
     }
