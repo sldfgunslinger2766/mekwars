@@ -130,7 +130,7 @@ final public class Terrain {
     /**
      * @return Vector<PlanetEnvironments>
      */
-    public Vector<PlanetEnvironment> getEnviroments() {
+    public Vector<PlanetEnvironment> getEnvironments() {
         return this.environments;
     }
 
@@ -151,7 +151,7 @@ final public class Terrain {
     /**
      * Return the total probability of all environments.
      */
-    public int getTotalEnivronmentPropabilities() {
+    public int getTotalEnvironmentProbabilities() {
         int result = 0;
         for (PlanetEnvironment pe : environments )
             result += pe.getEnvironmentalProb();

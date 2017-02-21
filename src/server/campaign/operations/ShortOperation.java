@@ -222,7 +222,7 @@ public class ShortOperation implements Comparable<Object> {
 
         // fetch an environment to play in
         playContinent = targetWorld.getEnvironments().getRandomEnvironment(CampaignMain.cm.getR());
-        playEnvironment = playContinent.getEnvironment().getEnviroments().firstElement();
+        playEnvironment = playContinent.getEnvironment().getEnvironments().firstElement();
 
 
         // initiator is always an attacker, so add

@@ -332,8 +332,8 @@ public class SPlanetOld extends TimeUpdatePlanet implements Serializable, Compar
         if (withTerrain) {
             Continent p = getEnvironments().getBiggestEnvironment();
             Terrain pe = p.getEnvironment();
-            if (pe != null && pe.getEnviroments().size() > 0)
-                result.append(" " + pe.getEnviroments().get(0).toImageDescription());
+            if (pe != null && pe.getEnvironments().size() > 0)
+                result.append(" " + pe.getEnvironments().get(0).toImageDescription());
 
             if (this.getUnitFactories().size() > 0) {
                 for (int i = 0; i < this.getUnitFactories().size(); i++) {

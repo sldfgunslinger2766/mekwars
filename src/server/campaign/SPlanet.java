@@ -518,9 +518,9 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             Continent p = getEnvironments().getBiggestEnvironment();
             Terrain pe = p.getEnvironment();
             AdvancedTerrain ape = p.getAdvancedTerrain();
-            if (pe != null && pe.getEnviroments().size() > 0) {
-                result.append(" " + pe.getEnviroments().get(0).toImageDescription());
-                result.append(" " + pe.getEnviroments().get(0).getName());
+            if (pe != null && pe.getEnvironments().size() > 0) {
+                result.append(" " + pe.getEnvironments().get(0).toImageDescription());
+                result.append(" " + pe.getEnvironments().get(0).getName());
             }
             if (ape != null )
                 result.append(" " + ape.WeatherForcast());
