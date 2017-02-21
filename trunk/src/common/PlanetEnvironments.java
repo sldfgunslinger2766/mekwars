@@ -129,7 +129,7 @@ public class PlanetEnvironments {
     }
 
     /**
-     * Returns a randomEnvironment based on the propability of each
+     * Returns a randomEnvironment based on the probability of each
      * Environment.
      */
     public Continent getRandomEnvironment(Random r) {
@@ -138,8 +138,8 @@ public class PlanetEnvironments {
         for (Continent pe:continents) {
             if (r.nextInt(probs) < pe.getSize()){
                 
-                probs = pe.getEnvironment().getTotalEnivronmentPropabilities();
-                for ( PlanetEnvironment env : pe.getEnvironment().getEnviroments() ){
+                probs = pe.getEnvironment().getTotalEnvironmentProbabilities();
+                for ( PlanetEnvironment env : pe.getEnvironment().getEnvironments() ){
                     if (r.nextInt(probs) < env.getEnvironmentalProb()){
                         return pe;
                     }
