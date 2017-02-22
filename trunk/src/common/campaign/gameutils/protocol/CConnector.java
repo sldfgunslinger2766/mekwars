@@ -29,13 +29,12 @@
  * @author Torren (Jason Tighe) 11.5.05
  *
  */
-package client.protocol;
+package common.campaign.gameutils.protocol;
 
 import java.io.IOException;
 import java.net.Socket;
 
 import client.gui.SplashWindow;
-
 import common.CampaignData;
 
 /**

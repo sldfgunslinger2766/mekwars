@@ -20,7 +20,7 @@ package client.gui.commands;
 import javax.swing.AbstractAction;
 
 import client.MWClient;
-import client.protocol.CConnector;
+import common.campaign.gameutils.protocol.CConnector;
 
 /**
  * Abstract class for GUI Commands

@@ -1,4 +1,4 @@
-package dedicatedhost.protocol.commands;
+package common.campaign.gameutils.commands;
 
 public interface IProtCommand
 {

@@ -129,15 +129,7 @@ import client.gui.commands.MailGCmd;
 import client.gui.commands.PingGCmd;
 import client.gui.dialog.RewardPointsDialog;
 import client.gui.dialog.SignonDialog;
-import client.protocol.CConnector;
 import client.protocol.DataFetchClient;
-import client.protocol.IClient;
-import client.protocol.TransportCodec;
-import client.protocol.commands.AckSignonPCmd;
-import client.protocol.commands.CommPCmd;
-import client.protocol.commands.IProtCommand;
-import client.protocol.commands.PingPCmd;
-import client.protocol.commands.PongPCmd;
 import client.util.RepairManagmentThread;
 import client.util.SalvageManagmentThread;
 import client.util.SerializeEntity;
@@ -165,6 +157,14 @@ import common.Planet;
 import common.PlanetEnvironment;
 import common.Unit;
 import common.campaign.Buildings;
+import common.campaign.gameutils.commands.AckSignonPCmd;
+import common.campaign.gameutils.commands.CommPCmd;
+import common.campaign.gameutils.commands.IProtCommand;
+import common.campaign.gameutils.commands.PingPCmd;
+import common.campaign.gameutils.commands.PongPCmd;
+import common.campaign.gameutils.protocol.CConnector;
+import common.campaign.gameutils.protocol.IClient;
+import common.campaign.gameutils.protocol.TransportCodec;
 import common.util.ThreadManager;
 import common.util.TokenReader;
 import common.util.UnitUtils;
@@ -233,10 +233,6 @@ public final class MWClient implements IClient, GameListener {
 
     public static final String CAMPAIGN_PATH = "data/campaign/";
 
-    public static final String PROTOCOL_DELIMITER = "\t"; // delimiter for
-    // protocol commands
-    public static final String PROTOCOL_PREFIX = "/"; // prefix for protocol
-    // commands
     public static final String COMMAND_DELIMITER = "|"; // delimiter for client
     // commands
     public static final String GUI_PREFIX = "/"; // prefix for commands in
@@ -966,11 +962,11 @@ public final class MWClient implements IClient, GameListener {
                 FileInputStream fis = new FileInputStream(logFile);
                 BufferedReader dis = new BufferedReader(new InputStreamReader(
                         fis));
-                sendChat(PROTOCOL_PREFIX + "c sendtomisc#" + name
+                sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name
                         + "#MegaMek Log from " + myUsername);
                 int counter = 0;
                 while (dis.ready()) {
-                    sendChat(PROTOCOL_PREFIX + "c sendtomisc#" + name + "#"
+                    sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name + "#"
                             + dis.readLine());
                     // problems with huge logs getting shoved down players
                     // throats so a 100ms delay should allow
@@ -989,7 +985,7 @@ public final class MWClient implements IClient, GameListener {
             } catch (Exception ex) {
                 // do nothing?
             }
-            sendChat(PROTOCOL_PREFIX + "c mm# " + name
+            sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                     + " used the display megamek logs command on " + myUsername);
             return;
         } else if (command.equals("displaydederrorlog")) { // display
@@ -1001,11 +997,11 @@ public final class MWClient implements IClient, GameListener {
                 FileInputStream fis = new FileInputStream(logFile);
                 BufferedReader dis = new BufferedReader(new InputStreamReader(
                         fis));
-                sendChat(PROTOCOL_PREFIX + "c sendtomisc#" + name
+                sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name
                         + "#Error Log from " + myUsername);
                 int counter = 0;
                 while (dis.ready()) {
-                    sendChat(PROTOCOL_PREFIX + "c sendtomisc#" + name + "#"
+                    sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name + "#"
                             + dis.readLine());
                     // problems with huge logs getting shoved down players
                     // throats so a 100ms delay should allow
@@ -1024,7 +1020,7 @@ public final class MWClient implements IClient, GameListener {
             } catch (Exception ex) {
                 // do nothing?
             }
-            sendChat(PROTOCOL_PREFIX + "c mm# " + name
+            sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                     + " used the display ded error log command on "
                     + myUsername);
             return;
@@ -1037,11 +1033,11 @@ public final class MWClient implements IClient, GameListener {
                 FileInputStream fis = new FileInputStream(logFile);
                 BufferedReader dis = new BufferedReader(new InputStreamReader(
                         fis));
-                sendChat(PROTOCOL_PREFIX + "c sendtomisc#" + name
+                sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name
                         + "#Ded Log from " + myUsername);
                 int counter = 0;
                 while (dis.ready()) {
-                    sendChat(PROTOCOL_PREFIX + "c sendtomisc#" + name + "#"
+                    sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name + "#"
                             + dis.readLine());
                     // problems with huge logs getting shoved down players
                     // throats so a 100ms delay should allow
@@ -1060,7 +1056,7 @@ public final class MWClient implements IClient, GameListener {
             } catch (Exception ex) {
                 // do nothing?
             }
-            sendChat(PROTOCOL_PREFIX + "c mm# " + name
+            sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                     + " used the display ded log command on " + myUsername);
             return;
         }
@@ -1114,7 +1110,7 @@ public final class MWClient implements IClient, GameListener {
                     } catch (Exception ex) {
                         CampaignData.mwlog.errLog(ex);
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the restart command on " + myUsername);
 
                     try {
@@ -1144,7 +1140,7 @@ public final class MWClient implements IClient, GameListener {
                     if (myServer != null) {
                         resetGame();
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the reset command on " + myUsername);
                     return;
 
@@ -1161,7 +1157,7 @@ public final class MWClient implements IClient, GameListener {
                     if (myServer == null) {
                         startHost(true, false, false);
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the start command on " + myUsername);
                     return;
 
@@ -1182,7 +1178,7 @@ public final class MWClient implements IClient, GameListener {
                     } catch (Exception ex) {
                         CampaignData.mwlog.errLog(ex);
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the stop command on " + myUsername);
                     return;
 
@@ -1191,9 +1187,9 @@ public final class MWClient implements IClient, GameListener {
 
                     CampaignData.mwlog.infoLog("Owners command received from "
                             + name);
-                    sendChat(PROTOCOL_PREFIX + "mail " + name + ", My owners: "
+                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", My owners: "
                             + myDedOwners.replace('$', ' '));
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the owners command on " + myUsername);
                     return;
 
@@ -1210,7 +1206,7 @@ public final class MWClient implements IClient, GameListener {
                     getConfig().setParam("DEDICATEDOWNERNAME", myDedOwners);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the owner " + myDedOwners + " command on "
                             + myUsername);
                     return;
@@ -1222,12 +1218,12 @@ public final class MWClient implements IClient, GameListener {
                             .infoLog("Clearowners command received from "
                                     + name);
                     myDedOwners = "";
-                    sendChat(PROTOCOL_PREFIX + "mail " + name + ", My owners: "
+                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", My owners: "
                             + myDedOwners);
                     getConfig().setParam("DEDICATEDOWNERNAME", myDedOwners);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the clear owners command on " + myUsername);
                     return;
 
@@ -1235,9 +1231,9 @@ public final class MWClient implements IClient, GameListener {
 
                     CampaignData.mwlog.infoLog("Port command received from "
                             + name);
-                    sendChat(PROTOCOL_PREFIX + "mail " + name + ", My port: "
+                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", My port: "
                             + myPort);
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the port command on " + myUsername);
                     return;
 
@@ -1265,7 +1261,7 @@ public final class MWClient implements IClient, GameListener {
                     getConfig().setParam("PORT", portString);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " changed the port for " + myUsername + " to "
                             + myPort);
                     return;
@@ -1276,10 +1272,10 @@ public final class MWClient implements IClient, GameListener {
                     CampaignData.mwlog
                             .infoLog("Save game purge command received from "
                                     + name);
-                    sendChat(PROTOCOL_PREFIX + "mail " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                             + ", I purge saved games that are "
                             + savedGamesMaxDays + " days old, or older.");
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the save game purge command on "
                             + myUsername);
                     return;
@@ -1309,7 +1305,7 @@ public final class MWClient implements IClient, GameListener {
                     getConfig().saveConfig();
                     setConfig();
                     savedGamesMaxDays = mySavedGamesMaxDays;
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " changed the save game purge for " + myUsername
                             + " to " + mySavedGamesMaxDays + " days.");
                     return;
@@ -1341,8 +1337,8 @@ public final class MWClient implements IClient, GameListener {
                         // do something?
                     }
 
-                    sendChat(PROTOCOL_PREFIX + "mail " + name + ", " + list);
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", " + list);
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the display saved games command on "
                             + myUsername);
                     return;
@@ -1351,7 +1347,7 @@ public final class MWClient implements IClient, GameListener {
                     // host using
                     // MWAutoUpdate
 
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the update command on " + myUsername);
                     CampaignData.mwlog.infoLog("Update command received from "
                             + name);
@@ -1376,9 +1372,9 @@ public final class MWClient implements IClient, GameListener {
                     CampaignData.mwlog.infoLog("Ping command received from "
                             + name);
                     String version = MWClient.CLIENT_VERSION;
-                    sendChat(PROTOCOL_PREFIX + "mail " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                             + ", I'm active with version " + version + ".");
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the ping command on " + myUsername);
                     return;
 
@@ -1401,14 +1397,14 @@ public final class MWClient implements IClient, GameListener {
                     }
                     if (myServer != null) {
                         if (!loadGame(filename)) {
-                            sendChat(PROTOCOL_PREFIX + "mail " + name
+                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                                     + ", Unable to load saved game.");
                         } else {
-                            sendChat(PROTOCOL_PREFIX + "mail " + name
+                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                                     + ", Saved game loaded.");
                         }
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " loaded game " + filename + " on " + myUsername);
                     return;
 
@@ -1434,14 +1430,14 @@ public final class MWClient implements IClient, GameListener {
                     }
                     if (myServer != null) {
                         if (!loadGameWithFullPath(filename)) {
-                            sendChat(PROTOCOL_PREFIX + "mail " + name
+                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                                     + ", Unable to load saved game.");
                         } else {
-                            sendChat(PROTOCOL_PREFIX + "mail " + name
+                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                                     + ", Saved game loaded.");
                         }
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " loaded game " + filename + " on " + myUsername);
                     return;
 
@@ -1460,14 +1456,14 @@ public final class MWClient implements IClient, GameListener {
                         }
 
                         if (!loadGame(filename)) {
-                            sendChat(PROTOCOL_PREFIX + "mail " + name
+                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                                     + ", Unable to load saved game.");
                         } else {
-                            sendChat(PROTOCOL_PREFIX + "mail " + name + ", "
+                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", "
                                     + filename + " loaded.");
                         }
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " loaded "
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name + " loaded "
                             + filename + " game on " + myUsername);
                     return;
 
@@ -1481,7 +1477,7 @@ public final class MWClient implements IClient, GameListener {
                     getConfig().setParam("NAME", myComName);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX
+                    sendChat(IClient.PROTOCOL_PREFIX
                             + "c mm# "
                             + name
                             + " used the set name command to change the name to "
@@ -1500,7 +1496,7 @@ public final class MWClient implements IClient, GameListener {
                     getConfig().setParam("COMMENT", myComComment);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " has set the comment to " + myComComment
                             + " on " + myUsername);
                     return;
@@ -1516,7 +1512,7 @@ public final class MWClient implements IClient, GameListener {
                         getConfig().setParam("MAXPLAYERS", numPlayers);
                         getConfig().saveConfig();
                         setConfig();
-                        sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                        sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                                 + " has set the max number of players to "
                                 + numPlayers + " on " + myUsername);
                         return;
@@ -1532,10 +1528,10 @@ public final class MWClient implements IClient, GameListener {
                     CampaignData.mwlog
                             .infoLog("Restartcount command received from "
                                     + name);
-                    sendChat(PROTOCOL_PREFIX + "mail " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                             + ", My restart count is set to " + dedRestartAt
                             + " my current game count is " + gameCount);
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the restartcount command on " + myUsername);
                     return;
 
@@ -1558,7 +1554,7 @@ public final class MWClient implements IClient, GameListener {
                     getConfig().setParam("DEDAUTORESTART", restartString);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " changed the restart count for " + myUsername
                             + " to " + dedRestartAt);
                     return;
@@ -1571,9 +1567,9 @@ public final class MWClient implements IClient, GameListener {
                             .infoLog("GetUpdateUrl command received from "
                                     + name);
                     String updateURL = getConfigParam("UPDATEURL");
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
                             + " used the getUpdateURL command on " + myUsername);
-                    sendChat(PROTOCOL_PREFIX + "mail " + name
+                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                             + ", My update URL is " + updateURL + ".");
                     return;
 
@@ -1587,7 +1583,7 @@ public final class MWClient implements IClient, GameListener {
                     getConfig().setParam("UPDATEURL", myUpdateURL);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX
+                    sendChat(IClient.PROTOCOL_PREFIX
                             + "c mm# "
                             + name
                             + " used the set update url command to change the the update url to "
@@ -1602,10 +1598,10 @@ public final class MWClient implements IClient, GameListener {
             }
         }
 
-        sendChat(PROTOCOL_PREFIX + "c mm# " + name + " tried to use the "
+        sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name + " tried to use the "
                 + command + " on " + myUsername
                 + ", but does not have ownership.");
-        sendChat(PROTOCOL_PREFIX + "mail " + name
+        sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                 + ", You do not have management rights for this host!");
         CampaignData.mwlog.infoLog("Command error: " + command
                 + ": access denied for " + name + ".");
@@ -2391,8 +2387,8 @@ public final class MWClient implements IClient, GameListener {
         IProtCommand pcommand = null;
 
         // CampaignData.mwlog.infoLog("INCOMING: " + incoming);
-        if (incoming.startsWith(PROTOCOL_PREFIX)) {
-            incoming = incoming.substring(PROTOCOL_PREFIX.length());
+        if (incoming.startsWith(IClient.PROTOCOL_PREFIX)) {
+            incoming = incoming.substring(IClient.PROTOCOL_PREFIX.length());
             StringTokenizer ST = new StringTokenizer(incoming,
                     PROTOCOL_DELIMITER);
             String s = ST.nextToken();
@@ -2486,7 +2482,7 @@ public final class MWClient implements IClient, GameListener {
             passToSend = "1337";
         }
 
-        Connector.send(PROTOCOL_PREFIX + "signon\t" + getConfigParam("NAME")
+        Connector.send(IClient.PROTOCOL_PREFIX + "signon\t" + getConfigParam("NAME")
                 + "\t" + passToSend + "\t" + getProtocolVersion() + "\t"
                 + Config.getParam("COLOR") + "\t" + CLIENT_VERSION + "\t"
                 + ST.nextToken());
@@ -2545,7 +2541,7 @@ public final class MWClient implements IClient, GameListener {
         }
         if (Status != STATUS_DISCONNECTED) {
             // serverSend("GB");
-            Connector.send(PROTOCOL_PREFIX + "signoff");
+            Connector.send(IClient.PROTOCOL_PREFIX + "signoff");
             dataFetcher.closeDataConnection();
             Connector.closeConnection();
         }
@@ -2561,7 +2557,7 @@ public final class MWClient implements IClient, GameListener {
 
     public void serverSend(String s) {
         try {
-            Connector.send(PROTOCOL_PREFIX + "comm" + "\t"
+            Connector.send(IClient.PROTOCOL_PREFIX + "comm" + "\t"
                     + TransportCodec.encode(s));
         } catch (Exception e) {
             CampaignData.mwlog.errLog(e);
@@ -3565,7 +3561,7 @@ public final class MWClient implements IClient, GameListener {
     public void loadMegaMekClient() {
         try {
             setWaiting(true);
-            sendChat(PROTOCOL_PREFIX + "c GetServerMegaMekGameOptions");
+            sendChat(IClient.PROTOCOL_PREFIX + "c GetServerMegaMekGameOptions");
             try {
                 while (isWaiting()) {
                     Thread.sleep(10);

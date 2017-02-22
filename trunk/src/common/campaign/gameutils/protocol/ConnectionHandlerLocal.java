@@ -29,7 +29,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package dedicatedhost.protocol;
+package common.campaign.gameutils.protocol;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -37,6 +37,9 @@ import java.net.Socket;
 import java.util.Vector;
 
 import common.CampaignData;
+import common.campaign.gameutils.protocol.IConnectionHandler;
+import common.campaign.gameutils.protocol.IConnectionListener;
+import common.campaign.gameutils.protocol.ReaderThread;
 
 /**
  * The keeper of the Socket on the client side.
@@ -110,7 +113,7 @@ public class ConnectionHandlerLocal implements IConnectionHandler {
         if (notify) {_listener.socketClosed();}
     }
 
-    static final void DEBUG(String s) {
+    public static final void DEBUG(String s) {
         if (DEBUG) {
             CampaignData.mwlog.errLog(s);
         }
@@ -133,7 +136,7 @@ class WriterThread extends Thread {
 
     @Override
 	public synchronized void run() {
-//        MMClient.MWDedHostLog.clientErrLog("ConnectionHandlerLocal$WriterThread: running");
+//        MMClient.mwClientLog.clientErrLog("ConnectionHandlerLocal$WriterThread: running");
         try {
             while (keepGoing) {
                 flushOutputQueue();

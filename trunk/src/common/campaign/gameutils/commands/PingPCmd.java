@@ -1,37 +1,36 @@
-package client.protocol.commands;
+package common.campaign.gameutils.commands;
 
 import java.util.StringTokenizer;
 
-import client.MWClient;
-
 import common.CampaignData;
+import common.campaign.gameutils.protocol.IClient;
 
 /**
  * Ping command
  */
 public class PingPCmd extends CProtCommand {
 
-	public PingPCmd(MWClient mwclient) {
-		super(mwclient);
-		name = "ping";
+	public PingPCmd(IClient client) {
+		super(client);
+		setName("ping");
 	}
 
 	// execute command
 	@Override
 	public boolean execute(String input) {
 
-		StringTokenizer ST = new StringTokenizer(input, delimiter);
+		StringTokenizer ST = new StringTokenizer(input, getDelimiter());
 		if (check(ST.nextToken()) && ST.hasMoreTokens()) {
 			input = decompose(input);
-			ST = new StringTokenizer(input, delimiter);
+			ST = new StringTokenizer(input, getDelimiter());
 			String sender = ST.nextToken();
 			String stamp = ST.nextToken();
 
 			CampaignData.mwlog.infoLog("Received server ping.");
 
-			Connector.send(prefix + "pong" + delimiter + sender + delimiter + stamp);
+			getConnector().send(getPrefix() + "pong" + getDelimiter() + sender + getDelimiter() + stamp);
 			if (!sender.equals("server")) {echo(input);}
-			else {mwclient.setLastPing(System.currentTimeMillis() / 1000);}
+			else {getClient().setLastPing(System.currentTimeMillis() / 1000);}
 			return true;
 		}
 		//else
@@ -42,9 +41,9 @@ public class PingPCmd extends CProtCommand {
 	@Override
 	protected void echo(String input) {
 
-		StringTokenizer ST = new StringTokenizer(input, delimiter);
+		StringTokenizer ST = new StringTokenizer(input, getDelimiter());
 		String sender = ST.nextToken();
-		mwclient.systemMessage("Ping request from " + sender); 
+		getClient().systemMessage("Ping request from " + sender); 
 	}
 
 }
