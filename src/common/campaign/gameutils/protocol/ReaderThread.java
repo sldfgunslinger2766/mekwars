@@ -28,7 +28,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package client.protocol;
+package common.campaign.gameutils.protocol;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -45,7 +45,7 @@ import common.CampaignData;
 /**
  * Constantly read from the socket's input stream
  */
-class ReaderThread extends Thread {
+public class ReaderThread extends Thread {
     private boolean keepGoing = true;
 
     //private BufferedReader _in;
@@ -64,7 +64,7 @@ class ReaderThread extends Thread {
 
     //private Checksum checksum = new CRC32();
 
-    ReaderThread(IConnectionHandler handler, Socket s) {
+    public ReaderThread(IConnectionHandler handler, Socket s) {
         super("ConnectionHandler$ReaderThread");
         //_in = in;
         try {
@@ -207,7 +207,7 @@ class ReaderThread extends Thread {
         }
     }
 
-    void pleaseStop() {
+    public void pleaseStop() {
         keepGoing = false;
     }
 }

@@ -79,18 +79,20 @@ import common.GameInterface;
 import common.GameWrapper;
 import common.MMGame;
 import common.campaign.Buildings;
+import common.campaign.gameutils.commands.AckSignonPCmd;
+import common.campaign.gameutils.commands.CommPCmd;
+import common.campaign.gameutils.commands.IProtCommand;
+import common.campaign.gameutils.commands.PingPCmd;
+import common.campaign.gameutils.commands.PongPCmd;
+import common.campaign.gameutils.protocol.CConnector;
+import common.campaign.gameutils.protocol.IClient;
+import common.campaign.gameutils.protocol.TransportCodec;
 import common.util.UnitUtils;
 
 import dedicatedhost.cmd.Command;
-import dedicatedhost.protocol.CConnector;
+
 import dedicatedhost.protocol.DataFetchClient;
-import dedicatedhost.protocol.IClient;
-import dedicatedhost.protocol.TransportCodec;
-import dedicatedhost.protocol.commands.AckSignonPCmd;
-import dedicatedhost.protocol.commands.CommPCmd;
-import dedicatedhost.protocol.commands.IProtCommand;
-import dedicatedhost.protocol.commands.PingPCmd;
-import dedicatedhost.protocol.commands.PongPCmd;
+
 import dedicatedhost.util.SerializeEntity;
 
 // This is the Client used for connecting to the master server.

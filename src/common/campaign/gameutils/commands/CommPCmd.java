@@ -1,9 +1,10 @@
-package dedicatedhost.protocol.commands;
+package common.campaign.gameutils.commands;
 
 import java.util.StringTokenizer;
 
-import dedicatedhost.MWDedHost;
-import dedicatedhost.protocol.TransportCodec;
+import client.MWClient;
+import common.campaign.gameutils.protocol.IClient;
+import common.campaign.gameutils.protocol.TransportCodec;
 
 /**
  * Comm command
@@ -11,9 +12,9 @@ import dedicatedhost.protocol.TransportCodec;
 
 public class CommPCmd extends CProtCommand
 {
-	public CommPCmd(MWDedHost dedHost) 
+	public CommPCmd(IClient mwclient) 
 	{
-		super(dedHost);
+		super(mwclient);
 		name = "comm";
 	}
 
@@ -24,7 +25,8 @@ public class CommPCmd extends CProtCommand
 		StringTokenizer ST = new StringTokenizer(input, delimiter);
 		if (check(ST.nextToken()) && ST.hasMoreTokens()) {
 			input = TransportCodec.unescape(ST.nextToken());
-			dedHost.parseDedDataInput(input);
+			if (!client.isDedicated()) {client.doParseDataInput(input);}
+			else {client.parseDedDataInput(input);}
 			return true;
 		}
 		

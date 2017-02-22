@@ -1,8 +1,8 @@
-package client.protocol.commands;
+package common.campaign.gameutils.commands;
 
 import java.util.StringTokenizer;
 
-import client.MWClient;
+import common.campaign.gameutils.protocol.IClient;
 
 /**
  * Pong command
@@ -10,7 +10,7 @@ import client.MWClient;
 
 public class PongPCmd extends CProtCommand {
 
-	public PongPCmd(MWClient mwclient) {
+	public PongPCmd(IClient mwclient) {
 		super(mwclient);
 		name = "pong";
 	}
@@ -37,7 +37,7 @@ public class PongPCmd extends CProtCommand {
 		String sender = ST.nextToken();
 		if (sender.equals("server")) {return;}
 		float time = (float)(System.currentTimeMillis() - Long.parseLong(ST.nextToken())) / 1000;
-		mwclient.systemMessage("Ping reply from " + sender + ": " + time + " s");
+		client.systemMessage("Ping reply from " + sender + ": " + time + " s");
 	}
 
 }
