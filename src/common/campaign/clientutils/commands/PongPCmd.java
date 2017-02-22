@@ -1,8 +1,8 @@
-package common.campaign.gameutils.commands;
+package common.campaign.clientutils.commands;
 
 import java.util.StringTokenizer;
 
-import common.campaign.gameutils.protocol.IClient;
+import common.campaign.clientutils.protocol.IClient;
 
 /**
  * Pong command

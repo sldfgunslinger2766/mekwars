@@ -29,7 +29,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package common.campaign.gameutils.protocol;
+package common.campaign.clientutils.protocol;
 
 /**
  * Interface that ConnectionHandlers must implement

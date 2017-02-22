@@ -1,4 +1,4 @@
-package common.campaign.gameutils.protocol;
+package common.campaign.clientutils.protocol;
 
 public interface IClient
 {
