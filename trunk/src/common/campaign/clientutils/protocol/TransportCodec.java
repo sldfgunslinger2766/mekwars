@@ -4,7 +4,7 @@
  * Created on June 13, 2002, 5:11 PM
  */
 
-package common.campaign.gameutils.protocol;
+package common.campaign.clientutils.protocol;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

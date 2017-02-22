@@ -29,7 +29,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package common.campaign.gameutils.protocol;
+package common.campaign.clientutils.protocol;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -37,9 +37,6 @@ import java.net.Socket;
 import java.util.Vector;
 
 import common.CampaignData;
-import common.campaign.gameutils.protocol.IConnectionHandler;
-import common.campaign.gameutils.protocol.IConnectionListener;
-import common.campaign.gameutils.protocol.ReaderThread;
 
 /**
  * The keeper of the Socket on the client side.

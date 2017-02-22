@@ -1,7 +1,7 @@
-package common.campaign.gameutils.commands;
+package common.campaign.clientutils.commands;
 
-import common.campaign.gameutils.protocol.CConnector;
-import common.campaign.gameutils.protocol.IClient;
+import common.campaign.clientutils.protocol.CConnector;
+import common.campaign.clientutils.protocol.IClient;
 
 /**
  * Abstract class for protocol Commands

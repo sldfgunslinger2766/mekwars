@@ -1,4 +1,4 @@
-package common.campaign.gameutils.commands;
+package common.campaign.clientutils.commands;
 
 public interface IProtCommand
 {

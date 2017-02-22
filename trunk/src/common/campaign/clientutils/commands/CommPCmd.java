@@ -1,10 +1,9 @@
-package common.campaign.gameutils.commands;
+package common.campaign.clientutils.commands;
 
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import common.campaign.gameutils.protocol.IClient;
-import common.campaign.gameutils.protocol.TransportCodec;
+import common.campaign.clientutils.protocol.IClient;
+import common.campaign.clientutils.protocol.TransportCodec;
 
 /**
  * Comm command
