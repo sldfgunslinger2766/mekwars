@@ -26,7 +26,7 @@ import client.CConfig;
 import client.CUser;
 import client.MWClient;
 import client.gui.CCommPanel;
-import common.campaign.gameutils.protocol.TransportCodec;
+import common.campaign.clientutils.protocol.TransportCodec;
 import common.util.StringUtils;
 
 /**
