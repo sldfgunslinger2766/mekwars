@@ -57,10 +57,10 @@ import javax.swing.ListCellRenderer;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import client.CConfig;
 import client.CUser;
 import client.MWClient;
 import common.CampaignData;
+import common.campaign.clientutils.IClientConfig;
 import common.util.StringUtils;
 
 
@@ -89,7 +89,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 	public static int SORTORDER_DESCENDING = 2;
 	
 	MWClient mwclient;
-	CConfig Config;
+	IClientConfig Config;
 	boolean LoggedIn = false;
 	boolean Dedicateds;
 	JScrollPane UserListSP;

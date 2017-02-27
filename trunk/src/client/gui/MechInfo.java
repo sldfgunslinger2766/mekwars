@@ -47,7 +47,7 @@ import megamek.client.ui.swing.util.RotateFilter;
 import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Tank;
-import client.CConfig;
+import client.GUIClientConfig;
 import client.MWClient;
 import client.campaign.CArmy;
 import client.campaign.CUnit;
@@ -73,7 +73,7 @@ public class MechInfo extends JPanel {
     private int cellWidth = 86;
 
     MWClient mwclient = null;
-    CConfig Config = null;
+    GUIClientConfig Config = null;
     ImageIcon previewIcon = null;
     CUnit cm = null;
     CArmy army = null;

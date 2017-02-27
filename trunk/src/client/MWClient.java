@@ -89,25 +89,9 @@ import megamek.common.IGame;
 import megamek.common.IGame.Phase;
 import megamek.common.Mech;
 import megamek.common.MechWarrior;
-import megamek.common.event.GameBoardChangeEvent;
-import megamek.common.event.GameBoardNewEvent;
-import megamek.common.event.GameCFREvent;
-import megamek.common.event.GameEndEvent;
-import megamek.common.event.GameEntityChangeEvent;
-import megamek.common.event.GameEntityNewEvent;
-import megamek.common.event.GameEntityNewOffboardEvent;
 import megamek.common.event.GameEntityRemoveEvent;
 import megamek.common.event.GameEvent;
-import megamek.common.event.GameListener;
-import megamek.common.event.GameMapQueryEvent;
-import megamek.common.event.GameNewActionEvent;
 import megamek.common.event.GamePhaseChangeEvent;
-import megamek.common.event.GamePlayerChangeEvent;
-import megamek.common.event.GamePlayerChatEvent;
-import megamek.common.event.GamePlayerConnectedEvent;
-import megamek.common.event.GamePlayerDisconnectedEvent;
-import megamek.common.event.GameReportEvent;
-import megamek.common.event.GameSettingsChangeEvent;
 import megamek.common.event.GameTurnChangeEvent;
 import megamek.common.event.GameVictoryEvent;
 import megamek.common.options.GameOptions;
@@ -157,6 +141,8 @@ import common.Planet;
 import common.PlanetEnvironment;
 import common.Unit;
 import common.campaign.Buildings;
+import common.campaign.clientutils.GameHost;
+import common.campaign.clientutils.IGameHost;
 import common.campaign.clientutils.commands.AckSignonPCmd;
 import common.campaign.clientutils.commands.CommPCmd;
 import common.campaign.clientutils.commands.IProtCommand;
@@ -169,7 +155,7 @@ import common.util.ThreadManager;
 import common.util.TokenReader;
 import common.util.UnitUtils;
 
-public final class MWClient implements IClient, GameListener {
+public final class MWClient extends GameHost implements IClient, IGameHost {
 
     /**
      *
@@ -181,14 +167,11 @@ public final class MWClient implements IClient, GameListener {
     DataFetchClient dataFetcher;
     Thread updateDataFetcher;
 
-    CConfig Config;
-
     public static final String CLIENT_VERSION = "0.6.0.1"; // change this with
 
     // all client
     // changes @Torren
 
-    CConnector Connector;
     TimeOutThread TO;
     Collection<CUser> Users;
     TreeMap<String, MMGame> servers = new TreeMap<String, MMGame>();// hostname,mmgame
@@ -231,20 +214,7 @@ public final class MWClient implements IClient, GameListener {
 
     Buildings buildingTemplate = null;
 
-    public static final String CAMPAIGN_PATH = "data/campaign/";
-
-    public static final String COMMAND_DELIMITER = "|"; // delimiter for client
-    // commands
-    public static final String GUI_PREFIX = "/"; // prefix for commands in
-    // GUI
-    public static final String CAMPAIGN_PREFIX = "/"; // prefix for campaign
-    // commands
-
-    public static final int STATUS_DISCONNECTED = 0;
-    public static final int STATUS_LOGGEDOUT = 1;
-    public static final int STATUS_RESERVE = 2;
-    public static final int STATUS_ACTIVE = 3;
-    public static final int STATUS_FIGHTING = 4;
+    public static final String GUI_PREFIX = "/"; // prefix for commands in GUI
 
     public static final int REFRESH_STATUS = 0;
     public static final int REFRESH_USERLIST = 1;
@@ -268,7 +238,7 @@ public final class MWClient implements IClient, GameListener {
     int LastStatus = STATUS_DISCONNECTED;
 
     TreeMap<String, IGUICommand> GUICommands = new TreeMap<String, IGUICommand>();
-    TreeMap<String, IProtCommand> ProtCommands = new TreeMap<String, IProtCommand>();
+    
 
     /**
      * Maps the task prefixes as HS, PL, SP etc. to a command under package cmd.
@@ -309,7 +279,7 @@ public final class MWClient implements IClient, GameListener {
     // Main-Method
     public static void main(String[] args) {
 
-        CConfig config;
+        GUIClientConfig config;
         boolean dedicated = false;
         int i;
 
@@ -350,7 +320,7 @@ public final class MWClient implements IClient, GameListener {
                     enableSplashScreen = true;
                 }
             }
-            config = new CConfig(dedicated);
+            config = new GUIClientConfig(dedicated);
 
             if (!enableSplashScreen) {
                 config.setParam("ENABLESPLASHSCREEN", "false");
@@ -383,7 +353,7 @@ public final class MWClient implements IClient, GameListener {
         }
     }
 
-    public MWClient(CConfig config) {
+    public MWClient(GUIClientConfig config) {
 
         Config = config;
 
@@ -623,7 +593,7 @@ public final class MWClient implements IClient, GameListener {
             System.err.flush();
 
             try {
-                MainFrame.setIconImage(Config.getImage("LOGOUT").getImage());
+                MainFrame.setIconImage(((GUIClientConfig) Config).getImage("LOGOUT").getImage());
             } catch (Exception ex) {
                 CampaignData.mwlog.errLog(ex);
             }
@@ -2323,12 +2293,12 @@ public final class MWClient implements IClient, GameListener {
         return myUsername;
     }
 
-    public CConfig getConfig() {
-        return (Config);
+    public GUIClientConfig getConfig() {
+        return (GUIClientConfig) (Config);
     }
 
     public void setConfig() {
-        Config = new CConfig(false);
+        Config = new GUIClientConfig(false);
     }
 
     public String getConfigParam(String p) {
@@ -4104,62 +4074,6 @@ public final class MWClient implements IClient, GameListener {
         serverSend("IPU|" + toSend);
     }
 
-    @Override
-    public void gamePlayerConnected(GamePlayerConnectedEvent e) {
-    }
-
-    @Override
-    public void gamePlayerDisconnected(GamePlayerDisconnectedEvent e) {
-    }
-
-    @Override
-    public void gamePlayerChange(GamePlayerChangeEvent e) {
-    }
-
-    @Override
-    public void gamePlayerChat(GamePlayerChatEvent e) {
-    }
-
-    @Override
-    public void gameReport(GameReportEvent e) {
-    }
-
-    @Override
-    public void gameEnd(GameEndEvent e) {
-    }
-
-    @Override
-    public void gameBoardNew(GameBoardNewEvent e) {
-    }
-
-    @Override
-    public void gameBoardChanged(GameBoardChangeEvent e) {
-    }
-
-    @Override
-    public void gameSettingsChange(GameSettingsChangeEvent e) {
-    }
-
-    @Override
-    public void gameMapQuery(GameMapQueryEvent e) {
-    }
-
-    @Override
-    public void gameEntityNew(GameEntityNewEvent e) {
-    }
-
-    @Override
-    public void gameEntityNewOffboard(GameEntityNewOffboardEvent e) {
-    }
-
-    @Override
-    public void gameEntityChange(GameEntityChangeEvent e) {
-    }
-
-    @Override
-    public void gameNewAction(GameNewActionEvent e) {
-    }
-
     public int getBuildingsLeft() {
         Enumeration<Building> buildings = myServer.getGame().getBoard()
                 .getBuildings();
@@ -4322,11 +4236,6 @@ public final class MWClient implements IClient, GameListener {
             return true;
         }
         return false;
-    }
-
-    public void gameClientFeedbackRquest(GameCFREvent e) {
-        // TODO Auto-generated method stub
-
     }
 
     public void gameVictory(GameVictoryEvent e) {

@@ -22,10 +22,10 @@ import java.util.StringTokenizer;
 
 import javax.swing.JPanel;
 
-import client.CConfig;
 import client.CUser;
 import client.MWClient;
 import client.gui.CCommPanel;
+import common.campaign.clientutils.IClientConfig;
 import common.campaign.clientutils.protocol.TransportCodec;
 import common.util.StringUtils;
 
@@ -35,7 +35,7 @@ import common.util.StringUtils;
 public class MailGCmd extends CGUICommand {
 	
 	private static final long serialVersionUID = 4728122923982632944L;
-	CConfig Config = null;
+	IClientConfig Config = null;
 	String fontcolor = "black";
 	
 	public MailGCmd(MWClient mwclient) {

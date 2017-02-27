@@ -34,11 +34,11 @@ import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.text.html.HTMLEditorKit;
 
-import client.CConfig;
 import client.MWClient;
 import client.campaign.CPlayer;
 
 import common.CampaignData;
+import common.campaign.clientutils.IClientConfig;
 import common.util.UnitUtils;
 
 /**
@@ -53,7 +53,7 @@ public class CPlayerPanel extends JScrollPane {
     private static final long serialVersionUID = -7036003412110367753L;
     MWClient mwclient;
     CPlayer player;
-    CConfig config;
+    IClientConfig config;
     
     private static final String PP_NAME = "Name";
     private static final String PP_STATUS = "Status:";

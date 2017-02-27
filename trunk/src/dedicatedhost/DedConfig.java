@@ -28,11 +28,12 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 
 import common.CampaignData;
+import common.campaign.clientutils.IClientConfig;
 
 /**
  * Class for Client's configuration.
  */
-public class CConfig {
+public class DedConfig implements IClientConfig {
 	
 	public static final String CONFIG_FILE = "./data/mwconfig.txt";
     public static final String CONFIG_BACKUP_FILE = "./data/mwconfig.txt.bak";
@@ -40,7 +41,7 @@ public class CConfig {
 	private Properties config;                //config. player values.
 	
 	//CONSTRUCTOR
-	public CConfig(boolean dedicated) {
+	public DedConfig(boolean dedicated) {
 		
 		config = setDefaults();		
 
