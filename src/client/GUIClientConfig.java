@@ -31,11 +31,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import common.CampaignData;
+import common.campaign.clientutils.IClientConfig;
+
 
 /**
  * Class for Client's configuration.
  */
-public class CConfig {
+public class GUIClientConfig implements IClientConfig {
 
     /**
      *
@@ -44,14 +46,11 @@ public class CConfig {
     // VARIABLES
     public static final String IMAGE_PATH = "data/images/";
     public static final String CAMO_PATH = "data/images/camo/";
-    public static final String CONFIG_FILE = "./data/mwconfig.txt";
-    public static final String CONFIG_BACKUP_FILE = "./data/mwconfig.txt.bak";
-
     private Properties config; // config. player values.
     private TreeMap<String, ImageIcon> images; // treemap with images
 
     // CONSTRUCTOR
-    public CConfig(boolean dedicated) {
+    public GUIClientConfig(boolean dedicated) {
 
         config = setDefaults();
         images = new TreeMap<String, ImageIcon>();
@@ -424,7 +423,11 @@ public class CConfig {
      * totally unused because the players don't know about them. Over time, the
      * options will be made public or removed.
      */
-    public void createConfig() {
+    /* (non-Javadoc)
+	 * @see client.IClientConfig#createConfig()
+	 */
+    @Override
+	public void createConfig() {
         try {
             FileOutputStream fos = new FileOutputStream(CONFIG_FILE);
             PrintStream ps = new PrintStream(fos);
@@ -556,10 +559,11 @@ public class CConfig {
         return images.get(image);
     }
 
-    /**
-     * Get a config value.
-     */
-    public String getParam(String param) {
+    /* (non-Javadoc)
+	 * @see client.IClientConfig#getParam(java.lang.String)
+	 */
+    @Override
+	public String getParam(String param) {
         String tparam = null;
 
         if (param.endsWith(":")) {
@@ -572,17 +576,19 @@ public class CConfig {
         return tparam;
     }
 
-    /**
-     * Set a config value.
-     */
-    public void setParam(String param, String value) {
+    /* (non-Javadoc)
+	 * @see client.IClientConfig#setParam(java.lang.String, java.lang.String)
+	 */
+    @Override
+	public void setParam(String param, String value) {
         config.setProperty(param, value);
     }
 
-    /**
-     * See if a paramater is enabled (YES, TRUE or ON).
-     */
-    public boolean isParam(String param) {
+    /* (non-Javadoc)
+	 * @see client.IClientConfig#isParam(java.lang.String)
+	 */
+    @Override
+	public boolean isParam(String param) {
         String tparam = getParam(param);
         if (tparam.equalsIgnoreCase("YES") || tparam.equalsIgnoreCase("TRUE") || tparam.equalsIgnoreCase("ON")) {
             return true;
@@ -633,11 +639,11 @@ public class CConfig {
         return false;
     }
 
-    /**
-     * Return the int value of a given config property. Return a 0 if the
-     * property is a non-number. Used mostly by the misc. mail tab checks.
-     */
-    public int getIntParam(String param) {
+    /* (non-Javadoc)
+	 * @see client.IClientConfig#getIntParam(java.lang.String)
+	 */
+    @Override
+	public int getIntParam(String param) {
         int toReturn;
         try {
             toReturn = Integer.parseInt(getParam(param));
@@ -647,10 +653,11 @@ public class CConfig {
         return toReturn;
     }
 
-    /**
-     * Write the config file out to ./data/mwconfig.txt.
-     */
-    public void saveConfig() {
+    /* (non-Javadoc)
+	 * @see client.IClientConfig#saveConfig()
+	 */
+    @Override
+	public void saveConfig() {
 
         try {
 

@@ -45,7 +45,7 @@ import javax.swing.event.ListSelectionListener;
 
 import megamek.common.Entity;
 import megamek.common.Player;
-import client.CConfig;
+import client.GUIClientConfig;
 import client.MWClient;
 import client.campaign.CUnit;
 import client.gui.MechInfo;
@@ -255,7 +255,7 @@ public class CamoSelectionDialog extends JDialog implements ListSelectionListene
             mwclient.setConfig();
 
             // then reload images and update the GUI
-            mwclient.getConfig().loadImage(CConfig.CAMO_PATH + currCamo, "CAMO", 84, 72);
+            mwclient.getConfig().loadImage(GUIClientConfig.CAMO_PATH + currCamo, "CAMO", 84, 72);
             mwclient.getMainFrame().getMainPanel().selectFirstTab();
             mwclient.getMainFrame().getMainPanel().getHQPanel().reinitialize();
         }

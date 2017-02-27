@@ -48,25 +48,9 @@ import megamek.common.IGame;
 import megamek.common.IGame.Phase;
 import megamek.common.Mech;
 import megamek.common.MechWarrior;
-import megamek.common.event.GameBoardChangeEvent;
-import megamek.common.event.GameBoardNewEvent;
 import megamek.common.event.GameCFREvent;
-import megamek.common.event.GameEndEvent;
-import megamek.common.event.GameEntityChangeEvent;
-import megamek.common.event.GameEntityNewEvent;
-import megamek.common.event.GameEntityNewOffboardEvent;
 import megamek.common.event.GameEntityRemoveEvent;
-import megamek.common.event.GameEvent;
-import megamek.common.event.GameListener;
-import megamek.common.event.GameMapQueryEvent;
-import megamek.common.event.GameNewActionEvent;
 import megamek.common.event.GamePhaseChangeEvent;
-import megamek.common.event.GamePlayerChangeEvent;
-import megamek.common.event.GamePlayerChatEvent;
-import megamek.common.event.GamePlayerConnectedEvent;
-import megamek.common.event.GamePlayerDisconnectedEvent;
-import megamek.common.event.GameReportEvent;
-import megamek.common.event.GameSettingsChangeEvent;
 import megamek.common.event.GameTurnChangeEvent;
 import megamek.common.event.GameVictoryEvent;
 import megamek.common.options.IOption;
@@ -79,6 +63,8 @@ import common.GameInterface;
 import common.GameWrapper;
 import common.MMGame;
 import common.campaign.Buildings;
+import common.campaign.clientutils.GameHost;
+import common.campaign.clientutils.IGameHost;
 import common.campaign.clientutils.commands.AckSignonPCmd;
 import common.campaign.clientutils.commands.CommPCmd;
 import common.campaign.clientutils.commands.IProtCommand;
@@ -98,18 +84,14 @@ import dedicatedhost.util.SerializeEntity;
 // This is the Client used for connecting to the master server.
 // @Author: Helge Richter (McWizard@gmx.de)
 
-public final class MWDedHost implements IClient, GameListener {
+public final class MWDedHost extends GameHost implements IClient, IGameHost {
 
-    CConfig Config;
     DataFetchClient dataFetcher;
-    public static final int STATUS_DISCONNECTED = 0;
-    public static final int STATUS_LOGGEDOUT = 1;
 
     public static final String CLIENT_VERSION = "0.6.0.1"; // change this with
     // all client
     // changes @Torren
 
-    CConnector Connector;
     TimeOutThread TO;
     Collection<CUser> Users;
     TreeMap<String, MMGame> servers = new TreeMap<String, MMGame>();// hostname,mmgame
@@ -144,21 +126,6 @@ public final class MWDedHost implements IClient, GameListener {
     Dimension MapSize;
     Dimension BoardSize;
 
-    public static final String CAMPAIGN_PATH = "data/campaign/";
-
-    public static final String PROTOCOL_DELIMITER = "\t"; // delimiter for
-    // protocol commands
-    public static final String PROTOCOL_PREFIX = "/"; // prefix for protocol
-    // commands
-    public static final String COMMAND_DELIMITER = "|"; // delimiter for client
-    // commands
-    public static final String GUI_PREFIX = "/"; // prefix for commands in
-    // GUI
-    public static final String CAMPAIGN_PREFIX = "/"; // prefix for campaign
-    // commands
-
-    TreeMap<String, IProtCommand> ProtCommands = new TreeMap<String, IProtCommand>();
-
     /**
      * Maps the task prefixes as HS, PL, SP etc. to a command under package cmd.
      * key: String, value: cmd.Command
@@ -178,7 +145,7 @@ public final class MWDedHost implements IClient, GameListener {
     // Main-Method
     public static void main(String[] args) {
 
-        CConfig config;
+        DedConfig config;
         CampaignData.mwlog.enableLogging(true);
         CampaignData.mwlog.enableSeconds(true);
 
@@ -204,7 +171,7 @@ public final class MWDedHost implements IClient, GameListener {
 
         CampaignData.mwlog.infoLog("Starting MekWars Client Version: " + CLIENT_VERSION);
         try {
-            config = new CConfig(true);
+            config = new DedConfig(true);
 
             /*
              * clear any cache'd unit files. these will be rebuilt later in the
@@ -234,8 +201,10 @@ public final class MWDedHost implements IClient, GameListener {
         }
     }
 
-    public MWDedHost(CConfig config) {
+    public MWDedHost(DedConfig config) {
 
+    	ProtCommands = new TreeMap<String, IProtCommand>();
+    	
         Config = config;
 
         Connector = new CConnector(this);
@@ -1108,12 +1077,12 @@ public final class MWDedHost implements IClient, GameListener {
         return myUsername;
     }
 
-    public CConfig getConfig() {
-        return (Config);
+    public DedConfig getConfig() {
+        return (DedConfig) (Config);
     }
 
     public void setConfig() {
-        Config = new CConfig(false);
+        Config = new DedConfig(false);
     }
 
     public String getConfigParam(String p) {
@@ -1798,12 +1767,6 @@ public final class MWDedHost implements IClient, GameListener {
         System.exit(0);// restart the ded
     }
 
-    /**
-     * redundant code since MM does not always send a discon event.
-     */
-    public void gamePlayerStatusChange(GameEvent e) {
-    }
-
     public void gameTurnChange(GameTurnChangeEvent e) {
         if (myServer != null) {
             if (turn == 0) {
@@ -1860,48 +1823,6 @@ public final class MWDedHost implements IClient, GameListener {
 
         String toSend = SerializeEntity.serializeEntity(removedE, true, false, isUsingAdvanceRepairs());
         serverSend("IPU|" + toSend);
-    }
-
-    public void gamePlayerConnected(GamePlayerConnectedEvent e) {
-    }
-
-    public void gamePlayerDisconnected(GamePlayerDisconnectedEvent e) {
-    }
-
-    public void gamePlayerChange(GamePlayerChangeEvent e) {
-    }
-
-    public void gamePlayerChat(GamePlayerChatEvent e) {
-    }
-
-    public void gameReport(GameReportEvent e) {
-    }
-
-    public void gameEnd(GameEndEvent e) {
-    }
-
-    public void gameBoardNew(GameBoardNewEvent e) {
-    }
-
-    public void gameBoardChanged(GameBoardChangeEvent e) {
-    }
-
-    public void gameSettingsChange(GameSettingsChangeEvent e) {
-    }
-
-    public void gameMapQuery(GameMapQueryEvent e) {
-    }
-
-    public void gameEntityNew(GameEntityNewEvent e) {
-    }
-
-    public void gameEntityNewOffboard(GameEntityNewOffboardEvent e) {
-    }
-
-    public void gameEntityChange(GameEntityChangeEvent e) {
-    }
-
-    public void gameNewAction(GameNewActionEvent e) {
     }
 
     public int getBuildingsLeft() {
@@ -2150,11 +2071,6 @@ public final class MWDedHost implements IClient, GameListener {
             checkForRestart();
         }
     }
-
-	public void gameClientFeedbackRquest(GameCFREvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public void gameVictory(GameVictoryEvent e) {
         sendGameReport();
