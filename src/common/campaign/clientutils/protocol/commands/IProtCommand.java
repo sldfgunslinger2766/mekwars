@@ -1,4 +1,4 @@
-package common.campaign.clientutils.commands;
+package common.campaign.clientutils.protocol.commands;
 
 public interface IProtCommand
 {
