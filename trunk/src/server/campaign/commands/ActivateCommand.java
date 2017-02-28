@@ -93,6 +93,11 @@ public class ActivateCommand implements Command {
             CampaignMain.cm.toUser("AM:You are already on active duty!", Username, true);
             return;
         }
+        // for those sleepy mods who activate and attack while invis
+        if (p.isInvisible()) {
+            CampaignMain.cm.toUser("AM:You are invisible... tsk tsk.", Username, true);
+            return;
+        }
 
         // this should never come up, but better safe than sorry
         if (currentStatus == SPlayer.STATUS_LOGGEDOUT) {
