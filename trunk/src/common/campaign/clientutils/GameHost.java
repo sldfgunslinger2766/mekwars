@@ -2,8 +2,8 @@ package common.campaign.clientutils;
 
 import java.util.TreeMap;
 
-import common.campaign.clientutils.commands.IProtCommand;
 import common.campaign.clientutils.protocol.CConnector;
+import common.campaign.clientutils.protocol.commands.IProtCommand;
 import megamek.common.event.GameBoardChangeEvent;
 import megamek.common.event.GameBoardNewEvent;
 import megamek.common.event.GameCFREvent;

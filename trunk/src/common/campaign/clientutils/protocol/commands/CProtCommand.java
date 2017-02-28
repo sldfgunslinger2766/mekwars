@@ -1,4 +1,4 @@
-package common.campaign.clientutils.commands;
+package common.campaign.clientutils.protocol.commands;
 
 import common.campaign.clientutils.protocol.CConnector;
 import common.campaign.clientutils.protocol.IClient;
