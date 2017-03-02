@@ -94,14 +94,8 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
 
     TimeOutThread TO;
     Collection<CUser> Users;
-    TreeMap<String, MMGame> servers = new TreeMap<String, MMGame>();// hostname,mmgame
-    Server myServer = null;
-    Date mytime = new Date(System.currentTimeMillis());
     Vector<IOption> GameOptions = new Vector<IOption>(1, 1);
-    Vector<String> decodeBuffer = new Vector<String>(1, 1);// used to buffer
-    // incoming data
-    // until CMainFrame
-    // is built
+
 
     boolean SignOff = false;
     public String myUsername = "";// public b/c used in RGTS command to set

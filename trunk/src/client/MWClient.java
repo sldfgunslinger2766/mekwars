@@ -175,15 +175,10 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 
     TimeOutThread TO;
     Collection<CUser> Users;
-    TreeMap<String, MMGame> servers = new TreeMap<String, MMGame>();// hostname,mmgame
     Server myServer = null;
     List<ClientThread> mmClientThreads = new ArrayList<>();
-    Date mytime = new Date(System.currentTimeMillis());
     Vector<IBasicOption> GameOptions = new Vector<IBasicOption>(1, 1);
-    Vector<String> decodeBuffer = new Vector<String>(1, 1);// used to buffer
-    // incoming data
-    // until CMainFrame
-    // is built
+
     Browser browser;
 
     boolean SignOff = false;
