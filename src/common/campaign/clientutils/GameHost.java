@@ -1,7 +1,10 @@
 package common.campaign.clientutils;
 
+import java.util.Date;
 import java.util.TreeMap;
+import java.util.Vector;
 
+import common.MMGame;
 import common.campaign.clientutils.protocol.CConnector;
 import common.campaign.clientutils.protocol.commands.IProtCommand;
 import megamek.common.event.GameBoardChangeEvent;
@@ -24,6 +27,7 @@ import megamek.common.event.GameReportEvent;
 import megamek.common.event.GameSettingsChangeEvent;
 import megamek.common.event.GameTurnChangeEvent;
 import megamek.common.event.GameVictoryEvent;
+import megamek.server.Server;
 
 public abstract class GameHost implements GameListener, IGameHost {
     public static final int STATUS_DISCONNECTED = 0;
@@ -41,6 +45,12 @@ public abstract class GameHost implements GameListener, IGameHost {
     protected IClientConfig Config;
 
     protected CConnector Connector;
+    
+    protected Server myServer = null;
+    protected Date mytime = new Date(System.currentTimeMillis());
+    protected TreeMap<String, MMGame> servers = new TreeMap<String, MMGame>();// hostname,mmgame
+    protected Vector<String> decodeBuffer = new Vector<String>(1, 1);// used to buffer incoming data until CMainFrame is built
+
     
 	@Override
 	public void gameBoardChanged(GameBoardChangeEvent arg0) {
