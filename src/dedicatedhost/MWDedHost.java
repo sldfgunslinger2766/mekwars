@@ -98,8 +98,6 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
 
 
     boolean SignOff = false;
-    public String myUsername = "";// public b/c used in RGTS command to set
-    // server status. HACK!
     String password = "";
     String myDedOwners = "";
     int myPort = -1;
@@ -1067,10 +1065,6 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
         password = s;
     }
 
-    public String getUsername() {
-        return myUsername;
-    }
-
     public DedConfig getConfig() {
         return (DedConfig) (Config);
     }
@@ -1453,14 +1447,6 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
      */
     public void changeStatus(int newStatus) {
         Status = newStatus;
-    }
-
-    public boolean isAdmin() {
-        return getUser(getUsername()).getUserlevel() >= 200;
-    }
-
-    public boolean isMod() {
-        return getUser(getUsername()).getUserlevel() >= 100;
     }
 
     // this adds 1 to the number of games played and if it matched the restart
