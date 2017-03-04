@@ -184,8 +184,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
     boolean SignOff = false;
     boolean packFrame = false;
     boolean SoundMuted = false;
-    public String myUsername = "";// public b/c used in RGTS command to set
-    // server status. HACK!
+
     String password = "";
     String myDedOwners = "";
     int myPort = -1;
@@ -2285,10 +2284,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         password = s;
     }
 
-    public String getUsername() {
-        return myUsername;
-    }
-
     public GUIClientConfig getConfig() {
         return (GUIClientConfig) (Config);
     }
@@ -3214,14 +3209,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 
     public Properties getserverConfigs() {
         return CampaignData.cd.getServerConfigs();
-    }
-
-    public boolean isAdmin() {
-        return getUserLevel() >= 200;
-    }
-
-    public boolean isMod() {
-        return getUserLevel() >= 100;
     }
 
     public boolean isLeader() {

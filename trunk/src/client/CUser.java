@@ -22,13 +22,14 @@ import java.util.StringTokenizer;
 
 import common.CampaignData;
 import common.House;
+import common.campaign.clientutils.IClientUser;
 import common.util.StringUtils;
 
 /*
  * Class for User objects held in userlist
  */
 
-public class CUser implements Comparable<Object> {
+public class CUser implements Comparable<Object>, IClientUser {
 
     protected String Name;
 

@@ -40,6 +40,8 @@ public abstract class GameHost implements GameListener, IGameHost {
     public static final String CAMPAIGN_PATH = "data/campaign/";
     public static final String COMMAND_DELIMITER = "|"; // delimiter for client commands
     
+    public String myUsername = "";// public b/c used in RGTS command to set server status. HACK!
+    
     protected TreeMap<String, IProtCommand> ProtCommands;
     
     protected IClientConfig Config;
@@ -165,5 +167,19 @@ public abstract class GameHost implements GameListener, IGameHost {
 		// TODO Auto-generated method stub
 		
 	}
+    
+    public boolean isAdmin() {
+        return getUser(getUsername()).getUserlevel() >= 200;
+    }
+
+    public boolean isMod() {
+        return getUser(getUsername()).getUserlevel() >= 100;
+    }
+	
+    public String getUsername() {
+        return myUsername;
+    }
+    
+    protected abstract IClientUser getUser(String name);
     
 }
