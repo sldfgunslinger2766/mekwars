@@ -42,13 +42,11 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import megamek.MegaMek;
-import megamek.common.Building;
 import megamek.common.Entity;
 import megamek.common.IGame;
 import megamek.common.IGame.Phase;
 import megamek.common.Mech;
 import megamek.common.MechWarrior;
-import megamek.common.event.GameCFREvent;
 import megamek.common.event.GameEntityRemoveEvent;
 import megamek.common.event.GamePhaseChangeEvent;
 import megamek.common.event.GameTurnChangeEvent;
@@ -132,7 +130,7 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
      */
     public Properties serverConfigs = new Properties();
 
-    Buildings buildingTemplate = null;
+    
 
     // Main-Method
     public static void main(String[] args) {
@@ -960,51 +958,6 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
         return result;
     }
 
-    public void sendChat(String s) {
-        // Sends the content of the Chatfield to the server
-        // We need the StringTokenizer to enable Mulitline comments
-        StringTokenizer st = new StringTokenizer(s, "\n");
-
-        while (st.hasMoreElements()) {
-            String str = (String) st.nextElement();
-            // don't send empty lines
-            if (!str.trim().equals("")) {
-                serverSend("CH|" + str);
-            }
-        }
-    }
-
-    public String doEscape(String str) {
-
-        if (str.indexOf("<a href=\"MEKINFO") != -1) {
-            return str;
-        }
-
-        // This function removes HTML Tags from the Chat, so no code may harm
-        // anyone
-        str = doEscapeString(str, '&', "&amp;");
-        str = doEscapeString(str, '<', "&lt;");
-        str = doEscapeString(str, '>', "&gt;");
-        return str;
-    }
-
-    public String doEscapeString(String t, int character, String replace) {
-
-        // find all occurences of character in t and replace them with replace
-        int pos = t.indexOf(character);
-        if (pos != -1) {
-            String res = "";
-            if (pos > 0) {
-                res += t.substring(0, pos);
-            }
-            res += replace;
-            if (pos < t.length()) {
-                res += doEscapeString(t.substring(pos + 1), character, replace);
-            }
-            return res;
-        }
-        return t;
-    }
 
     protected Vector<String> splitString(String string, String splitter) {
         Vector<String> vector = new Vector<String>(1, 1);
@@ -1026,10 +979,6 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
         }
 
         return vector;
-    }
-
-    public TreeMap<String, MMGame> getServers() {
-        return servers;
     }
 
     public synchronized CUser getUser(String name) {
@@ -1212,18 +1161,6 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
             Connector.closeConnection();
         }
 
-    }
-
-    public CConnector getConnector() {
-        return Connector;
-    }
-
-    public void serverSend(String s) {
-        try {
-            Connector.send(PROTOCOL_PREFIX + "comm" + "\t" + TransportCodec.encode(s));
-        } catch (Exception e) {
-            CampaignData.mwlog.errLog(e);
-        }
     }
 
     public void startHost(boolean dedicated, boolean deploy, boolean loadSavegame) {
@@ -1503,29 +1440,6 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
         }
     }
 
-    public void purgeOldLogs() {
-
-        long daysInSeconds = ((long) savedGamesMaxDays) * 24 * 60 * 60 * 1000;
-
-        File saveFiles = new File("./logs/backup");
-        if (!saveFiles.exists()) {
-            return;
-        }
-        File[] fileList = saveFiles.listFiles();
-        for (File savedFile : fileList) {
-            long lastTime = savedFile.lastModified();
-            if (savedFile.exists() && savedFile.isFile() && (lastTime < (System.currentTimeMillis() - daysInSeconds))) {
-                try {
-                    CampaignData.mwlog.infoLog("Purging File: " + savedFile.getName() + " Time: " + lastTime + " purge Time: " + (System.currentTimeMillis() - daysInSeconds));
-                    savedFile.delete();
-                } catch (Exception ex) {
-                    CampaignData.mwlog.errLog("Error trying to delete these files!");
-                    CampaignData.mwlog.errLog(ex);
-                }
-            }
-        }
-    }
-
     public String getParanoidAutoSave() {
 
         File tempFile = new File("./savegames/");
@@ -1542,23 +1456,7 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
         return saveFile;
     }
 
-    public void sendGameOptionsToServer() {
-        StringBuilder packet = new StringBuilder();
 
-        try {
-            FileInputStream gameOptionsFile = new FileInputStream("./mmconf/gameoptions.xml");
-            BufferedReader gameOptions = new BufferedReader(new InputStreamReader(gameOptionsFile));
-
-            while (gameOptions.ready()) {
-                packet.append(gameOptions.readLine() + "#");
-            }
-            gameOptions.close();
-            gameOptionsFile.close();
-        } catch (Exception ex) {
-        }
-
-        sendChat(MWDedHost.CAMPAIGN_PREFIX + "c servergameoptions#" + packet.toString());
-    }
 
     public void retrieveOpData(String type, String data) {
 
@@ -1803,16 +1701,6 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
 
         String toSend = SerializeEntity.serializeEntity(removedE, true, false, isUsingAdvanceRepairs());
         serverSend("IPU|" + toSend);
-    }
-
-    public int getBuildingsLeft() {
-        Enumeration<Building> buildings = myServer.getGame().getBoard().getBuildings();
-        int buildingCount = 0;
-        while (buildings.hasMoreElements()) {
-            buildings.nextElement();
-            buildingCount++;
-        }
-        return buildingCount;
     }
 
     private void sendServerGameUpdate() {

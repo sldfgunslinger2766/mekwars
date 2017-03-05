@@ -81,7 +81,6 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import megamek.MegaMek;
 import megamek.client.ui.swing.GameOptionsDialog;
-import megamek.common.Building;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
@@ -192,8 +191,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
     long lastResetCheck = System.currentTimeMillis();
     int dedRestartAt = 50; // number of games played on a ded before auto
     // restart.
-    int savedGamesMaxDays = 30; // max number of days a save game can be before
-    // its deleted.
+    
     long TimeOut = 120;
     long LastPing = 0;
 
@@ -206,8 +204,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
     int mapMedium = 0;
 
     SplashWindow splash = null;
-
-    Buildings buildingTemplate = null;
 
     public static final String GUI_PREFIX = "/"; // prefix for commands in GUI
 
@@ -1809,51 +1805,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 
     }
 
-    public void sendChat(String s) {
-        // Sends the content of the Chatfield to the server
-        // We need the StringTokenizer to enable Mulitline comments
-        StringTokenizer st = new StringTokenizer(s, "\n");
 
-        while (st.hasMoreElements()) {
-            String str = (String) st.nextElement();
-            // don't send empty lines
-            if (!str.trim().equals("")) {
-                serverSend("CH|" + str);
-            }
-        }
-    }
-
-    public String doEscape(String str) {
-
-        if (str.indexOf("<a href=\"MEKINFO") != -1) {
-            return str;
-        }
-
-        // This function removes HTML Tags from the Chat, so no code may harm
-        // anyone
-        str = doEscapeString(str, '&', "&amp;");
-        str = doEscapeString(str, '<', "&lt;");
-        str = doEscapeString(str, '>', "&gt;");
-        return str;
-    }
-
-    public String doEscapeString(String t, int character, String replace) {
-
-        // find all occurences of character in t and replace them with replace
-        int pos = t.indexOf(character);
-        if (pos != -1) {
-            String res = "";
-            if (pos > 0) {
-                res += t.substring(0, pos);
-            }
-            res += replace;
-            if (pos < t.length()) {
-                res += doEscapeString(t.substring(pos + 1), character, replace);
-            }
-            return res;
-        }
-        return t;
-    }
 
     protected Vector<String> splitString(String string, String splitter) {
         Vector<String> vector = new Vector<String>(1, 1);
@@ -1875,10 +1827,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         }
 
         return vector;
-    }
-
-    public TreeMap<String, MMGame> getServers() {
-        return servers;
     }
 
     public synchronized CUser getUser(String name) {
@@ -2509,19 +2457,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 
         if (getConfig().isParam("ENABLEEXITCLIENTSOUND")) {
             doPlaySound(getConfigParam("SOUNDONEXITCLIENT"), false);
-        }
-    }
-
-    public CConnector getConnector() {
-        return Connector;
-    }
-
-    public void serverSend(String s) {
-        try {
-            Connector.send(IClient.PROTOCOL_PREFIX + "comm" + "\t"
-                    + TransportCodec.encode(s));
-        } catch (Exception e) {
-            CampaignData.mwlog.errLog(e);
         }
     }
 
@@ -3295,35 +3230,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         }
     }
 
-    public void purgeOldLogs() {
-
-        long daysInSeconds = ((long) savedGamesMaxDays) * 24 * 60 * 60 * 1000;
-
-        File saveFiles = new File("./logs/backup");
-        if (!saveFiles.exists()) {
-            return;
-        }
-        File[] fileList = saveFiles.listFiles();
-        for (File savedFile : fileList) {
-            long lastTime = savedFile.lastModified();
-            if (savedFile.exists()
-                    && savedFile.isFile()
-                    && (lastTime < (System.currentTimeMillis() - daysInSeconds))) {
-                try {
-                    CampaignData.mwlog.infoLog("Purging File: "
-                            + savedFile.getName() + " Time: " + lastTime
-                            + " purge Time: "
-                            + (System.currentTimeMillis() - daysInSeconds));
-                    savedFile.delete();
-                } catch (Exception ex) {
-                    CampaignData.mwlog
-                            .errLog("Error trying to delete these files!");
-                    CampaignData.mwlog.errLog(ex);
-                }
-            }
-        }
-    }
-
     public String getParanoidAutoSave() {
 
         File tempFile = new File("./savegames/");
@@ -3539,27 +3445,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
             CampaignData.mwlog.errLog("Unable to pull server MegaMek Logs");
             CampaignData.mwlog.errLog(ex);
         }
-    }
-
-    public void sendGameOptionsToServer() {
-        StringBuilder packet = new StringBuilder();
-
-        try {
-            FileInputStream gameOptionsFile = new FileInputStream(
-                    "./mmconf/gameoptions.xml");
-            BufferedReader gameOptions = new BufferedReader(
-                    new InputStreamReader(gameOptionsFile));
-
-            while (gameOptions.ready()) {
-                packet.append(gameOptions.readLine() + "#");
-            }
-            gameOptions.close();
-            gameOptionsFile.close();
-        } catch (Exception ex) {
-        }
-
-        sendChat(MWClient.CAMPAIGN_PREFIX + "c servergameoptions#"
-                + packet.toString());
     }
 
     public int getMinPlanetOwnerShip(Planet p) {
@@ -4057,16 +3942,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         serverSend("IPU|" + toSend);
     }
 
-    public int getBuildingsLeft() {
-        Enumeration<Building> buildings = myServer.getGame().getBoard()
-                .getBuildings();
-        int buildingCount = 0;
-        while (buildings.hasMoreElements()) {
-            buildings.nextElement();
-            buildingCount++;
-        }
-        return buildingCount;
-    }
+
 
     private void sendServerGameUpdate() {
         // Report the mech stat
