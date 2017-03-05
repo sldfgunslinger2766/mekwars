@@ -346,8 +346,10 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 
     public MWClient(GUIClientConfig config) {
 
-        Config = config;
 
+        ProtCommands = new TreeMap<String, IProtCommand>();
+        Config = config;
+        
         // set up the splash screen. do this before any
         // other non-main/non-static actions.
 
