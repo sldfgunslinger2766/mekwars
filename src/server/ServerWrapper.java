@@ -81,6 +81,7 @@ public class ServerWrapper extends MWChatServer{
 	//this is a hack...
 	//there should be comm objects
 	public void broadcastComm(String command) {
+		CampaignData.mwlog.debugLog("Sending Broadcast Message: " + command);
 		synchronized (_users) {
 			for (Iterator<MWChatClient> i = _users.values().iterator(); i.hasNext(); ) {
 				MWChatClient cc = i.next();
