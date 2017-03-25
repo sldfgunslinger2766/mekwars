@@ -19,6 +19,8 @@ import common.campaign.clientutils.protocol.TransportCodec;
 import common.campaign.clientutils.protocol.commands.IProtCommand;
 import dedicatedhost.MWDedHost;
 import megamek.common.Building;
+import megamek.common.IGame;
+import megamek.common.IGame.Phase;
 import megamek.common.event.GameBoardChangeEvent;
 import megamek.common.event.GameBoardNewEvent;
 import megamek.common.event.GameCFREvent;
@@ -69,6 +71,9 @@ public abstract class GameHost implements GameListener, IGameHost {
     
     protected int savedGamesMaxDays = 30; // max number of days a save game can be before
     // its deleted.
+    
+    protected Phase currentPhase = IGame.Phase.PHASE_DEPLOYMENT;
+    protected int turn = 0;
     
 	@Override
 	public void gameBoardChanged(GameBoardChangeEvent arg0) {
@@ -172,19 +177,32 @@ public abstract class GameHost implements GameListener, IGameHost {
 		
 	}
 
-	@Override
-	public void gameTurnChange(GameTurnChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void gameTurnChange(GameTurnChangeEvent e) {
+        if (myServer != null) {
+            if (turn == 0) {
+                serverSend("SHS|" + getUsername() + "|Running");
+            } else if ((myServer.getGame().getPhase() != currentPhase)
+                    && myServer.getGame().getOptions()
+                            .booleanOption("paranoid_autosave")) {
+                sendServerGameUpdate();
+                currentPhase = myServer.getGame().getPhase();
+            }
+            turn += 1;
 
-	@Override
-	public void gameVictory(GameVictoryEvent arg0) {
-		// TODO Auto-generated method stub
-		
+        }
+    }
+
+	protected abstract void sendServerGameUpdate();
+
+	public void gameVictory(GameVictoryEvent e) {
+        sendGameReport();
+        CampaignData.mwlog.infoLog("GAME END");	
 	}
     
-    public boolean isAdmin() {
+    protected abstract void sendGameReport();
+
+	public boolean isAdmin() {
         return getUser(getUsername()).getUserlevel() >= 200;
     }
 
