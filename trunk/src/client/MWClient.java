@@ -218,9 +218,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
     public static final int IGNORE_HOUSE = 1;
     public static final int IGNORE_PRIVATE = 2;
 
-    private Phase currentPhase = IGame.Phase.PHASE_DEPLOYMENT;
-    private int turn = 0;
-
     CCampaign theCampaign;
     CPlayer myPlayer;
     CMainFrame MainFrame;
@@ -3882,22 +3879,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
     }
 
     @Override
-    public void gameTurnChange(GameTurnChangeEvent e) {
-        if (myServer != null) {
-            if (turn == 0) {
-                serverSend("SHS|" + getUsername() + "|Running");
-            } else if ((myServer.getGame().getPhase() != currentPhase)
-                    && myServer.getGame().getOptions()
-                            .booleanOption("paranoid_autosave")) {
-                sendServerGameUpdate();
-                currentPhase = myServer.getGame().getPhase();
-            }
-            turn += 1;
-
-        }
-    }
-
-    @Override
     public void gamePhaseChange(GamePhaseChangeEvent e) {
         try {
 
@@ -3946,7 +3927,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 
 
 
-    private void sendServerGameUpdate() {
+    protected void sendServerGameUpdate() {
         // Report the mech stat
 
         // Only send data for units currently on the board.
@@ -3976,7 +3957,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         }
     }
 
-    private void sendGameReport() {
+    protected void sendGameReport() {
         if (myServer == null) {
             return;
         }
@@ -4097,12 +4078,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
             return true;
         }
         return false;
-    }
-
-    public void gameVictory(GameVictoryEvent e) {
-        sendGameReport();
-        CampaignData.mwlog.infoLog("GAME END");
-
     }
 
     public static long getSerialversionuid() {

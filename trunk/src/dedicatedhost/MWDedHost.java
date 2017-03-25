@@ -1645,19 +1645,6 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
         System.exit(0);// restart the ded
     }
 
-    public void gameTurnChange(GameTurnChangeEvent e) {
-        if (myServer != null) {
-            if (turn == 0) {
-                serverSend("SHS|" + getUsername() + "|Running");
-            } else if ((myServer.getGame().getPhase() != currentPhase) && myServer.getGame().getOptions().booleanOption("paranoid_autosave")) {
-                sendServerGameUpdate();
-                currentPhase = myServer.getGame().getPhase();
-            }
-            turn += 1;
-
-        }
-    }
-
     public void gamePhaseChange(GamePhaseChangeEvent e) {
 
         try {
@@ -1703,7 +1690,7 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
         serverSend("IPU|" + toSend);
     }
 
-    private void sendServerGameUpdate() {
+    protected void sendServerGameUpdate() {
         // Report the mech stat
 
         // Only send data for units currently on the board.
@@ -1822,7 +1809,7 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
 	}
 
     
-    private void sendGameReport() {
+    protected void sendGameReport() {
         if (myServer == null) {
             return;
         }
@@ -1939,12 +1926,4 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
             checkForRestart();
         }
     }
-
-	public void gameVictory(GameVictoryEvent e) {
-        sendGameReport();
-        CampaignData.mwlog.infoLog("GAME END");
-
-		
-	}
-
 }
