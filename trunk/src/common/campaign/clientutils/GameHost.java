@@ -18,6 +18,7 @@ import common.campaign.clientutils.protocol.IClient;
 import common.campaign.clientutils.protocol.TransportCodec;
 import common.campaign.clientutils.protocol.commands.IProtCommand;
 import dedicatedhost.MWDedHost;
+import dedicatedhost.util.SerializeEntity;
 import megamek.common.Building;
 import megamek.common.IGame;
 import megamek.common.IGame.Phase;
@@ -117,11 +118,31 @@ public abstract class GameHost implements GameListener, IGameHost {
 		
 	}
 
-	@Override
-	public void gameEntityRemove(GameEntityRemoveEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+    /*
+     * When an entity is removed from play, check the reason. If the unit is
+     * ejected, captured or devestated and the player is invovled in the game at
+     * hand, report the removal to the server. The server stores these reports
+     * in pilotTree and deathTree in order to auto-resolve games after a player
+     * disconnects. NOTE: This send thefirst possible removal condition, which
+     * means that a unit which is simultanously head killed and then CT cored
+     * will show as salvageable.
+     */
+    public void gameEntityRemove(GameEntityRemoveEvent e) {// only send if the
+        // player is
+        // actually involved
+        // in the game
+
+        // get the entity
+        megamek.common.Entity removedE = e.getEntity();
+        if (removedE.getOwner().getName().startsWith("War Bot")) {
+            return;
+        }
+
+        String toSend = SerializeEntity.serializeEntity(removedE, true, false, isUsingAdvanceRepairs());
+        serverSend("IPU|" + toSend);
+    }
+
+	protected abstract boolean isUsingAdvanceRepairs();
 
 	@Override
 	public void gameMapQuery(GameMapQueryEvent arg0) {
@@ -135,11 +156,25 @@ public abstract class GameHost implements GameListener, IGameHost {
 		
 	}
 
-	@Override
-	public void gamePhaseChange(GamePhaseChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void gamePhaseChange(GamePhaseChangeEvent e) {
+        try {
+
+            /*
+             * Reporting phases show deaths - units that try to stand and blow
+             * their ammo, units that have ammo explode from head, etc. This is
+             * also an opportune time to correct isses with the gameRemoveEntity
+             * ISU's. Removals happen ASAP, even if the removal condition and
+             * final condition of the unit are not the same (ie - remove on
+             * Engine crits even when a CT core comes later in the round).
+             */
+            sendServerGameUpdate();
+
+        }// end try
+        catch (Exception ex) {
+            CampaignData.mwlog.errLog("Error reporting game!");
+            CampaignData.mwlog.errLog(ex);
+        }
+    }
 
 	@Override
 	public void gamePlayerChange(GamePlayerChangeEvent arg0) {
