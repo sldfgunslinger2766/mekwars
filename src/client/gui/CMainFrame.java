@@ -2709,92 +2709,68 @@ public class CMainFrame extends JFrame {
     public void jMenuHelpOpViewer_actionPerformed() {
 
     }
+    
+    private String sPSB(String a, String b) {//BK added
+        // builds help menu's pilot skill bv blurb, wants a and b to build serverconfig lookup and get the value
+	Integer i = Integer.parseInt(mwclient.getserverConfigs("chancefor" + a + "for" + b));
+        if (i > 0) {
+            return " " + b + " xp cost: " + i;
+        } else {
+            return "";
+        } 
+    }
+
+    private String sPSBL(String a, String b, String c) {//BK added
+        // builds help menu's pilot skill blurb line, wants a and b and c as skillfullname and 
+    	//skillshortname and description, e.g. "Astech" and "AT" and "does this..."
+        String s = " ";
+        //find if there is any chance for this skill, and if yes, create entry
+        s += sPSB(b, "Mek") + sPSB(b, "Vehicle") + sPSB(b, "Infantry") + sPSB(b, "ProtoMek") + sPSB(b, "BattleArmor") + sPSB(b, "Aero");//not sure where to get a reiterable list for unit types
+        if (s.length() > 1) {
+            s = "<tr><td>" + a + "</td><td>" + b + "</td><td>" + c + "<br>" + s + "</td></tr>";
+        }
+    return s;
+    }
 
     public void jMenuHelpPilotSkills_actionPerformed() {
+        //BK;  would prefer to have this Help Menu list built using a reiteration of the pilot 
+    	//skills by pulling the info from those classes
+        //step one was adding pilot xp costs to the help menu, 
+    	//step two will be adding bv costs, drawn via the skill 
         String result = "";
+        Integer i; 
+        String s; 
         result += "<font color=\"black\">";
         result += "<b><i>MekWars/MegaMek Pilot Skills</b></i><br>";
         result += "<table><tr><th>Name</th>" + "<th>Abbrivation</th>" + "<th>Description</th></tr>";
-
-        // to make the code a bit more stream line going to do everything based
-        // on meks. if its off for a mek but on for something else oh well.
-
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforATforMek")) > 0) {
-            result += "<tr>" + "<td>Astech</td>" + "<td>AT</td>";
-            if (useAdvanceRepairs) {
-                result += "<td>Pilot acts as a tech with repairs only costing parts</td>";
-            } else {
-                result += "<td>Reduces the number of techs needed to repair a unit by 1</td>";
-            }
-            result += "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforBVDNIforMek")) > 0) {
-            result += "<tr>" + "<td>MD Buffered VDNI</td>" + "<td>BVDNI</td>" + "<td>Allows pilots to take more damage.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforDMforMek")) > 0) {
-            result += "<tr>" + "<td>Dodge Maneuver</td>" + "<td>DM</td>" + "<td>Enables the unit to make a dodge maneuver instead of a physical attack.<br>This maneuver adds +2 to the BTH to physical attacks against the unit.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforEDforMek")) > 0) {
-            result += "<tr>" + "<td>Edge</td>" + "<td>ED</td>" + "<td>Allows Pilot to reroll 1 roll(per level) per game.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforEIforMek")) > 0) {
-            result += "<tr>" + "<td>Enhanced Interface</td>" + "<td>EI</td>" + "<td>Neural interface to the clan enhanced imaging system<br>-1 To PSR<br>+2 when targeting with TC instead of +3<br>Can Target without TC at +6<br>Reduces all forest and Smoke mods to 1<br>Pilot receives 1 point of damage every time Units IS is hit,<br>If you fail a roll of 7+<br>BA's recieve 1 extra point of damage every time they are hit</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforGTforMek")) > 0) {
-            result += "<tr>" + "<td>Gifted</td>" + "<td>GT</td>" + "<td>Pilots receive an extra " + mwclient.getserverConfigs("GiftedPercent") + "% chance to gain a skill when they fail<br>to level Piloting or Gunnery after a win.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforGBforMek")) > 0) {
-            result += "<tr>" + "<td>Gunnery Ballistic</td>" + "<td>GB</td>" + "<td>NOTE: This is an unofficial rule. Pilot gets a -1 to-hit bonus on all<br>ballistic weapons (MGs, all ACs, Gaussrifles).</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforGLforMek")) > 0) {
-            result += "<tr>" + "<td>Gunnery Laser</td>" + "<td>GL</td>" + "<td>NOTE: This is an unofficial rule. Pilot gets a -1 to-hit bonus on all<br>energy-based weapons (Laser, PPC, and Flamer).</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforGMforMek")) > 0) {
-            result += "<tr>" + "<td>Gunnery Missile</td>" + "<td>GM</td>" + "<td>NOTE: This is an unofficial rule. Pilot gets a -1 to-hit bonus on all<br>missile weapons (LRM, MRM, SRM).</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforIMforMek")) > 0) {
-            result += "<tr>" + "<td>Iron Man</td>" + "<td>IM</td>" + "<td>NOTE: This is an unofficial rule. A pilot with this skill receives only<br>1 pilot hit from ammunition explosions.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforMAforMek")) > 0) {
-            result += "<tr>" + "<td>Maneuvering Ace</td>" + "<td>MA</td>" + "<td>Enables the unit to move laterally like a Quad. Units also receive a -1<br>BTH to rolls against skidding.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforMSforMek")) > 0) {
-            result += "<tr>" + "<td>Melee Specialist</td>" + "<td>MS</td>" + "<td>Enables the unit to do 1 additional point of damage with physical attacks<br>and subtracts one from the attacker movement modifier (to a minimum of zero).<br>Note: This ability is only used for BattleMechs.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforMTforMek")) > 0) {
-            result += "<tr>" + "<td>MedTech</td>" + "<td>MT</td>" + "<td>A pilot with the MedTech skill will heal 1 extra point per tick.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforNAGforMek")) > 0) {
-            result += "<tr>" + "<td>Natural Aptitude: Gunnery</td>" + "<td>NAG</td>" + "<td>The pilot checks leveling for gunnery at one level higher then current i.e.<br>5 instead of 4 for a 4/5 pilot</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforNAPforMek")) > 0) {
-            result += "<tr>" + "<td>Natural Aptitude: Piloting</td>" + "<td>NAP</td>" + "<td>The pilot checks leveling for piloting at one level higher then current i.e.<br>6 instead of 5 for a 4/5 pilot</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforPRforMek")) > 0) {
-            result += "<tr>" + "<td>Pain Resistance</td>" + "<td>PR</td>" + "<td>When making consciousness rolls, 1 is added to all rolls. Also, damage received<BR>from ammo explosions is reduced to 1.<BR>Note: This ability is only used for BattleMechs.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforPSforMek")) > 0) {
-            result += "<tr>" + "<td>Pain Shunt</td>" + "<td>PS</td>" + "<td>When making consciousness rolls, 1 is added to all rolls. Also, damage received<BR>from ammo explosions is reduced to 1.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforQSforMek")) > 0) {
-            result += "<tr>" + "<td>Quick Study</td>" + "<td>QS</td>" + "<td>Pilots with the Quick Study skill gain a 5% bonus to all XP earned.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforSVforMek")) > 0) {
-            result += "<tr>" + "<td>Survivalist</td>" + "<td>SV</td>" + "<td>If a pilot has this skill they will have a +20% of returning home if ejected and<br>left on the field.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforTGforMek")) > 0) {
-            result += "<tr>" + "<td>Tactical Genius</td>" + "<td>TG</td>" + "<td>A pilot who has a Tactical Genius may reroll their initiative once per turn.<br>The second roll must be accepted.</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforTNforMek")) > 0) {
-            result += "<tr>" + "<td>Trait</td>" + "<td>TN</td>" + "<td>Pilot traits for use with moding the gaining of other skills</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforVDNIforMek")) > 0) {
-            result += "<tr>" + "<td>VDNI MD Skill</td>" + "<td>VDNI</td>" + "<td>Allows Pilot to Take more Damage</td>" + "</tr>";
-        }
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforWSforMek")) > 0) {
-            result += "<tr>" + "<td>Weapon Specialist</td>" + "<td>WS</td>" + "<td>A pilot who specializes in a particular weapon receives a -2 to hit modifier<br>on all attacks with that weapon.</td>" + "</tr>";
-        }
-        result += "<tr>" + "<td>Clan Pilot Training</td>" + "<td>CPT</td>" + "<td>Pilot has a +1 penalty for physical attacks,<br>because clans do not train for dishonourable combat.</td>" + "</tr>";
+        if (useAdvanceRepairs) {
+            result += sPSBL("Astech", "AT", "Pilot acts as a tech with repairs only costing parts");
+        } else {
+            result += sPSBL("Astech", "AT", "Reduces the number of techs needed to repair a unit by 1");
+        } 
+        result += sPSBL("MD Buffered VDNI", "BVDNI", "Allows pilots to take more damage.");
+        result += sPSBL("Dodge Maneuver", "DM", "Enables the unit to make a dodge maneuver instead of a physical attack.<br>This maneuver adds +2 to the BTH to physical attacks against the unit.");
+        result += sPSBL("Edge", "ED", "Allows Pilot to reroll 1 roll(per level) per game.");
+        result += sPSBL("Enhanced Interface", "EI", "Neural interface to the clan enhanced imaging system<br>-1 To PSR<br>+2 when targeting with TC instead of +3<br>Can Target without TC at +6<br>Reduces all forest and Smoke mods to 1<br>Pilot receives 1 point of damage every time Units IS is hit,<br>If you fail a roll of 7+<br>BA's recieve 1 extra point of damage every time they are hit.");
+        result += sPSBL("Gifted", "GT", "Pilots receive an extra " + mwclient.getserverConfigs("GiftedPercent") + "% chance to gain a skill when they fail<br>to level Piloting or Gunnery after a win.");
+        result += sPSBL("Gunnery Ballistic", "GB", "NOTE: This is an unofficial rule. Pilot gets a -1 to-hit bonus on all<br>ballistic weapons (MGs, all ACs, Gaussrifles).");
+        result += sPSBL("Gunnery Laser", "GL", "NOTE: This is an unofficial rule. Pilot gets a -1 to-hit bonus on all<br>energy-based weapons (Laser, PPC, and Flamer).");
+        result += sPSBL("Gunnery Missile", "GM", "NOTE: This is an unofficial rule. Pilot gets a -1 to-hit bonus on all<br>missile weapons (LRM, MRM, SRM).");
+        result += sPSBL("Iron Man", "IM", "NOTE: This is an unofficial rule. A pilot with this skill receives only<br>1 pilot hit from ammunition explosions.");
+        result += sPSBL("Maneuvering Ace", "MA", "Enables the unit to move laterally like a Quad. Units also receive a -1<br>BTH to rolls against skidding.");
+        result += sPSBL("Melee Specialist", "MS", "Enables the unit to do 1 additional point of damage with physical attacks<br>and subtracts one from the attacker movement modifier (to a minimum of zero).");
+        result += sPSBL("MedTech", "MT", "A pilot with the MedTech skill will heal 1 extra point per tick.");
+        result += sPSBL("Natural Aptitude: Gunnery", "NAG", "The pilot checks leveling for gunnery at one level higher then current i.e.<br>5 instead of 4 for a 4/5 pilot.");
+        result += sPSBL("Natural Aptitude: Piloting", "NAP", "The pilot checks leveling for piloting at one level higher then current i.e.<br>6 instead of 5 for a 4/5 pilot.");
+        result += sPSBL("Pain Resistance", "PR", "When making consciousness rolls, 1 is added to all rolls. Also, damage received<BR>from ammo explosions is reduced to 1.");
+        result += sPSBL("Pain Shunt", "PS", "When making consciousness rolls, 1 is added to all rolls. Also, damage received<BR>from ammo explosions is reduced to 1.");
+        result += sPSBL("Quick Study", "QS", "Pilots with the Quick Study skill gain a 5% bonus to all XP earned.");
+        result += sPSBL("Survivalist", "SV", "If a pilot has this skill they will have a +20% of returning home if ejected and<br>left on the field.");
+        result += sPSBL("Tactical Genius", "TG", "A pilot who has a Tactical Genius may reroll their initiative once per turn.<br>The second roll must be accepted.");
+        result += sPSBL("Trait", "TN", "Pilot traits for use with moding the gaining of other skills.");
+        result += sPSBL("VDNI MD Skill", "VDNI", "Allows Pilot to Take more Damage.");
+        result += sPSBL("Weapon Specialist", "WS", "A pilot who specializes in a particular weapon receives a -2 to hit modifier<br>on all attacks with that weapon.");
+        result += sPSBL("Clan Pilot Training", "CPT", "Pilot has a +1 penalty for physical attacks,<br>because clans do not train for dishonourable combat.");
         result += "</table>";
 
         /*
