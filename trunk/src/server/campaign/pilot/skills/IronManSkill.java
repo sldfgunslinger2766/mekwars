@@ -22,7 +22,7 @@ package server.campaign.pilot.skills;
 
 import megamek.common.AmmoType;
 import megamek.common.Entity;
-import megamek.common.Mounted;
+import megamek.common.Mech;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.pilot.SPilot;
@@ -81,36 +81,25 @@ public class IronManSkill extends SPilotSkill {
 
     @Override
 	public int getBVMod(Entity unit, SPilot pilot){
-        int amountOfAmmo = 0;
         int IronManBVBaseMod = CampaignMain.cm.getIntegerConfig("IronManBaseBVMod");
 
         if ( pilot.getSkills().has(PilotSkill.PainResistanceSkillID) ) {
             return 0;
         }
-
-        for ( Mounted ammoType : unit.getAmmo() ){
-
-            if ( ammoType.getUsableShotsLeft() <= 0 ) {
-                continue;
-            }
-
-            AmmoType ammo = (AmmoType)ammoType.getType();
-            if ( (ammo.getAmmoType() == AmmoType.T_GAUSS) ||
-                    (ammo.getAmmoType() == AmmoType.T_GAUSS_HEAVY) ||
-                    (ammo.getAmmoType() == AmmoType.T_GAUSS_LIGHT) ) {
-                continue;
-            }
-
-            amountOfAmmo++;
+    	//BK - changing PR costs to % of bv for CASE/CASEII units, 0 for other units
+    	//this is because in Megamek, IM reduces pilot hits from 2 to 1 for any ammo explosion
+    	//The previous IM costs were 30 or 40 per ammo bin which is silly if you have no 
+    	//CASE (mek gets gutted anyways). PainResistance and IM do not stack so this costs 0 if the pilot also has PR
+        boolean b = false;
+        if (unit instanceof Mech) { //BK - this section of code is tested! ty STK9A
+        	Mech m = (Mech)unit; 
+        	b = m.hasCASEIIAnywhere(); 
         }
-
-        for (Mounted weapon  : unit.getWeaponList()){
-            if ( weapon.getName().indexOf("Gauss Rifle") != -1 ) {
-                amountOfAmmo++;
-            }
-        }
-
-        return amountOfAmmo * IronManBVBaseMod;
+        if(unit.hasCase() || b) {
+        	return (int) (unit.calculateBattleValue(false, true) *  IronManBVBaseMod/100);
+      	} else {
+        	return 0;
+    	}
 
     }
 

@@ -18,9 +18,8 @@ package server.campaign.pilot.skills;
 
 import java.util.Iterator;
 
-import megamek.common.AmmoType;
 import megamek.common.Entity;
-import megamek.common.Mounted;
+import megamek.common.Mech;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.pilot.SPilot;
@@ -28,7 +27,7 @@ import server.campaign.pilot.SPilot;
 import common.MegaMekPilotOption;
 import common.Unit;
 import common.campaign.pilot.Pilot;
-
+import common.CampaignData;
 /**
  * @author Helge Richter
  */
@@ -73,67 +72,37 @@ public class PainResistanceSkill extends SPilotSkill {
 
     @Override
     public int getBVMod(Entity unit) {
-        int amountOfAmmo = 0;
+    	//BK - changing PR costs to % of bv, doubled for CASE/CASEII units
+    	//this is because in Megamek, PR gives +1 on any KO roll (hidden modifier) and reduces pilot hits from 2 to 1 for any ammo explosion
+    	//The previous PR costs were 30 or 40 per ammo bin which is silly if you have no 
+    	//CASE (mek gets gutted anyways) and silly if you have nothing to explode (free +1 on KO rolls)
         int PainResistanceBVBaseMod = CampaignMain.cm.getIntegerConfig("PainResistanceBaseBVMod");
-
-        Iterator<Mounted> ammoList = unit.getAmmo().iterator();
-        while (ammoList.hasNext()) {
-            Mounted ammoType = ammoList.next();
-
-            if (ammoType.getUsableShotsLeft() <= 0) {
-                continue;
-            }
-
-            AmmoType ammo = (AmmoType) ammoType.getType();
-            if ((ammo.getAmmoType() == AmmoType.T_GAUSS) || (ammo.getAmmoType() == AmmoType.T_GAUSS_HEAVY) || (ammo.getAmmoType() == AmmoType.T_GAUSS_LIGHT)) {
-                continue;
-            }
-
-            amountOfAmmo++;
+        boolean b = false;
+        if (unit instanceof Mech) { //BK - this section of code is tested! ty STK9A
+        	Mech m = (Mech)unit; 
+        	b = m.hasCASEIIAnywhere(); 
         }
-
-        Iterator<Mounted> weaponsList = unit.getWeapons();
-        while (weaponsList.hasNext()) {
-            Mounted weapon = weaponsList.next();
-            if (weapon.getName().indexOf("Gauss Rifle") != -1) {
-                amountOfAmmo++;
-            }
-        }
-        return amountOfAmmo * PainResistanceBVBaseMod;
-
+        if(unit.hasCase() || b) {
+        	return (int) (2 * unit.calculateBattleValue(false, true) *  PainResistanceBVBaseMod/100);
+      	} else {
+        	return (int) (unit.calculateBattleValue(false, true) *  PainResistanceBVBaseMod/100);
+    	}
     }
 
     @Override
     public int getBVMod(Entity unit, SPilot p) {
-        int amountOfAmmo = 0;
+    	//BK repeat of comments in getBVMod(Entity unit)
         SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
         int PainResistanceBVBaseMod = house.getIntegerConfig("PainResistanceBaseBVMod");
-
-        Iterator<Mounted> ammoList = unit.getAmmo().iterator();
-        while (ammoList.hasNext()) {
-            Mounted ammoType = ammoList.next();
-
-            if (ammoType.getUsableShotsLeft() <= 0) {
-                continue;
-            }
-
-            AmmoType ammo = (AmmoType) ammoType.getType();
-            if ((ammo.getAmmoType() == AmmoType.T_GAUSS) || (ammo.getAmmoType() == AmmoType.T_GAUSS_HEAVY) || (ammo.getAmmoType() == AmmoType.T_GAUSS_LIGHT)) {
-                continue;
-            }
-
-            amountOfAmmo++;
+        boolean b = false;
+        if (unit instanceof Mech) { 
+        	Mech m = (Mech)unit; 
+        	b = m.hasCASEIIAnywhere(); 
         }
-
-        Iterator<Mounted> weaponsList = unit.getWeapons();
-        while (weaponsList.hasNext()) {
-            Mounted weapon = weaponsList.next();
-            if (weapon.getName().indexOf("Gauss Rifle") != -1) {
-                amountOfAmmo++;
-            }
-        }
-        return amountOfAmmo * PainResistanceBVBaseMod;
-
+        if(unit.hasCase() || b) {
+        	return (int) (2 * unit.calculateBattleValue(false, true) *  PainResistanceBVBaseMod/100);
+      	} else {
+        	return (int) (unit.calculateBattleValue(false, true) *  PainResistanceBVBaseMod/100);
+    	}
     }
-
 }

@@ -63,13 +63,13 @@ public class PilotSkillsModPanel extends JPanel {
 
         baseTextField = new PilotSkillTextField(5);
         SkillModSpring.add(new JLabel("PR BV Mod", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>Base BV mod for Pain Resistance<br>a base BV increase, and this would be applied for<br>every ammo critical or<br>Gauss weapon the unit has");
+        baseTextField.setToolTipText("<html>Base BV % multiplier for Pain Resistance. Use integer value.<br>Example: Use 5 to add 5% base bv to modified bv. Doubles if unit has CASE/CASE II.");
         baseTextField.setName("PainResistanceBaseBVMod");
         SkillModSpring.add(baseTextField);
-
+        
         baseTextField = new PilotSkillTextField(5);
         SkillModSpring.add(new JLabel("IM BV Mod", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>Base BV mod for Iron Man<br>a base BV increase, and this would be applied for<br>every ammo critical or<br>Gauss weapon the unit has");
+        baseTextField.setToolTipText("<html>Base BV % multiplier for Iron Man. Use integer value.<br>Example: Use 5 to add 5% base bv to modified bv. Only adds BV if unit has CASE/CASE II. No cost if pilot has PR.");
         baseTextField.setName("IronManBaseBVMod");
         SkillModSpring.add(baseTextField);
 

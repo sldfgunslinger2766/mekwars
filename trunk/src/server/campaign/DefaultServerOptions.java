@@ -841,8 +841,8 @@ public class DefaultServerOptions {
         defaults.setProperty("SellDirectAssaultAeroPrice", "0");
 
         // Level 3 MaxTech Pilot Skill BV Mods.
-        defaults.setProperty("PainResistanceBaseBVMod", "50");
-        defaults.setProperty("IronManBaseBVMod", "50");
+        defaults.setProperty("PainResistanceBaseBVMod", "5");
+        defaults.setProperty("IronManBaseBVMod", "5");
         defaults.setProperty("DodgeManeuverBaseBVMod", "50");
         defaults.setProperty("ManeuveringAceBaseBVMod", "50");
         defaults.setProperty("ManeuveringAceSpeedRating", "5");
