@@ -25,10 +25,13 @@ import common.CampaignData;
  * @version 2016.10.26
  */
 public class StartChristmasJob implements Job {
-
+	public StartChristmasJob() {
+	}
+	
 	@Override
 	public void execute(JobExecutionContext context)
-			throws JobExecutionException {
+		{
+		CampaignData.mwlog.debugLog("Starting Christmas");
 		ChristmasHandler.getInstance().startChristmas();
 	}
 	
@@ -36,7 +39,7 @@ public class StartChristmasJob implements Job {
 	 * Get the StartChristmasJob into the scheduler
 	 */
 	public static void submit() {
-		JobDetail job = newJob(UserActivityInfluenceJob.class)
+		JobDetail job = newJob(StartChristmasJob.class)
 				.withIdentity("StartChristmas", "ChristmasGroup")
 				.build();
 		
@@ -66,8 +69,7 @@ public class StartChristmasJob implements Job {
 				.startAt(date)
 				.build();
 		}
-        
-		MWScheduler.getInstance().scheduleJob(job, trigger);
+        MWScheduler.getInstance().scheduleJob(job, trigger);
 	}
 	
 	/**
