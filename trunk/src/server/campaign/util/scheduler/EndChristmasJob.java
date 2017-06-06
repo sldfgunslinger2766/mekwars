@@ -25,7 +25,10 @@ import common.CampaignData;
  * @version 2016.10.26
  */
 public class EndChristmasJob implements Job {
-
+	public EndChristmasJob() {
+		
+	}
+	
 	@Override
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
@@ -36,7 +39,7 @@ public class EndChristmasJob implements Job {
 	 * Get the StartChristmasJob into the scheduler
 	 */
 	public static void submit() {
-		JobDetail job = newJob(UserActivityInfluenceJob.class)
+		JobDetail job = newJob(EndChristmasJob.class)
 				.withIdentity("EndChristmas", "ChristmasGroup")
 				.build();
 		

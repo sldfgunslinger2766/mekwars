@@ -1,5 +1,6 @@
 VERSION HISTORY:
 ----------------
++ Bug: Christmas scheduler was submitting wrong type of job
 + bv calc mods for some pilot skills (PR,IM)
 + updated help menu's pilot skill descriptions
 0.6.0.x
