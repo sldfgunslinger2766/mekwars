@@ -62,6 +62,13 @@ public class MeleeSpecialistSkill extends SPilotSkill {
         double numberOfHatchets = 0;
         double hatchetMod = CampaignMain.cm.getDoubleConfig("HatchetRating");
         double baseBV = CampaignMain.cm.getDoubleConfig("MeleeSpecialistBaseBVMod");
+        double speedFactor; 
+        if(CampaignMain.cm.getBooleanConfig("MeleeSpecialistUseSpeedFactor")) {
+        	// Adds a BV malus based on unit movement capability
+        	speedFactor = Math.pow(1 + ((((double) unit.getRunMP() + (Math.round(Math.max(unit.getJumpMP(), unit.getActiveUMUCount()) / 2.0))) - 5) / 10), 1.2);
+        } else {
+        	speedFactor = 1.0;
+        }
 
         SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
 
@@ -78,8 +85,8 @@ public class MeleeSpecialistSkill extends SPilotSkill {
         }
 
         numberOfHatchets = unit.getClubs().size();
-
-        double total = baseBV * (tonnage / 10) + (hatchetMod * numberOfHatchets);
+        
+        double total = baseBV * ((tonnage / 10) * speedFactor) + (hatchetMod * numberOfHatchets);
         return (int) total;
     }
 

@@ -11,6 +11,7 @@
   BarukKhazad!
   James Allred 		(wildj79)
   TubeAlloy
+  Nick Pettinato	(TigerShark)
   
  MekWars testing and documentation (a few of many):
   Alan Bell         (Carpe Mortis)

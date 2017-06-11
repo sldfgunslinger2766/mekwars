@@ -848,6 +848,7 @@ public class DefaultServerOptions {
         defaults.setProperty("ManeuveringAceSpeedRating", "5");
         defaults.setProperty("TacticalGeniusBVMod", "50");
         defaults.setProperty("MeleeSpecialistBaseBVMod", "50");
+        defaults.setProperty("MeleeSpecialistUseSpeedFactor", "false"); // If checked, applies a BV addition based on unit movement to MS skill
         defaults.setProperty("HatchetRating", "5");
         defaults.setProperty("EnhancedInterfaceBaseBVMod", "50");
         defaults.setProperty("EdgeBaseBVMod", "50");
