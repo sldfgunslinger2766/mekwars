@@ -54,7 +54,7 @@ public class PilotSkillsModPanel extends JPanel {
         baseTextField.setToolTipText("Base BV Mod for Melee Specialist");
         baseTextField.setName("MeleeSpecialistBaseBVMod");
         SkillModSpring.add(baseTextField);
-
+        
         baseTextField = new PilotSkillTextField(5);
         SkillModSpring.add(new JLabel("Hatchet Mod", SwingConstants.TRAILING));
         baseTextField.setToolTipText("<HTML>Base BV Mod per Hatchet/Sword<br> [(Base Increase)(unit tonage/10)]<br>+(hatchet mod * number of physical weapons)</html>");
@@ -136,6 +136,21 @@ public class PilotSkillsModPanel extends JPanel {
         }
         baseTextField.setName("GiftedPercent");
         SkillModSpring.add(baseTextField);
+        
+        /**
+         * New checkbox for TigerShark's contributed SpeedFactor
+         */
+        BaseCheckBox = new JCheckBox("MS SpeedRating");
+        BaseCheckBox.setName("MeleeSpecialistUseSpeedFactor");
+        BaseCheckBox.setToolTipText(
+        		"<html>If checked, the MS BV mod will be calculated using the following formula:<br />"
+        		+ "<br />"
+        		+ "<b>&nbsp;&nbsp;&nbsp;&nbsp;Math.pow(1 + ((((double) unit.getRunMP() + (Math.round(Math.max(unit.getJumpMP(), unit.getActiveUMUCount()) / 2.0))) - 5) / 10), 1.2);<br />"
+        		+ "&nbsp;&nbsp;&nbsp;&nbsp;double total = baseBV * ((tonnage / 10) * speedFactor) + (hatchetMod * numberOfHatchets);<br/>"
+        		+ "</b><br />"
+        		+ "If unchecked, the SpeedRating will be set to 1.0, effectively ignoring it.</html>");
+        SkillModSpring.add(new JLabel(" "));
+        SkillModSpring.add(BaseCheckBox);
 
         JPanel GunneryModPanel = new JPanel();
         
