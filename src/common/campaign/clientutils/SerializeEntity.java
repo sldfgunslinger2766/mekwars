@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package dedicatedhost.util;
+package common.campaign.clientutils;
 
 import java.util.Enumeration;
 
@@ -30,6 +30,7 @@ import megamek.common.MechWarrior;
 import megamek.common.Protomech;
 import megamek.common.QuadMech;
 import megamek.common.Tank;
+
 import common.Unit;
 import common.util.UnitUtils;
 
@@ -120,7 +121,7 @@ public class SerializeEntity{
 				if ( useRepairs ){
 					result.append(UnitUtils.unitBattleDamage(e, true)+"*");
 				}
-				result.append(UnitUtils.getEntityFileName(e));
+	            result.append(UnitUtils.getEntityFileName(e));
 			} else if (e instanceof Tank ) {
 				result.append(e.isRepairable() + "*");
 				result.append(e.isImmobile() + "*");
@@ -128,13 +129,13 @@ public class SerializeEntity{
 				if ( useRepairs ){
 					result.append(UnitUtils.unitBattleDamage(e, true)+"*");
 				}
-				result.append(UnitUtils.getEntityFileName(e));
-			} else if ( e instanceof Aero ){
+	            result.append(UnitUtils.getEntityFileName(e));
+			}else if (e instanceof Aero ) {
                 result.append(e.isRepairable() + "*");
                 result.append(e.isImmobile() + "*");
                 result.append(e.getCrew().isDead() + "*");
                 result.append(UnitUtils.getEntityFileName(e));
-			}
+            }
 			else if (e instanceof MechWarrior) {
 				MechWarrior mw = (MechWarrior)e;
 				result.append("MW*");
@@ -181,7 +182,7 @@ public class SerializeEntity{
 				}
 				result.append(e.isRepairable() + "*");
 			}
-		}//end else(un-full status)
+		} //end else(un-full status)
 		
 		return result.toString();
 	}
