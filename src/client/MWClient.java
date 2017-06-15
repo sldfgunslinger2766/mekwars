@@ -115,7 +115,6 @@ import client.gui.dialog.SignonDialog;
 import client.protocol.DataFetchClient;
 import client.util.RepairManagmentThread;
 import client.util.SalvageManagmentThread;
-import client.util.SerializeEntity;
 import client.GUIClientConfig;
 
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
@@ -143,6 +142,7 @@ import common.Unit;
 import common.campaign.Buildings;
 import common.campaign.clientutils.GameHost;
 import common.campaign.clientutils.IGameHost;
+import common.campaign.clientutils.SerializeEntity;
 import common.campaign.clientutils.protocol.CConnector;
 import common.campaign.clientutils.protocol.IClient;
 import common.campaign.clientutils.protocol.TransportCodec;
