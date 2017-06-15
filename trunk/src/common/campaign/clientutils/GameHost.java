@@ -17,8 +17,6 @@ import common.campaign.clientutils.protocol.CConnector;
 import common.campaign.clientutils.protocol.IClient;
 import common.campaign.clientutils.protocol.TransportCodec;
 import common.campaign.clientutils.protocol.commands.IProtCommand;
-import dedicatedhost.MWDedHost;
-import dedicatedhost.util.SerializeEntity;
 import megamek.common.Building;
 import megamek.common.IGame;
 import megamek.common.IGame.Phase;
@@ -306,7 +304,7 @@ public abstract class GameHost implements GameListener, IGameHost {
         } catch (Exception ex) {
         }
 
-        sendChat(MWDedHost.CAMPAIGN_PREFIX + "c servergameoptions#" + packet.toString());
+        sendChat(GameHost.CAMPAIGN_PREFIX + "c servergameoptions#" + packet.toString());
     }
     
 
