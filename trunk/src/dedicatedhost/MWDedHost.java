@@ -63,6 +63,7 @@ import common.MMGame;
 import common.campaign.Buildings;
 import common.campaign.clientutils.GameHost;
 import common.campaign.clientutils.IGameHost;
+import common.campaign.clientutils.SerializeEntity;
 import common.campaign.clientutils.protocol.CConnector;
 import common.campaign.clientutils.protocol.IClient;
 import common.campaign.clientutils.protocol.TransportCodec;
@@ -77,7 +78,6 @@ import dedicatedhost.cmd.Command;
 
 import dedicatedhost.protocol.DataFetchClient;
 
-import dedicatedhost.util.SerializeEntity;
 
 // This is the Client used for connecting to the master server.
 // @Author: Helge Richter (McWizard@gmx.de)
