@@ -1014,6 +1014,7 @@ public class DefaultServerOptions {
         defaults.setProperty("AttackFromReserveResponseTime", "5");
         defaults.setProperty("AttackFromReserveSleepTime", "60");// time between each attack.
         defaults.setProperty("MaxNegativeBaysForAFR", "-1");
+        defaults.setProperty("MaxNegativeBaysForActivation", "0");
 
         // Pilot Damage Transfers
         defaults.setProperty("AllowPilotDamageToTransfer", "false");
