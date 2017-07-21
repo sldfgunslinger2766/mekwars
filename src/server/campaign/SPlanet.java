@@ -500,6 +500,8 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             newOwnerHSUpdates.append(currUF.getTicksUntilRefresh());
             newOwnerHSUpdates.append("$");
             newOwnerHSUpdates.append(currUF.getAccessLevel());
+            newOwnerHSUpdates.append("$");
+            newOwnerHSUpdates.append(currUF.getID());
             newOwnerHSUpdates.append("|");
         }
 

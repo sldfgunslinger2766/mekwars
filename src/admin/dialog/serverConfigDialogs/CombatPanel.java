@@ -307,6 +307,13 @@ public class CombatPanel extends JPanel {
         baseTextField.setName("MaxNegativeBaysForAFR");
         combatSpring4.add(baseTextField);
         
+        baseTextField = new JTextField(5);
+        combatSpring4.add(new JLabel("Max Negative Bays for activation:", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("<html>How many negative bays a player may have<br>to go active.  Set to -1 to disable check");
+        baseTextField.setName("MaxNegativeBaysForActivation");
+        combatSpring4.add(baseTextField);
+        
+        
         //SpringLayoutHelper.setupSpringGrid(combatSpring4, 5);
         
         SpringLayoutHelper.setupSpringGrid(combatSpring4, 7);

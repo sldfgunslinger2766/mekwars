@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.Vector;
 
 import server.campaign.pilot.SPilot;
@@ -91,6 +92,7 @@ public class SUnitFactory extends UnitFactory implements Serializable {
         result.append(getType());
         result.append(isLocked());
         result.append(getAccessLevel());
+        result.append(getID());
         return result.toString();
     }
 
@@ -118,7 +120,11 @@ public class SUnitFactory extends UnitFactory implements Serializable {
         setType(TokenReader.readInt(ST));
         setLock(TokenReader.readBoolean(ST));
         setAccessLevel(TokenReader.readInt(ST));
-
+        if(ST.hasMoreTokens()) {
+        	setID(TokenReader.readString(ST));
+        } else {
+        	setID(UUID.randomUUID().toString());
+        }
         setPlanet(p);
     }
 

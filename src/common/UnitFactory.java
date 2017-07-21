@@ -98,8 +98,8 @@ public class UnitFactory implements Serializable {
 	 */
 	private boolean factoryLocked = false;
 	
-	
-	private int factoryID = 0;
+	private String factoryID = "";
+	//private int factoryID = 0;
 
 	private int factoryAccessLevel = 0;
 	private String buildTableFolder = "";
@@ -120,14 +120,14 @@ public class UnitFactory implements Serializable {
 	/**
 	 * @return Returns the factoryID
 	 */
-	public int getID() {
+	public String getID() {
 	  return factoryID;
 	}
 
 	/**
 	 * @param id The factoryID to set.
 	 */
-	public void setID(int id) {
+	public void setID(String id) {
 	  this.factoryID = id;
 	}
 	
@@ -322,6 +322,7 @@ public class UnitFactory implements Serializable {
 		out.println(factoryLocked,"factorylock");
 		out.println(factoryAccessLevel, "factoryaccess");
 		out.println(buildTableFolder,"buildtablefolder");
+		out.println(factoryID, "factoryID");
 	}
 	
 	/**
@@ -337,6 +338,7 @@ public class UnitFactory implements Serializable {
 		factoryLocked = in.readBoolean("factorylock");
 		factoryAccessLevel = in.readInt("factoryaccess");
 		buildTableFolder = in.readLine("buildtablefolder");
+		factoryID = in.readLine("factoryID");
 	}    
 	
 	public String getTypeString() {
