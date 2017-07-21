@@ -207,11 +207,11 @@ public class ActivateCommand implements Command {
             }
         }
 
-        if (p.getFreeBays() < 0) {
+        if (p.getFreeBays() < 0 && CampaignMain.cm.getIntegerConfig("MaxNegativeBaysForActivation") > -1 && ((p.getFreeBays() + CampaignMain.cm.getIntegerConfig("MaxNegativeBaysForActivation")) > 0)) {
             if (CampaignMain.cm.isUsingAdvanceRepair()) {
-                CampaignMain.cm.toUser("AM:You may not activate with negative bays!", Username, true);
+                CampaignMain.cm.toUser("AM:You may not activate with more than " + CampaignMain.cm.getIntegerConfig("MaxNegativeBaysForActivation") + " negative bays!", Username, true);
             } else {
-                CampaignMain.cm.toUser("AM:You may not activate with negative techs!", Username, true);
+                CampaignMain.cm.toUser("AM:You may not activate with more than " + CampaignMain.cm.getIntegerConfig("MaxNegativeBaysForActivation") + " negative techs!", Username, true);
             }
             return;
         }

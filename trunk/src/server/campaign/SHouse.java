@@ -2311,7 +2311,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
          * 
          * Loop through all worlds, check control, and send owned factories.
          * 
-         * Structure: AF|weight$metatype$founder$planet$name$refreshtime|
+         * Structure: AF|weight$metatype$founder$planet$name$refreshtime$ID|
          */
         for (SPlanet currPlanet : getPlanets().values()) {
 
@@ -2332,7 +2332,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                 result.append(currFactory.getName() + internalDelim);
                 result.append(currFactory.getTicksUntilRefresh() + internalDelim);
                 result.append(currFactory.getAccessLevel() + internalDelim);
-
+                result.append(currFactory.getID() + internalDelim);
                 result.append(cmdDelim);
             }
         }

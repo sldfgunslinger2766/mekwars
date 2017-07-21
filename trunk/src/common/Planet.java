@@ -658,7 +658,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
                     openImage = "./data/images/open.gif";
                 }
 
-                result.append("<img src=\"file:///" + new File(openImage).getAbsolutePath() + "\">" + u.getSize() + " " + u.getFullTypeString() + u.getName() + " built by " + founder + "<br>");
+                result.append("<img src=\"file:///" + new File(openImage).getAbsolutePath() + ">" + u.getSize() + " " + u.getFullTypeString() + u.getName() + " built by " + founder + "<br>");
             }
         }
 

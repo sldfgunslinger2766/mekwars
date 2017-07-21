@@ -285,6 +285,8 @@ public class CHSPanel extends JPanel {
 
         int timeToRefresh = Integer.valueOf(tokenizer.nextToken());
         int accessLevel = Integer.parseInt(tokenizer.nextToken());
+        
+        String factoryID = tokenizer.nextToken();
 
         /*
          * Check for multiproduction and add to all appropriate factory
@@ -294,22 +296,22 @@ public class CHSPanel extends JPanel {
          * :-(
          */
         if (canProduce(Unit.MEK, type)) {
-            addFactoryHelper(weight, new Integer(Unit.MEK), timeToRefresh, founder, planet, factoryName, accessLevel);
+            addFactoryHelper(weight, new Integer(Unit.MEK), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
         if (canProduce(Unit.VEHICLE, type)) {
-            addFactoryHelper(weight, new Integer(Unit.VEHICLE), timeToRefresh, founder, planet, factoryName, accessLevel);
+            addFactoryHelper(weight, new Integer(Unit.VEHICLE), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
         if (canProduce(Unit.INFANTRY, type)) {
-            addFactoryHelper(weight, new Integer(Unit.INFANTRY), timeToRefresh, founder, planet, factoryName, accessLevel);
+            addFactoryHelper(weight, new Integer(Unit.INFANTRY), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
         if (canProduce(Unit.PROTOMEK, type)) {
-            addFactoryHelper(weight, new Integer(Unit.PROTOMEK), timeToRefresh, founder, planet, factoryName, accessLevel);
+            addFactoryHelper(weight, new Integer(Unit.PROTOMEK), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
         if (canProduce(Unit.BATTLEARMOR, type)) {
-            addFactoryHelper(weight, new Integer(Unit.BATTLEARMOR), timeToRefresh, founder, planet, factoryName, accessLevel);
+            addFactoryHelper(weight, new Integer(Unit.BATTLEARMOR), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
         if (canProduce(Unit.AERO, type)) {
-            addFactoryHelper(weight, new Integer(Unit.AERO), timeToRefresh, founder, planet, factoryName, accessLevel);
+            addFactoryHelper(weight, new Integer(Unit.AERO), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
     }
 
@@ -371,28 +373,31 @@ public class CHSPanel extends JPanel {
         int timeToRefresh = Integer.valueOf(tokenizer.nextToken());
 
         int accessLevel = Integer.parseInt(tokenizer.nextToken());
+        
+        String factoryID = tokenizer.nextToken();
+        
         /*
          * Check for multiproduction and update in all appropriate factory
          * categories. Overly complex, and makes me want to punch the person who
          * RFE'ed multifacs in the face :-(
          */
         if (canProduce(Unit.MEK, type)) {
-            changeFactoryHelper(weight, Unit.MEK, planet, factoryName, timeToRefresh, accessLevel);
+            changeFactoryHelper(weight, Unit.MEK, planet, factoryName, timeToRefresh, accessLevel, factoryID);
         }
         if (canProduce(Unit.VEHICLE, type)) {
-            changeFactoryHelper(weight, Unit.VEHICLE, planet, factoryName, timeToRefresh, accessLevel);
+            changeFactoryHelper(weight, Unit.VEHICLE, planet, factoryName, timeToRefresh, accessLevel, factoryID);
         }
         if (canProduce(Unit.INFANTRY, type)) {
-            changeFactoryHelper(weight, Unit.INFANTRY, planet, factoryName, timeToRefresh, accessLevel);
+            changeFactoryHelper(weight, Unit.INFANTRY, planet, factoryName, timeToRefresh, accessLevel, factoryID);
         }
         if (canProduce(Unit.PROTOMEK, type)) {
-            changeFactoryHelper(weight, Unit.PROTOMEK, planet, factoryName, timeToRefresh, accessLevel);
+            changeFactoryHelper(weight, Unit.PROTOMEK, planet, factoryName, timeToRefresh, accessLevel, factoryID);
         }
         if (canProduce(Unit.BATTLEARMOR, type)) {
-            changeFactoryHelper(weight, Unit.BATTLEARMOR, planet, factoryName, timeToRefresh, accessLevel);
+            changeFactoryHelper(weight, Unit.BATTLEARMOR, planet, factoryName, timeToRefresh, accessLevel, factoryID);
         }
         if (canProduce(Unit.AERO, type)) {
-            changeFactoryHelper(weight, Unit.AERO, planet, factoryName, timeToRefresh, accessLevel);
+            changeFactoryHelper(weight, Unit.AERO, planet, factoryName, timeToRefresh, accessLevel, factoryID);
         }
     }
 
@@ -401,7 +406,7 @@ public class CHSPanel extends JPanel {
      * repetetive code that checks for factory vectors and creates missing
      * listings.
      */
-    private void addFactoryHelper(int weight, int type, int timeToRefresh, String founder, String planet, String factoryName, int accessLevel) {
+    private void addFactoryHelper(int weight, int type, int timeToRefresh, String founder, String planet, String factoryName, int accessLevel, String factoryID) {
 
         // if there isn't a vector for this type + weight combo already, create
         // one
@@ -415,7 +420,7 @@ public class CHSPanel extends JPanel {
          * Add the factory to the map. Note that we use a map so the factories
          * appear in alpha order, by world.
          */
-        weightAndTypeMap.put(planet + "$" + factoryName, founder + "$" + planet + "$" + factoryName + "$" + timeToRefresh + "$" + accessLevel);
+        weightAndTypeMap.put(planet + "$" + factoryName, founder + "$" + planet + "$" + factoryName + "$" + timeToRefresh + "$" + accessLevel + "$" + factoryID);
     }
 
     /**
@@ -446,7 +451,7 @@ public class CHSPanel extends JPanel {
      * Helper that abstracts out some repetetive checks from
      * checkFactionFactory.
      */
-    private void changeFactoryHelper(int weight, int type, String planet, String factoryName, int timeToRefresh, int accessLevel) {
+    private void changeFactoryHelper(int weight, int type, String planet, String factoryName, int timeToRefresh, int accessLevel, String factoryID) {
 
         TreeMap<String, String> weightAndTypeMap = factoriesInfo.get(weight + "$" + type);
 
@@ -469,7 +474,7 @@ public class CHSPanel extends JPanel {
         String founder = tokenizer.nextToken();
 
         // overwrite the old entry
-        weightAndTypeMap.put(planet + "$" + factoryName, founder + "$" + planet + "$" + factoryName + "$" + timeToRefresh + "$" + accessLevel);
+        weightAndTypeMap.put(planet + "$" + factoryName, founder + "$" + planet + "$" + factoryName + "$" + timeToRefresh + "$" + accessLevel + "$" + factoryID);
     }
 
     /**
@@ -580,6 +585,8 @@ public class CHSPanel extends JPanel {
                             String factoryName = ST.nextToken();
                             int refreshTime = Integer.parseInt(ST.nextToken());
                             int accessLevel = Integer.parseInt(ST.nextToken());
+                            String factoryID = ST.nextToken();
+                            
                             String openImage = "data/images/open" + founder + ".gif";
                             String closeImage = "data/images/closed" + founder + ".gif";
 
@@ -614,7 +621,7 @@ public class CHSPanel extends JPanel {
 
                                 String costString = "(Cost: " + mwclient.moneyOrFluMessage(true, true, cbillCost, false) + ", " + mwclient.moneyOrFluMessage(false, true, fluCost, false) + ", " + ppCost + " Components)";
 
-                                result.append("<a href=\"MEKWARS/c request#" + weight + "#" + type_id + "#" + planet + "#" + factoryName + "\"><img border=\"0\" alt=\"Click to buy a " + founder + " " + Unit.getTypeClassDesc(type_id) + " from " + factoryName + " on " + planet + ". " + costString + "\" src=\"" + openImage + "\"></a>");
+                                result.append("<a href=\"MEKWARS/c request#" + weight + "#" + type_id + "#" + planet + "#" + factoryName + "\"><img border=\"0\" alt=\"(FID: " + factoryID + ") Click to buy a " + founder + " " + Unit.getTypeClassDesc(type_id) + " from " + factoryName + " on " + planet + ". " + costString + "\" src=\"" + openImage + "\"></a>");
                                 hasOpen = true;
 
                             } else {

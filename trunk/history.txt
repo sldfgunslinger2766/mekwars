@@ -1,5 +1,8 @@
 VERSION HISTORY:
 ----------------
+R Released Server v0.6.0.3
++ Allow users to activate with negative bays
++ Added IDs to factories in preparation for changing how they are referenced
 R Released Client v0.6.0.1
 + Added MS SpeedFactor option
 + Bug: Christmas scheduler was submitting wrong type of job

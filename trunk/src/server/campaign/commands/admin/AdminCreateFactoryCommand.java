@@ -21,6 +21,7 @@
 package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.Vector;
 
 import server.MWChatServer.auth.IAuthenticator;
@@ -53,7 +54,6 @@ public class AdminCreateFactoryCommand implements Command {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;
 		}
-		int fid = 0;  // Factory DBId
 		SPlanet planet = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
 		String name = command.nextToken();
 		String size = command.nextToken();
@@ -69,8 +69,10 @@ public class AdminCreateFactoryCommand implements Command {
 			accessLevel = Integer.parseInt(command.nextToken());
 		
 		SUnitFactory fac = new SUnitFactory(name,planet,size,faction,0,100,type,buildTableFolder,accessLevel);
-		fac.setID(fid);
-        Vector<UnitFactory> uf = planet.getUnitFactories();
+		
+		fac.setID(UUID.randomUUID().toString());
+        
+		Vector<UnitFactory> uf = planet.getUnitFactories();
 		uf.add(fac);
 		fac.setPlanet(planet);
 		if (planet.getOwner() != null) {
