@@ -91,6 +91,11 @@ public class UnitsCardPanel extends JPanel {
 				baseTextField.setName(baseName + "PP");
 				baseTextField.setToolTipText(Unit.getWeightClassDesc(unitWeight) + Unit.getTypeClassDesc(unitType) + "_PP");
 				costGrid.add(baseTextField);
+
+				baseTextField = new JTextField(5);
+				baseTextField.setName(baseName + "RP");
+				baseTextField.setToolTipText(Unit.getWeightClassDesc(unitWeight) + Unit.getTypeClassDesc(unitType) + "_RP");
+				costGrid.add(baseTextField);
 				
 			}
 		}
