@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -50,10 +50,10 @@ import common.util.UnitUtils;
 
 
 public final class RewardPointsDialog implements ActionListener, KeyListener{
-	
+
 	//store the client backlink for other things to use
-	private MWClient mwclient = null; 
-	
+	private MWClient mwclient = null;
+
 	private final static String okayCommand = "Okay";
 	private final static String cancelCommand = "Cancel";
 	private final static String unitCommand = "Units";
@@ -66,14 +66,14 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
     private final static String repairCommand = "Repair";
 
 	//private final static String amountCommand = "Amount";
-	
+
 	private static String windowName = "Reward Points";
-	
-	
+
+
 	//BUTTONS
 	private final JButton okayButton = new JButton("OK");
-	private final JButton cancelButton = new JButton("Cancel");	
-	
+	private final JButton cancelButton = new JButton("Cancel");
+
 	//TEXT FIELDS
 	//tab names
 	private final JLabel costLabel= new JLabel();
@@ -86,7 +86,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 	private final JLabel refreshLabel = new JLabel("Refresh:",SwingConstants.TRAILING);
     private final JLabel techComboLabel = new JLabel("Tech Type:",SwingConstants.TRAILING);
     private final JLabel repairLabel = new JLabel("Repair:",SwingConstants.TRAILING);
-	
+
 	private JComboBox unitComboBox = new JComboBox();
 	private final String[] weightChoices = {"Light", "Medium", "Heavy", "Assault"};
 	private final JComboBox weightComboBox = new JComboBox(weightChoices);
@@ -98,19 +98,19 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
     private JComboBox repairComboBox = new JComboBox();
     private final String[] techChoices = {"Green", "Reg", "Vet", "Elite"};
     private final JComboBox techComboBox = new JComboBox(techChoices);
-	
+
 	private final JTextField amountText = new JTextField(5);
 	private JLabel amountLabel;
 	int cost = 0;
-	
+
 	//STOCK DIALOUG AND PANE
 	private JDialog dialog;
 	private JOptionPane pane;
-	
+
 	JTabbedPane ConfigPane = new JTabbedPane(SwingConstants.TOP);
-	
+
 	public RewardPointsDialog(MWClient c) {
-		
+
 		//save the client
 		this.mwclient = c;
 		windowName = mwclient.getserverConfigs("RPLongName");
@@ -120,24 +120,27 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 		names.add("Common"); //start with the common faction
 		for (Iterator<House> factions = mwclient.getData().getAllHouses().iterator(); factions.hasNext();)
 			names.add( factions.next().getName());
-		
+
 		//check for the use of rare and add if used
 		if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowRareUnitsForRewards")))
 		    names.add("Rare");
-		
+
 		factionComboBox = new JComboBox(names.toArray());
-		
+
 		names = new TreeSet<String>();
 		if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowTechsForRewards")))
 		    names.add("Techs");
 		if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowInfluenceForRewards")))
 		    names.add(mwclient.getserverConfigs("FluLongName"));
+		// @Author Salient (mwosux@gmail.com) , Add RP for CBills
+		if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowCBillsForRewards")))
+			names.add(mwclient.getserverConfigs("MoneyLongName"));
 		if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowUnitsForRewards"))){
-          names.add(unitCommand);
+          	names.add(unitCommand);
           //private final String[] unitChoices = {"Mek", "Vehicle", "Infantry", "ProtoMek","BattleArmor" };
 
           Vector<String> unitList = new Vector<String>(5,1);
-          
+
           unitList.add("Mek");
           if ( Boolean.parseBoolean(mwclient.getserverConfigs("UseVehicle")) )
               unitList.add("Vehicle");
@@ -152,11 +155,11 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 
           unitComboBox = new JComboBox(unitList.toArray());
        }
-        
+
 		if (Boolean.parseBoolean(mwclient.getserverConfigs("GlobalRepodAllowed"))) {
 		    names.add(repodCommand);
 		    TreeSet<String> repodOptions = new TreeSet<String>();
-		    
+
 		    if (Boolean.parseBoolean(mwclient.getserverConfigs("RandomRepodOnly")))
 		        repodOptions.add("Random");
 		    else{
@@ -164,7 +167,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 		            repodOptions.add("Random");
 		        repodOptions.add("Select");
 		    }
-		    
+
 		    repodComboBox = new JComboBox(repodOptions.toArray());
 		    repodOptions.clear();
 		    Iterator<CUnit> units = c.getPlayer().getHangar().iterator();
@@ -204,7 +207,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 		    }
 		    refreshComboBox = new JComboBox(factories.toArray());
 		}
-		
+
 		rewardsComboBox = new JComboBox(names.toArray());
 
 		//stored values.
@@ -222,7 +225,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
         techComboBox.setActionCommand(techComboCommand);
         repairComboBox.setActionCommand(repairCommand);
 		//amountText.setActionCommand(amountCommand);
-		
+
 		okayButton.addActionListener(this);
 		cancelButton.addActionListener(this);
 		okayButton.setToolTipText("Save Options");
@@ -238,34 +241,34 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
         repairComboBox.addActionListener(this);
 
         amountText.addKeyListener(this);
-		
+
 		//CREATE THE PANELS
 		JPanel rewardPanel = new JPanel();//player name, etc
-		
+
 		/*
 		 * Format the Reward Points panel. Spring layout.
 		 */
 		rewardPanel.setLayout(new BoxLayout(rewardPanel,BoxLayout.Y_AXIS));
-		
+
 		JPanel comboPanel = new JPanel(new SpringLayout());
 		JPanel costPanel = new JPanel();
-		
+
 		comboPanel.add(rewardLabel);
 		rewardsComboBox.setToolTipText("Select your Reward Type");
 		comboPanel.add(rewardsComboBox);
-		
+
 		comboPanel.add(factionLabel);
 		factionComboBox.setToolTipText("Select the faction build table you wish to use");
 		comboPanel.add(factionComboBox);
-		
+
 		comboPanel.add(unitLabel);
 		unitComboBox.setToolTipText("Select the Unit Type");
 		comboPanel.add(unitComboBox);
-		
+
 		comboPanel.add(weightLabel);
 		weightComboBox.setToolTipText("Unit Weight Class");
 		comboPanel.add(weightComboBox);
-		
+
 		comboPanel.add(pUnitsLabel);
 		pUnitsComboBox.setToolTipText("Unit");
 		comboPanel.add(pUnitsComboBox);
@@ -273,7 +276,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
         comboPanel.add(repodLabel);
 		repodComboBox.setToolTipText("Repod Selection Type");
 		comboPanel.add(repodComboBox);
-		
+
 		comboPanel.add(refreshLabel);
 		refreshComboBox.setToolTipText("Refresh Factory");
 		comboPanel.add(refreshComboBox);
@@ -288,26 +291,26 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
         comboPanel.add(repairLabel);
         repairComboBox.setToolTipText("Repair Unit with " + mwclient.getserverConfigs("RPShortName") + "s");
         comboPanel.add(repairComboBox);
-        
+
 		comboPanel.add(amountLabel);
 		comboPanel.add(amountText);
-		
+
 		//run the spring layout
 		SpringLayoutHelper.setupSpringGrid(comboPanel,2);
-		
+
 		rewardPanel.add(comboPanel);
 		costPanel.add(costLabel);
 		rewardPanel.add(costPanel);
-		
+
 		costLabel.setText("Result: no expenditure");
-		
+
         try{
             factionComboBox.setSelectedItem(mwclient.getPlayer().getHouse());
         }catch (Exception ex){
             factionComboBox.setSelectedIndex(0);
         }
         techComboBox.setSelectedIndex(0);
-		
+
 		if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowUnitsForRewards"))) {
 			rewardsComboBox.setSelectedItem("Units");
             weightComboBox.setSelectedIndex(0);
@@ -317,13 +320,13 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 			rewardsComboBox.setSelectedIndex(0);
 
 		JPanel mainPanel = new JPanel();
-		
+
 		// Set the user's options
 		Object[] options = { okayButton, cancelButton };
-		
+
 		// Create the pane containing the buttons
 		pane = new JOptionPane(rewardPanel,JOptionPane.PLAIN_MESSAGE,JOptionPane.DEFAULT_OPTION, null, options, null);
-		
+
 		// Create the main dialog and set the default button
 		dialog = pane.createDialog(mainPanel, windowName);
 		dialog.getRootPane().setDefaultButton(cancelButton);
@@ -333,17 +336,17 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 		dialog.setModal(true);
 		dialog.pack();
 		dialog.setVisible(true);
-		
+
 		if (pane.getValue() == okayButton) {
-			
+
 		}
-		else 
+		else
 			dialog.dispose();
 	}
-	
+
 	public void keyTyped(KeyEvent e){
 	}
-	
+
 	public void keyReleased(KeyEvent e){
 	    String selection = (String)rewardsComboBox.getSelectedItem();
 	    cost = Integer.parseInt(amountText.getText());
@@ -365,6 +368,11 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 		        costLabel.setText(mwclient.getserverConfigs("RPShortName") + " Required: "+cost+" " + mwclient.getserverConfigs("RPShortName"));
 		        dialog.repaint();
 		    }
+			// @Author Salient (mwosux@gmail.com) , Add RP for CBills
+			else if ( selection.equals(mwclient.getserverConfigs("MoneyLongName")) ){
+				int total = cost * Integer.parseInt(mwclient.getserverConfigs("CBillsForARewardPoint"));
+				costLabel.setText("Result: Gain "+mwclient.moneyOrFluMessage(true,true,total));
+			}
 		    else{
 		        int total = cost * Integer.parseInt(mwclient.getserverConfigs("InfluenceForARewardPoint"));
 		        costLabel.setText("Result: Gain "+mwclient.moneyOrFluMessage(false,true,total));
@@ -377,10 +385,10 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-		
+
 		if (command.equals(okayCommand)) {
 		    String selection = (String)rewardsComboBox.getSelectedItem();
-		    
+
 		    if ( selection.equals("Units") ){
 		        String type = (String)unitComboBox.getSelectedItem();
 		        String weight = (String)weightComboBox.getSelectedItem();
@@ -414,21 +422,25 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
                 String selectionName = (String)repairComboBox.getSelectedItem();
                 mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c userewardpoints#3#"+selectionName.trim().substring(0,selectionName.indexOf(" ")));
             }
+			// @Author Salient (mwosux@gmail.com) , Add RP for CBills
+			else if ( selection.equals(mwclient.getserverConfigs("MoneyLongName")) ){
+		        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c userewardpoints#4#"+ amountText.getText());
+            }
 		    else{//flu
 		        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c userewardpoints#1#"+ amountText.getText());
 		    }
-		    
+
 			dialog.dispose();
 		} else if (command.equals(cancelCommand)) {
 			pane.setValue(cancelButton);
 			dialog.dispose();
-		} 
+		}
 		else if (command.equals(rewardCommand)){
 		    String selection = (String)rewardsComboBox.getSelectedItem();
 		    if ( selection.equals("Units")){
 		        makeVisible(true,false,false);
 				unitComboBox.setSelectedIndex(0);
-				weightComboBox.setSelectedIndex(0);        
+				weightComboBox.setSelectedIndex(0);
                 try{
                     factionComboBox.setSelectedItem(mwclient.getPlayer().getHouse());
                 }catch (Exception ex){
@@ -447,7 +459,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
                     costLabel.setText("Hire 1 "+UnitUtils.techDescription(type)+" tech for "+total+" " + mwclient.getserverConfigs("RPShortName"));
                     techComboBox.setVisible(true);
                     techComboLabel.setVisible(true);
-                    
+
                     amountText.setVisible(false);
                     amountLabel.setVisible(false);
                 }else{
@@ -482,10 +494,18 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
                 costLabel.setText("Repair Cost: "+mwclient.getserverConfigs("RewardPointsForRepair"));
                 repairComboBox.setVisible(true);
                 repairLabel.setVisible(true);
-                
+
                 amountText.setVisible(false);
                 amountLabel.setVisible(false);
             }
+			// @Author Salient (mwosux@gmail.com) , Add RP for CBills
+			else if (selection.equals(mwclient.getserverConfigs("MoneyLongName"))){
+				amountText.setText("0");
+				cost = Integer.parseInt(amountText.getText());
+				int total = cost * Integer.parseInt(mwclient.getserverConfigs("CBillsForARewardPoint"));
+				costLabel.setText("Result: Gain "+mwclient.moneyOrFluMessage(true,true,total));
+				makeVisible(false,false,false);
+			}
 		    else{
 		        amountText.setText("0");
 				cost = Integer.parseInt(amountText.getText());
@@ -500,7 +520,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 	            cost /= 2;
 			costLabel.setText(mwclient.getserverConfigs("RPShortName") + " Required: "+cost+" " + mwclient.getserverConfigs("RPShortName"));
 		}
-		else if (command.equals(weightCommand) 
+		else if (command.equals(weightCommand)
 		        || command.equals(unitCommand)
 		        || command.equals(factionCommand)){
 			cost = getUnitRPCost();
@@ -514,7 +534,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
             costLabel.setText("Hire 1 "+UnitUtils.techDescription(type)+" tech for "+total+" " + mwclient.getserverConfigs("RPShortName"));
             techComboBox.setVisible(true);
             techComboLabel.setVisible(true);
-            
+
             amountText.setVisible(false);
             amountLabel.setVisible(false);
         }
@@ -524,12 +544,12 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
             costLabel.setText("Repair Cost: "+mwclient.getserverConfigs("RewardPointsForRepair"));
             repairComboBox.setVisible(true);
             repairLabel.setVisible(true);
-            
+
             amountText.setVisible(false);
             amountLabel.setVisible(false);
         }
 	}
-	
+
 	private void makeVisible(boolean visible, boolean repod, boolean refresh){
 		unitComboBox.setVisible(visible);
 		weightComboBox.setVisible(visible);
@@ -537,7 +557,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 		unitLabel.setVisible(visible);
 		weightLabel.setVisible(visible);
 		factionLabel.setVisible(visible);
-        
+
 		repodComboBox.setVisible(repod);
 		repodLabel.setVisible(repod);
 		pUnitsComboBox.setVisible(repod);
@@ -545,7 +565,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 
 		refreshComboBox.setVisible(refresh);
 		refreshLabel.setVisible(refresh);
-		
+
 		if ( repod || refresh ){
 		    amountLabel.setVisible(false);
 		    amountText.setVisible(false);
@@ -554,24 +574,24 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 		    amountLabel.setVisible(!visible);
 		    amountText.setVisible(!visible);
 		}
-		    
+
         techComboBox.setVisible(false);
         techComboLabel.setVisible(false);
         repairComboBox.setVisible(false);
         repairLabel.setVisible(false);
 
 	}
-	
+
 	private int getUnitRPCost(){
-        
+
         if ( !Boolean.parseBoolean(mwclient.getserverConfigs("AllowUnitsForRewards")) )
             return 0;
-        
+
         int type = Unit.getTypeIDForName((String)unitComboBox.getSelectedItem());
 	    int weight = Unit.getWeightIDForName((String)weightComboBox.getSelectedItem());
 	    String House = (String)factionComboBox.getSelectedItem();
 	    int cost = 0;
-	    
+
 
 	    String configName = "";
 	    if (type == Unit.MEK) {
@@ -580,17 +600,17 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 			configName = Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type)+"RP";
 		}
 	    cost = Integer.parseInt(mwclient.getserverConfigs(configName));
-	    
+
 	    if ( House.equals("Rare"))
 	        cost *= Double.parseDouble(mwclient.getserverConfigs("RewardPointMultiplierForRare"));
 	    else if ( !House.equals("Common") && !House.equals(mwclient.getPlayer().getHouse())){
 	    	double multiplier = Double.parseDouble(mwclient.getserverConfigs(mwclient.getPlayer().getHouse()+"To"+House+"RewardPointMultiplier"));
-	    		
+
 	    	if ( multiplier < 0 )
 	    		multiplier = Double.parseDouble(mwclient.getserverConfigs("RewardPointNonHouseMultiplier"));
 	        cost *= multiplier;
 	    }
-	    
+
 	    return cost;
 	}
 

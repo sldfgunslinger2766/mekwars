@@ -1,5 +1,7 @@
 VERSION HISTORY:
 ----------------
+R Released Server v0.6.0.5
++ Allow for cbills to be purchased with RPs
 R Released Server v0.6.0.3
 + Allow users to activate with negative bays
 + Added IDs to factories in preparation for changing how they are referenced
