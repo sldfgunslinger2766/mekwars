@@ -100,7 +100,7 @@ public class UnitsCardPanel extends JPanel {
 			}
 		}
 		
-		SpringLayoutHelper.setupSpringGrid(costGrid, 4);
+		SpringLayoutHelper.setupSpringGrid(costGrid, 5);
 		leftPanel1.add(costGrid);
 		leftPanel1.setBorder(BorderFactory.createTitledBorder("Unit Costs"));
 		
