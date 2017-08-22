@@ -54,7 +54,7 @@ import common.comm.ServerCommand;
 public class MWServ {
 
 	// Static logging engine, and static version info.
-    public static final String SERVER_VERSION = "0.6.0.4";
+    public static final String SERVER_VERSION = "0.6.0.5";
 
 
     private ServerWrapper myCommunicator;

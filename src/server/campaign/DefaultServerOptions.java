@@ -453,6 +453,9 @@ public class DefaultServerOptions {
         defaults.setProperty("ShowReward", "true");
         defaults.setProperty("AllowInfluenceForRewards", "true");
         defaults.setProperty("InfluenceForARewardPoint", "100");
+        // @Author Salient (mwosux@gmail.com) , Add RP for CBills
+        defaults.setProperty("AllowCBillsForRewards", "true");
+        defaults.setProperty("CBillsForARewardPoint", "100");
         defaults.setProperty("AllowTechsForRewards", "true");
         defaults.setProperty("TechsForARewardPoint", "5");
         defaults.setProperty("AllowUnitsForRewards", "true");
@@ -1331,12 +1334,12 @@ public class DefaultServerOptions {
         defaults.setProperty("ModifyLandExchangeByExp", "false");
         defaults.setProperty("ModifyLandExchangeByExp_Base", "500");
         defaults.setProperty("ModifyLandExchangeByExp_Max", "2000");
-        
+
         defaults.setProperty("ShowUnitTypeCounts", "false");
         defaults.setProperty("UseBaseBVForMatching", "false");
 
         defaults.setProperty("UseUnitQuirks", "false");
-        
+
         // Merry Christmas
         defaults.setProperty("Celebrate_Christmas", "false");
         defaults.setProperty("Christmas_AllowTransfer", "false");
@@ -1352,13 +1355,13 @@ public class DefaultServerOptions {
         defaults.setProperty("Christmas_Units_Method_XTotal", "false");
         defaults.setProperty("Christmas_Units_X", "1");
         defaults.setProperty("Christmas_ManuallyStarted", "false");
-        
-        
+
+
         // Quartz Scheduler defaults
         defaults.setProperty("Scheduler_PlayerActivity_comps", "900");
         defaults.setProperty("Scheduler_PlayerActivity_flu", "300");
         defaults.setProperty("Scheduler_FactionSave", "900");
-        
+
     }
 
     /**
