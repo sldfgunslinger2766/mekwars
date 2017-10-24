@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -30,19 +30,19 @@ import common.CampaignData;
 import common.House;
 
 public class EnrollCommand implements Command {
-	
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
 	public void setExecutionLevel(int i) {accessLevel = i;}
 	public String getSyntax() { return syntax;}
-	
+
 	public void process(StringTokenizer command,String Username) {
-		
+
 		/*
 		 * Never check access level for Enroll.
 		 */
-		
+
 		//don't let stock names enroll
 		if (Username.startsWith("Nobody")) {
 			CampaignMain.cm.toUser("AM:Nobodies are not allowed to enroll. If you're signing on for the " +
@@ -52,7 +52,7 @@ public class EnrollCommand implements Command {
 					"the configuration menu and connecting again.",Username,true);
 			return;
 		}
-		
+
 		if ( Username.equalsIgnoreCase("DRAW") ){
 			CampaignMain.cm.toUser("AM:The name DRAW is reserved for system use. Try another name.",Username,true);
 			return;
@@ -63,7 +63,7 @@ public class EnrollCommand implements Command {
 			CampaignMain.cm.toUser("AM:Dedicated hosts may not enroll in the campaign.",Username,true);
 			return;
 		}
-		
+
 		/*
 		 * Do not allow players to enroll with campaign faction  names. This would cause
 		 * problems with the Market and with various admin commands (scrap, transfer, etc).
@@ -74,13 +74,13 @@ public class EnrollCommand implements Command {
 				return;
 			}
 		}
-		
+
 		//reserve "SERVER" as a PM and BM name
 		if (Username.trim().equalsIgnoreCase("SERVER")) {
 			CampaignMain.cm.toUser("AM:The name SERVER is reserved for system use. Try another name.",Username,true);
 			return;
 		}
-		
+
 		/*
 		 * block special charachters used in to/from string,
 		 * or which may be used in the future, or are reserved
@@ -107,30 +107,30 @@ public class EnrollCommand implements Command {
  					+ " the following and try enrolling again: ~ @ # $ % ^ + = & < > * . , ! |",Username,true);
  			return;
  		}
-		
+
 		//make sure the player isn't alread enrolled
 		if (CampaignMain.cm.getHouseForPlayer(Username) != null) {
 			CampaignMain.cm.toUser("AM:You are already enrolled in the campaign. Nice try though.",Username,true);
 			return;
 		}
-		
+
 		//this shouldn't ever happen, but still needs to be checked ...
 		SHouse h = CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"),null);
 		if (h == null) {
 			CampaignMain.cm.toUser("AM:Training faction is null. Contact an admin immediately.",Username,true);
 			return;
 		}
-		
+
 		//cast the house into a newbie house
 		NewbieHouse nh = null;
 		if (h instanceof NewbieHouse)
 			nh = (NewbieHouse)h;
-		
+
 		if (nh == null) {
 			CampaignMain.cm.toUser("AM:Named training faction is not a NewbieHouse. Contact an admin immediately.",Username,true);
 			return;
 		}
-			
+
 		/*
 		 * break outs passed. enroll the player in a newbie faction,
 		 * give him some units, give him some money, and send him a
@@ -142,7 +142,9 @@ public class EnrollCommand implements Command {
 
 		String unitInfo = nh.getNewSOLUnits(newPlayer,null);
 		newPlayer.addMoney(CampaignMain.cm.getIntegerConfig("PlayerBaseMoney"));
-		
+		//@Salient adding option to give new player
+		newPlayer.addReward(CampaignMain.cm.getIntegerConfig("PlayerBaseRP"));
+
 		String result = new String("AM:<font color=\"navy\">WELCOME TO MEKWARS!</font>"
 				+ "<br><br>You've been assigned to " + nh.getNameAsLink() + ", "
 				+ "a training faction. Take some time here to learn about the server rules, "
@@ -153,17 +155,17 @@ public class EnrollCommand implements Command {
 				+ "You've been assigned a starting force: " + unitInfo + ".<br><br>Have fun!"
 				+ "</font><br>");
 		CampaignMain.cm.toUser(result,Username,true);
-		
+
 		if (CampaignMain.cm.getServer().getUserLevel(Username) < IAuthenticator.REGISTERED)
 			CampaignMain.cm.toUser("AM:<font color=\"navy\"><br>---<br>NOTE: Your account will not be password protected until you [<a href=\"MWREG\">register</a>] your nickname.<br>---<br></font>", Username, true);
-	
+
 		CampaignMain.cm.doLoginPlayer(Username);
-		
+
 		//tell the mods and add to the IP log
 		InetAddress ip = CampaignMain.cm.getServer().getIP(Username);
 		//CampaignData.mwlog.modLog(Username + " enrolled in the campaign (IP: " + ip + ").");
 		CampaignData.mwlog.ipLog("ENROLL: " + Username + " IP: " + ip);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " enrolled in the campaign (IP: " + ip + ").");
-		
+
 	}//end process()
 }//end EnrollCommand

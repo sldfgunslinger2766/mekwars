@@ -95,6 +95,8 @@ public class DefaultServerOptions {
         defaults.setProperty("MaximumVotes", "7");
 
         defaults.setProperty("PlayerBaseMoney", "2000");
+        //@Salient adding option to give new player starting RP
+        defaults.setProperty("PlayerBaseRP", "0");
         defaults.setProperty("MaxSOLExp", "150");
         defaults.setProperty("MaxSOLCBills", "300");
         defaults.setProperty("MinEXPforDefecting", "0");
@@ -189,15 +191,9 @@ public class DefaultServerOptions {
         defaults.setProperty("BMPriceMultiplier_AssaultAero", "1.0");
 
         defaults.setProperty("WelfareCeiling", "30");// go above this and you
-        // no longer can pull
-        // welfare units
+        // no longer can pull welfare units
         defaults.setProperty("WelfareTotalUnitBVCeiling", "3000");// Go above
-        // this and
-        // you no
-        // longer
-        // can pull
-        // welfare
-        // units
+        // this and you no longer can pull welfare units
 
         defaults.setProperty("InfluenceCeiling", "2000000");
         defaults.setProperty("InfluenceTimeMin", "150000");
@@ -600,17 +596,11 @@ public class DefaultServerOptions {
 
         // ratios TODO: Remove? Move into ops? Are these still used?
         defaults.setProperty("AllowRatios", "false"); // if turned off you can
-        // have as many units as
-        // you want and also
-        // non-mek armies
+        // have as many units as you want and also non-mek armies
         defaults.setProperty("MekToInfantryRatio", "100");// with AllowRatios
-        // on this well set
-        // your inf to mek
-        // Ratio 100% 50% if
-        // 50% then 1 inf
+        // on this well set your inf to mek Ratio 100%, 50% if 50% then 1 inf
         // for every 2 meks
         defaults.setProperty("MekToVehicleRatio", "100");
-
         // Pilot skill selectable settings
         // Mek Only
         defaults.setProperty("chanceforDMforMek", "20");
@@ -730,7 +720,7 @@ public class DefaultServerOptions {
         // Pilots/Crews stay with their units after donation
         defaults.setProperty("CrewsStayWithUnits", "false");
 
-        // Pesonal Pilot Queues
+        // Personal Pilot Queues
         defaults.setProperty("AllowPersonalPilotQueues", "false");
         defaults.setProperty("CostToBuyNewPilot", "1");
         defaults.setProperty("CostToBuyNewProtoPilot", "1");
@@ -1082,7 +1072,7 @@ public class DefaultServerOptions {
         defaults.setProperty("FactoryRefreshPoints", "-1");
         defaults.setProperty("TIMESTAMP", "-1");
 
-        // Black Markt Parts
+        // Black Market Parts
         defaults.setProperty("UsePartsBlackMarket", "false");
         defaults.setProperty("UsePartsRepair", "false");
         defaults.setProperty("AllowCrossOverTech", "false");
@@ -1362,6 +1352,11 @@ public class DefaultServerOptions {
         defaults.setProperty("Scheduler_PlayerActivity_flu", "300");
         defaults.setProperty("Scheduler_FactionSave", "900");
 
+        // New SOL options @Salient (mwosux@gmail.com) 9-1-17
+        // This property allows SOL to create units from a build table for free
+        defaults.setProperty("SOL_FreeBuild", "false");
+        // Set which build table used for SOL freebuild
+        defaults.setProperty("Sol_FreeBuild_BuildTable", "Common");
     }
 
     /**

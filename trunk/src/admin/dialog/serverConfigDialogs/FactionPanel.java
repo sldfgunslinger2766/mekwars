@@ -1,10 +1,10 @@
 /*
  * MekWars - Copyright (C) 2011
- * 
- * 
+ *
+ *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
@@ -31,16 +31,16 @@ import common.util.SpringLayoutHelper;
 public class FactionPanel extends JPanel {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 6005564512507419589L;
 
     private JTextField baseTextField = new JTextField(5);
     private JCheckBox baseCheckBox = new JCheckBox();
-    
+
     public FactionPanel(MWClient mwclient) {
 		super();
-		
+
         /*
          * FACTION TAB CONSTRUCTION
          */
@@ -53,6 +53,13 @@ public class FactionPanel extends JPanel {
         baseTextField.setToolTipText("Number of " + mwclient.moneyOrFluMessage(true, true, -1) + " given to a new SOL player");
         baseTextField.setName("PlayerBaseMoney");
         factionSpring1.add(baseTextField);
+
+		//@Salient adding option to give new player starting RP
+		baseTextField = new JTextField(5);
+		factionSpring1.add(new JLabel("Starting "+ mwclient.getserverConfigs("RPShortName") + ":", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("Number of "+ mwclient.getserverConfigs("RPLongName") +" given to a new SOL player");
+		baseTextField.setName("PlayerBaseRP");
+		factionSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
         factionSpring1.add(new JLabel("Max SOL XP:", SwingConstants.TRAILING));
@@ -124,9 +131,9 @@ public class FactionPanel extends JPanel {
         baseTextField.setToolTipText("Max number of characters allowed in the MOTD.");
         baseTextField.setName("MaxMOTDLength");
         factionSpring1.add(baseTextField);
-        
 
-        
+
+
         SpringLayoutHelper.setupSpringGrid(factionSpring1, 2);
 
         // faction spring #2
@@ -237,17 +244,17 @@ public class FactionPanel extends JPanel {
         baseCheckBox.setToolTipText("<html>If checked, House Leaders will not be notified <br>when a player no longer qualifies for a subfaction.</html>");
         baseCheckBox.setName("disableDemotionNotification");
         factionCBoxSpring.add(baseCheckBox);
-        
+
         baseCheckBox = new JCheckBox("Allow Planets in MOTD");
         baseCheckBox.setToolTipText("If checked, players can use the new <planet> tags in their MOTD");
         baseCheckBox.setName("AllowPlanetsInMOTD");
         factionCBoxSpring.add(baseCheckBox);
-        
+
         baseCheckBox = new JCheckBox("Allow Links in MOTD");
         baseCheckBox.setToolTipText("If checked, players can add external links to their MOTD");
         baseCheckBox.setName("AllowLinksInMOTD");
         factionCBoxSpring.add(baseCheckBox);
-        
+
         SpringLayoutHelper.setupSpringGrid(factionCBoxSpring, 3);
 
         // finalize the layout
@@ -258,7 +265,7 @@ public class FactionPanel extends JPanel {
         factionSpringFlow.add(factionSpring2);
         factionBox.add(factionSpringFlow);
         factionBox.add(factionCBoxSpring);
-        
+
         add(factionBox);
 	}
 }
