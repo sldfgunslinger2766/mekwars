@@ -70,6 +70,9 @@ import client.gui.dialog.BulkRepairDialog;
 import client.gui.dialog.CamoSelectionDialog;
 import client.gui.dialog.CustomUnitDialog;
 import client.gui.dialog.PromotePilotDialog;
+//@Salient
+import client.gui.dialog.SolFreeBuildDialog;
+//import client.gui.dialog.TableViewerDialog; //for testing/debug
 
 import common.Army;
 import common.CampaignData;
@@ -111,7 +114,8 @@ public class CHQPanel extends JPanel {
     private JButton newbieResetUnitsButton;
     private JButton repairAllUnitsButton;
     private JButton reloadAllUnitsButton;
-
+    //@Salient (mwosux@gmail.com) added for SolFreeBuild option
+    private JButton solFreeBuildButton;
     private boolean useAdvanceRepairs = false;
 
     public CHQPanel(MWClient client) {
@@ -173,6 +177,8 @@ public class CHQPanel extends JPanel {
         newbieResetUnitsButton = new JButton();
         repairAllUnitsButton = new JButton();
         reloadAllUnitsButton = new JButton();
+        //@Salient (mwosux@gmail.com) added for SolFreeBuild option
+        solFreeBuildButton = new JButton();
         // pnlMekIcon = new MechInfo(mwclient);
         // btnShowMek = new JButton();
 
@@ -309,6 +315,12 @@ public class CHQPanel extends JPanel {
         CamoSelectionDialog camoDialog = new CamoSelectionDialog(mwclient.getMainFrame(), mwclient);
         camoDialog.setVisible(true);
     }
+    
+    //@Salient (mwosux@gmail.com) added for SolFreeBuild option
+    private void solFreeBuildButtonActionPerformed(ActionEvent evt) {
+        SolFreeBuildDialog solDialog = new SolFreeBuildDialog(mwclient);
+        solDialog.setVisible(true);
+    }
 
     public void makeButtons() {
 
@@ -376,6 +388,21 @@ public class CHQPanel extends JPanel {
             }
         });
         hqButtonSpring.add(setCamoButton);
+        
+        //@Salient add sol free build button
+        if (player != null) {
+            if (player.getMyHouse().getName().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName"))
+            		&& mwclient.getserverConfigs("SOL_FreeBuild").equalsIgnoreCase("true")) {
+                solFreeBuildButton.setText("Create Unit");
+                solFreeBuildButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                    	solFreeBuildButtonActionPerformed(evt);
+                    }
+                });
+                hqButtonSpring.add(solFreeBuildButton);
+                numButtons++;
+            }
+        }
 
         // do the spring layout on the buttons, then add them to the box
         SpringLayoutHelper.setupSpringGrid(hqButtonSpring, 1, numButtons);
@@ -1789,6 +1816,14 @@ public class CHQPanel extends JPanel {
                         	hm.add(menuItem);
                         	numItems++;
                         }
+                        //@Salient for SOL free build
+                        if(Player.getHouse().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName")) && Boolean.parseBoolean(mwclient.getserverConfigs("SOL_FreeBuild"))) {
+                        	menuItem = new JMenuItem("Delete Unit");
+                        	menuItem.setActionCommand("DL|" + cm.getId());
+                        	menuItem.addActionListener(this);
+                        	hm.add(menuItem);
+                        	numItems++;
+                        }
                         if (!cm.isChristmasUnit() || Boolean.parseBoolean(mwclient.getserverConfigs("Christmas_AllowTransfer"))) {
                         	menuItem = new JMenuItem("Transfer Unit");
                             menuItem.setActionCommand("TM|" + cm.getId());
@@ -2711,6 +2746,11 @@ public class CHQPanel extends JPanel {
                     mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c scrap#" + num);
                     // Maintain Mek
                 }
+            //@Salient for SOL freebuild option    
+            } else if (command.equalsIgnoreCase("DL")) {
+                int num = Integer.parseInt(st.nextToken());
+                //int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to Remove this unit?", "Delete it?", JOptionPane.YES_NO_OPTION);
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLDELETEUNIT " + num);
             } else if (command.equalsIgnoreCase("MM")) {
                 int num = Integer.parseInt(st.nextToken());
                 mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setmaintained#" + num);

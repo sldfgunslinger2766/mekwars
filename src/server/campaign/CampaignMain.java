@@ -1710,6 +1710,9 @@ public final class CampaignMain implements Serializable {
         // Double SingASong
         Commands.put("SINGASONG", new SingASongCommand());
         Commands.put("SAS", new SingASongCommand());
+        //@Salient for sol free build option
+        Commands.put("SOLCREATEUNIT", new SolCreateUnitCommand());
+        Commands.put("SOLDELETEUNIT", new SolDeleteUnitCommand());
         Commands.put("STARTCHRISTMAS", new StartChristmasCommand());
         Commands.put("STOPREPAIRJOB", new StopRepairJobCommand());
         Commands.put("STRIPALLPARTSCACHE", new StripAllPartsCacheCommand());
