@@ -51,7 +51,7 @@ public class SolDeleteUnitCommand implements Command {
 			return;
 		}
 		
-		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("SOL_FreeBuild"))) {
+		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild"))) {
 			CampaignMain.cm.toUser("AM:This command is disabled on this server.",Username,true);
 			return;
 		}

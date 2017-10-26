@@ -81,6 +81,7 @@ import client.gui.TableSorter;
 import client.util.CUnitComparator;
 
 import common.CampaignData;
+import common.House;
 //import common.House;
 import common.Unit;
 import common.campaign.pilot.Pilot;
@@ -140,15 +141,27 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
         // alpha sorted faction array. hacky and evil.
         TreeSet<String> factionNames = new TreeSet<String>();// tree to alpha
-        // sort
-        //Iterator<House> i = mwclient.getData().getAllHouses().iterator();
-        //while (i.hasNext()) {
-        //   House house = i.next();
-        //
-        //   if (house.getId() > -1) {
-        //       factionNames.add(house.getName());
-        //  }
-        //}
+        // sort if useall option is true
+        if(mwclient.getserverConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true"))
+        {
+        	Iterator<House> i = mwclient.getData().getAllHouses().iterator();
+        	while (i.hasNext()) 
+        	{
+        		House house = i.next();
+        
+        		if (house.getId() > -1) 
+        		{
+        			factionNames.add(house.getName());
+        		}
+        	}
+        	
+        	if(!mwclient.getserverConfigs("Sol_FreeBuild_BuildTable").equalsIgnoreCase("Common"))
+        	{
+        		factionNames.add("Common");
+        	}
+        }
+        
+        //check if build table is set to common, if not add it
         
         // Only going to allow SOL to build from a table defined by DSO
         factionNames.add(mwclient.getserverConfigs("Sol_FreeBuild_BuildTable"));
@@ -1336,14 +1349,22 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     	Entity tempEntity = selectedUnit.getEntity();
     	//why does mekwars use 0-3 and megamek uses 1-4 for weight classes?
     	//int calcWeight = tempEntity.getWeightClass() - 1; 
+    	//String selectedFaction = (String) factionCombo.getSelectedItem();
     	
-        if (selectedUnit != null) {
-        	
-
+        if (selectedUnit != null) 
+        {
         	createButton.setEnabled(false);
-
-        	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity));
         	
+        	if(mwclient.getserverConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true"))
+        	{
+        		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
+        		//debug
+        		mwclient.sendChat("DEBUG:" + MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
+        	}
+        	else 
+        	{
+        		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity));
+        	}
         	//debug
         	//mwclient.sendChat("debug:" + MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity));
         	//mwclient.sendChat(selectedUnit.getRealFilename());

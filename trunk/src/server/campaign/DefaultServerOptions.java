@@ -1354,9 +1354,11 @@ public class DefaultServerOptions {
 
         // New SOL options @Salient (mwosux@gmail.com) 9-1-17
         // This property allows SOL to create units from a build table for free
-        defaults.setProperty("SOL_FreeBuild", "false");
+        defaults.setProperty("Sol_FreeBuild", "false");
         // Set which build table used for SOL freebuild
         defaults.setProperty("Sol_FreeBuild_BuildTable", "Common");
+        // Or set this to true to just use all of them instead
+        defaults.setProperty("Sol_FreeBuild_UseAll", "false");
     }
 
     /**
