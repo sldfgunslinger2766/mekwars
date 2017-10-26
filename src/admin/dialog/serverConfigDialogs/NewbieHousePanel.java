@@ -91,7 +91,12 @@ public class NewbieHousePanel extends JPanel {
 
 		BaseCheckBox = new JCheckBox("Allow Free Build");
 		BaseCheckBox.setToolTipText("<HTML>Allows new players to create their own units based<br> on the build table of your choice, starting units should be set to 0</HTML>");
-		BaseCheckBox.setName("SOL_FreeBuild");
+		BaseCheckBox.setName("Sol_FreeBuild");
+		bottomPanel.add(BaseCheckBox);
+		
+		BaseCheckBox = new JCheckBox("Use All Tables");
+		BaseCheckBox.setToolTipText("<HTML>Lets sol players build from all tables, it would be like letting them build from the build table viewer.</HTML>");
+		BaseCheckBox.setName("Sol_FreeBuild_UseAll");
 		bottomPanel.add(BaseCheckBox);
 
 		baseTextField = new JTextField(30);

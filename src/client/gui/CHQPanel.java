@@ -392,7 +392,7 @@ public class CHQPanel extends JPanel {
         //@Salient add sol free build button
         if (player != null) {
             if (player.getMyHouse().getName().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName"))
-            		&& mwclient.getserverConfigs("SOL_FreeBuild").equalsIgnoreCase("true")) {
+            		&& mwclient.getserverConfigs("Sol_FreeBuild").equalsIgnoreCase("true")) {
                 solFreeBuildButton.setText("Create Unit");
                 solFreeBuildButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
@@ -1817,7 +1817,7 @@ public class CHQPanel extends JPanel {
                         	numItems++;
                         }
                         //@Salient for SOL free build
-                        if(Player.getHouse().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName")) && Boolean.parseBoolean(mwclient.getserverConfigs("SOL_FreeBuild"))) {
+                        if(Player.getHouse().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName")) && Boolean.parseBoolean(mwclient.getserverConfigs("Sol_FreeBuild"))) {
                         	menuItem = new JMenuItem("Delete Unit");
                         	menuItem.setActionCommand("DL|" + cm.getId());
                         	menuItem.addActionListener(this);

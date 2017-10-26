@@ -59,7 +59,7 @@ import common.CampaignData;
 public class SolCreateUnitCommand implements Command {
 
 	int accessLevel = 1;
-	String syntax = "filename#weightclass";
+	String syntax = "filename#weightclass#factionTable";
 	public int getExecutionLevel(){return accessLevel;}
 	public void setExecutionLevel(int i) {accessLevel = i;}
 	public String getSyntax() { return syntax;}
@@ -83,7 +83,7 @@ public class SolCreateUnitCommand implements Command {
 			return;
 		}
 		
-		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("SOL_FreeBuild"))) {
+		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild"))) {
 			CampaignMain.cm.toUser("AM:This command is disabled on this server.",Username,true);
 			return;
 		}
@@ -100,6 +100,8 @@ public class SolCreateUnitCommand implements Command {
 		int gunnery = h.getBaseGunner();
 		int piloting = h.getBasePilot();
 		String skillTokens = null;
+		//used if 'useall' flag is set to true in SO
+		String factionTable = null;
 		
 		try {
 			filename = command.nextToken();
@@ -112,6 +114,10 @@ public class SolCreateUnitCommand implements Command {
 
 		if ( command.hasMoreElements() )
 			weight = Integer.parseInt(command.nextToken());
+		
+		//used if 'useall' flag is set to true in SO
+		if ( command.hasMoreElements() )
+			factionTable = command.nextToken();
 		
 		// Create Unit
 		u = SUnit.create(filename, FlavorText, gunnery, piloting, weight, skillTokens);		
@@ -170,13 +176,27 @@ public class SolCreateUnitCommand implements Command {
 		//Here we will check to see if it's a legal freebuild unit
 		// /*
 		try {
-			if(!CheckIfLegal(CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable"),u)) 
+			if(CampaignMain.cm.getConfig("Sol_FreeBuild_UseAll").equalsIgnoreCase("true"))
 			{
-				CampaignMain.cm.toUser("AM:This is not a legal unit!",Username,true);
-				//add some logging here, mod mail possible cheating attempt or bt ERROR
-				CampaignData.mwlog.errLog("User: " + Username + "  tried to create " + u.getUnitFilename() + " unit was not found in build tables");
-				CampaignData.mwlog.modLog("User: " + Username + "  tried to create " + u.getUnitFilename() + " unit was not found in build tables");
-				return;
+				if(!CheckIfLegal(factionTable,u)) 
+				{
+					CampaignMain.cm.toUser("AM:This is not a legal unit!",Username,true);
+					//add some logging here, mod mail possible cheating attempt or bt ERROR
+					CampaignData.mwlog.errLog("User: " + Username + "  tried to create " + u.getUnitFilename() + " unit was not found in build tables");
+					CampaignData.mwlog.modLog("User: " + Username + "  tried to create " + u.getUnitFilename() + " unit was not found in build tables");
+					return;
+				}
+			}
+			else
+			{
+				if(!CheckIfLegal(CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable"),u)) 
+				{
+					CampaignMain.cm.toUser("AM:This is not a legal unit!",Username,true);
+					//add some logging here, mod mail possible cheating attempt or bt ERROR
+					CampaignData.mwlog.errLog("User: " + Username + "  tried to create " + u.getUnitFilename() + " unit was not found in build tables");
+					CampaignData.mwlog.modLog("User: " + Username + "  tried to create " + u.getUnitFilename() + " unit was not found in build tables");
+					return;
+				}
 			}
 		} catch (IOException e) {
 			//Auto-generated catch block
