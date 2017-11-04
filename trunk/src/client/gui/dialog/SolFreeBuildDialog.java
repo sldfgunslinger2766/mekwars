@@ -1359,7 +1359,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         	{
         		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
         		//debug
-        		mwclient.sendChat("DEBUG:" + MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
+        		//mwclient.sendChat("DEBUG:" + MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
         	}
         	else 
         	{
