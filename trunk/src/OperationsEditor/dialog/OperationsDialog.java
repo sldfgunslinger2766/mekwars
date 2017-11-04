@@ -4116,6 +4116,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         } catch (Exception ex) {
         	System.err.println(ex.getMessage());
             System.err.println("Unable to save file");
+            CampaignData.mwlog.errLog(ex);
         }
 
     }

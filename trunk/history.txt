@@ -1,5 +1,6 @@
 VERSION HISTORY:
 ----------------
++ Bug: Player flags caused operations to not be saved.
 R Released Server v0.6.0.5
 + Allow for cbills to be purchased with RPs
 R Released Server v0.6.0.3
