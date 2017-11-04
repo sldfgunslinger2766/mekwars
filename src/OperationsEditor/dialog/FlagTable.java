@@ -227,7 +227,7 @@ public class FlagTable extends JTable implements ActionListener {
 			DefaultTableModel tableModel = (DefaultTableModel) getModel();
 			String flagName = (String) JOptionPane.showInputDialog(parent, "Add which flag", "Select a flag", JOptionPane.PLAIN_MESSAGE, null, availableFlags.getFlagNames().toArray(), "");
 			if (flagName != null) {
-				tableModel.addRow(new Object[]{flagName, new Boolean(false)});
+				tableModel.addRow(new Object[]{flagName, new Boolean(false), new Boolean(false), new Boolean(false)});
 			}
 		}
 	}
