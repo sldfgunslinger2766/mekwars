@@ -105,6 +105,12 @@ public class NewbieHousePanel extends JPanel {
 		baseTextField.setName("Sol_FreeBuild_BuildTable");
 		bottomPanel.add(baseTextField);
 		
+		baseTextField = new JTextField(5);
+		bottomPanel.add(new JLabel("Build Limit", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("<html>How many units are players allowed to build.</html>");
+		baseTextField.setName("Sol_Freebuild_Limit");
+		bottomPanel.add(baseTextField);
+		
 		//SpringLayoutHelper.setupSpringGrid(bottomPanel, 4);
 
 

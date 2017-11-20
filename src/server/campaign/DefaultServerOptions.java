@@ -1359,6 +1359,8 @@ public class DefaultServerOptions {
         defaults.setProperty("Sol_FreeBuild_BuildTable", "Common");
         // Or set this to true to just use all of them instead
         defaults.setProperty("Sol_FreeBuild_UseAll", "false");
+        // -1 disables limits, 0 disables build, otherwise it is a limiter
+        defaults.setProperty("Sol_FreeBuild_Limit", "0");
     }
 
     /**

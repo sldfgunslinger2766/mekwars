@@ -33,7 +33,22 @@ public class Player {
 	private boolean autoReorderParts = false;
 	protected PlayerFlags flags = new PlayerFlags();
 	protected PlayerFlags defaultPlayerFlags = new PlayerFlags(); // This is only going to be set for staff
+	protected int mekToken = 0; // A counter for how many meks a player is allowed to create
 	
+	/**
+	 * @return the mekToken
+	 */
+	public int getMekToken() {
+		return mekToken;
+	}
+
+	/**
+	 * @param mekToken the mekToken to set
+	 */
+	public void setMekToken(int mekToken) {
+		this.mekToken = mekToken;
+	}
+
 	/**
 	 * @return current post-task payment to technicians, in Cbills
 	 */

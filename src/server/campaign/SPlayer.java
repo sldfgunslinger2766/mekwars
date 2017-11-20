@@ -2601,8 +2601,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
          */
         if (!toClient) {
             result.append("0");
-            result.append(0);
         }
+        
+        result.append(getMekToken());
+        
         result.append(myHouse.getName() + " ");
         if (toClient) {
             result.append(getHouseFightingFor().getName() + " ");
@@ -2772,15 +2774,15 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             currentReward = TokenReader.readInt(ST);
 
             /*
-             * Eat the next two tokens. Formerly used to save mezzo data. Can be
+             * Eat the next token. Formerly used to save mezzo data. Can be
              * reclaimed soon-ish, as no server used the feature. @urgru 9/30/06
              */
 
-            TokenReader.readString(ST);
-            TokenReader.readString(ST);
-
             // TODO: Remove this after the next few updates from 0.1.51.2
-
+            TokenReader.readString(ST);
+            
+            setMekToken(TokenReader.readInt(ST));
+            
             myHouse = CampaignMain.cm.getHouseFromPartialString(TokenReader.readString(ST));
 
             if (myHouse == null) {
