@@ -212,6 +212,8 @@ public class CPlayer extends Player {
         setTechnicians(TokenReader.readInt(ST));
         doPayTechniciansMath();
         RewardPoints = TokenReader.readInt(ST);
+        String string = TokenReader.readString(ST);
+       	setMekToken(Integer.parseInt(string));
         House = TokenReader.readString(ST);
         setHouseFightingFor(TokenReader.readString(ST));
         setLogo(TokenReader.readString(ST));
