@@ -1,5 +1,16 @@
 VERSION HISTORY:
 ----------------
++ Updated MM to version 0.43.5-MW20171123-00f7619
+- Removed calls to deprecated Crew methods and constructors
++ Added log4j to client/lib files
+  ***********************************
+  * NOTE TO OPERATORS               *
+  *                                 *
+  * Make sure this file gets into   *
+  * your client structure, or your  *
+  * users will not be able to       *
+  * launch a MegaMek session.       *
+  ***********************************
 + Added MekToken to Player.java to track SOL Free Builds
 R Released Server v0.6.0.6
 + Bug: Player flags caused operations to not be saved.

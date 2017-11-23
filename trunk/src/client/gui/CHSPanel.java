@@ -49,6 +49,7 @@ import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
 
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
+import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.Infantry;
 import client.MWClient;
@@ -828,7 +829,7 @@ public class CHSPanel extends JPanel {
         JFrame InfoWindow = new JFrame();
         UnitDisplay unitDetailInfo = new UnitDisplay(null);
         unitEntity.loadAllWeapons();
-        unitEntity.setCrew(new megamek.common.Crew("", 1, gunnery, piloting));
+        unitEntity.setCrew(new megamek.common.Crew(CrewType.SINGLE, "", 1, gunnery, piloting));
         if (battleDamage.trim().length() > 1) {
             UnitUtils.applyBattleDamage(unitEntity, battleDamage, false);
         }

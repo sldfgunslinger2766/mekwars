@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import megamek.common.AmmoType;
+import megamek.common.CrewType;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Infantry;
@@ -164,7 +165,7 @@ public class CUnit extends Unit {
         if (getModelName().startsWith("Error")
                 || getModelName().startsWith("OMG")) {
             unitEntity.setExternalId(getId());
-            unitEntity.setCrew(new megamek.common.Crew(p.getName(), 1, p
+            unitEntity.setCrew(new megamek.common.Crew(CrewType.SINGLE, p.getName(), 1, p
                     .getGunnery(), p.getPiloting()));
             return true;
         }

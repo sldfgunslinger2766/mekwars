@@ -21,6 +21,7 @@ import java.util.Iterator;
 import megamek.common.AmmoType;
 import megamek.common.BipedMech;
 import megamek.common.Crew;
+import megamek.common.CrewType;
 import megamek.common.CriticalSlot;
 import megamek.common.Engine;
 import megamek.common.Entity;
@@ -2657,14 +2658,14 @@ public class UnitUtils {
         Crew pilot = null;
         if (mek.getPilot() == null) {
 			//when looking at a pilotless mek - we need a default pilot
-		    pilot = new Crew("No Pilot", 1, 4, 5);
+		    pilot = new Crew(CrewType.SINGLE, "No Pilot", 1, 4, 5);
 		    return pilot;
 		} else {
-            pilot = new Crew(mek.getPilot().getName(), 1, mek.getPilot()
+            pilot = new Crew(CrewType.SINGLE, mek.getPilot().getName(), 1, mek.getPilot()
                 .getGunnery(), mek.getPilot().getPiloting());
         }
         // Hits defaults to 0 so no reason to keep checking over and over again.
-        pilot.setHits(mek.getPilot().getHits());
+        pilot.setHits(mek.getPilot().getHits(), 0);
 
         Iterator<MegaMekPilotOption> iter = mek.getPilot().getMegamekOptions()
                 .iterator();
