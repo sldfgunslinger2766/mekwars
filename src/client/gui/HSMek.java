@@ -20,6 +20,7 @@ package client.gui;
 import java.util.StringTokenizer;
 
 import megamek.common.BattleArmor;
+import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.Infantry;
 import megamek.common.Mech;
@@ -84,7 +85,7 @@ public class HSMek {
 		 * stringed CUnit BV. The server sends over units without pilot data, so we set
 		 * a faction-default crew. See CHSPanel.java for usage.
 		 */
-		embeddedUnit.getEntity().setCrew(new megamek.common.Crew("Generic Pilot", 1, factionGunnery, factionPiloting));
+		embeddedUnit.getEntity().setCrew(new megamek.common.Crew(CrewType.SINGLE, "Generic Pilot", 1, factionGunnery, factionPiloting));
 
 		//set type
 		Entity e = embeddedUnit.getEntity();

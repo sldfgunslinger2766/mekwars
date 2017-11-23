@@ -33,6 +33,7 @@ import megamek.common.Board;
 import megamek.common.BoardDimensions;
 import megamek.common.Coords;
 import megamek.common.Crew;
+import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.IGame;
 import megamek.common.IPlayer;
@@ -557,7 +558,7 @@ public class ClientThread extends Thread implements CloseClientListener {
 
                     if (entity.getCrew().getName().equalsIgnoreCase("Unnamed") || entity.getCrew().getName().equalsIgnoreCase("vacant")) {
                         // set the pilot
-                        Crew pilot = new Crew("AutoArtillery", 1, 4, 5);
+                        Crew pilot = new Crew(CrewType.SINGLE, "AutoArtillery", 1, 4, 5);
                         entity.setCrew(pilot);
                     } else {
                         entity.setCrew(UnitUtils.createEntityPilot(autoUnit));

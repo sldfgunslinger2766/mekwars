@@ -22,6 +22,7 @@ import java.util.StringTokenizer;
 import common.Unit;
 import common.campaign.pilot.Pilot;
 import common.util.TokenReader;
+import megamek.common.CrewType;
 
 /**
  * Client-side market unit. The market uses the filenames and other data
@@ -100,7 +101,7 @@ public class CBMUnit {
 			 *
 			 * As such, we need to set the crew. See BlackMarketModel.java for usage.
 			 */
-			embeddedUnit.getEntity().setCrew(new megamek.common.Crew("Generic Pilot", 1, factionGunnery, factionPiloting));
+			embeddedUnit.getEntity().setCrew(new megamek.common.Crew(CrewType.SINGLE, "Generic Pilot", 1, factionGunnery, factionPiloting));
 		}
 	}
 
