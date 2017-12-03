@@ -1,13 +1,13 @@
 /*
  * MekWars - Copyright (C) 2005
- * 
+ *
  * Original author - nmorris (urgru@users.sourceforge.net)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -33,7 +33,7 @@ import client.gui.dialog.PlayerNameDialog;
 public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 9145688971748962135L;
     // variables
@@ -148,6 +148,13 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         item.setActionCommand("SAU|" + userName);
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("StripUnits"))
+            unitsMen.add(item);
+        //@Salient added for free build
+        item = new JMenuItem("Reset Free Unit Limit");
+        item.setActionCommand("RFUL|" + userName);
+        item.addActionListener(this);
+        if (userLevel >= mwclient.getData().getAccessLevel("ResetFreeMeks") &&
+            Integer.parseInt(mwclient.getserverConfigs("Sol_FreeBuild_Limit")) > 0)
             unitsMen.add(item);
         item = new JMenuItem("Donate");
         item.setActionCommand("DU|" + userName);
@@ -287,7 +294,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         // mod commands
         if (command.equals("PF") && st.hasMoreElements()) {
         	userName = st.nextToken();
-        	
+
         	// Build a picklist of flags
         	String fName = (String)JOptionPane.showInputDialog(mwclient.getMainFrame(),"Select a Flag", "Player Flags", JOptionPane.INFORMATION_MESSAGE, null, mwclient.getPlayer().getFlags().getFlagNames().toArray(), null);
         	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SetPlayerFlags#" + userName + "#" + fName + "#toggle");
@@ -386,7 +393,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
             userName = st.nextToken();
             String[] techTypes = {"Green","Reg","Vet","Elite"};
-            
+
             JComboBox combo = new JComboBox(techTypes);
 
             combo.setEditable(false);
@@ -445,6 +452,14 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to strip " + userName + "'s units?");
             if (result == JOptionPane.YES_OPTION)
                 mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c stripunits#" + userName);
+        }
+        if (command.equals("RFUL") && st.hasMoreElements()) {
+
+            userName = st.nextToken();
+            // confirm action
+            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want reset " + userName + "'s free mek limit?");
+            if (result == JOptionPane.YES_OPTION)
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c resetfreemeks#" + userName);
         }
         if (command.equals("SU") && st.hasMoreElements()) {
 
@@ -618,4 +633,3 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
     }
 
 }// end ModeratorPopupMenu class
-

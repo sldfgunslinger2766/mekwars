@@ -15,7 +15,6 @@ import java.awt.GridLayout;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -24,7 +23,6 @@ import javax.swing.SwingConstants;
 
 import common.Unit;
 import common.VerticalLayout;
-import common.util.SpringLayoutHelper;
 
 /**
  * @author Spork
@@ -52,6 +50,7 @@ public class NewbieHousePanel extends JPanel {
 		JPanel topPanel = new JPanel();
 		JPanel middlePanel = new JPanel();
 		JPanel bottomPanel = new JPanel();
+		JPanel bottomPanel2 = new JPanel();
 
 		topPanel.setLayout(new GridLayout(0,5));
 		topPanel.setBorder(BorderFactory.createTitledBorder("Starting Units"));
@@ -86,37 +85,45 @@ public class NewbieHousePanel extends JPanel {
         middlePanel.add(baseTextField);
 
 		bottomPanel.setBorder(BorderFactory.createTitledBorder("SOL Free Build"));
-		
-		//bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
 
-		BaseCheckBox = new JCheckBox("Allow Free Build");
+		BaseCheckBox = new JCheckBox("Allow Sol Free Build");
 		BaseCheckBox.setToolTipText("<HTML>Allows new players to create their own units based<br> on the build table of your choice, starting units should be set to 0</HTML>");
 		BaseCheckBox.setName("Sol_FreeBuild");
 		bottomPanel.add(BaseCheckBox);
 		
 		BaseCheckBox = new JCheckBox("Use All Tables");
-		BaseCheckBox.setToolTipText("<HTML>Lets sol players build from all tables, it would be like letting them build from the build table viewer.</HTML>");
+		BaseCheckBox.setToolTipText("<HTML>Lets Sol players build from all build tables instead of defining a table.</HTML>");
 		BaseCheckBox.setName("Sol_FreeBuild_UseAll");
 		bottomPanel.add(BaseCheckBox);
 
 		baseTextField = new JTextField(30);
 		bottomPanel.add(new JLabel("Build Table Name:", SwingConstants.TRAILING));
-		baseTextField.setToolTipText("<HTML>Set name of build table for new players to build units from.<br>default is Common, you can create a new set of build tables if you'd like(ex Starter) <br>Starter_Light Starter_Medium and so on. Frequency is irrelavant, if creating a new build table, just set it to 1. </HTML>");
+		baseTextField.setToolTipText("<HTML>Set name of build table for new players to build units from.<br>default is Common, or you can create a new set of build tables if you'd like(ex Starter) <br>Starter_Light Starter_Medium and so on. Frequency is irrelavant, if creating a new build table, just set frequency to 1. </HTML>");
 		baseTextField.setName("Sol_FreeBuild_BuildTable");
 		bottomPanel.add(baseTextField);
 		
 		baseTextField = new JTextField(5);
 		bottomPanel.add(new JLabel("Build Limit", SwingConstants.TRAILING));
-		baseTextField.setToolTipText("<html>How many units are players allowed to build.</html>");
-		baseTextField.setName("Sol_Freebuild_Limit");
+		baseTextField.setToolTipText("<html>How many units are players allowed to build. Zero or less disables limit.</html>");
+		baseTextField.setName("Sol_FreeBuild_Limit");
 		bottomPanel.add(baseTextField);
 		
-		//SpringLayoutHelper.setupSpringGrid(bottomPanel, 4);
-
-
+		bottomPanel2.setBorder(BorderFactory.createTitledBorder("Post Defection Free Build"));
+				
+		BaseCheckBox = new JCheckBox("Allow Free Build Post Defection");
+		BaseCheckBox.setToolTipText("<HTML>Set this if you want players to be able to build free units after defection. Uses house table.</HTML>");
+		BaseCheckBox.setName("Sol_FreeBuild_PostDefection");
+		bottomPanel2.add(BaseCheckBox);
+		
+		BaseCheckBox = new JCheckBox("Limit Post Defection Only");
+		BaseCheckBox.setToolTipText("<HTML>Set this if you want SOL free build to work without limits, and only limit free build after defection</HTML>");
+		BaseCheckBox.setName("Sol_FreeBuild_LimitPostDefOnly");
+		bottomPanel2.add(BaseCheckBox);
+				
 		add(topPanel);
 		add(middlePanel);
 		add(bottomPanel);
+		add(bottomPanel2);
 	}
 
 	public NewbieHousePanel() {

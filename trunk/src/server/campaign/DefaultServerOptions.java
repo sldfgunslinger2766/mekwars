@@ -1360,7 +1360,25 @@ public class DefaultServerOptions {
         // Or set this to true to just use all of them instead
         defaults.setProperty("Sol_FreeBuild_UseAll", "false");
         // -1 disables limits, 0 disables build, otherwise it is a limiter
-        defaults.setProperty("Sol_FreeBuild_Limit", "0");
+        defaults.setProperty("Sol_FreeBuild_Limit", "-1");
+        // allows player to build free mechs in the house they defected to
+        defaults.setProperty("Sol_FreeBuild_PostDefection", "false");
+        // if true, the mekToken limit only applies outside of SOL
+        defaults.setProperty("Sol_FreeBuild_LimitPostDefOnly", "false");
+
+        // New buttons for client
+        defaults.setProperty("Enable_Link_Area", "false");
+        defaults.setProperty("Link_Area_Label", "Links:");
+        // Add generic link buttons
+        defaults.setProperty("Enable_Link1_Button", "false");
+        defaults.setProperty("Link1_URL", "http://www.mekwars.org/");
+        defaults.setProperty("Link1_Icon", "./data/images/misc/web.png");
+        defaults.setProperty("Enable_Link2_Button", "false");
+        defaults.setProperty("Link2_URL", "https://discordapp.com/invite/nMGS3r");
+        defaults.setProperty("Link2_Icon", "./data/images/misc/discord.png");
+        defaults.setProperty("Enable_Link3_Button", "false");
+        defaults.setProperty("Link3_URL", "https://facebook.com");
+        defaults.setProperty("Link3_Icon", "./data/images/misc/facebook.png");
     }
 
     /**

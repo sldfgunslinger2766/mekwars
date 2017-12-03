@@ -64,6 +64,7 @@ public class CPlayerPanel extends JScrollPane {
     private static final String PP_PAIDTECHS = "Paid Techs:";
     private static final String PP_BAYS = "Bays:";
     private static final String PP_IDLETECHS = "Idle Techs:";
+    private static final String PP_FREEUNITS = "Free Units:"; //@Salient for free build
     
     protected JPanel PlayerPanel = new JPanel();
     protected JEditorPane lblLogo = new JEditorPane("text/html", "");
@@ -78,6 +79,7 @@ public class CPlayerPanel extends JScrollPane {
     protected JLabel lblTechs = new JLabel();
     protected JLabel lblRewardPoints = new JLabel();
     protected JLabel lblNextTick = new JLabel();
+    protected JLabel lblFreeMeks = new JLabel(); //@Salient for free build
     protected long nextTick = System.currentTimeMillis();
     
     public CPlayerPanel(MWClient client)
@@ -149,6 +151,7 @@ public class CPlayerPanel extends JScrollPane {
             lblTechs.setText(tag + PP_PAIDTECHS + endtag);
         }
         lblRewardPoints.setText(tag + PP_REWARD + endtag);
+        lblFreeMeks.setText(tag + PP_FREEUNITS + endtag); //@Salient for free build
         lblNextTick.setText("Next Tick: N/A");
         InfoPanel.add(lblName);
         
@@ -167,6 +170,8 @@ public class CPlayerPanel extends JScrollPane {
         InfoPanel.add(lblTechs);
         if (Boolean.parseBoolean(client.getserverConfigs("ShowReward")))
             InfoPanel.add(lblRewardPoints);
+        if (Integer.parseInt(client.getserverConfigs("Sol_FreeBuild_Limit")) > 0) //@Salient for free build
+        	InfoPanel.add(lblFreeMeks);
         InfoPanel.add(lblNextTick);
         if (logo) {PlayerPanel.add(InfoPanel, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, center, none, insets, 0, 0));}
         else {PlayerPanel.add(InfoPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, center, none, insets, 0, 0));}
@@ -232,6 +237,7 @@ public class CPlayerPanel extends JScrollPane {
         }
             
         lblRewardPoints.setText(PP_REWARD + " " + player.getRewardPoints() + "/" + mwclient.getserverConfigs("XPRewardCap"));
+        lblFreeMeks.setText(PP_FREEUNITS + " " + mwclient.getPlayer().getMekToken() + " / " + mwclient.getserverConfigs("Sol_FreeBuild_Limit")); //@Salient for free build
     }
     
     public void setNextTick(long nextTick) {

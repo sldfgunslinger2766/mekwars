@@ -1,10 +1,10 @@
 /*
- * 
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
@@ -234,13 +234,13 @@ public final class CampaignMain implements Serializable {
      * removed from this hash and added to the houses memory.
      */
     private Hashtable<String, SPlayer> lostSouls = new Hashtable<String, SPlayer>();
-    
+
     private Vector<String> supportUnits = new Vector<String>();
-    
+
     private PlayerFlags defaultPlayerFlags = new PlayerFlags();
-    
+
     private MWScheduler scheduler;
-    
+
     private ChristmasHandler christmas;
 
     // CONSTRUCTOR
@@ -285,7 +285,7 @@ public final class CampaignMain implements Serializable {
              * FileInputStream(this.myServer.getConfigParam("CAMPAIGNCONFIG")));
              * }
              */
-            
+
             // Right here, we're going to try to prune old cruft from the configs
             // Over the course of many years, as config options change, crap never
             // gets removed from campaignconfig.txt.  We're seeing this very badly on
@@ -295,16 +295,16 @@ public final class CampaignMain implements Serializable {
             	if (!dso.getServerDefaults().keySet().contains(key) && !((String)key).endsWith("RewardPointMultiplier")) {
             		CampaignData.mwlog.errLog("Key " + (String)key + " does not exist in DefaultServerConfig.  Pruning from configs.");
             		keysToRemove.add((String)key);
-            	} 
+            	}
             }
-            
+
             for (String key : keysToRemove) {
             	config.remove(key);
             }
-            
+
             CampaignMain.cm.saveConfigureFile(config, CampaignMain.cm.getServer().getConfigParam("CAMPAIGNCONFIG"));
             // Now, in theory, there is no cruft for next boot.  Let's test.
-            
+
         } catch (Exception ex) {
             CampaignData.mwlog.errLog("Problems with loading campaign config");
             CampaignData.mwlog.errLog(ex);
@@ -347,13 +347,13 @@ public final class CampaignMain implements Serializable {
         // Parse Terrain
         // XMLTerrainDataParser tParse =
         new XMLTerrainDataParser("./data/terrain.xml");
-        
+
         if (new File("./data/advancedTerrain.xml").exists())
-        	new XMLAdvancedTerrainDataParser("./data/advancedTerrain.xml");        
-        
+        	new XMLAdvancedTerrainDataParser("./data/advancedTerrain.xml");
+
         new XMLAdvancedTerrainDataParser("./data/advterr.xml");
 
-        
+
         cm.loadTopUnitID();
         gamesCompleted = 0;
 
@@ -380,7 +380,7 @@ public final class CampaignMain implements Serializable {
 
         cm.loadBannedTargetSystems();
         cm.loadSupportUnitDefinitions();
-        
+
         // create command hashs
         init();
 
@@ -404,7 +404,7 @@ public final class CampaignMain implements Serializable {
             CampaignData.mwlog.errLog(ex);
             CampaignData.mwlog.mainLog("No Mech Statistic Data found");
         }
-        
+
         if (Boolean.parseBoolean(getConfig("HTMLOUTPUT"))) {
             Statistics.doRanking();
         }
@@ -418,22 +418,22 @@ public final class CampaignMain implements Serializable {
          * objects as part of its construction.
          */
         createNewOpsManager();
-        
-        
+
+
         // Start up the HTML Sanitizer
         StringUtil.loadSanitizer();
-        
+
         // Load the default player flags
         defaultPlayerFlags.loadFromDisk();
-        
+
         //Load the scheduler
         scheduler = MWScheduler.getInstance();
         scheduler.start();
-       
+
         // Load the Christmas Handler and set the start and end dates
         christmas = ChristmasHandler.getInstance();
         christmas.schedule();
-        
+
         // create & start a data provider
         int dataport = -1;
         try {
@@ -465,12 +465,12 @@ public final class CampaignMain implements Serializable {
 
     public void loadSupportUnitDefinitions() {
     	CampaignData.mwlog.mainLog("Entering loadSupportUnitDefinitions");
-    	
+
     	File tsFile = new File("./data/supportunits.txt");
     	if(!tsFile.exists()) {
     		return;
     	}
-    	
+
 		Vector<String> units = new Vector<String>();
         try {
             MekwarsFileReader dis = new MekwarsFileReader(tsFile);
@@ -1114,7 +1114,7 @@ public final class CampaignMain implements Serializable {
 
             // Send him the Tick Counter
             CampaignMain.cm.toUser("CC|NT|" + TThread.getRemainingSleepTime() + "|" + false, Username, false);
-            
+
             // Check for Christmas
             if(ChristmasHandler.getInstance().isItChristmas()) {
             	// Check if the user has received his Christmas Gifts
@@ -1126,7 +1126,7 @@ public final class CampaignMain implements Serializable {
             		// CampaignMain.cm.toUser("AM:You have already received presents", Username, true);
             	}
             }
-            
+
         }
     }// end CampaignMain.doLogin(String userName)
 
@@ -1138,12 +1138,12 @@ public final class CampaignMain implements Serializable {
      * for removal. this.getPlayer() will retreive the memory resident SPlayer
      * from the save queue if the player returns before the purge.
      */
-    
+
     public void doLogoutPlayer(String name) {   //start Baruk Khazad! 20151110   created method so all old doLogoutPlayer calls will continue to work without need for change
         	doLogoutPlayer(name,true);
     }
-    
-    public void doLogoutPlayer(String name, Boolean bSavePlayerOrNot) { //Baruk Khazad! 20151110   added method parameter bSavePlayerOrNot to allow for command.DeleteAccount to skip the SavePlayer call 
+
+    public void doLogoutPlayer(String name, Boolean bSavePlayerOrNot) { //Baruk Khazad! 20151110   added method parameter bSavePlayerOrNot to allow for command.DeleteAccount to skip the SavePlayer call
 
         // if the name is null or blank, return.
         if (name == null || name.trim().length() == 0) {
@@ -1164,10 +1164,10 @@ public final class CampaignMain implements Serializable {
         releaseLostSoul(name);
         // set save, then log the player out of his house
         //start Baruk Khazad! 20151110  put IF wrapper around setSave() so deleted players can be told to logout without being saved(which basically recreates their account
-        if (bSavePlayerOrNot) {    
-           toLogout.setSave();      
-        }                          
-        //end Baruk Khazad! 20151110  
+        if (bSavePlayerOrNot) {
+           toLogout.setSave();
+        }
+        //end Baruk Khazad! 20151110
         toLogout.getMyHouse().doLogout(toLogout);// hacky.
 
         // clear the addon and send the new logged out status to all players
@@ -1222,7 +1222,7 @@ public final class CampaignMain implements Serializable {
 
     /**
      * This sends status updates of Player p to all players
-     * 
+     *
      * @param p
      */
     public void sendPlayerStatusUpdate(SPlayer p, boolean sendToAll) {
@@ -1401,7 +1401,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("ADMINCREATEPLANET", new AdminCreatePlanetCommand());
         Commands.put("ADMINCREATEFACTORY", new AdminCreateFactoryCommand());
         Commands.put("ADMINCREATESOLARIS", new AdminCreateSolarisCommand());
-        Commands.put("ADMINCREATETERRAIN", new AdminCreateTerrainCommand());        
+        Commands.put("ADMINCREATETERRAIN", new AdminCreateTerrainCommand());
         Commands.put("ADMINDESTROYFACTION", new AdminDestroyFactionCommand());
         Commands.put("ADMINDESTROYFACTORY", new AdminDestroyFactoryCommand());
         Commands.put("ADMINDESTROYPLANET", new AdminDestroyPlanetCommand());
@@ -1657,6 +1657,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("REQUESTSUBFACTIONPROMOTION", new RequestSubFactionPromotionCommand());
         Commands.put("RESEARCHTECHLEVEL", new ResearchTechLevelCommand());
         Commands.put("RESEARCHUNIT", new ResearchUnitCommand());
+        Commands.put("RESETFREEMEKS", new AdminResetFreeMeksCommand()); //@Salient added for free build
         Commands.put("RESTARTREPAIRTHREAD", new RestartRepairThreadCommand());
         Commands.put("RETRIEVEALLOPERATIONS", new RetrieveAllOperationsCommand());
         Commands.put("RETRIEVEOPERATION", new RetrieveOperationCommand());
@@ -1855,7 +1856,7 @@ public final class CampaignMain implements Serializable {
 
                     // add the planet
                     addPlanet(p);
- 
+
                     // set initial influences
                     for (House h : p.getInfluence().getHouses()) {
 
@@ -2048,15 +2049,15 @@ public final class CampaignMain implements Serializable {
         CampaignData.mwlog.mainLog("Slice #" + sliceID + " Started");
         CampaignData.mwlog.cmdLog("Slice #" + sliceID + " Started");
         CampaignData.mwlog.infoLog("Slice #" + sliceID + " Started: " + System.currentTimeMillis());
-        
+
         WhoToHTML who = new WhoToHTML(CampaignMain.cm.getConfig("HTMLWhoPath"));
-        
+
         // loop through all houses
         for (House vh : data.getAllHouses()) {
             SHouse currH = (SHouse) vh;
 			//fahr
 			CampaignData.mwlog.infoLog("Slice #" + sliceID + " house: " + currH.getName());
-        
+
             // load max idle time, converted to ms
             long maxIdleTime = Long.parseLong(CampaignMain.cm.getConfig("MaxIdleTime")) * 60000;
 
@@ -2074,7 +2075,7 @@ public final class CampaignMain implements Serializable {
             		who.addPlayer(currP);
             	}
             }
-            
+
             /*
              * Active players get the whole shebang - influence addition,
              * maintainance, and an idle check (if enabled).
@@ -2113,7 +2114,7 @@ public final class CampaignMain implements Serializable {
                 }
             }
         }// end all houses
-        
+
         if (CampaignMain.cm.getBooleanConfig("HTMLOUTPUT")) {
         	who.outputHTML();
         }
@@ -2543,7 +2544,7 @@ public final class CampaignMain implements Serializable {
         return partsmarket;
     }
 
-   
+
 
     public Properties getConfig() {
         return config;
@@ -2589,7 +2590,7 @@ public final class CampaignMain implements Serializable {
      * This retuns the blackMarketEquipmentCostTable This hashTable keeps track
      * of all the mix/max costs and parts production for the Black market. This
      * is used to allow players to buy spare parts to repair Their units.
-     * 
+     *
      * @return blackMarketEquipmentCostTable
      */
     public Hashtable<String, Equipment> getBlackMarketEquipmentTable() {
@@ -2778,7 +2779,7 @@ public final class CampaignMain implements Serializable {
      * Private method which writes a player to the disc. This code was housed in
      * SPlayer; however, it is only called from CampaignMain and (from an OO
      * standpoint) only CMain should know the hardcoded paths which are used.
-     * 
+     *
      * @author nmorris 1/13/06
      */
     private void savePlayerFile(SPlayer p) {
@@ -2830,13 +2831,13 @@ public final class CampaignMain implements Serializable {
         }// make it compatible with people that had the old format,without
         // the timestamp on the first line, the first time and now dont.
     }
-    
+
     public void loadBannedTargetSystems() {
     	File tsFile = new File("./campaign/bantarget.dat");
     	if(!tsFile.exists()) {
     		return;
     	}
-    	
+
         try {
             MekwarsFileReader dis = new MekwarsFileReader(tsFile);
         	Vector<Integer> bans = new Vector<Integer>(1,1);
@@ -2944,7 +2945,7 @@ public final class CampaignMain implements Serializable {
 
     /**
      * Use to load a factions trait file.
-     * 
+     *
      * @author Torren (Jason Tighe)
      * @param faction
      * @return
@@ -3212,7 +3213,7 @@ public final class CampaignMain implements Serializable {
 
     public void saveConfigureFile(Properties config, String fileName) {
         /*
-         * 
+         *
          * if(CampaignMain.cm.isUsingMySQL()) {
          * CampaignMain.cm.MySQL.saveConfig(); return; }
          */
@@ -3557,7 +3558,7 @@ public final class CampaignMain implements Serializable {
         double cost = 1;
         int totalCrits = 1;
         int year = getIntegerConfig("CampaignYear");
-        
+
         if (techType < UnitUtils.TECH_PILOT) {
             techCost = CampaignMain.cm.getIntegerConfig(UnitUtils.techDescription(techType) + "TechRepairCost");
         }
@@ -3718,7 +3719,7 @@ public final class CampaignMain implements Serializable {
 			e.printStackTrace();
 		}
     }
-    
+
     public void loadPlanetOpFlags() {
         File configFile = new File("./campaign/planetOpFlags.dat");
         if (!configFile.exists()) {
@@ -3957,7 +3958,7 @@ public final class CampaignMain implements Serializable {
             CampaignData.mwlog.errLog("Unable to find and load /planets, or /planets is empty.");
             CampaignData.mwlog.errLog("Planets will be read from XML during init().");
             return;
-        } 
+        }
         // dir and files exist. read them.
         File[] planetFileList = planetFile.listFiles(filter);
         for (File planet : planetFileList) {
@@ -4003,7 +4004,7 @@ public final class CampaignMain implements Serializable {
      * player logs into a house, in which case the house now stores the object,
      * or when the player logs off, incase they never bothred to register or
      * login.
-     * 
+     *
      * @param soul
      */
     public void releaseLostSoul(String soul) {
@@ -4059,10 +4060,10 @@ public final class CampaignMain implements Serializable {
 
     public void saveMegaMekGameOptions(StringTokenizer gameOptions){
 		File mmGameOptionsFolder = new File("./mmconf");
-		
+
 		if ( !mmGameOptionsFolder.exists() )
 			mmGameOptionsFolder.mkdir();
-		
+
 		File mmGameOptions = new File("./mmconf/gameoptions.xml");
 		try{
 			FileOutputStream fops = new FileOutputStream(mmGameOptions);
@@ -4079,7 +4080,7 @@ public final class CampaignMain implements Serializable {
 		}
 
     }
-    
+
     public String getMegaMekOptionsToString() {
         StringBuffer result = new StringBuffer();
 
@@ -4112,8 +4113,8 @@ public final class CampaignMain implements Serializable {
 	public void setSupportUnits(Vector<String> supportUnits) {
 		this.supportUnits = supportUnits;
 	}
-	
-	
+
+
 	/**
 	 * @return the defaultPlayerFlags
 	 */

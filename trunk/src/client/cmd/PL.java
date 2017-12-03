@@ -85,6 +85,8 @@ public class PL extends Command {
             player.setExp(TokenReader.readInt(st));
         } else if (cmd.equals("SM")) {
             player.setMoney(TokenReader.readInt(st));
+        } else if (cmd.equals("UMT")) {
+            player.setMekToken(TokenReader.readInt(st));
         } else if (cmd.equals("SB")) {
             player.setBays(TokenReader.readInt(st));
         } else if (cmd.equals("SF")) {

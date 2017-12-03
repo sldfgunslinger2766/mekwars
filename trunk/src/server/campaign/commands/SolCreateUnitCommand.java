@@ -65,9 +65,9 @@ public class SolCreateUnitCommand implements Command {
 	public String getSyntax() { return syntax;}
 	
 	
-	private SPlayer p;
-	private SHouse h;
-	private SUnit u;
+	private SPlayer player;
+	private SHouse house;
+	private SUnit unit;
 	
 	List<String> houseList = new ArrayList<String>();
 	
@@ -75,95 +75,128 @@ public class SolCreateUnitCommand implements Command {
 
 		//access checks
 		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
-		p = CampaignMain.cm.getPlayer(Username);
-		h = p.getMyHouse();
+		player = CampaignMain.cm.getPlayer(Username);
+		house = player.getMyHouse();
 		
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild"))) {
-			CampaignMain.cm.toUser("AM:This command is disabled on this server.",Username,true);
-			return;
-		}
-		
-		
-		if( !h.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName"))) {
-			CampaignMain.cm.toUser("AM: Only players in " + CampaignMain.cm.getConfig("NewbieHouseName") + " can use this command.",Username,true);
-			return;
-		}
+		if(!accessChecks(Username, userLevel))
+			return;		
      
-		String filename;
-		String FlavorText = "Created by " + p.getName();
-		//get pilot values from house config
-		int gunnery = h.getBaseGunner();
-		int piloting = h.getBasePilot();
-		String skillTokens = null;
-		//used if 'useall' flag is set to true in SO
+		unit = readCommandReturnSUnit(command, Username);
+		if(unit == null)
+			return;		
+		
+		//used if 'useall' flag or post defection is set to true in SO
 		String factionTable = null;
-		
-		try {
-			filename = command.nextToken();
-		}catch(Exception ex) {
-			CampaignMain.cm.toUser(syntax, Username);
-			return;
-		}
-
-		int weight = SUnit.LIGHT;
-
-		if ( command.hasMoreElements() )
-			weight = Integer.parseInt(command.nextToken());
-		
-		//used if 'useall' flag is set to true in SO
-		if ( command.hasMoreElements() )
+		if(command.hasMoreElements())
 			factionTable = command.nextToken();
-		
-		// Create Unit
-		u = SUnit.create(filename, FlavorText, gunnery, piloting, weight, skillTokens);		
 
-		//debug
-		//CampaignMain.cm.toUser("DEBUG: u.getType() = " + u.getType() + " u.getWeightclass() = " + u.getWeightclass(), p.getName() ,true);
-		
-		// Check to see if player has enough bay space for this unit.
-		if(!p.hasRoomForUnit(u.getType(), u.getWeightclass())) {
-			CampaignMain.cm.toUser("AM:You have reached the limit for this weight class of this type of unit.",Username,true);
+		if(!playerUnitLimitChecks(Username))
 			return;
-		}
 		
-		if(SUnit.getHangarSpaceRequired(u, h) > p.getFreeBays() ) {
-			CampaignMain.cm.toUser("AM:You do not have enough free bays to create this unit. You can delete an existing unit by right clicking on it and choosing transactions -> delete to make some room.",Username,true);
-			return;
+		initHouseList();
+        addNonFactionBuildTables();
+
+		//check to see if it's a legal freebuild unit
+		try {
+			if( CampaignMain.cm.getConfig("Sol_FreeBuild_UseAll").equalsIgnoreCase("true") &&
+				house.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName"))	)
+			{
+				if(!CheckIfLegal(factionTable,unit)) 
+				{
+					CampaignMain.cm.toUser("AM:This is not a legal unit!",Username,true);
+					//add some logging here, mod mail possible cheating attempt or bt ERROR
+					CampaignData.mwlog.errLog("User: " + Username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					CampaignData.mwlog.modLog("User: " + Username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					return;
+				}
+			}
+			else if ( CampaignMain.cm.getConfig("Sol_FreeBuild_PostDefection").equalsIgnoreCase("true") &&
+					  !house.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName")))
+			{
+				if(!CheckIfLegal(house.getName().trim(),unit)) 
+				{
+					CampaignMain.cm.toUser("AM:This is not a legal unit!",Username,true);
+					//add some logging here, mod mail possible cheating attempt or bt ERROR
+					CampaignData.mwlog.errLog("User: " + Username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					CampaignData.mwlog.modLog("User: " + Username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					return;
+				}	
+			}
+			else
+			{
+				if(!CheckIfLegal(CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable"),unit)) 
+				{
+					CampaignMain.cm.toUser("AM:This is not a legal unit!",Username,true);
+					//add some logging here, mod mail possible cheating attempt or bt ERROR
+					CampaignData.mwlog.errLog("User: " + Username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					CampaignData.mwlog.modLog("User: " + Username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					return;
+				}
+			}
+		} catch (IOException e) {
+			//Auto-generated catch block
+			CampaignData.mwlog.errLog(e);
 		}
+
+		//finally add the unit
+		player.addUnit(unit, true);
 		
-		//Get a collection of all houses in game and covert it to a list
-        //Need to set the list of houses before calling checkiflegal method
-		houseList.clear();
-        Iterator<House> i = CampaignMain.cm.getData().getAllHouses().iterator();
-           
-        while (i.hasNext()) {
-           House aHouse = i.next();
-      
-           if (aHouse.getId() > -1) {
-        	   houseList.add(aHouse.getName().trim());
-        	   //debug
-       		   //CampaignMain.cm.toUser("DEBUG: houseList = " + aHouse.getName() , p.getName() ,true);
-           }
-        }
-        
-        //add non-faction build tables to list if they aren't already present
+	    handleFreeMekLimit(Username);
+			
+		//remove extension to make msg to user more readable
+		//String unitName =  unit.getUnitFilename().substring(0, unit.getUnitFilename().indexOf(".") - 1);
+		CampaignMain.cm.toUser("Unit created: " + unit.getSmallDescription() + "  ID #" + unit.getId(),Username,true);
+
+		
+		
+	}
+	
+	/**
+	 *  makes sure that infinite sol free build can co-exist with limited post defection freebuild
+	 */
+	private void handleFreeMekLimit(String Username) 
+	{
+
+		if( CampaignMain.cm.getConfig("Sol_FreeBuild_LimitPostDefOnly").equalsIgnoreCase("true") &&
+			!house.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName")) &&
+			Integer.parseInt((CampaignMain.cm.getConfig("Sol_FreeBuild_Limit"))) > 0)
+		{
+			player.addMekToken(1);
+			int remaining = Integer.parseInt(CampaignMain.cm.getConfig("Sol_FreeBuild_Limit")) - player.getMekToken();
+			CampaignMain.cm.toUser(remaining + " Free units remaining.",Username,true);
+		}
+	
+		if( CampaignMain.cm.getConfig("Sol_FreeBuild_LimitPostDefOnly").equalsIgnoreCase("false") &&
+			house.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName")) &&
+			Integer.parseInt((CampaignMain.cm.getConfig("Sol_FreeBuild_Limit"))) > 0)
+		{
+			player.addMekToken(1);
+			int remaining = Integer.parseInt(CampaignMain.cm.getConfig("Sol_FreeBuild_Limit")) - player.getMekToken();
+			CampaignMain.cm.toUser(remaining + " Free units remaining.",Username,true);
+		}
+	}
+	
+	/**
+	 * add non-faction build tables to list if they aren't already present
+	 */
+	private void addNonFactionBuildTables() 
+	{
+		
         if(!CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable").equalsIgnoreCase("Common") &&
-        		!houseList.contains("Common")){
+           !houseList.contains("Common"))
+        {
         	houseList.add("Common");
         }
         
         if(!CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable").equalsIgnoreCase("Rare") &&
-        		!houseList.contains("Rare")){
+           !houseList.contains("Rare"))
+        {
         	houseList.add("Rare");
         }
         
         if(!CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable").equalsIgnoreCase("Contest") &&
-        		!houseList.contains("Contest")){
+           !houseList.contains("Contest"))
+        {
         	houseList.add("Contest");
         }
   
@@ -172,54 +205,121 @@ public class SolCreateUnitCommand implements Command {
         //houseList.forEach(x->{
         //	CampaignMain.cm.toUser("DEBUG: houseList = " + x , p.getName() ,true);
         //});
-
-		//Here we will check to see if it's a legal freebuild unit
-		// /*
-		try {
-			if(CampaignMain.cm.getConfig("Sol_FreeBuild_UseAll").equalsIgnoreCase("true"))
+	}
+	
+	/**
+	 * 	Get a collection of all houses in game and covert it to a list
+     *  Need to set the list of houses before calling checkiflegal method
+	 */
+	private void initHouseList() 
+	{
+		houseList.clear();
+        Iterator<House> i = CampaignMain.cm.getData().getAllHouses().iterator();
+           
+        while (i.hasNext()) 
+        {
+           House aHouse = i.next();
+      
+           if (aHouse.getId() > -1) 
+           {
+        	   houseList.add(aHouse.getName().trim());
+        	   //debug
+       		   //CampaignMain.cm.toUser("DEBUG: houseList = " + aHouse.getName() , p.getName() ,true);
+           }
+        }
+	}
+	
+	private Boolean playerUnitLimitChecks(String Username) 
+	{
+		if(!player.hasRoomForUnit(unit.getType(), unit.getWeightclass())) 
+		{
+			CampaignMain.cm.toUser("AM:You have reached the limit for this type of unit at this weight class.",Username,true);
+			return false;
+		}
+		
+		if(SUnit.getHangarSpaceRequired(unit, house) > player.getFreeBays()) 
+		{
+			if( !house.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName")))
 			{
-				if(!CheckIfLegal(factionTable,u)) 
-				{
-					CampaignMain.cm.toUser("AM:This is not a legal unit!",Username,true);
-					//add some logging here, mod mail possible cheating attempt or bt ERROR
-					CampaignData.mwlog.errLog("User: " + Username + "  tried to create " + u.getUnitFilename() + " unit was not found in build tables");
-					CampaignData.mwlog.modLog("User: " + Username + "  tried to create " + u.getUnitFilename() + " unit was not found in build tables");
-					return;
-				}
+				CampaignMain.cm.toUser("AM:You do not have enough free bays to create this unit.",Username,true);
+				return false;
 			}
 			else
 			{
-				if(!CheckIfLegal(CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable"),u)) 
-				{
-					CampaignMain.cm.toUser("AM:This is not a legal unit!",Username,true);
-					//add some logging here, mod mail possible cheating attempt or bt ERROR
-					CampaignData.mwlog.errLog("User: " + Username + "  tried to create " + u.getUnitFilename() + " unit was not found in build tables");
-					CampaignData.mwlog.modLog("User: " + Username + "  tried to create " + u.getUnitFilename() + " unit was not found in build tables");
-					return;
-				}
-			}
-		} catch (IOException e) {
-			//Auto-generated catch block
-			CampaignData.mwlog.errLog(e);
+				CampaignMain.cm.toUser("AM:You do not have enough free bays to create this unit. You can delete an existing unit by right clicking on it and choosing transactions -> delete to make some room.",Username,true);
+				return false;
+			}				
 		}
-		// */
-		//finally add the unit
-		p.addUnit(u, true);
 		
-	
-		//remove extension to make msg to user more readable
-		filename = filename.substring(0, filename.indexOf(".") - 1);
-		CampaignMain.cm.toUser("Unit created: " + filename + ", " + FlavorText + ". Pilot: " + gunnery + "/" + piloting + ". ID #" + u.getId(),Username,true);
-
-		
+		return true;
 	}
 	
-    //thought of alternate method of doing this that updates a container class with legal lists that lives in 
-    //memory attached to campaignmain.cm. That object will hold legal lists for each weight class
-    //the lists will update only when a failure occurs (to make sure that this wasnt an intentional
-    //server side build table update) and only then fail to produce a unit (likely cheating attempt or bad BT).
-    //Could be more stable and faster especially if this is a very popular mekwars server.
-    //Or it may be overkill.
+	private SUnit readCommandReturnSUnit(StringTokenizer command, String Username) {
+		
+		String filename;
+		String FlavorText = "Built by " + player.getName();
+		String skillTokens = null;
+		
+		try 
+		{
+			filename = command.nextToken();
+		}
+		catch(Exception ex) 
+		{
+			CampaignMain.cm.toUser(syntax, Username);
+			return null;
+		}
+
+		int weight = SUnit.LIGHT;
+
+		if(command.hasMoreElements())
+			weight = Integer.parseInt(command.nextToken());
+
+		return SUnit.create(filename, FlavorText, house.getBaseGunner(), house.getBasePilot(), weight, skillTokens);
+	}
+	
+	private Boolean accessChecks(String Username, int userLevel) 
+	{
+		if(userLevel < getExecutionLevel()) 
+		{
+			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
+			return false;
+		}
+		
+		// if Sol_FreeBuild and post defection are set to false, return
+		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild")) &&
+		   !Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild_PostDefection"))) 
+		{
+			CampaignMain.cm.toUser("AM:This command is disabled on this server.",Username,true);
+			return false;
+		}
+		
+		// if build limit set to 0, return
+		if(Integer.parseInt((CampaignMain.cm.getConfig("Sol_FreeBuild_Limit"))) == 0) 
+		{
+			CampaignMain.cm.toUser("AM:Build limit set to 0, was this intentional? If so, uncheck Sol Free Build instead.",Username,true);
+			return false;
+		}
+		
+		// if the player isn't in SOL and Sol_FreeBuild_PostDefection is false, return
+		if(!house.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName")) &&
+				!Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild_PostDefection"))) 
+		{
+			CampaignMain.cm.toUser("AM: Only players in " + CampaignMain.cm.getConfig("NewbieHouseName") + " can use this command.",Username,true);
+			return false;
+		}
+		
+		// if a limit has been set, check to make sure player has not exceeded limit
+		if(Integer.parseInt((CampaignMain.cm.getConfig("Sol_FreeBuild_Limit"))) > 0 &&
+		   player.getMekToken() == Integer.parseInt((CampaignMain.cm.getConfig("Sol_FreeBuild_Limit")))) 
+		{
+			CampaignMain.cm.toUser("AM:You have reached the server limit of free units.",Username,true);
+			return false;
+		}
+		
+		return true;
+	}
+	
 	/**        
 	 * @Return a Boolean as true if the SUnit is found in available build tables
 	 */
@@ -249,7 +349,7 @@ public class SolCreateUnitCommand implements Command {
         //make sure this build table file exists
         if(Files.notExists(path)) 
         {
-			CampaignMain.cm.toUser("DEBUG: Error Build Table file " + buildTableName + " does not exist", p.getName() ,true);
+			CampaignMain.cm.toUser("DEBUG: Error Build Table file " + buildTableName + " does not exist", player.getName() ,true);
 			return false;
         }
         
@@ -331,7 +431,7 @@ public class SolCreateUnitCommand implements Command {
             				String temp = houseList.get(z);
             				houseList.remove(z);
             				//search other BTs recursively
-            				result = CheckIfLegal(temp,u);
+            				result = CheckIfLegal(temp,unit);
             				//if it's true, stop searching, return it.
             				if(result) { 
             					//debug
@@ -348,6 +448,13 @@ public class SolCreateUnitCommand implements Command {
         //CampaignMain.cm.toUser("DEBUG: result = " + result + " BT = " + buildTableName + " Unit = " + unitToCheck.getUnitFilename(), p.getName() ,true);
 		
         return result;
+        
+        //thought of alternate method of doing this that updates a container class with legal lists that lives in 
+        //memory attached to campaignmain.cm. That object will hold legal lists for each weight class
+        //the lists will update only when a failure occurs (to make sure that this wasnt an intentional
+        //server side build table update) and only then fail to produce a unit (likely cheating attempt or bad BT).
+        //Could be more stable and faster especially if this is a very popular mekwars server.
+        //Or it may be overkill.
         		
 	}//end checkiflegal
 }
