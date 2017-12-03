@@ -263,11 +263,11 @@ public class CHQPanel extends JPanel {
     // try to remove all armies
     private void btnRemoveAllArmiesActionPerformed(ActionEvent evt) {
     	//no armies... don't bother   		//Baruk Khazad! 20151204 - start block 1
-        if (mwclient.getPlayer().getArmies().size() == 0) 
+        if (mwclient.getPlayer().getArmies().size() == 0)
         	return;
         //get confirm
         int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to remove all of your armies?", "Remove all armies?", JOptionPane.YES_NO_OPTION);
-        if (result == JOptionPane.NO_OPTION) 
+        if (result == JOptionPane.NO_OPTION)
           	return;		//Baruk Khazad! 20151204 - end block 1
         // only remove all if he's logged in, not fighting/active/logout/discon
         if (mwclient.getMyStatus() != MWClient.STATUS_RESERVE) {
@@ -315,7 +315,7 @@ public class CHQPanel extends JPanel {
         CamoSelectionDialog camoDialog = new CamoSelectionDialog(mwclient.getMainFrame(), mwclient);
         camoDialog.setVisible(true);
     }
-    
+
     //@Salient (mwosux@gmail.com) added for SolFreeBuild option
     private void solFreeBuildButtonActionPerformed(ActionEvent evt) {
         SolFreeBuildDialog solDialog = new SolFreeBuildDialog(mwclient);
@@ -388,7 +388,7 @@ public class CHQPanel extends JPanel {
             }
         });
         hqButtonSpring.add(setCamoButton);
-        
+
         //@Salient add sol free build button
         if (player != null) {
             if (player.getMyHouse().getName().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName"))
@@ -397,6 +397,18 @@ public class CHQPanel extends JPanel {
                 solFreeBuildButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                     	solFreeBuildButtonActionPerformed(evt);
+                    }
+                });
+                hqButtonSpring.add(solFreeBuildButton);
+                numButtons++;
+            }
+            //also spawn button if post defection option is set
+            if (!player.getMyHouse().getName().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName"))
+                    && mwclient.getserverConfigs("Sol_FreeBuild_PostDefection").equalsIgnoreCase("true")) {
+                solFreeBuildButton.setText("Create Unit");
+                solFreeBuildButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        solFreeBuildButtonActionPerformed(evt);
                     }
                 });
                 hqButtonSpring.add(solFreeBuildButton);
@@ -2746,7 +2758,7 @@ public class CHQPanel extends JPanel {
                     mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c scrap#" + num);
                     // Maintain Mek
                 }
-            //@Salient for SOL freebuild option    
+            //@Salient for SOL freebuild option
             } else if (command.equalsIgnoreCase("DL")) {
                 int num = Integer.parseInt(st.nextToken());
                 //int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to Remove this unit?", "Delete it?", JOptionPane.YES_NO_OPTION);

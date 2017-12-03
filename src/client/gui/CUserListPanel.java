@@ -20,7 +20,9 @@ package client.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -41,6 +43,7 @@ import java.util.TreeSet;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -53,9 +56,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
+
+//import com.sun.jndi.toolkit.url.Uri;
 
 import client.CUser;
 import client.MWClient;
@@ -99,9 +106,21 @@ public class CUserListPanel extends JPanel implements ActionListener{
 	//additional info
 	JPanel countPanel = new JPanel();
 	JLabel CountLabel = new JLabel();
+	JLabel LinksLabel = new JLabel();
 	JButton ActivityButton = new JButton();
-	UserListPopupListener UserListPopup = new UserListPopupListener();
+	//@ Salient new buttons for discord/facebook/www
+	JButton LinkButton = new JButton();
+	JButton LinkButton1 = new JButton();
+	JButton LinkButton2 = new JButton();
+	JButton LinkButton3 = new JButton();
+	JPanel linksPanel = new JPanel();
+	JPanel bottomPanel = new JPanel();
 
+	UserListPopupListener UserListPopup = new UserListPopupListener();
+	
+	private Icon link1Icon = null;
+	private Icon link2Icon = null;
+	private Icon link3Icon = null;
 	private Icon activateIcon = null;
 	private Icon deactivateIcon = null;
 	private Icon mouseActivateIcon = null;
@@ -123,7 +142,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		UserList.addMouseListener(UserListPopup);
 		UserList.setCellRenderer(Users.getRenderer());
 		UserListSP = new JScrollPane(UserList);
-		UserListSP.setPreferredSize(new Dimension(180, 480));
+		UserListSP.setPreferredSize(new Dimension(180, 380));
 		UserListSP.setMinimumSize(new Dimension(180, 100));
 		UserListSP.setMaximumSize(new Dimension(180, 2000));
 		UserListSP.setBorder(new LineBorder(Color.black));
@@ -198,12 +217,18 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		
 		//add the button and label to CountPanel
 		countPanel.setLayout(new BoxLayout(countPanel, BoxLayout.Y_AXIS));
-		countPanel.add(ActivityButton);
-	
+		countPanel.add(ActivityButton);	
 		countPanel.add(CountLabel);
-		countPanel.setBorder(BorderFactory.createEmptyBorder(4,2,3,2));
-		add(countPanel, BorderLayout.SOUTH);
 		
+		//@ Salient - toggle for link area
+		if(mwclient.getserverConfigs("Enable_Link_Area").equalsIgnoreCase("false"))
+		{
+			countPanel.setBorder(BorderFactory.createEmptyBorder(4,2,3,2));
+			add(countPanel, BorderLayout.SOUTH);
+		}
+		else
+			createLinkArea();
+				
 		//restore the previous sort mode
 		String mode = mwclient.getConfig().getParam("SORTMODE");
 		if (mode.equals("HOUSE")) {((CUserListModel)UserList.getModel()).setSortMode(SORTMODE_HOUSE);}
@@ -224,6 +249,113 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		if (order.equals("DESCENDING")) {((CUserListModel)UserList.getModel()).setSortOrder(SORTORDER_DESCENDING);}
 		else {((CUserListModel)UserList.getModel()).setSortOrder(SORTORDER_ASCENDING);}
 		
+	}
+
+	private void createLinkArea() 
+	{
+		LinksLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		LinksLabel.setAlignmentY(Component.CENTER_ALIGNMENT);
+		LinksLabel.setText(mwclient.getserverConfigs("Link_Area_Label").trim());
+		
+		link1Icon = new ImageIcon(mwclient.getserverConfigs("Link1_Icon").trim());
+		LinkButton1.setEnabled(true);
+		LinkButton1.setIcon(link1Icon);
+		LinkButton1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		LinkButton1.setAlignmentY(Component.CENTER_ALIGNMENT);
+		LinkButton1.setPreferredSize(new Dimension(30,30));
+		LinkButton1.setMinimumSize(new Dimension(30,30));
+		LinkButton1.setMaximumSize(new Dimension(30,30));
+		
+		LinkButton1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+        	   Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+        	        try {
+        	            desktop.browse(new URL(mwclient.getserverConfigs("Link1_URL")).toURI());
+        	        } catch (Exception e) {
+        	            e.printStackTrace();
+        	        }
+        	    }
+            }
+        });
+		
+		if (mwclient.getserverConfigs("Enable_Link1_Button").equalsIgnoreCase("true")) 
+			LinkButton1.setVisible(true);
+		else 
+			LinkButton1.setVisible(false);
+		
+		//button2
+		link2Icon = new ImageIcon(mwclient.getserverConfigs("Link2_Icon").trim());
+		LinkButton2.setEnabled(true);
+		LinkButton2.setIcon(link2Icon);
+		LinkButton2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		LinkButton2.setAlignmentY(Component.CENTER_ALIGNMENT);
+		LinkButton2.setPreferredSize(new Dimension(30,30));
+		LinkButton2.setMinimumSize(new Dimension(30,30));
+		LinkButton2.setMaximumSize(new Dimension(30,30));
+		
+		LinkButton2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+        	   Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+        	        try {
+        	            desktop.browse(new URL(mwclient.getserverConfigs("Link2_URL")).toURI());
+        	        } catch (Exception e) {
+        	            e.printStackTrace();
+        	        }
+        	    }
+            }
+        });
+		
+		if (mwclient.getserverConfigs("Enable_Link2_Button").equalsIgnoreCase("true")) 
+			LinkButton2.setVisible(true);
+		else 
+			LinkButton2.setVisible(false);
+		
+		//button3
+		link3Icon = new ImageIcon(mwclient.getserverConfigs("Link3_Icon").trim());
+		LinkButton3.setEnabled(true);
+		LinkButton3.setIcon(link3Icon);
+		LinkButton3.setAlignmentX(Component.CENTER_ALIGNMENT);
+		LinkButton3.setAlignmentY(Component.CENTER_ALIGNMENT);
+		LinkButton3.setPreferredSize(new Dimension(30,30));
+		LinkButton3.setMinimumSize(new Dimension(30,30));
+		LinkButton3.setMaximumSize(new Dimension(30,30));
+		
+		LinkButton3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+        	   Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+        	        try {
+        	            desktop.browse(new URL(mwclient.getserverConfigs("Link3_URL")).toURI());
+        	        } catch (Exception e) {
+        	            e.printStackTrace();
+        	        }
+        	    }
+            }
+        });
+		
+		if (mwclient.getserverConfigs("Enable_Link3_Button").equalsIgnoreCase("true")) 
+			LinkButton3.setVisible(true);
+		else 
+			LinkButton3.setVisible(false);
+		
+		
+		linksPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
+		linksPanel.setBackground(Color.LIGHT_GRAY);
+		linksPanel.setPreferredSize(new Dimension(175,34));
+		linksPanel.setMinimumSize(new Dimension(175,34));
+    	linksPanel.setMaximumSize(new Dimension(175,34));
+    	linksPanel.add(LinksLabel);
+		linksPanel.add(LinkButton1);
+		linksPanel.add(LinkButton2);
+		linksPanel.add(LinkButton3);
+	
+		bottomPanel.setLayout(new BorderLayout());
+		bottomPanel.add(countPanel, BorderLayout.CENTER);
+		bottomPanel.add(linksPanel, BorderLayout.SOUTH);
+		
+		add(bottomPanel, BorderLayout.SOUTH);
 	}
 	
 	public CUserListModel getUsers() {return Users;}

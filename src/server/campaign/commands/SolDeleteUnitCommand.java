@@ -76,6 +76,15 @@ public class SolDeleteUnitCommand implements Command {
 		CampaignMain.cm.toUser("AM:"+ Username + "'s " + u.getModelName() + " was removed.", Username, true);
 
 		p.removeUnit(unitID, true);
+		
+		//if the limit is on for SOL players, they have the ability to use this command to delete units
+		//So, when they do, we need to subtract one from their free mek counter.
+		if( CampaignMain.cm.getConfig("Sol_FreeBuild_LimitPostDefOnly").equalsIgnoreCase("false") &&
+			h.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName")) &&
+			Integer.parseInt((CampaignMain.cm.getConfig("Sol_FreeBuild_Limit"))) > 0)
+		{
+			p.addMekToken(-1);
+		}
 
 	}
 }//end SolDeleteUnitCommand

@@ -54,6 +54,7 @@ import admin.dialog.serverConfigDialogs.DisconnectionPanel;
 import admin.dialog.serverConfigDialogs.FactionPanel;
 import admin.dialog.serverConfigDialogs.FactoryPurchasePanel;
 import admin.dialog.serverConfigDialogs.InfluencePanel;
+import admin.dialog.serverConfigDialogs.LinksPanel;
 import admin.dialog.serverConfigDialogs.LossCompensationPanel;
 import admin.dialog.serverConfigDialogs.MiscOptionsPanel;
 import admin.dialog.serverConfigDialogs.NewbieHousePanel;
@@ -160,6 +161,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         PayoutModPanel payoutModPanel = new PayoutModPanel();
         ChristmasPanel christmasPanel = new ChristmasPanel();
         SchedulerPanel schedulerPanel = new SchedulerPanel();
+        LinksPanel linksPanel = new LinksPanel();
         
         // Set the actions to generate
         okayButton.setActionCommand(okayCommand);
@@ -189,6 +191,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Factory Purchase", null, factoryPurchasePanel, "Factories For Sale");
         ConfigPane.addTab("File Paths", null, pathsPanel, "Paths");
         ConfigPane.addTab("Influence", null, influencePanel, "Influence");
+        ConfigPane.addTab("Links Area", null, linksPanel, "Configure/Enable Links Area");
         ConfigPane.addTab("Loss Compensation", null, lossCompensationPanel, "Extra Payments for salvaged/destroyed units.");
         ConfigPane.addTab("Misc Options", null, miscOptionsPanel, "Misc Stuff");
         ConfigPane.addTab("No Play", null, noPlayPanel, "Personal Blacklist/Exclusion options");

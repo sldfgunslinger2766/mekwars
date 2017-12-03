@@ -1314,6 +1314,18 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public int getMoney() {
         return money;
     }
+    
+    /**
+     * @ Salient for free build, mek tokens iterate up to the server limit. Updates CPlayer.
+     */
+    public void addMekToken(int i) {
+
+        int tokenToSet = this.getMekToken() + i;
+        this.setMekToken(tokenToSet);
+        CampaignMain.cm.toUser("PL|UMT|" + tokenToSet, name, false); //UMT: Update Mek Token on cplayer
+        setSave();
+        
+    }
 
     public void setPassword(MWPasswdRecord pass) {
 
