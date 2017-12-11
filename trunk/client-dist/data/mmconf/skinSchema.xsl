@@ -21,7 +21,7 @@
     <!-- Defines the images that will be used in an edge -->
     <xs:element name="edge">      
       <!-- A sequence of image/tiled pairs -->
-      <xs:element name="edgeName" type=xs:"string"/>
+      <xs:element name="edgeName" type="xs:string"/>
       <xs:complexType>
         <xs:sequence>
           <xs:element maxOccurs="unbounded" ref="edgeIcon"/>

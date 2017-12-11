@@ -1411,12 +1411,20 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 	 * @return             the created unit
 	 */
 	public static SUnit create(String filename, String fluff, int gunnery, int piloting, Integer weight, String skillTokens) {
+		boolean refigureWeightClass = false;
 		
 		if (weight == null) {
 			weight = SUnit.LIGHT;
+			// This is stupid.  We should not have to specify weight classes.  So now we do not.
+			refigureWeightClass = true;
 		}
 		
 		SUnit cm = new SUnit(fluff,filename,weight);
+		
+		if (refigureWeightClass) {
+			cm.setWeightclass(cm.getEntity().getWeightClass());
+			CampaignData.mwlog.debugLog("Setting " + cm.getEntity().getModel() + " to weight class " + cm.getEntity().getWeightClass());
+		}
 		
 		SPilot pilot = null;
 		if ( gunnery == 99 || piloting == 99 )
