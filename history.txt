@@ -1,5 +1,7 @@
 VERSION HISTORY:
 ----------------
++ Updated MM to version 0.43.7-MW20180101-62948ba
+  This will allow for use of PNGs as unit images, meaning we can use Bloodwolf's new images
 + Updated MM to version 0.43.5-MW20171123-00f7619
 - Removed calls to deprecated Crew methods and constructors
 + Added log4j to client/lib files
