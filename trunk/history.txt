@@ -1,5 +1,8 @@
 VERSION HISTORY:
 ----------------
++ Bug: Send All Local Op Files erroring if incorrect files in op folder.  
+    This was causing Mac clients (for example) to die on .DS_Store files which are a normal 
+    part of the OS.
 + Updated MM to version 0.43.7-MW20180101-62948ba
   This will allow for use of PNGs as unit images, meaning we can use Bloodwolf's new images
 + Updated MM to version 0.43.5-MW20171123-00f7619

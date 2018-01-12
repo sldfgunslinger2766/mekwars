@@ -2998,7 +2998,9 @@ public class CMainFrame extends JFrame {
 
         for (File opFile : opFiles.listFiles()) {
             try {
-
+            	if(!opFile.getName().endsWith(".txt")) {
+            		continue;
+            	}
                 FileInputStream fis = new FileInputStream(opFile);
                 BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
                 opData.append(opFile.getName().substring(0, opFile.getName().lastIndexOf(".txt")) + "#");
