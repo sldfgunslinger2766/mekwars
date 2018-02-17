@@ -40,7 +40,7 @@ public class LinksPanel extends JPanel {
 				+ " in a new area on the very bottom right of the client window. You can then set the icon and<br>"
 				+ " destination of these buttons which open the users default browser to view the content.<br>"
 				+ " An example would be, a button for server homepage, one for discord, and another for<br>"
-				+ " facebook. Icon Images must be placed in '/data/images/misc/' before client distribution</HTML>";
+				+ " facebook. Icon Images should be placed in '/data/images/misc/' before client distribution</HTML>";
 		
 		JPanel panel0 = new JPanel();
 		JPanel panel1 = new JPanel();
@@ -82,12 +82,12 @@ public class LinksPanel extends JPanel {
 		panel2.setLayout(new FlowLayout(FlowLayout.CENTER));
 		panel2a.setLayout(new GridLayout(3,1,0,5));
 		panel2b.setLayout(new GridLayout(3,1));
-		panel2.setBorder(BorderFactory.createTitledBorder("Icon Location and File Names"));
+		panel2.setBorder(BorderFactory.createTitledBorder("Icon Location and File Names (Size 30x30 or less"));
 
 		baseLabel = new JLabel("Link1 Icon:");
 		baseLabel.setHorizontalAlignment(JLabel.RIGHT);
 		baseTextField = new JTextField(30);
-		baseTextField.setToolTipText("<HTML>  </HTML>");
+		baseTextField.setToolTipText("<HTML>Icon size should be 30x30 or less </HTML>");
 		baseTextField.setName("Link1_Icon");
 		panel2a.add(baseLabel);
 		panel2b.add(baseTextField);
@@ -95,7 +95,7 @@ public class LinksPanel extends JPanel {
 		baseLabel = new JLabel("Link2 Icon:");
 		baseLabel.setHorizontalAlignment(JLabel.RIGHT);
 		baseTextField = new JTextField(30);
-		baseTextField.setToolTipText("<HTML>  </HTML>");
+		baseTextField.setToolTipText("<HTML> Icon size should be 30x30 or less  </HTML>");
 		baseTextField.setName("Link2_Icon");
 		panel2a.add(baseLabel);
 		panel2b.add(baseTextField);
@@ -103,7 +103,7 @@ public class LinksPanel extends JPanel {
 		baseLabel = new JLabel("Link3 Icon:");
 		baseLabel.setHorizontalAlignment(JLabel.RIGHT);
 		baseTextField = new JTextField(30);
-		baseTextField.setToolTipText("<HTML>  </HTML>");
+		baseTextField.setToolTipText("<HTML> Icon size should be 30x30 or less   </HTML>");
 		baseTextField.setName("Link3_Icon");
 		panel2a.add(baseLabel);
 		panel2b.add(baseTextField);

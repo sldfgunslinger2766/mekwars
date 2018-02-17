@@ -80,7 +80,7 @@ public class SolCreateUnitCommand implements Command {
 		
 		if(!accessChecks(Username, userLevel))
 			return;		
-     
+     	
 		unit = readCommandReturnSUnit(command, Username);
 		if(unit == null)
 			return;		
@@ -92,6 +92,9 @@ public class SolCreateUnitCommand implements Command {
 
 		if(!playerUnitLimitChecks(Username))
 			return;
+		
+		//debug
+		CampaignMain.cm.toUser("DEBUG: First Faction to Search: " + factionTable,Username,true);
 		
 		initHouseList();
         addNonFactionBuildTables();
@@ -136,6 +139,7 @@ public class SolCreateUnitCommand implements Command {
 		} catch (IOException e) {
 			//Auto-generated catch block
 			CampaignData.mwlog.errLog(e);
+			return;
 		}
 
 		//finally add the unit
@@ -178,9 +182,12 @@ public class SolCreateUnitCommand implements Command {
 	
 	/**
 	 * add non-faction build tables to list if they aren't already present
+	 * also add the table that is set by the SO
 	 */
 	private void addNonFactionBuildTables() 
 	{
+		
+		houseList.add(CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable"));
 		
         if(!CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable").equalsIgnoreCase("Common") &&
            !houseList.contains("Common"))
@@ -215,7 +222,11 @@ public class SolCreateUnitCommand implements Command {
 	{
 		houseList.clear();
         Iterator<House> i = CampaignMain.cm.getData().getAllHouses().iterator();
-           
+        
+        //debug
+        CampaignMain.cm.toUser("-------------------------------------------------------------------------", player.getName() ,true);
+		CampaignMain.cm.toUser("DEBUG: Sever Side Faction List ( CampaignMain.cm.getData().getAllHouses() )", player.getName() ,true);
+
         while (i.hasNext()) 
         {
            House aHouse = i.next();
@@ -224,9 +235,11 @@ public class SolCreateUnitCommand implements Command {
            {
         	   houseList.add(aHouse.getName().trim());
         	   //debug
-       		   //CampaignMain.cm.toUser("DEBUG: houseList = " + aHouse.getName() , p.getName() ,true);
+       		   CampaignMain.cm.toUser("DEBUG: " + aHouse.getName() , player.getName() ,true);
            }
         }
+        //debug
+        CampaignMain.cm.toUser("-------------------------------------------------------------------------", player.getName() ,true);
 	}
 	
 	private Boolean playerUnitLimitChecks(String Username) 
@@ -341,7 +354,7 @@ public class SolCreateUnitCommand implements Command {
         buildTableName += ".txt";
         
         //debug
-		//CampaignMain.cm.toUser("Searching in: " + buildTableName + ", For Unit: " + unitToCheck.getUnitFilename().trim(), p.getName(), true);	
+		CampaignMain.cm.toUser("DEBUG: Searching in: " + buildTableName + ", For Unit: " + unitToCheck.getUnitFilename().trim(), player.getName(), true);	
         
         //we should now have the correct path.
         Path path = Paths.get("data/buildtables/standard/" + buildTableName).toAbsolutePath();
@@ -404,28 +417,23 @@ public class SolCreateUnitCommand implements Command {
         //If the result is false, check to see if there were any other BTs in the list
         if(!result)	
         {
-        	//debug
-    		//CampaignMain.cm.toUser("DEBUG: Check 1", p.getName(), true);	
+        	//^^debug
+    		//CampaignMain.cm.toUser("DEBUG: Check 1", player.getName(), true);	
 
-            for(int i = 0; i < allowedUnits.size(); i++)
-            {
-            	//iterate and check if unit or another built table
-            	//if its another build table it wont have the . character
-            	if(!allowedUnits.get(i).contains("."))
+            for(int i = 0; i < allowedUnits.size(); i++) //iterate and check if unit or built table
+            { 	
+            	if(!allowedUnits.get(i).contains(".")) //if its another build table it wont have the . character
             	{	
-            		//debug
-            		//CampaignMain.cm.toUser("DEBUG: Check 2 " + allowedUnits.get(i), p.getName() , true);	
-
-            		//so now that we've found another BT, we'll find out which house it is
-            		for(int z = 0; z < houseList.size(); z++)
+            		//^^debug
+            		//CampaignMain.cm.toUser("DEBUG: Check 2 " + allowedUnits.get(i), player.getName() , true);			
+            		for(int z = 0; z < houseList.size(); z++) //found another BT, find out which house
             		{
-            			//debug
-            			//CampaignMain.cm.toUser("DEBUG: Check 3 .." + allowedUnits.get(i).trim() + ".. ?= .." + houseList.get(z)+ "..", p.getName(), true);	
-            			
+            			//^^debug
+            			//CampaignMain.cm.toUser("DEBUG: Check 3 .." + allowedUnits.get(i).trim() + ".. ?= .." + houseList.get(z)+ "..", player.getName(), true);	
             			if(houseList.get(z).equalsIgnoreCase(allowedUnits.get(i)))
             			{	
-            	    		//debug
-            				//CampaignMain.cm.toUser("DEBUG: Check 4 " + houseList.get(z), p.getName(), true);	
+            	    		//^^debug
+            				//CampaignMain.cm.toUser("DEBUG: Check 4 " + houseList.get(z), player.getName(), true);	
 
             				//once we find it, it's important to remove it from the list
             				String temp = houseList.get(z);
