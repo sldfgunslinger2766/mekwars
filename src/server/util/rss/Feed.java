@@ -57,6 +57,7 @@ public class Feed {
 	private String getChannel() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<channel>\n");
+		sb.append("<atom:link href=\"" + CampaignMain.cm.getConfig("NewsURL") + "\" rel=\"self\" type=\"application/rss+xml\" />");
 		sb.append("<title>");
 		sb.append(CampaignMain.cm.getServer().getConfigParam("SERVERNAME") + " News Feed");
 		sb.append("</title>\n");
@@ -64,7 +65,6 @@ public class Feed {
 		sb.append(CampaignMain.cm.getServer().getConfigParam("TRACKERLINK"));
 		sb.append("</link>\n");
 		sb.append("<description>Campaign News</description>\n");
-		sb.append("<atom:link href=\"" + CampaignMain.cm.getConfig("NewsURL") + "\" rel=\"self\" tpe=\"application/rss+xml\" />");
 		return sb.toString();
 	}
 	
