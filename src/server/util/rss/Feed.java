@@ -41,7 +41,7 @@ public class Feed {
 	public Feed() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n");
-		sb.append("<rss version=\"2.0\">\n");
+		sb.append("<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n");
 		header = sb.toString();
 		
 		sb = new StringBuilder();
@@ -64,6 +64,7 @@ public class Feed {
 		sb.append(CampaignMain.cm.getServer().getConfigParam("TRACKERLINK"));
 		sb.append("</link>\n");
 		sb.append("<description>Campaign News</description>\n");
+		sb.append("<atom:link href=\"" + CampaignMain.cm.getConfig("NewsURL") + "\" rel=\"self\" tpe=\"application/rss+xml\" />");
 		return sb.toString();
 	}
 	
