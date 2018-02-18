@@ -67,7 +67,7 @@ public class FeedMessage {
 		sb.append(addAttribute("pubDate", pubDate));
 		sb.append(addAttribute("category", category));
 		sb.append(addAttribute("guid", guid));
-		//sb.append(addAttribute("source", source));
+		sb.append(addAttribute("source", guid));
 		sb.append(addAttribute("description", description));
 		sb.append("</item>");
 		return sb.toString();
