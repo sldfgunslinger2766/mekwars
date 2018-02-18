@@ -575,7 +575,7 @@ public class DefectCommand implements Command {
             CampaignMain.cm.doSendHouseMail(newHouse, "NOTE: ", p.getName() + " joined the faction! (Defected from " + oldHouse.getName() + ")");
 
             // do we really want to keep the RSS feed?
-            CampaignMain.cm.addToNewsFeed(Username + " defected from " + oldHouse.getName() + " to " + HouseName);
+            CampaignMain.cm.addToNewsFeed("Player Defection", "Player News", Username + " defected from " + oldHouse.getName() + " to " + HouseName);
 
             if ( p.getMyLogo().trim().equals(oldHouse.getLogo().trim()) ){
                 p.setMyLogo(newHouse.getLogo().trim());

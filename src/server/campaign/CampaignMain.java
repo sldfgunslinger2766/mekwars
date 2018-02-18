@@ -140,6 +140,8 @@ import server.util.AutomaticBackup;
 import server.util.MWPasswd;
 import server.util.RepairTrackingThread;
 import server.util.StringUtil;
+import server.util.rss.Feed;
+import server.util.rss.FeedMessage;
 import common.CampaignData;
 import common.Equipment;
 import common.House;
@@ -217,8 +219,9 @@ public final class CampaignMain implements Serializable {
 
     private UnitCosts unitCostLists = null;
 
-    private TreeMap<String, String> NewsFeed = new TreeMap<String, String>();
-
+    //private TreeMap<String, String> NewsFeed = new TreeMap<String, String>();
+    private Feed newsFeed = new Feed();
+    
     private boolean isArchiving = false;
 
     private Random r = new Random(System.currentTimeMillis());
@@ -460,7 +463,7 @@ public final class CampaignMain implements Serializable {
         isUsingAdvanceRepair();
 
         // finally, announce restart in news feed.
-        this.addToNewsFeed("MekWars Server Started!");
+        this.addToNewsFeed("MekWars Server Started!", "Server News", "");
     }
 
     public void loadSupportUnitDefinitions() {
@@ -2481,59 +2484,11 @@ public final class CampaignMain implements Serializable {
     }
 
     synchronized public void addToNewsFeed(String s) {
-        addToNewsFeed(s, "");
+        addToNewsFeed(s, "", "");
     }
 
-    synchronized public void addToNewsFeed(String title, String body) {
-        String dateTimeFormat = "yyyy/MM/dd HH:mm:ss z";
-        SimpleDateFormat sDF = new SimpleDateFormat(dateTimeFormat);
-        Date date = new Date(System.currentTimeMillis());
-        String dateTime = "[" + sDF.format(date) + "] ";
-        StringBuffer msgBody = new StringBuffer(body);
-
-        // Delete any html tags in the body
-        while (msgBody.indexOf("<") > -1) {
-            msgBody.delete(msgBody.indexOf("<"), msgBody.indexOf(">") + 1);
-        }
-
-        title = dateTime + title;
-        NewsFeed.put(title, msgBody.toString());
-        if (NewsFeed.size() > 200) {
-            NewsFeed.remove(NewsFeed.firstKey());
-        }
-
-        try {
-            FileOutputStream out = new FileOutputStream(getConfig("NewsPath"));
-            PrintStream ps = new PrintStream(out);
-            ps.println("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>");
-            ps.println("<rdf:RDF");
-            ps.println("xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"");
-            ps.println("xmlns=\"http://my.netscape.com/rdf/simple/0.9/\">");
-            ps.println("<channel>");
-            ps.println("<title>" + getServer().getConfigParam("SERVERNAME") + " News Feed</title>");
-            ps.println("<link>" + getServer().getConfigParam("TRACKERLINK") + "</link>");
-            ps.println("<description>Campaign News</description>");
-            ps.println("</channel>");
-
-            for (String header : NewsFeed.keySet()) {
-                String newsBody = NewsFeed.get(header);
-                ps.println("<item>");
-                ps.println("<title>" + header + "</title>");
-                ps.println("<description>" + newsBody + "</description>");
-                ps.println("<link>" + getServer().getConfigParam("TRACKERLINK") + "</link>");
-                ps.println("</item>");
-            }
-            ps.println("</rdf:RDF>");
-            ps.close();
-        } catch (FileNotFoundException efnf) {
-            // ignore
-        } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Problems writing the news feed");
-            /*
-             * CampaignData.mwlog.errLog(ex); MWServ.addToErrorLog(ex);
-             */
-        }
-
+    synchronized public void addToNewsFeed(String title, String category, String body) {
+    	newsFeed.addMessage(new FeedMessage(title, category, body));
     }
 
     public Market2 getMarket() {

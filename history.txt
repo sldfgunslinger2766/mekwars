@@ -1,5 +1,14 @@
 VERSION HISTORY:
 ----------------
++ Updated RSS feed to allow for ITTT/Discord integration.  
+  ***********************************
+  * NOTE TO OPERATORS               *
+  *                                 *
+  * There is a new field in the File*
+  * Path tab in Server Configs.     *
+  * Please fill that in if you want *
+  * to use the RSS                  *
+  ***********************************
 + Bug: Send All Local Op Files erroring if incorrect files in op folder.  
     This was causing Mac clients (for example) to die on .DS_Store files which are a normal 
     part of the OS.

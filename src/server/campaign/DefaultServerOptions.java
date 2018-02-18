@@ -41,6 +41,7 @@ public class DefaultServerOptions {
         defaults.setProperty("RankingPath", "./Ranking.htm");
         defaults.setProperty("EXPRankingPath", "./EXPRanking.htm");
         defaults.setProperty("NewsPath", "./News.rdf");
+        defaults.setProperty("NewsURL", "");
         defaults.setProperty("HouseRankPath", "./HouseRanking.html");
         defaults.setProperty("XMLPlanetPath", "./data/DynPlanets.xml");
         defaults.setProperty("MechstatPath", "./Mechstats.htm");
