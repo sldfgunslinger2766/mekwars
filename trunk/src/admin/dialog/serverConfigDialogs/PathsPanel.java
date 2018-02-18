@@ -45,6 +45,12 @@ public class PathsPanel extends JPanel {
         baseTextField.setToolTipText("Path to News.rdf (News Feed)");
         baseTextField.setName("NewsPath");
         pathsSubPanel.add(baseTextField);
+        
+        baseTextField = new JTextField(5);
+        pathsSubPanel.add(new JLabel("News URL:", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("URL to News.rdf");
+        baseTextField.setName("NewsURL");
+        pathsSubPanel.add(baseTextField);
 
         baseTextField = new JTextField(5);
         pathsSubPanel.add(new JLabel("House Rank Path:", SwingConstants.TRAILING));

@@ -58,7 +58,7 @@ public class ShutdownCommand implements Command {
         CampaignMain.cm.getDefaultPlayerFlags().save();
         CampaignMain.cm.toUser("AM:You halted the server. Have a nice day.", Username,true);
         CampaignData.mwlog.infoLog(Username + " halted the server. Have a nice day!");
-        CampaignMain.cm.addToNewsFeed("Server halted!");
+        CampaignMain.cm.addToNewsFeed("Server halted!", "Server News", "");
         try {
             MWPasswd.save();
         } catch(Exception ex) {
