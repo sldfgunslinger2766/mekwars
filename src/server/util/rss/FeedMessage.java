@@ -17,6 +17,7 @@ package server.util.rss;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import common.CampaignData;
 import server.campaign.CampaignMain;
@@ -52,8 +53,8 @@ public class FeedMessage {
 			}
 			this.description = msgBody.toString();
 			}
-		guid = CampaignMain.cm.getConfig("NewsURL");
-		source = CampaignMain.cm.getServer().getConfigParam("SERVERNAME");
+		guid = CampaignMain.cm.getConfig("NewsURL" + "?id=" + UUID.randomUUID());
+		source = CampaignMain.cm.getConfig("NewsURL");
 		pubDate = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z").format(new Date());
 	}
 	
@@ -67,7 +68,7 @@ public class FeedMessage {
 		sb.append(addAttribute("pubDate", pubDate));
 		sb.append(addAttribute("category", category));
 		sb.append(addAttribute("guid", guid));
-		sb.append(addAttribute("link", guid));
+		sb.append(addAttribute("source", source));
 		sb.append(addAttribute("description", description));
 		sb.append("</item>");
 		return sb.toString();
