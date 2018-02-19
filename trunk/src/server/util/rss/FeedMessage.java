@@ -44,7 +44,7 @@ public class FeedMessage {
 		this.msgBody = new StringBuffer(description);
 		
 		if(description.isEmpty()) {
-			this.description = "";
+			this.description = " ";
 		} else {
 			// Delete any html tags in the body
 			while (msgBody.indexOf("<") > -1) {
