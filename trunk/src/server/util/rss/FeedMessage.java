@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import common.CampaignData;
 import server.campaign.CampaignMain;
 
 /**
@@ -30,12 +29,12 @@ import server.campaign.CampaignMain;
  * @since 2018-02-18
  */
 public class FeedMessage {
-	private String source;
 	private String category;
 	private String pubDate;
 	private String guid;
 	private String description;
 	private String title;
+	private String link;
 	
 	private StringBuffer msgBody;
 	
@@ -53,8 +52,8 @@ public class FeedMessage {
 			}
 			this.description = msgBody.toString();
 			}
-		guid = CampaignMain.cm.getConfig("NewsURL") + "?id=" + UUID.randomUUID();
-		source = CampaignMain.cm.getConfig("NewsURL");
+		guid = UUID.randomUUID().toString();
+		link = CampaignMain.cm.getConfig("NewsURL");
 		pubDate = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z").format(new Date());
 	}
 	
@@ -68,7 +67,7 @@ public class FeedMessage {
 		sb.append(addAttribute("pubDate", pubDate));
 		sb.append(addAttribute("category", category));
 		sb.append(addAttribute("guid", guid));
-		sb.append(addAttribute("source", source));
+		sb.append(addAttribute("link", link));
 		sb.append(addAttribute("description", description));
 		sb.append("</item>");
 		return sb.toString();
