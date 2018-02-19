@@ -66,7 +66,7 @@ public class FeedMessage {
 		sb.append(addAttribute("title", title));
 		sb.append(addAttribute("pubDate", pubDate));
 		sb.append(addAttribute("category", category));
-		sb.append("<guid isPermalink=\"false\">" + guid + "</guid>");
+		sb.append("<guid isPermaLink=\"false\">" + guid + "</guid>\n");
 		sb.append(addAttribute("link", link));
 		sb.append(addAttribute("description", description));
 		sb.append("</item>");
