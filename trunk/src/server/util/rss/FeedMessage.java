@@ -53,7 +53,7 @@ public class FeedMessage {
 			}
 			this.description = msgBody.toString();
 			}
-		guid = CampaignMain.cm.getConfig("NewsURL" + "?id=" + UUID.randomUUID());
+		guid = CampaignMain.cm.getConfig("NewsURL") + "?id=" + UUID.randomUUID();
 		source = CampaignMain.cm.getConfig("NewsURL");
 		pubDate = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z").format(new Date());
 	}
