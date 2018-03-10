@@ -94,7 +94,7 @@ public class SolCreateUnitCommand implements Command {
 			return;
 		
 		//debug
-		CampaignMain.cm.toUser("DEBUG: First Faction to Search: " + factionTable,Username,true);
+		//CampaignMain.cm.toUser("DEBUG: First Faction to Search: " + factionTable,Username,true);
 		
 		initHouseList();
         addNonFactionBuildTables();
@@ -224,8 +224,8 @@ public class SolCreateUnitCommand implements Command {
         Iterator<House> i = CampaignMain.cm.getData().getAllHouses().iterator();
         
         //debug
-        CampaignMain.cm.toUser("-------------------------------------------------------------------------", player.getName() ,true);
-		CampaignMain.cm.toUser("DEBUG: Sever Side Faction List ( CampaignMain.cm.getData().getAllHouses() )", player.getName() ,true);
+        //CampaignMain.cm.toUser("-------------------------------------------------------------------------", player.getName() ,true);
+		//CampaignMain.cm.toUser("DEBUG: Sever Side Faction List ( CampaignMain.cm.getData().getAllHouses() )", player.getName() ,true);
 
         while (i.hasNext()) 
         {
@@ -235,11 +235,11 @@ public class SolCreateUnitCommand implements Command {
            {
         	   houseList.add(aHouse.getName().trim());
         	   //debug
-       		   CampaignMain.cm.toUser("DEBUG: " + aHouse.getName() , player.getName() ,true);
+       		   //CampaignMain.cm.toUser("DEBUG: " + aHouse.getName() , player.getName() ,true);
            }
         }
         //debug
-        CampaignMain.cm.toUser("-------------------------------------------------------------------------", player.getName() ,true);
+        //CampaignMain.cm.toUser("-------------------------------------------------------------------------", player.getName() ,true);
 	}
 	
 	private Boolean playerUnitLimitChecks(String Username) 
@@ -354,7 +354,7 @@ public class SolCreateUnitCommand implements Command {
         buildTableName += ".txt";
         
         //debug
-		CampaignMain.cm.toUser("DEBUG: Searching in: " + buildTableName + ", For Unit: " + unitToCheck.getUnitFilename().trim(), player.getName(), true);	
+		//CampaignMain.cm.toUser("DEBUG: Searching in: " + buildTableName + ", For Unit: " + unitToCheck.getUnitFilename().trim(), player.getName(), true);	
         
         //we should now have the correct path.
         Path path = Paths.get("data/buildtables/standard/" + buildTableName).toAbsolutePath();
