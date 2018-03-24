@@ -1,5 +1,17 @@
 VERSION HISTORY:
 ----------------
++ Moved tracker configuration from serverdata.dat to campaignconfg.date
+  **********************************************************************
+  * NOTE TO OPERATORS                                                  *
+  *                                                                    *
+  * Please take a quick look at the MekWars Wiki                       *
+  * http://www.mekwars.org/mediawiki-1.20.2/index.php/MekWars_Versions *
+  *                                                                    *
+  * This is where I will be detailing upgrade instructions in the      *
+  * future.                                                            *
+  **********************************************************************
+R Released Server, Client, Ded v0.7.0.0
+v 0.7.x.x
 + Updated RSS feed to allow for ITTT/Discord integration.  
   ***********************************
   * NOTE TO OPERATORS               *

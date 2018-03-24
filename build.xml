@@ -48,6 +48,11 @@
 	>
 	</property>
 	<property
+		name="hpgnetfile"
+		value="HPGNet.jar"
+	/>
+	
+	<property
 			name="PlanetDatConverterFile"
 			value="PlanetDatConverter.jar"
 	>
@@ -107,6 +112,7 @@
 				name="server-dist/lib/*.jar"
 			>
 			</include>
+			<include name="hpg-dist/lib/*.jar" />
 			<include
 				name="client-dist/*.jar"
 			>
@@ -182,20 +188,27 @@
 		description="Create tracker jar file"
 		name="tracker-jar"
 	>
-		<delete
-			file="${trackerfile}"
-		>
-		</delete>
+		<delete file="${trackerfile}" />
+		<delete file="${hpgnetfile}" />
 		<jar
 			basedir="${build}"
 			compress="true"
 			destfile="${trackerfile}"
-			excludes="server/**,admin/**,dedicatedhost/**"
+			excludes="server/**,admin/**,dedicatedhost/**,hpgnet/**"
 			includes="tracker/**"
 			jarfile="${trackerfile}"
 			manifest="TrackerManifest.txt"
 		>
 		</jar>
+		<jar 
+			basedir="${build}"
+			compress="true"
+			destfile="${hpgnetfile}"
+			excludes="server/**,admin/**,dedicatedhost/**,tracker/**"
+			includes="hpgnet/**"
+			jarfile="${hpgnetfile}"
+			manifest="HPGNetManifest.txt"
+		/>
 	</target>
 	<target
 		depends="compile"
@@ -229,7 +242,7 @@
 			basedir="${build}"
 			compress="true"
 			destfile="${opeditor}"
-			excludes="server/**,admin/**,dedicatedhost/**"
+			excludes="server/**,admin/**,dedicatedhost/**,hpgnet/**"
 			includes="OperationsEditor/**,common/campaign/operations/**,common/util/SpringLayoutHelper*,common/flags/**,common/CampaignData*,common/TerrainProvider*,common/util/MWLogger*,common/VerticalLayout*"
 			jarfile="${opeditor}"
 			manifest="OpEditorManifest.txt"
@@ -310,6 +323,7 @@
 			file="MekWarsTracker.jar"
 		>
 		</delete>
+		<delete file="HPGNet.jar" />
 		<delete
 			file="MekWarsOpEditor.jar"
 		>

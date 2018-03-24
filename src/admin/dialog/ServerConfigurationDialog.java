@@ -71,6 +71,7 @@ import admin.dialog.serverConfigDialogs.SchedulerPanel;
 import admin.dialog.serverConfigDialogs.SinglePlayerFactionPanel;
 import admin.dialog.serverConfigDialogs.TechnicianPanel;
 import admin.dialog.serverConfigDialogs.TechnologyResearchPanel;
+import admin.dialog.serverConfigDialogs.TrackerPanel;
 import admin.dialog.serverConfigDialogs.UnitLimitsPanel;
 import admin.dialog.serverConfigDialogs.UnitResearchPanel;
 import admin.dialog.serverConfigDialogs.UnitsCardPanel;
@@ -162,6 +163,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         ChristmasPanel christmasPanel = new ChristmasPanel();
         SchedulerPanel schedulerPanel = new SchedulerPanel();
         LinksPanel linksPanel = new LinksPanel();
+        TrackerPanel trackerPanel = new TrackerPanel(mwclient.getserverConfigs("TrackerUUID"));
         
         // Set the actions to generate
         okayButton.setActionCommand(okayCommand);
@@ -206,6 +208,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Support Units", null, artilleryPanel, "Artillery and Gun Emplacements and Mines oh my!");
         ConfigPane.addTab("Techs", null, technicianPanel, "Techs");
         ConfigPane.addTab("Tech Research", null, technologyResearchPanel, "Technology Research Configuration");
+        ConfigPane.addTab("Tracker", null, trackerPanel, "Comstar HPGNet - enabling inter-server communiation and activity tracking");
         ConfigPane.addTab("Voting", null, votingPanel, "Voting Stuff");
         ConfigPane.addTab("Unit Limits", null, unitLimitsPanel, "Limits to unit ownership based on unit weightclass");
         ConfigPane.addTab("Unit Research", null, unitResearchPanel, "Unit Research Configuration");

@@ -42,7 +42,7 @@ public class AdminRestartTrackerThreadCommand implements Command {
 			}
 		}
 
-		if ( !Boolean.parseBoolean(CampaignMain.cm.getServer().getConfigParam("USETRACKER"))) {
+		if ( !Boolean.parseBoolean(CampaignMain.cm.getConfig("UseTracker"))) {
 			CampaignMain.cm.toUser("AM: Server is configured not to use the tracker.", Username, true);
 			return;
 		}

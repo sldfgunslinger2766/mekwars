@@ -22,6 +22,7 @@
 package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import javax.swing.JOptionPane;
 
@@ -91,6 +92,9 @@ public class AdminChangeServerConfigCommand implements Command {
 			ChristmasHandler.getInstance().setNumberOfUnits(Integer.parseInt(arg));
 		} else if (config.equalsIgnoreCase("Celebrate_Christmas")) {
 			ChristmasHandler.getInstance().setCelebrateChristmas(Boolean.parseBoolean(arg));
+		} else if (config.equalsIgnoreCase("TrackerResetUUID")) {
+			CampaignMain.cm.getConfig().setProperty("TrackerUUID", UUID.randomUUID().toString());
+			CampaignMain.cm.getConfig().setProperty("TrackerResetUUID", "false");
 		}
 		
 		//NOTE:
