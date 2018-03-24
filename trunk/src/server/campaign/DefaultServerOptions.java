@@ -1380,6 +1380,16 @@ public class DefaultServerOptions {
         defaults.setProperty("Enable_Link3_Button", "false");
         defaults.setProperty("Link3_URL", "https://facebook.com");
         defaults.setProperty("Link3_Icon", "./data/images/misc/facebook.png");
+        
+        // Tracker - let's move stuff out of the server config file and into 
+        // Campaign configs so we can edit it while the server is live, shall we?
+        defaults.setProperty("TrackerUUID", "0");
+        defaults.setProperty("UseTracker", "false");
+        defaults.setProperty("TrackerAddress", "tracker.mekwars.org");
+        defaults.setProperty("TrackerLink", "http://www.myserver.net");
+        defaults.setProperty("TrackerDesc", "A MekWars Server");
+        defaults.setProperty("TrackerResetUUID", "false");
+        defaults.setProperty("ServerName", "ExampleTech");
     }
 
     /**

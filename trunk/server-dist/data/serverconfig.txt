@@ -24,14 +24,7 @@ DATAPORT=4867
 
 #TRACKER SETUP
 #
-#If USETRACKER is false, all other setting in this
-#block may be ignored. Contact the mekwars.org staff
-#for the settings required to list on their tracker.
-#-------------
-USETRACKER=false
-TRACKERADDRESS=example.com
-TRACKERLINK=http://www.myserver.net
-TRACKERDESC=A test server.
+#This has been moved to CampaignConfig.  Please configure it in the Tracker tab
 
 #CAMPAIGN CONFIG PATH
 #

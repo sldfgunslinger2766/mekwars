@@ -42,6 +42,7 @@ import server.MWChatServer.MWChatClient;
 import server.MWChatServer.MWChatServer;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
+import server.campaign.DefaultServerOptions;
 import server.campaign.SPlayer;
 import server.util.IpCountry;
 import server.util.TrackerThread;
@@ -54,7 +55,7 @@ import common.comm.ServerCommand;
 public class MWServ {
 
 	// Static logging engine, and static version info.
-    public static final String SERVER_VERSION = "0.6.0.6";
+    public static final String SERVER_VERSION = "0.7.0.0";
 
 
     private ServerWrapper myCommunicator;
@@ -76,6 +77,7 @@ public class MWServ {
 	private Vector<String> ignoreList = new Vector<String>(1, 1);
 	private Vector<String> factionLeaderIgnoreList = new Vector<String>(1, 1);
     private TrackerThread trackerThread;
+    
 	// private boolean debug = true;
 
 	/*
@@ -171,7 +173,8 @@ public class MWServ {
 	}
 
 	public void startTracker() {
-		if (Boolean.parseBoolean(getConfigParam("USETRACKER"))){
+		if (Boolean.parseBoolean(getCampaign().getConfig("UseTracker"))) {
+			
 			if(this.trackerThread != null) {
 				this.trackerThread.interrupt();
 			}
@@ -186,30 +189,12 @@ public class MWServ {
 		try {
 			config.load(new FileInputStream("./data/serverconfig.txt"));
 		} catch (Exception e) {
-			config.setProperty("SERVERNAME", "MekWars Server");
 			config.setProperty("INFOMESSAGE", "For MekWars project info, visit http://www.sourceforge.net/projects/mekwars");
 			config.setProperty("RESOLVECOUNTRY", "true");
 			config.setProperty("CAMPAIGNCONFIG", "./data/campaignconfig.txt");
 			config.setProperty("DATAPORT", "4867");
-			config.setProperty("USETRACKER", "false");
-			config.setProperty("TRACKERADDRESS", "none");
-			config.setProperty("TRACKERLINK", "none");
-			config.setProperty("TRACKERDESC", "none");
 			config.setProperty("SERVERIP", "-1");// this binds to all local IPs
 													// in MWChatServer.java
-			config.setProperty("USEMYSQL", "false");
-			config.setProperty("MYSQLUSER", "");
-			config.setProperty("MYSQLPASS", "");
-			config.setProperty("MYSQLHOST", "");
-			config.setProperty("MYSQLDB", "mekwars");
-			config.setProperty("MYSQL_SYNCHPPHPBB", "false");
-			config.setProperty("PHPBB_USER", "sa");
-			config.setProperty("PHPBB_PASS", "master");
-			config.setProperty("PHPBB_HOST", "localhost");
-			config.setProperty("PHPBB_DB", "phpbb");
-			config.setProperty("PHPBB_TABLE_PREFIX", "phpbb_");
-			config.setProperty("PHPBB_MAJOR_VERSION", "2");
-			config.setProperty("PHPBB_URL", "http://localhost/phpbb/index.php");
 			try {
 				config.store(new FileOutputStream("./data/serverconfig.txt"), "Server config File");
 			} catch (Exception e1) {
@@ -431,7 +416,7 @@ public class MWServ {
 		}
 
 		String clientVersion = "any " + SERVER_VERSION.substring(0, SERVER_VERSION.lastIndexOf(".")) + ".x";
-		clientSend("CH|Welcome to " + getConfigParam("SERVERNAME") + " (Server Version: " + SERVER_VERSION + ", Compatible Clients: " + clientVersion + ")", name);
+		clientSend("CH|Welcome to " + getCampaign().getConfig("ServerName") + " (Server Version: " + SERVER_VERSION + ", Compatible Clients: " + clientVersion + ")", name);
 		clientSend("CH|" + getConfigParam("INFOMESSAGE"), name);
 
 		// send MMGame info for currently open hosts. future updates
@@ -1185,6 +1170,11 @@ public class MWServ {
 
 	public Hashtable<String, String> getBanAccounts() {
 		return banaccounts;
+	}
+	
+	public void saveConfigs() {
+        DefaultServerOptions dso = new DefaultServerOptions();
+        dso.createConfig();
 	}
 }
 

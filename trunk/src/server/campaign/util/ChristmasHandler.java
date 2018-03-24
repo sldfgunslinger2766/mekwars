@@ -30,15 +30,12 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import javax.swing.JOptionPane;
-
+import common.CampaignData;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.util.scheduler.EndChristmasJob;
 import server.campaign.util.scheduler.StartChristmasJob;
-
-import common.CampaignData;
 
 /**
  * A class to handle scheduling of distribution of meks during the Christmas season.  Historically,
@@ -270,7 +267,7 @@ public class ChristmasHandler {
 		isChristmasSeason = false;
 		CampaignMain.cm.getConfig().setProperty("Christmas_ManuallyStarted", "false");
 		
-		// Clear the gift receipients so they are not penalized next Christmas season
+		// Clear the gift recipients so they are not penalized next Christmas season
 		File file = new File(giftRecipientsFile);
 		gifts.clear();
 		if(file.exists()) {

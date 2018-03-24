@@ -19,20 +19,43 @@ package server.util;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.UUID;
 
 import server.MWServ;
 import server.campaign.CampaignMain;
 import common.CampaignData;
 
+/**
+ * 
+ * @author urgru
+ * @author Torren
+ * 
+ * @version 2.0
+ * 
+ * A thread which communicates with the tracker.
+ * 
+ * ChangeLog: Updated to use campaignconfig instead of ServerConfig, so we don't
+ * have to reboot to affect change.  *
+ */
 public class TrackerThread extends Thread {
 	
 	//VARIABLE
 	MWServ serv;
+	private String trackerID = "0";
 	
 	//CONSTRUCTOS
 	public TrackerThread(MWServ s) {
 	    super("Tracker Thread");
 		serv = s;
+		if(trackerID.equalsIgnoreCase("0")) {
+			// Tracker ID not loaded yet
+			if((trackerID = serv.getCampaign().getConfig("TrackerUUID")).equalsIgnoreCase("0")) {
+				// The tracker ID is not yet set by the server.  Let's set it so this never happens again
+				trackerID = UUID.randomUUID().toString();
+				serv.getCampaign().getConfig().setProperty("TrackerUUID", trackerID);
+				serv.saveConfigs();
+			}
+		}		
 		CampaignData.mwlog.infoLog("Created TrackerThread");
 	}
 	
@@ -44,12 +67,14 @@ public class TrackerThread extends Thread {
 		CampaignData.mwlog.infoLog("TrackerThread running.");
 		
 		//core info
-		String name = serv.getConfigParam("SERVERNAME");
-		String link = serv.getConfigParam("TRACKERLINK");
-		String desc = serv.getConfigParam("TRACKERDESC");
+		String name = serv.getCampaign().getConfig("ServerName");
+		String link = serv.getCampaign().getConfig("TrackerLink");
+		String desc = serv.getCampaign().getConfig("TrackerDesc");
 		
 		//ip of tracker
-		String trackerAddress = serv.getConfigParam("TRACKERADDRESS");
+		//String trackerAddress = serv.getConfigParam("TRACKERADDRESS");
+		String trackerAddress = serv.getCampaign().getConfig("TrackerAddress");
+		CampaignData.mwlog.infoLog(name + " " + link + " " + desc + " " + trackerAddress);
 		
 		/*
 		 * Immediately send core info to tracker.
