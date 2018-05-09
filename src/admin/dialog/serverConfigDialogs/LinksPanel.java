@@ -50,6 +50,9 @@ public class LinksPanel extends JPanel {
 		JPanel panel3 = new JPanel();
 		JPanel panel3a = new JPanel();
 		JPanel panel3b = new JPanel();
+		JPanel panel4 = new JPanel();
+		JPanel panel4a = new JPanel();
+		JPanel panel4b = new JPanel();
 
 		panel0.add(new JLabel(description));
 
@@ -82,7 +85,7 @@ public class LinksPanel extends JPanel {
 		panel2.setLayout(new FlowLayout(FlowLayout.CENTER));
 		panel2a.setLayout(new GridLayout(3,1,0,5));
 		panel2b.setLayout(new GridLayout(3,1));
-		panel2.setBorder(BorderFactory.createTitledBorder("Icon Location and File Names (Size 30x30 or less"));
+		panel2.setBorder(BorderFactory.createTitledBorder("Icon Location and File Names (Size 30x30 or less)"));
 
 		baseLabel = new JLabel("Link1 Icon:");
 		baseLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -143,10 +146,27 @@ public class LinksPanel extends JPanel {
 		panel3.add(panel3a);
 		panel3.add(panel3b);
 		
+		panel4.setLayout(new FlowLayout(FlowLayout.CENTER));
+		panel4a.setLayout(new GridLayout(1,1,0,5));
+		panel4b.setLayout(new GridLayout(1,1));
+		panel4.setBorder(BorderFactory.createTitledBorder("Rules Panel"));
+
+		baseLabel = new JLabel("Rules Location:");
+		baseLabel.setHorizontalAlignment(JLabel.RIGHT);
+		baseTextField = new JTextField(30);
+		baseTextField.setToolTipText("<HTML>Needs to be a basic HTML. Linking to remote host may slow client load time </HTML>");
+		baseTextField.setName("RulesLocation");
+		panel4a.add(baseLabel);
+		panel4b.add(baseTextField);
+		
+		panel4.add(panel4a);
+		panel4.add(panel4b);
+		
 		add(panel0);
 		add(panel1);
 		add(panel2);
 		add(panel3);
+		add(panel4);
 
 	}
 
