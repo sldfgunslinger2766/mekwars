@@ -226,6 +226,10 @@ public class GUIClientConfig implements IClientConfig {
         defaults.setProperty("HQTABNAME", "Headquarters");
         defaults.setProperty("HQINTOPROW", "YES");
         defaults.setProperty("HQMNEMONIC", "Q");
+        defaults.setProperty("RULESTABVISIBLE", "YES"); //@Salient
+        defaults.setProperty("RULESTABNAME", "Rules");
+        defaults.setProperty("RULESINTOPROW", "YES");
+        defaults.setProperty("RULESMNEMONIC", "Z");
         defaults.setProperty("BMTABVISIBLE", "YES");
         defaults.setProperty("BMTABNAME", "Black Market");
         defaults.setProperty("BMINTOPROW", "YES");

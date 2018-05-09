@@ -29,6 +29,8 @@ import server.campaign.SPlayer;
 import server.campaign.SUnit;
 //import server.campaign.SArmy;
 import server.campaign.commands.Command;
+import server.campaign.pilot.SPilot;
+
 //import server.campaign.pilot.SPilot;
 //import server.campaign.pilot.SPilotSkills;
 //import server.campaign.pilot.skills.SPilotSkill;
@@ -68,6 +70,7 @@ public class SolCreateUnitCommand implements Command {
 	private SPlayer player;
 	private SHouse house;
 	private SUnit unit;
+	//private SPilot pilot;
 	
 	List<String> houseList = new ArrayList<String>();
 	
@@ -287,8 +290,13 @@ public class SolCreateUnitCommand implements Command {
 
 		if(command.hasMoreElements())
 			weight = Integer.parseInt(command.nextToken());
-
-		return SUnit.create(filename, FlavorText, house.getBaseGunner(), house.getBasePilot(), weight, skillTokens);
+			
+		//Note that if you look at the create method of SUnit, it appears you dont really need to pass the weight...
+		SUnit tempUnit = SUnit.create(filename, FlavorText, house.getBaseGunner(), house.getBasePilot(), weight, skillTokens);
+        SPilot tempPilot = house.getNewPilot(tempUnit.getType());
+        tempUnit.setPilot(tempPilot);
+        
+        return tempUnit;
 	}
 	
 	private Boolean accessChecks(String Username, int userLevel) 

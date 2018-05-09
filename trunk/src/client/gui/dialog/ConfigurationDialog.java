@@ -63,6 +63,7 @@ public final class ConfigurationDialog implements ActionListener {
     // TEXT FIELDS
     // tab names
     private final JTextField hqTabNameField = new JTextField(10);
+    private final JTextField rulesTabNameField = new JTextField(10); //@salient
     private final JTextField bmTabNameField = new JTextField(10);
     private final JTextField bmeTabNameField = new JTextField(10);
     private final JTextField hsTabNameField = new JTextField(10);
@@ -78,6 +79,7 @@ public final class ConfigurationDialog implements ActionListener {
 
     // tab mnemonic
     private final JTextField hqTabMnemonicField = new JTextField(1);
+    private final JTextField rulesTabMnemonicField = new JTextField(1); //@salient
     private final JTextField bmTabMnemonicField = new JTextField(1);
     private final JTextField bmeTabMnemonicField = new JTextField(1);
     private final JTextField hsTabMnemonicField = new JTextField(1);
@@ -160,6 +162,7 @@ public final class ConfigurationDialog implements ActionListener {
     // CHECK BOXEN
     // tab visibility
     private final JCheckBox hqTabVisBox = new JCheckBox();
+    private final JCheckBox rulesTabVisBox = new JCheckBox(); //@salient , top only?
     private final JCheckBox bmTabVisBox = new JCheckBox();
     private final JCheckBox bmeTabVisBox = new JCheckBox();
     private final JCheckBox hsTabVisBox = new JCheckBox();
@@ -174,6 +177,7 @@ public final class ConfigurationDialog implements ActionListener {
 
     // tab location
     private final JCheckBox hqTabonTopBox = new JCheckBox();
+    private final JCheckBox rulesTabonTopBox = new JCheckBox();
     private final JCheckBox bmTabonTopBox = new JCheckBox();
     private final JCheckBox bmeTabonTopBox = new JCheckBox();
     private final JCheckBox hsTabonTopBox = new JCheckBox();
@@ -961,6 +965,12 @@ public final class ConfigurationDialog implements ActionListener {
         dopeCBox6.setEnabled(false);
         dopeCBox6.setHorizontalAlignment(SwingConstants.CENTER);
         tabVisibilitySpring.add(dopeCBox6);
+        
+        tabVisibilitySpring.add(new JLabel("Rules:", SwingConstants.TRAILING)); //@salient
+        rulesTabVisBox.setHorizontalAlignment(SwingConstants.CENTER);
+        rulesTabonTopBox.setHorizontalAlignment(SwingConstants.CENTER);
+        tabVisibilitySpring.add(rulesTabVisBox);
+        tabVisibilitySpring.add(rulesTabonTopBox);
 
         // Set up the springs
         SpringLayoutHelper.setupSpringGrid(tabVisibilitySpring, 3);
@@ -1061,6 +1071,10 @@ public final class ConfigurationDialog implements ActionListener {
             tabNamingSpring.add(bmeTabNameField);
             tabNamingSpring.add(bmeTabMnemonicField);
         }
+        
+        tabNamingSpring.add(new JLabel("Role Play:", SwingConstants.TRAILING)); //@salient
+        tabNamingSpring.add(rulesTabNameField);
+        tabNamingSpring.add(rulesTabMnemonicField);
 
         // Set up the actual layout
         SpringLayoutHelper.setupSpringGrid(tabNamingSpring, 3);
@@ -1283,6 +1297,11 @@ public final class ConfigurationDialog implements ActionListener {
         hqTabMnemonicField.setText(mwclient.getConfig().getParam("HQMNEMONIC"));
         hqTabonTopBox.setSelected(mwclient.getConfig().isParam("HQINTOPROW"));
         hqTabVisBox.setSelected(mwclient.getConfig().isParam("HQTABVISIBLE"));
+        
+        rulesTabNameField.setText(mwclient.getConfig().getParam("RULESTABNAME")); //@salient
+        rulesTabMnemonicField.setText(mwclient.getConfig().getParam("RULESMNEMONIC"));
+        rulesTabonTopBox.setSelected(mwclient.getConfig().isParam("RULESINTOPROW"));
+        rulesTabVisBox.setSelected(mwclient.getConfig().isParam("RULESTABVISIBLE"));
 
         hsTabNameField.setText(mwclient.getConfig().getParam("HSTATUSTABNAME"));
         hsTabMnemonicField.setText(mwclient.getConfig().getParam("HSTATUSMNEMONIC"));
@@ -1563,6 +1582,11 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.getConfig().setParam("HQMNEMONIC", hqTabMnemonicField.getText());
             mwclient.getConfig().setParam("HQINTOPROW", Boolean.toString(hqTabonTopBox.isSelected()));
             mwclient.getConfig().setParam("HQTABVISIBLE", Boolean.toString(hqTabVisBox.isSelected()));
+            
+            mwclient.getConfig().setParam("RULESTABNAME", rulesTabNameField.getText()); //@salient
+            mwclient.getConfig().setParam("RULESMNEMONIC", rulesTabMnemonicField.getText());
+            mwclient.getConfig().setParam("RULESINTOPROW", Boolean.toString(rulesTabonTopBox.isSelected()));
+            mwclient.getConfig().setParam("RULESTABVISIBLE", Boolean.toString(rulesTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("BMTABNAME", bmTabNameField.getText());
             mwclient.getConfig().setParam("BMMNEMONIC", bmTabMnemonicField.getText());

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -45,7 +45,7 @@ import common.CampaignData;
 
 public class CMainPanel extends JPanel implements ChangeListener, ComponentListener {
 	/**
-     * 
+     *
      */
     private static final long serialVersionUID = -7817596095411018999L;
     JSplitPane MainSPane;
@@ -59,26 +59,28 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 	CHQPanel HQPanel = null;
 	CBMPanel BMPanel = null;
 	CHSPanel HSPanel = null;
+	CRulesPanel RulesPanel = null; //@salient
 	JTabbedPane BMETabbed = null;
 	CSelectTabAction HQSelect = null;
+	CSelectTabAction RulesSelect = null; //@salient
 	CSelectTabAction BMSelect = null;
 	CSelectTabAction HSSelect = null;
 	CSelectTabAction BMESelect = null;
-	
+
 	CBattlePanel BattlePanel = null;
 	CSelectTabAction BattleSelect = null;
 	CMapPanel MapPanel = null;
 	CSelectTabAction MapSelect = null;
-	
+
 	MWClient mwclient;
-	
+
 	CTabForwardAction ForwardMainTab;
 	CTabBackwardAction BackwardMainTab;
 	int panelDivider;
     int playerPanelDivider;
     int verticalPanelDivider;
 	int sPanelDivider = 0;
-	
+
 	public CMainPanel(MWClient client, CMainFrame mainFrame) {
 		mwclient = client;
 		setLayout(new BorderLayout());
@@ -111,7 +113,7 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 		MainSPane.setDividerLocation(verticalPanelDivider);
 		MainSPane.setDividerSize(sPanelDivider);
 		add(MainSPane, BorderLayout.CENTER);
-		
+
 		ForwardMainTab = new CTabForwardAction();
 		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("alt X"), "TabForward");
 		getActionMap().put("TabForward", ForwardMainTab);
@@ -120,84 +122,85 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 		getActionMap().put("TabBackward", BackwardMainTab);
 		revalidate();
 	}
-	
+
 	private void addPanelMain(
-			JPanel panel, 
-			CSelectTabAction select, 
-			String name, 
-			String tooltip, 
-			String mnemostr, 
+			JPanel panel,
+			CSelectTabAction select,
+			String name,
+			String tooltip,
+			String mnemostr,
 			String commandStr) {
 		MainTPane.addTab(name, null, panel, tooltip);
 		int index = MainTPane.indexOfComponent(panel);
 		int mnemo = MainTPane.getTitleAt(index).indexOf(mnemostr.toUpperCase());
-		if (mnemo == -1) 
+		if (mnemo == -1)
 			mnemo = MainTPane.getTitleAt(index).indexOf(mnemostr.toLowerCase());
 		MainTPane.setDisplayedMnemonicIndexAt(index, mnemo);
 		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("alt "+mnemostr), commandStr);
 		getActionMap().put(commandStr, select);
 	}
-	
+
 	private void addPanelCComm(
-			JPanel panel, 
-			CSelectTabAction select, 
-			String name, 
-			String tooltip, 
-			String mnemostr, 
+			JPanel panel,
+			CSelectTabAction select,
+			String name,
+			String tooltip,
+			String mnemostr,
 			String commandStr,
 			CCommPanel CommPanel) {
 		CommPanel.CommTPane.addTab(name, null, panel, tooltip);
 		int index = CommPanel.CommTPane.indexOfComponent(panel);
 		int mnemo = CommPanel.CommTPane.getTitleAt(index).indexOf(mnemostr.toUpperCase());
-		if (mnemo == -1) 
+		if (mnemo == -1)
 			mnemo = CommPanel.CommTPane.getTitleAt(index).indexOf(mnemostr.toLowerCase());
 		CommPanel.CommTPane.setDisplayedMnemonicIndexAt(index, mnemo);
 		CommPanel.CommTPane.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("alt "+mnemostr), commandStr);
 		CommPanel.CommTPane.getActionMap().put(commandStr, select);
 	}
-	
+
+    //Why is this defined twice? - salient
 	private void addPanelMain(
-			JTabbedPane panel, 
-			CSelectTabAction select, 
-			String name, 
-			String tooltip, 
-			String mnemostr, 
+			JTabbedPane panel,
+			CSelectTabAction select,
+			String name,
+			String tooltip,
+			String mnemostr,
 			String commandStr) {
 		MainTPane.addTab(name, null, panel, tooltip);
 		int index = MainTPane.indexOfComponent(panel);
 		int mnemo = MainTPane.getTitleAt(index).indexOf(mnemostr.toUpperCase());
-		if (mnemo == -1) 
+		if (mnemo == -1)
 			mnemo = MainTPane.getTitleAt(index).indexOf(mnemostr.toLowerCase());
 		MainTPane.setDisplayedMnemonicIndexAt(index, mnemo);
 		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("alt "+mnemostr), commandStr);
 		getActionMap().put(commandStr, select);
 	}
-	
+
 	private void addPanelCComm(
-			JTabbedPane panel, 
-			CSelectTabAction select, 
-			String name, 
-			String tooltip, 
-			String mnemostr, 
+			JTabbedPane panel,
+			CSelectTabAction select,
+			String name,
+			String tooltip,
+			String mnemostr,
 			String commandStr,
 			CCommPanel CommPanel) {
 		CommPanel.CommTPane.addTab(name, null, panel, tooltip);
 		int index = CommPanel.CommTPane.indexOfComponent(panel);
 		int mnemo = CommPanel.CommTPane.getTitleAt(index).indexOf(mnemostr.toUpperCase());
-		if (mnemo == -1) 
+		if (mnemo == -1)
 			mnemo = CommPanel.CommTPane.getTitleAt(index).indexOf(mnemostr.toLowerCase());
 		CommPanel.CommTPane.setDisplayedMnemonicIndexAt(index, mnemo);
 		CommPanel.CommTPane.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("alt "+mnemostr), commandStr);
 		CommPanel.CommTPane.getActionMap().put(commandStr, select);
 	}
-	
+
 	private void createMainTPane(CMainFrame mainFrame)
 	{
 		//int index;
 		//int mnemo;
-		
+
 		CommPanel = new CCommPanel(mwclient);
-		
+
         String tabText="";
 		String mnemonicText="";
 		if ( mwclient.getConfig().isParam("HQTABVISIBLE"))
@@ -211,7 +214,7 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 			else
 				addPanelCComm(HQPanel, HQSelect, tabText, "Command Center and Hangars (Alt + "+mnemonicText+")", mnemonicText, "HQSelect",CommPanel);
 		}
-		
+
 		if ( mwclient.getConfig().isParam("BMTABVISIBLE"))
 		{
 			BMPanel = new CBMPanel(mwclient);
@@ -223,7 +226,7 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 			else
 				addPanelCComm(BMPanel, BMSelect, tabText, "Buy and Sell Units (Alt + "+mnemonicText+")", mnemonicText, "BMSelect",CommPanel);
 		}
-		
+
 		if ( mwclient.getConfig().isParam("BMETABVISIBLE") && Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsBlackMarket")) )
 		{
 			BMETabbed = new JTabbedPane(SwingConstants.BOTTOM);
@@ -239,9 +242,9 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 			else
 				addPanelCComm(BMETabbed, BMESelect, tabText, "Buy and Sell Parts (Alt + "+mnemonicText+")", mnemonicText, "BMESelect",CommPanel);
 		}
-		
+
 		HSPanel = new CHSPanel(mwclient);
-		if ( mwclient.getConfig().isParam("HSTATUSTABVISIBLE")) {		
+		if ( mwclient.getConfig().isParam("HSTATUSTABVISIBLE")) {
 			HSSelect = new CSelectTabAction(HSPanel);
 			tabText = mwclient.getConfig().getParam("HSTATUSTABNAME");
 			mnemonicText = mwclient.getConfig().getParam("HSTATUSMNEMONIC");
@@ -250,9 +253,9 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 			else
 				addPanelCComm(HSPanel, HSSelect, tabText, "Show current House Status (Alt + "+mnemonicText+")", mnemonicText, "HSSelect",CommPanel);
 		}
-		
+
 		if ( mwclient.getConfig().isParam("BATTLETABVISIBLE"))
-		{		
+		{
 			BattlePanel = new CBattlePanel(mwclient);
 			BattleSelect = new CSelectTabAction(BattlePanel);
 			tabText = mwclient.getConfig().getParam("BATTLETABNAME");
@@ -261,10 +264,10 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 				addPanelMain(BattlePanel, BattleSelect, tabText, "Battles Intelligence Data (Alt + "+mnemonicText+")", mnemonicText, "BattleSelect");
 			else
 				addPanelCComm(BattlePanel, BattleSelect, tabText, "Battles Intelligence Data (Alt + "+mnemonicText+")", mnemonicText, "BattleSelect",CommPanel);
-		}	
-		
+		}
+
 		MapPanel = new CMapPanel(mwclient, mainFrame, CommPanel.getWidth(), CommPanel.getHeight());
-		if ( mwclient.getConfig().isParam("MAPTABVISIBLE")) {		
+		if ( mwclient.getConfig().isParam("MAPTABVISIBLE")) {
 			MapSelect = new CSelectTabAction(MapPanel);
 			tabText = mwclient.getConfig().getParam("MAPTABNAME");
 			mnemonicText = mwclient.getConfig().getParam("MAPMNEMONIC");
@@ -273,32 +276,44 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 			else
 				addPanelCComm(MapPanel, MapSelect, tabText, "Star Map (Alt + "+mnemonicText+")", mnemonicText, "MapSelect",CommPanel);
 		}
-		
+
+		if ( mwclient.getConfig().isParam("RULESTABVISIBLE")) //@salient
+		{
+			RulesPanel = new CRulesPanel(mwclient);
+			RulesSelect = new CSelectTabAction(RulesPanel);
+			tabText = mwclient.getConfig().getParam("RULESTABNAME");
+			mnemonicText = mwclient.getConfig().getParam("RULESMNEMONIC");
+			if ( mwclient.getConfig().isParam("RULESINTOPROW"))
+				addPanelMain(RulesPanel, RulesSelect, tabText, "Rules Tab (Alt + "+mnemonicText+")",mnemonicText, "RulesSelect");
+	        else
+	        	addPanelCComm(RulesPanel, RulesSelect, tabText, "Rules Tab (Alt + "+mnemonicText+")",mnemonicText, "RulesSelect",CommPanel);
+		}
+
 		MainTPane.addChangeListener(this);
 	}
-	
+
 	public void changeStatus(int status, int laststatus) {
-		
+
 		if (status == MWClient.STATUS_RESERVE) {
 			if (laststatus == MWClient.STATUS_LOGGEDOUT) {
 				UserListPanel.setLoggedIn(true);
 				UserListPanel.getUsers().getRenderer().setLoggedIn(true);
 				if (mwclient.getConfig().isParam("PLAYERPANEL")) {PlayerPanel.setVisible(true);}
 				TabSPane.setDividerLocation(panelDivider);
-				SideSPane.setDividerLocation(playerPanelDivider);        
+				SideSPane.setDividerLocation(playerPanelDivider);
 			}
 		}
-		
+
 		if (status == MWClient.STATUS_DISCONNECTED || status == MWClient.STATUS_LOGGEDOUT) {
 			UserListPanel.setLoggedIn(false);
 			UserListPanel.getUsers().getRenderer().setLoggedIn(false);
 			PlayerPanel.setVisible(false);
 		}
-		
+
 		if (status == MWClient.STATUS_DISCONNECTED) {MainTPane.setVisible(false);}
 		else {MainTPane.setVisible(true);}
 	}
-	
+
 	/**
 	 * A method which selects the FIRST tab, whatever it may be.
 	 */
@@ -309,18 +324,18 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 			//do nothing. just means no upper-level tabs.
 		}
 	}
-	
+
 	/**
 	 * A method which selects the map tab, whether it is in
 	 * the main or comm panel, and sends it to the front.
-	 * 
+	 *
 	 * Used by MMNETHyperLinkListener if MAPTABONCLICK is set.
 	 */
 	public void selectMapTab() {
-		
+
 		//get the map name
 		String nameToFind = mwclient.getConfigParam("MAPTABNAME");
-		
+
 		//look for map in main/top
 		for (int i = MainTPane.getTabCount() - 1; 0 <= i ; i--) {
 			String currTitle = MainTPane.getTitleAt(i);
@@ -329,7 +344,7 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 				return;
 			}
 		}
-		
+
 		//look for map in chat/bottom
 		for (int i = CommPanel.CommTPane.getTabCount() - 1; 0 <= i ; i--) {
 			String currTitle = CommPanel.CommTPane.getTitleAt(i);
@@ -339,20 +354,20 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 			}
 		}
 	}//end selectMapTab
-	
+
 	public CPlayerPanel getPlayerPanel() {return PlayerPanel;}
     public void setPlayerPanel(CPlayerPanel panel) {PlayerPanel = panel;}
 
     public CMapPanel getMapPanel() {return MapPanel;}
-	
+
     public JSplitPane getTabSPane(){return TabSPane;}
     public JSplitPane getMainSPane(){return MainSPane;}
     public JSplitPane getSideSPane(){return SideSPane;}
-    
+
 	public CUserListPanel getUserListPanel() {return UserListPanel;}
-	
+
 	public CCommPanel getCommPanel() {return CommPanel;}
-	
+
 	public CHQPanel getHQPanel() {return HQPanel;}
 	public CBMPanel getBMPanel() {return BMPanel;}
 	public CHSPanel getHSPanel() {return HSPanel;}
@@ -368,46 +383,46 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 			CampaignData.mwlog.errLog(ex);
 		}
 	}
-	
+
 	public JTable getBattleTable() {return BattlePanel.getBattleTable();}
-	
+
 	public void refreshBattleTable() {BattlePanel.getBattleTableModel().refreshModel();}
-	
-	
+
+
 	// change listener
 	public void stateChanged(ChangeEvent e) {
 		if (MainTPane.getSelectedIndex() == -1) {return;}
 		if (MainTPane.getSelectedComponent() == CommPanel) {CommPanel.getInputField().requestFocusInWindow();}
 	}
-	
-	// component listener	
+
+	// component listener
 	public void componentHidden(ComponentEvent e) {}
 	public void componentMoved(ComponentEvent e) {}
-	
+
 	public void componentResized(ComponentEvent e) {
 		TabSPane.setDividerLocation(panelDivider);
 		SideSPane.setDividerLocation(playerPanelDivider);
 		MainSPane.setDividerLocation(verticalPanelDivider);
 	}
-	
+
 	public void componentShown(ComponentEvent e) {
 		TabSPane.setDividerLocation(panelDivider);
 		SideSPane.setDividerLocation(playerPanelDivider);
 		MainSPane.setDividerLocation(verticalPanelDivider);
 	}
-	
+
 	// component listener
 	// actions
-	
+
 	private class CTabForwardAction extends AbstractAction {
-		
+
 		/**
-         * 
+         *
          */
         private static final long serialVersionUID = -6816947698919825957L;
         public CTabForwardAction() {}
 		public void actionPerformed(ActionEvent e) {
-			
+
 			int count = MainTPane.getTabCount();
 			if (count < 2) {return;}
 			int index = MainTPane.getSelectedIndex();
@@ -417,15 +432,15 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 				index++;
 				if (index == count) {index = 0;}
 			}
-			
+
 			MainTPane.setSelectedIndex(index);
 		}
 	}
-	
+
 	private class CTabBackwardAction extends AbstractAction {
-		
+
 		/**
-         * 
+         *
          */
         private static final long serialVersionUID = -507793785645622171L;
         public CTabBackwardAction() {}
@@ -439,15 +454,15 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 				index--;
 				if (index == -1) {index = count - 1;}
 			}
-			
+
 			MainTPane.setSelectedIndex(index);
 		}
 	}
-	
+
 	private class CSelectTabAction extends AbstractAction {
-		
+
 		/**
-         * 
+         *
          */
         private static final long serialVersionUID = -1191343876143323182L;
         Component Tab = null;
@@ -461,9 +476,9 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
 			}
 		}
 	}
-	
+
 	// actions
-    
+
     public void recreateMainTPane(CMainFrame mainFrame)  {
         //int index;
         //int mnemo;
@@ -471,7 +486,7 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
         MainTPane.removeAll();
         CommPanel.CommTPane.removeAll();
         CommPanel.reload();
-        
+
         String tabText="";
         String mnemonicText="";
         if ( mwclient.getConfig().isParam("HQTABVISIBLE"))
@@ -487,7 +502,7 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
             else
                 addPanelCComm(HQPanel, HQSelect, tabText, "Command Center and Hangars (Alt + "+mnemonicText+")", mnemonicText, "HQSelect",CommPanel);
         }
-        
+
         if ( mwclient.getConfig().isParam("BMTABVISIBLE"))
         {
             if ( BMPanel == null ){
@@ -501,7 +516,7 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
             else
                 addPanelCComm(BMPanel, BMSelect, tabText, "Buy and Sell Units (Alt + "+mnemonicText+")", mnemonicText, "BMSelect",CommPanel);
         }
-        
+
         if ( mwclient.getConfig().isParam("BMETABVISIBLE") && Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsBlackMarket")) )
         {
             if ( BMETabbed == null ){
@@ -519,9 +534,9 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
             else
                 addPanelCComm(BMETabbed, BMSelect, tabText, "Buy and Sell Parts (Alt + "+mnemonicText+")", mnemonicText, "BMESelect",CommPanel);
         }
-        
+
         if ( mwclient.getConfig().isParam("HSTATUSTABVISIBLE"))
-        {       
+        {
             if (HSPanel == null){
                 HSPanel = new CHSPanel(mwclient);
                 HSSelect = new CSelectTabAction(HSPanel);
@@ -535,7 +550,7 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
             else
                 addPanelCComm(HSPanel, HSSelect, tabText, "Show current House Status (Alt + "+mnemonicText+")", mnemonicText, "HSSelect",CommPanel);
         }
-        
+
         if ( mwclient.getConfig().isParam("BATTLETABVISIBLE"))
         {
             if ( BattlePanel == null){
@@ -548,8 +563,8 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
                 addPanelMain(BattlePanel, BattleSelect, tabText, "Battles Intelligence Data (Alt + "+mnemonicText+")", mnemonicText, "BattleSelect");
             else
                 addPanelCComm(BattlePanel, BattleSelect, tabText, "Battles Intelligence Data (Alt + "+mnemonicText+")", mnemonicText, "BattleSelect",CommPanel);
-        }   
-        
+        }
+
         if ( MapPanel == null )
             MapPanel = new CMapPanel(mwclient, mainFrame, CommPanel.getWidth(), CommPanel.getHeight());
         if ( mwclient.getConfig().isParam("MAPTABVISIBLE")) {
@@ -562,7 +577,22 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
             else
                 addPanelCComm(MapPanel, MapSelect, tabText, "Star Map (Alt + "+mnemonicText+")", mnemonicText, "MapSelect",CommPanel);
         }
-        
+
+		if ( mwclient.getConfig().isParam("RULESTABVISIBLE"))
+		{
+			if(RulesPanel == null)
+			{
+				RulesPanel = new CRulesPanel(mwclient);
+				RulesSelect = new CSelectTabAction(RulesPanel);
+			}
+			tabText = mwclient.getConfig().getParam("RULESTABNAME");
+			mnemonicText = mwclient.getConfig().getParam("RULESMNEMONIC");
+			if ( mwclient.getConfig().isParam("RULESINTOPROW"))
+				addPanelMain(RulesPanel, RulesSelect, tabText, "Rules Tab (Alt + "+mnemonicText+")",mnemonicText, "RulesSelect");
+	        else
+	        	addPanelCComm(RulesPanel, RulesSelect, tabText, "Rules Tab (Alt + "+mnemonicText+")",mnemonicText, "RulesSelect",CommPanel);		
+		}
+
         MainTPane.addChangeListener(this);
     }
 

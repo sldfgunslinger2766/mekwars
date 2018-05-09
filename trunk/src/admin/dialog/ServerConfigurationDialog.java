@@ -1,10 +1,10 @@
 /*
  * MekWars - Copyright (C) 2004
- * 
- * 
+ *
+ *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
@@ -12,7 +12,7 @@
 /**
  * @author jtighe
  * @author Spork
- * 
+ *
  * Server Configuration Page. All new Server Options need to be added to this page or subPanels as well.
  */
 
@@ -95,7 +95,7 @@ public final class ServerConfigurationDialog implements ActionListener {
     JTabbedPane ConfigPane = new JTabbedPane(SwingConstants.TOP);
 
     MWClient mwclient = null;
-    
+
     private Dimension screenSize;
 
     /**
@@ -110,18 +110,18 @@ public final class ServerConfigurationDialog implements ActionListener {
      *         Two recursive methods populate and save the data to the server findAndPopulateTextAndCheckBoxes(JPanel) findAndSaveConfigs(JPanel) This change to
      *         the code removes the tediousness of having to add a new var to 3 locations when it is use. Now only 1 location needs to added and that is the
      *         vars placement on the tab in the UI.
-     *         
+     *
      * @author Spork - refactored this completely, breaking each panel into its own class.
      *         This file was well over 5000 lines long, impossible to find anything in.
      */
     public ServerConfigurationDialog(MWClient mwclient) {
 
         this.mwclient = mwclient;
-        
+
         // Get the screen dimensions - the Units tab is too tall for smaller than 1280 x 1024
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         screenSize = toolkit.getScreenSize();
-        
+
         // TAB PANELS (these are added to the root pane as tabs)
         JPanel unitsPanel;
         JPanel pilotSkillsPanel;
@@ -164,7 +164,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         SchedulerPanel schedulerPanel = new SchedulerPanel();
         LinksPanel linksPanel = new LinksPanel();
         TrackerPanel trackerPanel = new TrackerPanel(mwclient.getserverConfigs("TrackerUUID"));
-        
+
         // Set the actions to generate
         okayButton.setActionCommand(okayCommand);
         cancelButton.setActionCommand(cancelCommand);
@@ -193,7 +193,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Factory Purchase", null, factoryPurchasePanel, "Factories For Sale");
         ConfigPane.addTab("File Paths", null, pathsPanel, "Paths");
         ConfigPane.addTab("Influence", null, influencePanel, "Influence");
-        ConfigPane.addTab("Links Area", null, linksPanel, "Configure/Enable Links Area");
+        ConfigPane.addTab("Links & Rules", null, linksPanel, "Configure/Enable Links Area and Rules Panel");
         ConfigPane.addTab("Loss Compensation", null, lossCompensationPanel, "Extra Payments for salvaged/destroyed units.");
         ConfigPane.addTab("Misc Options", null, miscOptionsPanel, "Misc Stuff");
         ConfigPane.addTab("No Play", null, noPlayPanel, "Personal Blacklist/Exclusion options");
@@ -260,7 +260,7 @@ public final class ServerConfigurationDialog implements ActionListener {
     /**
      * This Method tunnels through all of the panels to find the textfields and checkboxes. Once it find one it grabs the Name() param of the object and uses
      * that to find out what the setting should be from the mwclient.getserverConfigs() method.
-     * 
+     *
      * @param panel
      */
     public void findAndPopulateTextAndCheckBoxes(JPanel panel) {
@@ -316,7 +316,7 @@ public final class ServerConfigurationDialog implements ActionListener {
 
             } else if (field instanceof JDatePickerImpl) {
             	JDatePickerImpl picker = (JDatePickerImpl) field;
-            	
+
             	key = picker.getName();
             	if (key == null) {
             		CampaignData.mwlog.errLog("Null JDatePickerImpl: " + picker.getToolTipText());
@@ -336,14 +336,14 @@ public final class ServerConfigurationDialog implements ActionListener {
             	int year = cal.get(Calendar.YEAR);
             	int month = cal.get(Calendar.MONTH);
             	int day = cal.get(Calendar.DAY_OF_MONTH);
-            	
+
             	picker.getModel().setYear(year);
             	picker.getModel().setMonth(month);
             	picker.getModel().setDay(day);
             	picker.getModel().setSelected(true);
-            	
+
             } else if (field instanceof JScrollPane) {
-            	JScrollPane pane = (JScrollPane) field;            	
+            	JScrollPane pane = (JScrollPane) field;
             	JTextArea area = (JTextArea)pane.getViewport().getView();
             	key = area.getName();
             	if(key == null) {
@@ -359,7 +359,7 @@ public final class ServerConfigurationDialog implements ActionListener {
     /**
      * This method will tunnel through all of the panels of the config UI to find any changed text fields or checkboxes. Then it will send the new configs to
      * the server.
-     * 
+     *
      * @param panel
      */
     public void findAndSaveConfigs(JPanel panel) {
@@ -425,9 +425,9 @@ public final class ServerConfigurationDialog implements ActionListener {
             	// reduce bandwidth only send things that have changed.
                 if (!mwclient.getserverConfigs(key).equalsIgnoreCase(value)) {
                     mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
-                }            	
+                }
             } else if (field instanceof JScrollPane) {
-            	JScrollPane pane = (JScrollPane) field;            	
+            	JScrollPane pane = (JScrollPane) field;
             	JTextArea area = (JTextArea)pane.getViewport().getView();
             	value = area.getText();
             	key = area.getName();
@@ -435,7 +435,7 @@ public final class ServerConfigurationDialog implements ActionListener {
             		String toSend = value.replace('\n', '$');
             		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + toSend + "#CONFIRM");
             	}
-            } // else continue            	
+            } // else continue
         }
     }
 
