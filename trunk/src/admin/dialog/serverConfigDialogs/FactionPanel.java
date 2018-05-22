@@ -137,6 +137,12 @@ public class FactionPanel extends JPanel {
         SpringLayoutHelper.setupSpringGrid(factionSpring1, 2);
 
         // faction spring #2
+		baseTextField = new JTextField(5);
+		factionSpring2.add(new JLabel("Light XP:", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("XP required to buy light units");
+		baseTextField.setName("MinEXPforLight");
+		factionSpring2.add(baseTextField);
+
         baseTextField = new JTextField(5);
         factionSpring2.add(new JLabel("Medium XP:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("XP required to buy medium units");

@@ -722,7 +722,7 @@ public class CMainFrame extends JFrame {
                 jMenuCommanderRange_actionPerformed();
             }
         });
-        
+
         //BarukKhazad 20151129 - start 1
         jMenuFindContestedPlanets.setText("Find Contested Planets");
         jMenuFindContestedPlanets.setMnemonic('Z');
@@ -1475,14 +1475,14 @@ public class CMainFrame extends JFrame {
         mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c range#" + range + "#" + faction);
     }
 
-    public void jMenuFindContestedPlanets_actionPerformed() { //BarukKhazad 20151129 - start 2 
+    public void jMenuFindContestedPlanets_actionPerformed() { //BarukKhazad 20151129 - start 2
     	String h1=thePlayer.getHouse();
     	String h2="";
     	String Perc = "20";
         Perc = (String)JOptionPane.showInputDialog(getContentPane(),(Object)"Minimum Attacker Planet Percentage? (1 to 100)","",  JOptionPane.PLAIN_MESSAGE, null, null, Perc);
         if ((Perc == null) || (Perc.length() < 1)) {
             return;
-        } 
+        }
 
         HouseNameDialog factionDialog = new HouseNameDialog(mwclient, "Target Faction", false, false);
         factionDialog.setVisible(true);
@@ -2643,6 +2643,7 @@ public class CMainFrame extends JFrame {
             result.append("</table>");
         }
         result.append("<table><tr><th>Size of Unit</th><th>EXP needed</th></tr>");
+        result.append("<tr><td>Light</td><td>" + mwclient.getserverConfigs("MinEXPforLight") + "</td></tr>"); //@salient
         result.append("<tr><td>Medium</td><td>" + mwclient.getserverConfigs("MinEXPforMedium") + "</td></tr>");
         result.append("<tr><td>Heavy</td><td>" + mwclient.getserverConfigs("MinEXPforHeavy") + "</td></tr>");
         result.append("<tr><td>Assault</td><td>" + mwclient.getserverConfigs("MinEXPforAssault") + "</td></tr>");
@@ -2709,7 +2710,7 @@ public class CMainFrame extends JFrame {
     public void jMenuHelpOpViewer_actionPerformed() {
 
     }
-    
+
     private String sPSB(String a, String b) {//BK added
         // builds help menu's pilot skill bv blurb, wants a and b to build serverconfig lookup and get the value
 	Integer i = Integer.parseInt(mwclient.getserverConfigs("chancefor" + a + "for" + b));
@@ -2717,11 +2718,11 @@ public class CMainFrame extends JFrame {
             return " " + b + " xp cost: " + i;
         } else {
             return "";
-        } 
+        }
     }
 
     private String sPSBL(String a, String b, String c) {//BK added
-        // builds help menu's pilot skill blurb line, wants a and b and c as skillfullname and 
+        // builds help menu's pilot skill blurb line, wants a and b and c as skillfullname and
     	//skillshortname and description, e.g. "Astech" and "AT" and "does this..."
         String s = " ";
         //find if there is any chance for this skill, and if yes, create entry
@@ -2733,13 +2734,13 @@ public class CMainFrame extends JFrame {
     }
 
     public void jMenuHelpPilotSkills_actionPerformed() {
-        //BK;  would prefer to have this Help Menu list built using a reiteration of the pilot 
+        //BK;  would prefer to have this Help Menu list built using a reiteration of the pilot
     	//skills by pulling the info from those classes
-        //step one was adding pilot xp costs to the help menu, 
-    	//step two will be adding bv costs, drawn via the skill 
+        //step one was adding pilot xp costs to the help menu,
+    	//step two will be adding bv costs, drawn via the skill
         String result = "";
-        Integer i; 
-        String s; 
+        Integer i;
+        String s;
         result += "<font color=\"black\">";
         result += "<b><i>MekWars/MegaMek Pilot Skills</b></i><br>";
         result += "<table><tr><th>Name</th>" + "<th>Abbrivation</th>" + "<th>Description</th></tr>";
@@ -2747,7 +2748,7 @@ public class CMainFrame extends JFrame {
             result += sPSBL("Astech", "AT", "Pilot acts as a tech with repairs only costing parts");
         } else {
             result += sPSBL("Astech", "AT", "Reduces the number of techs needed to repair a unit by 1");
-        } 
+        }
         result += sPSBL("MD Buffered VDNI", "BVDNI", "Allows pilots to take more damage.");
         result += sPSBL("Dodge Maneuver", "DM", "Enables the unit to make a dodge maneuver instead of a physical attack.<br>This maneuver adds +2 to the BTH to physical attacks against the unit.");
         result += sPSBL("Edge", "ED", "Allows Pilot to reroll 1 roll(per level) per game.");

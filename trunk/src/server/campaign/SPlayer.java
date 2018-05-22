@@ -57,7 +57,7 @@ import common.util.UnitUtils;
  * @author Helge Richter (McWizard)
  * @author Bob Eldred (Spork)
  * @version 2016.10.06
- * 
+ *
  * Modifications:
  * - Moved slice flu generation to a Quartz task
  */
@@ -136,7 +136,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private long lastPromoted = 0;
 
     public volatile int leechCount = 0;
-    
+
     // CONSTRUCTORS
     /**
      * Stock constructor. Note that an SPlayer is data-less unless/until
@@ -211,6 +211,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @param - weight class to check.
      */
     public boolean mayUse(int weightClass) {
+        //@Salient addint this in for Gunny
+        if (weightClass == Unit.LIGHT) {
+            if (Integer.parseInt(getMyHouse().getConfig("MinEXPforLight")) > experience) {
+                return false;
+            }
+        }
         if (weightClass == Unit.MEDIUM) {
             if (Integer.parseInt(getMyHouse().getConfig("MinEXPforMedium")) > experience) {
                 return false;
@@ -226,7 +232,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 return false;
             }
         }
-        return true;// LIGHT is always usable.
+        return true;
     }
 
     /**
@@ -289,10 +295,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         String penaltyString = buildHangarPenaltyString();
         CampaignMain.cm.toUser("PL|SHP|" + penaltyString, name, false);
-        
+
         //CampaignData.mwlog.debugLog("Checking Anti-Air");
         //m.isAntiAir();
-        
+
         return "";// dummy string returned to comply with IBuyer
     }
 
@@ -945,7 +951,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
              */
             myHouse.getActivePlayers().remove(lowerName);
             myHouse.getFightingPlayers().put(lowerName, this);
-            
+
             // send status update to the user
             CampaignMain.cm.toUser("CS|" + +SPlayer.STATUS_FIGHTING, name, false);
 
@@ -1314,7 +1320,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public int getMoney() {
         return money;
     }
-    
+
     /**
      * @ Salient for free build, mek tokens iterate up to the server limit. Updates CPlayer.
      */
@@ -1324,7 +1330,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         this.setMekToken(tokenToSet);
         CampaignMain.cm.toUser("PL|UMT|" + tokenToSet, name, false); //UMT: Update Mek Token on cplayer
         setSave();
-        
+
     }
 
     public void setPassword(MWPasswdRecord pass) {
@@ -2507,14 +2513,14 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         }
 
         s.append("<br>");
-        
+
         // Return the player's PlayerFlags
         s.append("<b>Player Flags</b><br>");
         PlayerFlags pFlags = this.getFlags();
         for (String flag : pFlags.getFlagNames()) {
         	s.append(flag + ": " + Boolean.toString(pFlags.getFlagStatus(flag)) + "<br>");
         }
-        
+
         return s.toString();
     }
 
@@ -2571,11 +2577,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 result.append(CampaignMain.cm.getConfig("NewbieHouseName"));
             }
             result.append(lastOnline);
-            
+
         }
         result.append(getTotalMekBays());
         result.append(getFreeBays());
-        
+
         if (toClient) {
             if (Boolean.parseBoolean(getMyHouse().getConfig("HideELO"))) {
                 result.append("0");
@@ -2614,9 +2620,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         if (!toClient) {
             result.append("0");
         }
-        
+
         result.append(getMekToken());
-        
+
         result.append(myHouse.getName() + " ");
         if (toClient) {
             result.append(getHouseFightingFor().getName() + " ");
@@ -2631,7 +2637,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             result.append(getPersonalPilotQueue().toString(toClient));
             result.append(getExclusionList().adminExcludeToString("$"));
             result.append(getExclusionList().playerExcludeToString("$"));
-            
+
             if (CampaignMain.cm.isUsingAdvanceRepair()) {
                 result.append(totalTechsToString());
                 result.append(availableTechsToString());
@@ -2792,9 +2798,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             // TODO: Remove this after the next few updates from 0.1.51.2
             TokenReader.readString(ST);
-            
+
             setMekToken(TokenReader.readInt(ST));
-            
+
             myHouse = CampaignMain.cm.getHouseFromPartialString(TokenReader.readString(ST));
 
             if (myHouse == null) {
@@ -2885,15 +2891,15 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             lastPromoted = TokenReader.readLong(ST);
 
             loadFlags(CampaignMain.cm.getDefaultPlayerFlags().export());
-            
+
             if (ST.hasMoreTokens()) {
             	String flagString = TokenReader.readString(ST);
             	if (flagString.length() > 1) {
             		flags.loadPersonal(flagString);
-            	} 
-            } 
-            
-            
+            	}
+            }
+
+
             if ((password != null) && (password.getPasswd().trim().length() <= 2)) {
                 password.setAccess(IAuthenticator.GUEST);
             }
