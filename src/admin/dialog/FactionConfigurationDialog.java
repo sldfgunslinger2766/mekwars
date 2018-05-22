@@ -3157,6 +3157,12 @@ public final class FactionConfigurationDialog implements ActionListener {
 		JPanel factionSpring1 = new JPanel(new SpringLayout());
 		JPanel factionSpring2 = new JPanel(new SpringLayout());
 
+		baseTextField = new JTextField(5);
+		factionSpring1.add(new JLabel("Light XP:", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("XP required to buy light units");
+		baseTextField.setName("MinEXPforLight");
+		factionSpring1.add(baseTextField);
+
         baseTextField = new JTextField(5);
 		factionSpring1.add(new JLabel("Medium XP:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("XP required to buy medium units");

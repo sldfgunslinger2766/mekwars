@@ -101,6 +101,7 @@ public class DefaultServerOptions {
         defaults.setProperty("MaxSOLExp", "150");
         defaults.setProperty("MaxSOLCBills", "300");
         defaults.setProperty("MinEXPforDefecting", "0");
+        defaults.setProperty("MinEXPforLight", "0"); //@salient
         defaults.setProperty("MinEXPforMedium", "0");
         defaults.setProperty("MinEXPforHeavy", "0");
         defaults.setProperty("MinEXPforAssault", "0");
@@ -1382,8 +1383,8 @@ public class DefaultServerOptions {
         defaults.setProperty("Enable_Link3_Button", "false");
         defaults.setProperty("Link3_URL", "https://facebook.com");
         defaults.setProperty("Link3_Icon", "./data/images/misc/facebook.png");
-        
-        // Tracker - let's move stuff out of the server config file and into 
+
+        // Tracker - let's move stuff out of the server config file and into
         // Campaign configs so we can edit it while the server is live, shall we?
         defaults.setProperty("TrackerUUID", "0");
         defaults.setProperty("UseTracker", "false");
