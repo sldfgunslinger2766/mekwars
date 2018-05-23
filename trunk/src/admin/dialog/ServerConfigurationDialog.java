@@ -54,6 +54,7 @@ import admin.dialog.serverConfigDialogs.DisconnectionPanel;
 import admin.dialog.serverConfigDialogs.FactionPanel;
 import admin.dialog.serverConfigDialogs.FactoryPurchasePanel;
 import admin.dialog.serverConfigDialogs.InfluencePanel;
+import admin.dialog.serverConfigDialogs.FreebuildPanel;
 import admin.dialog.serverConfigDialogs.LinksPanel;
 import admin.dialog.serverConfigDialogs.LossCompensationPanel;
 import admin.dialog.serverConfigDialogs.MiscOptionsPanel;
@@ -162,7 +163,8 @@ public final class ServerConfigurationDialog implements ActionListener {
         PayoutModPanel payoutModPanel = new PayoutModPanel();
         ChristmasPanel christmasPanel = new ChristmasPanel();
         SchedulerPanel schedulerPanel = new SchedulerPanel();
-        LinksPanel linksPanel = new LinksPanel();
+        LinksPanel linksPanel = new LinksPanel(); // @salient
+        FreebuildPanel freebuildPanel = new FreebuildPanel(); // @salient
         TrackerPanel trackerPanel = new TrackerPanel(mwclient.getserverConfigs("TrackerUUID"));
 
         // Set the actions to generate
@@ -192,8 +194,9 @@ public final class ServerConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Factory Options", null, productionPanel, "Factories That Can Do");
         ConfigPane.addTab("Factory Purchase", null, factoryPurchasePanel, "Factories For Sale");
         ConfigPane.addTab("File Paths", null, pathsPanel, "Paths");
+        ConfigPane.addTab("Free Build", null, freebuildPanel, "Free Build"); //@salient
         ConfigPane.addTab("Influence", null, influencePanel, "Influence");
-        ConfigPane.addTab("Links & Rules", null, linksPanel, "Configure/Enable Links Area and Rules Panel");
+        ConfigPane.addTab("Links & Rules", null, linksPanel, "Configure/Enable Links Area and Rules Panel"); //@salient
         ConfigPane.addTab("Loss Compensation", null, lossCompensationPanel, "Extra Payments for salvaged/destroyed units.");
         ConfigPane.addTab("Misc Options", null, miscOptionsPanel, "Misc Stuff");
         ConfigPane.addTab("No Play", null, noPlayPanel, "Personal Blacklist/Exclusion options");

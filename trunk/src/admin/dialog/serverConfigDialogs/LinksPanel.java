@@ -40,7 +40,8 @@ public class LinksPanel extends JPanel {
 				+ " in a new area on the very bottom right of the client window. You can then set the icon and<br>"
 				+ " destination of these buttons which open the users default browser to view the content.<br>"
 				+ " An example would be, a button for server homepage, one for discord, and another for<br>"
-				+ " facebook. Icon Images should be placed in '/data/images/misc/' before client distribution</HTML>";
+				+ " facebook. Icon Images should be placed in '/data/images/misc/' before client distribution<br><br>"
+				+ " The Rules panel is a new client tab that you can use to display a simple HTML page</HTML>";
 		
 		JPanel panel0 = new JPanel();
 		JPanel panel1 = new JPanel();
