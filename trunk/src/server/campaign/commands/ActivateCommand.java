@@ -236,6 +236,13 @@ public class ActivateCommand implements Command {
         	return;
         }
         
+        // @salient
+        // Check if the SOs have disabled going active with unused mektokens
+        if (CampaignMain.cm.getBooleanConfig("Sol_FreeBuild_LimitGoActive") && p.hasUnusedMekTokens()) {
+        	CampaignMain.cm.toUser("AM: To go active you must first finish creating your free meks.", Username, true);
+        	return;
+        }
+        
         
         for (SArmy army : p.getArmies()) {
             CampaignMain.cm.getOpsManager().checkOperations(army, false);

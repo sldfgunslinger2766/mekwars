@@ -119,6 +119,11 @@ public class NewbieHousePanel extends JPanel {
 		BaseCheckBox.setToolTipText("<HTML>Set this if you want SOL free build to work without limits, and only limit free build after defection</HTML>");
 		BaseCheckBox.setName("Sol_FreeBuild_LimitPostDefOnly");
 		bottomPanel2.add(BaseCheckBox);
+		
+		BaseCheckBox = new JCheckBox("Must Create All FreeMeks Before Able to Go Active");
+		BaseCheckBox.setToolTipText("<HTML>Set this if you want to disable going active if player has free meks remaining</HTML>");
+		BaseCheckBox.setName("Sol_FreeBuild_LimitGoActive");
+		bottomPanel2.add(BaseCheckBox);
 				
 		add(topPanel);
 		add(middlePanel);
