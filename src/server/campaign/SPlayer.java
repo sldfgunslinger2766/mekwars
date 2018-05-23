@@ -3449,4 +3449,15 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 		}
 		return penalty;
 	}
+	
+	//@salient
+	public boolean hasUnusedMekTokens()
+	{
+		if(getMekToken() < Integer.parseInt((CampaignMain.cm.getConfig("Sol_FreeBuild_Limit"))) )
+		{
+			return true;
+		}
+		
+		return false;		
+	}
 }// end SPlayer()

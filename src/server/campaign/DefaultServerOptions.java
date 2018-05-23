@@ -1367,6 +1367,8 @@ public class DefaultServerOptions {
         defaults.setProperty("Sol_FreeBuild_PostDefection", "false");
         // if true, the mekToken limit only applies outside of SOL
         defaults.setProperty("Sol_FreeBuild_LimitPostDefOnly", "false");
+        // can't go active if you can still get more free meks
+        defaults.setProperty("Sol_FreeBuild_LimitGoActive", "false");
 
         // New buttons for client
         defaults.setProperty("Enable_Link_Area", "false");
