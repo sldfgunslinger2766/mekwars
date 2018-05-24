@@ -140,6 +140,7 @@ import server.util.AutomaticBackup;
 import server.util.MWPasswd;
 import server.util.RepairTrackingThread;
 import server.util.StringUtil;
+import server.util.discord.DiscordMessageHandler;
 import server.util.rss.Feed;
 import server.util.rss.FeedMessage;
 import common.CampaignData;
@@ -4089,6 +4090,16 @@ public final class CampaignMain implements Serializable {
 	 */
 	public void setScheduler(MWScheduler scheduler) {
 		this.scheduler = scheduler;
+	}
+
+	
+	/**
+	 * Send a message to a Discord Webhook
+	 * @param message the message to send
+	 */
+	public void postToDiscord(String message) {
+		DiscordMessageHandler handler = new DiscordMessageHandler();
+		handler.post(message);
 	}
 
 }

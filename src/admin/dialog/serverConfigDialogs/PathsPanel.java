@@ -75,6 +75,12 @@ public class PathsPanel extends JPanel {
         baseTextField.setToolTipText("Path to who.html");
         baseTextField.setName("HTMLWhoPath");
         pathsSubPanel.add(baseTextField);
+        
+        baseTextField = new JTextField();
+        pathsSubPanel.add(new JLabel("Discord Webhook Address", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("Address for the webhook to which game results and such should be sent.");
+        baseTextField.setName("DiscordWebHookAddress");
+        pathsSubPanel.add(baseTextField);
 
         // do the spring layout.
         SpringLayoutHelper.setupSpringGrid(pathsSubPanel, 2);

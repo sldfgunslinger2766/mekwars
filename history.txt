@@ -12,7 +12,7 @@ VERSION HISTORY:
   **********************************************************************
 R Released Server, Client, Ded v0.7.0.0
 v 0.7.x.x
-+ Updated RSS feed to allow for ITTT/Discord integration.  
++ Updated RSS feed to allow for ITTT/Discord integration. 
   ***********************************
   * NOTE TO OPERATORS               *
   *                                 *
@@ -21,6 +21,11 @@ v 0.7.x.x
   * Please fill that in if you want *
   * to use the RSS                  *
   ***********************************
+R Released Server v0.7.0.1
++ Added Discord Webhook integration.  Configure the webhook address on
+  the File Path menu.  This removes the need for IFTTT or Zapier
+
+0.6.0.x
 + Bug: Send All Local Op Files erroring if incorrect files in op folder.  
     This was causing Mac clients (for example) to die on .DS_Store files which are a normal 
     part of the OS.
@@ -50,7 +55,6 @@ R Released Client v0.6.0.1
 + Bug: Christmas scheduler was submitting wrong type of job
 + bv calc mods for some pilot skills (PR,IM)
 + updated help menu's pilot skill descriptions
-0.6.0.x
 + Bug: activity jobs not being stopped after games.
 R Released Server v0.6.0.2
   ***********************************

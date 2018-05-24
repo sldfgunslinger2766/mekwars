@@ -515,6 +515,7 @@ public class ShortResolver {
 
         if (o.getBooleanValue("ReportOpToNewsFeed")) {
             CampaignMain.cm.addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
+            CampaignMain.cm.postToDiscord(newsFeedBody);
         }
         so.getReporter().closeOperation(drawGame, attackersWon);
         so.getReporter().commit();
@@ -791,6 +792,7 @@ public class ShortResolver {
         // game
         if (o.getBooleanValue("ReportOpToNewsFeed")) {
             CampaignMain.cm.addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
+            CampaignMain.cm.postToDiscord(newsFeedBody);
         }
 
 		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "check for promotions and then save again?");
