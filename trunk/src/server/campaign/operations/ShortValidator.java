@@ -643,8 +643,10 @@ public class ShortValidator {
                         newsFeedTitle = ap.getName() + " gained land on " + newOp.getTargetWorld().getName();
                         newsFeedBody = ap.getName() + " gained " + totalConquest + "cp on " + newOp.getTargetWorld().getName();
                     }
-                    if (o.getBooleanValue("ReportOpToNewsFeed"))
+                    if (o.getBooleanValue("ReportOpToNewsFeed")) {
                         CampaignMain.cm.addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
+                        CampaignMain.cm.postToDiscord(newsFeedBody);
+                    }
                     newOp.setCompleteFinishedInfo(ap.getName() + " gained " + totalConquest + "cp on " + newOp.getTargetWorld().getName());
                     newOp.setIncompleteFinishedInfo(ap.getHouseFightingFor().getColoredNameAsLink() + " gained " + totalConquest + "cp on " + newOp.getTargetWorld().getName());
 

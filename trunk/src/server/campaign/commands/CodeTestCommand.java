@@ -19,6 +19,7 @@ package server.campaign.commands;
 import java.util.StringTokenizer;
 
 import server.campaign.CampaignMain;
+import server.util.discord.DiscordMessageHandler;
 
 public class CodeTestCommand implements Command {
 	
@@ -62,22 +63,8 @@ public class CodeTestCommand implements Command {
 		switch (action) {
 		case ACTION_START:
 						
-//			JobDetail job = newJob(RepeatingJob.class)
-//							  .withIdentity("job1", "group1")
-//							  .build();
-//			Date runTime = evenMinuteDate(new Date());
-//			
-//			Trigger trigger = newTrigger()
-//								.withIdentity("trigger1", "group1")
-//								.withSchedule(cronSchedule("0/5 * * * * ?"))
-//								.startAt(runTime)
-//								.build();
-//			
-//			try {
-//				CampaignMain.cm.getScheduler().scheduleJob(job, trigger);
-//			} catch (SchedulerException e) {
-//				CampaignData.mwlog.errLog(e);
-//			}
+			DiscordMessageHandler handler = new DiscordMessageHandler();
+			handler.post("This is a test of the Comstar broadcast system");
 			
 			break;
 		case ACTION_STOP:

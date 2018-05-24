@@ -1395,6 +1395,9 @@ public class DefaultServerOptions {
         defaults.setProperty("TrackerDesc", "A MekWars Server");
         defaults.setProperty("TrackerResetUUID", "false");
         defaults.setProperty("ServerName", "ExampleTech");
+        
+        //Discord Integration
+        defaults.setProperty("DiscordWebHookAddress", "");
     }
 
     /**
