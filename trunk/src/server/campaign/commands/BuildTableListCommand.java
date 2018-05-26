@@ -104,7 +104,9 @@ public class BuildTableListCommand implements Command {
 		    return;
 		} finally {
 			try {
-				dis.close();
+				if (dis != null) {
+					dis.close();
+				}
 			} catch (IOException e) {
 				CampaignData.mwlog.errLog(e);
 			}
