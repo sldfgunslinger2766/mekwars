@@ -25,7 +25,7 @@ import common.Unit;
  * @version	1.0
  * @since	2013-06-19
  */
-public class BVSpreadCalculator extends A_SpreadCalculator implements ISpreadCalculator {
+public class BVSpreadCalculator extends AbstractSpreadCalculator implements ISpreadCalculator {
 	
 	/**
 	 * Calculates the maximum BV of any unit in the army
