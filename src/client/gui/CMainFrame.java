@@ -76,7 +76,7 @@ import client.gui.dialog.SubFactionNameDialog;
 import client.gui.dialog.TableViewerDialog;
 import client.gui.dialog.TraitDialog;
 import client.gui.dialog.UnitSelectionDialog;
-
+import client.gui.dialog.buildtableviewer.BuildTableViewer;
 import common.CampaignData;
 import common.House;
 import common.Unit;
@@ -2233,8 +2233,10 @@ public class CMainFrame extends JFrame {
          * Show the client side GUI if the requisite file is available.
          * Otherwise, make use of server commands.
          */
+    	// User the new BuildTableViewer
         if ((userLevel >= mwclient.getData().getAccessLevel("AdminRequestBuildTable")) || (userLevel >= mwclient.getData().getAccessLevel("RequestBuildTable"))) {
-            new TableViewerDialog(mwclient);
+            	BuildTableViewer btv = new BuildTableViewer(this, mwclient);
+            	btv.run();
         } else {
             mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c buildtablelist");
         }

@@ -40,7 +40,7 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import client.MWClient;
-
+import common.VerticalLayout;
 import common.util.SpringLayoutHelper;
 
 public final class ConfigurationDialog implements ActionListener {
@@ -195,6 +195,7 @@ public final class ConfigurationDialog implements ActionListener {
     private final JCheckBox viewLogoBox = new JCheckBox();
     private final JCheckBox armyPopUpBox = new JCheckBox();
     private final JCheckBox autoReOrder = new JCheckBox();
+    private final JCheckBox testBuildTableBox = new JCheckBox();
     
     // chat options
     private final JCheckBox hmInMainBox = new JCheckBox();
@@ -292,6 +293,7 @@ public final class ConfigurationDialog implements ActionListener {
         JPanel keyBindPanel = new JPanel();// Funtion key binds
         JPanel dedicatedHostPanel = new JPanel();// Dedicated Host Panel
         JPanel unitHUDLayoutPanel = new JPanel();// Unit Status Panel
+        JPanel devPanel = new JPanel(); // Dev options
 
         /*
          * Format the PLAYER panel. Spring layout.
@@ -1124,6 +1126,27 @@ public final class ConfigurationDialog implements ActionListener {
          */
         JPanel tabVisWrapper = new JPanel();
         tabVisWrapper.add(tabVisibilityPanel);
+        
+        /*
+         * Developer options panel.  First, a warning.
+         */
+        devPanel.setLayout(new VerticalLayout(5));
+        
+        JPanel panel = new JPanel();
+        JLabel warning = new JLabel();
+        warning.setText("Please don't check these unless you know what you are doing.");
+        panel.setBorder(BorderFactory.createTitledBorder("WARNING!!!"));
+        panel.add(warning);
+        devPanel.add(panel);
+        
+        panel = new JPanel();
+        panel.setLayout(new SpringLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Test Options"));
+        panel.add(new JLabel("Test Build Table Viewer", SwingConstants.TRAILING));
+        panel.add(testBuildTableBox);
+        
+        SpringLayoutHelper.setupSpringGrid(panel, 2);
+        devPanel.add(panel);
 
         ConfigPane.addTab("User", null, playerPanel, "Player and Formatting options");
         ConfigPane.addTab("Chat", null, chatPanel, "Chat and Messaging options");
@@ -1133,6 +1156,8 @@ public final class ConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Tab Naming", null, tabNamingPanel, "Tab name configuration");
         ConfigPane.addTab("FKeys", null, keyBindPanel, "Function Key configuration");
         ConfigPane.addTab("Host Setup", null, dedicatedHostPanel, "Host Configuration");
+        ConfigPane.addTab("Developer Options", null, devPanel, "Developer Options");
+        
 
         // Create the panel that will hold the entire UI
         JPanel mainConfigPanel = new JPanel();
@@ -1405,6 +1430,8 @@ public final class ConfigurationDialog implements ActionListener {
         leftAmmoCB.setSelected(mwclient.getConfig().isParam("LEFTAMMO"));
         leftCommanderCB.setSelected(mwclient.getConfig().isParam("LEFTCOMMANDER"));
 
+        testBuildTableBox.setSelected(mwclient.getConfig().isParam("USETESTBUILDTABLEVIEWER"));
+        
         // Show the dialog and get the user's input
         dialog.setModal(true);
         dialog.pack();
@@ -1465,6 +1492,8 @@ public final class ConfigurationDialog implements ActionListener {
 
             mwclient.getConfig().setParam("MAXPMMESSAGE", maxMailTabStringField.getText());
             mwclient.getConfig().setParam("MAXPMTABS", maxNumberOfMailTabsField.getText());
+            
+            mwclient.getConfig().setParam("USETESTBUILDTABLEVIEWER", Boolean.toString(testBuildTableBox.isSelected()));
 
             // set the HQCOLORSCHEME based on selected button.
             // private final String[] schemeChoices = {"Grey", "Tan",

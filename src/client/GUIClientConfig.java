@@ -415,6 +415,9 @@ public class GUIClientConfig implements IClientConfig {
         defaults.setProperty("INVERTCHATCOLOR", "NO");
 
         defaults.setProperty("ShowUnitBaseBV", "false");
+        
+        // Developer stuffs
+        defaults.setProperty("USETESTBUILDTABLEVIEWER", "false");
 
         return defaults;
     }
