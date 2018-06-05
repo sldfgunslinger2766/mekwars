@@ -75,6 +75,12 @@ import common.campaign.pilot.Pilot;
 import common.util.SpringLayoutHelper;
 import common.util.UnitUtils;
 
+/**
+ * 
+ * @deprecated As of Client v0.7.0.1, replaced by BuildTableViewer.java
+ *
+ */
+@Deprecated
 public class TableViewerDialog extends JFrame implements ItemListener {
 
     /**
