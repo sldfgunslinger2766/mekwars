@@ -77,7 +77,7 @@ public class SelfPromoteCommand implements Command {
         } 
         catch (Exception ex) 
         {
-            CampaignMain.cm.toUser("AM:Invalid Syntax: /promoteplayer Player#NewSubFactionName", Username);
+            CampaignMain.cm.toUser("AM:Invalid Syntax: /selfpromote SubFactionName", Username);
             return;
         }
 
