@@ -1370,12 +1370,12 @@ public class DefaultServerOptions {
         // can't go active if you can still get more free meks
         defaults.setProperty("Sol_FreeBuild_LimitGoActive", "false");
 
-        // New buttons for client
+        // New buttons for client @Salient
         defaults.setProperty("Enable_Link_Area", "false");
         defaults.setProperty("Link_Area_Label", "Links:");
-        // HTML location for new rules panel
-        defaults.setProperty("RulesLocation", "/data/ServerRules.html");
-        // Add generic link buttons
+        // HTML location for new rules panel 
+        defaults.setProperty("Rules_Location", "/data/ServerRules.html");
+        // Add generic link buttons 
         defaults.setProperty("Enable_Link1_Button", "false");
         defaults.setProperty("Link1_URL", "http://www.mekwars.org/");
         defaults.setProperty("Link1_Icon", "./data/images/misc/web.png");
@@ -1385,6 +1385,11 @@ public class DefaultServerOptions {
         defaults.setProperty("Enable_Link3_Button", "false");
         defaults.setProperty("Link3_URL", "https://facebook.com");
         defaults.setProperty("Link3_Icon", "./data/images/misc/facebook.png");
+        //Bot Options @Salient
+        defaults.setProperty("Enable_Bot_Chat", "false");
+        defaults.setProperty("Bot_Buffer_Location", "./data/allchatforbot.txt");
+        //Subfaction Options @Salient
+        defaults.setProperty("Enforce_Subfaction_Factory_Acess", "false");
 
         // Tracker - let's move stuff out of the server config file and into
         // Campaign configs so we can edit it while the server is live, shall we?

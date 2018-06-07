@@ -99,6 +99,7 @@ import megamek.common.preference.IClientPreferences;
 import megamek.common.preference.PreferenceManager;
 import megamek.server.Server;
 import net.sourceforge.mlf.metouia.MetouiaLookAndFeel;
+import server.campaign.CampaignMain;
 import client.campaign.CCampaign;
 import client.campaign.CPlayer;
 import client.campaign.CUnit;
@@ -112,6 +113,7 @@ import client.gui.commands.MailGCmd;
 import client.gui.commands.PingGCmd;
 import client.gui.dialog.RewardPointsDialog;
 import client.gui.dialog.SignonDialog;
+//import client.gui.dialog.SolFreeBuildDialog.TableUnit;
 import client.protocol.DataFetchClient;
 import client.util.RepairManagmentThread;
 import client.util.SalvageManagmentThread;
@@ -191,7 +193,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
     long lastResetCheck = System.currentTimeMillis();
     int dedRestartAt = 50; // number of games played on a ded before auto
     // restart.
-    
+
     long TimeOut = 120;
     long LastPing = 0;
 
@@ -226,7 +228,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
     int LastStatus = STATUS_DISCONNECTED;
 
     TreeMap<String, IGUICommand> GUICommands = new TreeMap<String, IGUICommand>();
-    
+
 
     /**
      * Maps the task prefixes as HS, PL, SP etc. to a command under package cmd.
@@ -346,7 +348,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 
         ProtCommands = new TreeMap<String, IProtCommand>();
         Config = config;
-        
+
         // set up the splash screen. do this before any
         // other non-main/non-static actions.
 
@@ -1604,8 +1606,10 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
             if (Config.isParam("TIMESTAMP")) {
                 s = "<font color=\"" + Config.isParam("CHATFONTCOLOR") + "\">"
                         + getShortTime() + "</font>" + s;
+
             }
             addToChat(s, CCommPanel.CHANNEL_PLOG, null);
+            chatCaptureForBot(myUsername,addon,input); //@salient
         }
     }// end processGUIInput
 
@@ -1779,6 +1783,9 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
             (MainFrame.getMainPanel().getCommPanel()).setChat(input, channel,
                     tabName);
         }
+        //@salient discord bot chat capture
+        //if i wanted to capture multiple channels
+        //i'd have to do it here?
     }
 
     public void addToChat(String s) {
@@ -1803,8 +1810,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         }
 
     }
-
-
 
     protected Vector<String> splitString(String string, String splitter) {
         Vector<String> vector = new Vector<String>(1, 1);
@@ -2982,7 +2987,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 
     public double getAmmoCost(String ammo) {
         EquipmentType eq = EquipmentType.get(ammo);
-        
+
 
         if (eq == null) {
 			return -1;
@@ -4038,6 +4043,21 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 
     public List<ClientThread> getMMClients() {
         return mmClientThreads;
+    }
+
+    private void chatCaptureForBot(String username, String addon, String input)
+    {
+		if(!Boolean.parseBoolean(getserverConfigs("Enable_Bot_Chat")))
+			return;
+
+        String temp = getShortTime().trim() + username.trim() + addon.trim() + ":" + input;
+        temp = String.format("%s%n", temp);
+
+//		if(channel !=0)
+//			return;
+
+		//call a new command to capture chat server side
+		sendChat(MWClient.CAMPAIGN_PREFIX + "CHATBOT " + temp);
     }
 
 }

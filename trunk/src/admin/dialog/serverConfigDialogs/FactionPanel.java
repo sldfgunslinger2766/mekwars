@@ -260,6 +260,11 @@ public class FactionPanel extends JPanel {
         baseCheckBox.setToolTipText("If checked, players can add external links to their MOTD");
         baseCheckBox.setName("AllowLinksInMOTD");
         factionCBoxSpring.add(baseCheckBox);
+        
+        baseCheckBox = new JCheckBox("Enforce Subfaction Factory Access");
+        baseCheckBox.setToolTipText("If checked, subfaction level MUST be equal to factory level to use it");
+        baseCheckBox.setName("Enforce_Subfaction_Factory_Acess");
+        factionCBoxSpring.add(baseCheckBox);
 
         SpringLayoutHelper.setupSpringGrid(factionCBoxSpring, 3);
 

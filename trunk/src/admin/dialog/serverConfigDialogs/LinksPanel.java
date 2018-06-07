@@ -54,6 +54,9 @@ public class LinksPanel extends JPanel {
 		JPanel panel4 = new JPanel();
 		JPanel panel4a = new JPanel();
 		JPanel panel4b = new JPanel();
+		JPanel panel5 = new JPanel();
+		JPanel panel5a = new JPanel();
+		JPanel panel5b = new JPanel();
 
 		panel0.add(new JLabel(description));
 
@@ -156,18 +159,40 @@ public class LinksPanel extends JPanel {
 		baseLabel.setHorizontalAlignment(JLabel.RIGHT);
 		baseTextField = new JTextField(30);
 		baseTextField.setToolTipText("<HTML>Needs to be a basic HTML. Linking to remote host may slow client load time </HTML>");
-		baseTextField.setName("RulesLocation");
+		baseTextField.setName("Rules_Location");
 		panel4a.add(baseLabel);
 		panel4b.add(baseTextField);
 		
 		panel4.add(panel4a);
 		panel4.add(panel4b);
 		
+		panel5.setLayout(new FlowLayout(FlowLayout.CENTER));
+		panel5a.setLayout(new GridLayout(2,1,0,5));
+		panel5b.setLayout(new GridLayout(2,1));
+		panel5.setBorder(BorderFactory.createTitledBorder("Bot Panel"));
+		
+		baseCheckBox = new JCheckBox("Enable Bot Chat");
+		baseCheckBox.setName("Enable_Bot_Chat");
+		panel5a.add(baseCheckBox);
+		panel5b.add(new JLabel(""));
+
+		baseLabel = new JLabel("Chat Buffer Location:");
+		baseLabel.setHorizontalAlignment(JLabel.RIGHT);
+		baseTextField = new JTextField(30);
+		baseTextField.setToolTipText("<HTML>Location of file to use with bot, the code 'should' generate this file if it does not exit </HTML>");
+		baseTextField.setName("Bot_Buffer_Location");
+		panel5a.add(baseLabel);
+		panel5b.add(baseTextField);
+		
+		panel5.add(panel5a);
+		panel5.add(panel5b);
+		
 		add(panel0);
 		add(panel1);
 		add(panel2);
 		add(panel3);
 		add(panel4);
+		add(panel5);
 
 	}
 

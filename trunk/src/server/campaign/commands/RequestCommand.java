@@ -220,7 +220,18 @@ public class RequestCommand implements Command {
                 return;
             }
 
-            if (factory.getAccessLevel() > p.getSubFactionAccess()) {
+            //Enforce_Subfaction_Factory_Acess
+            //@Salient
+            if (CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Acess") &&
+            	factory.getAccessLevel() != p.getSubFactionAccess())
+            {
+                CampaignMain.cm.toUser("You do not have the correct rank to purchase a unit from " + factoryName + " on " + planetName + ".", Username);
+                return;
+            }
+            
+            if (!CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Acess") &&
+            	factory.getAccessLevel() > p.getSubFactionAccess()) 
+            {
                 CampaignMain.cm.toUser("You do not have sufficient rank to purchase a unit from " + factoryName + " on " + planetName + ".", Username);
                 return;
             }
