@@ -1373,9 +1373,9 @@ public class DefaultServerOptions {
         // New buttons for client @Salient
         defaults.setProperty("Enable_Link_Area", "false");
         defaults.setProperty("Link_Area_Label", "Links:");
-        // HTML location for new rules panel 
+        // HTML location for new rules panel
         defaults.setProperty("Rules_Location", "/data/ServerRules.html");
-        // Add generic link buttons 
+        // Add generic link buttons
         defaults.setProperty("Enable_Link1_Button", "false");
         defaults.setProperty("Link1_URL", "http://www.mekwars.org/");
         defaults.setProperty("Link1_Icon", "./data/images/misc/web.png");
@@ -1389,7 +1389,8 @@ public class DefaultServerOptions {
         defaults.setProperty("Enable_Bot_Chat", "false");
         defaults.setProperty("Bot_Buffer_Location", "./data/allchatforbot.txt");
         //Subfaction Options @Salient
-        defaults.setProperty("Enforce_Subfaction_Factory_Acess", "false");
+        defaults.setProperty("Enforce_Subfaction_Factory_Access", "false");
+        defaults.setProperty("Self_Promote_Subfaction", "false");
 
         // Tracker - let's move stuff out of the server config file and into
         // Campaign configs so we can edit it while the server is live, shall we?
@@ -1400,7 +1401,7 @@ public class DefaultServerOptions {
         defaults.setProperty("TrackerDesc", "A MekWars Server");
         defaults.setProperty("TrackerResetUUID", "false");
         defaults.setProperty("ServerName", "ExampleTech");
-        
+
         //Discord Integration
         defaults.setProperty("DiscordWebHookAddress", "");
     }

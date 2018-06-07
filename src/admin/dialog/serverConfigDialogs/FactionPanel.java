@@ -263,8 +263,14 @@ public class FactionPanel extends JPanel {
         
         baseCheckBox = new JCheckBox("Enforce Subfaction Factory Access");
         baseCheckBox.setToolTipText("If checked, subfaction level MUST be equal to factory level to use it");
-        baseCheckBox.setName("Enforce_Subfaction_Factory_Acess");
+        baseCheckBox.setName("Enforce_Subfaction_Factory_Access");
         factionCBoxSpring.add(baseCheckBox);
+        
+        baseCheckBox = new JCheckBox("Allow Subfaction Self Promotion");
+        baseCheckBox.setToolTipText("If checked, a user will be allowed to self promote into a subfaction, can be used once.");
+        baseCheckBox.setName("Self_Promote_Subfaction");
+        factionCBoxSpring.add(baseCheckBox);
+
 
         SpringLayoutHelper.setupSpringGrid(factionCBoxSpring, 3);
 
