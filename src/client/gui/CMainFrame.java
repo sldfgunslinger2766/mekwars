@@ -73,7 +73,7 @@ import client.gui.dialog.PlayerNameDialog;
 import client.gui.dialog.RegisterNameDialog;
 import client.gui.dialog.SellUnitDialog;
 import client.gui.dialog.SubFactionNameDialog;
-import client.gui.dialog.TableViewerDialog;
+//import client.gui.dialog.TableViewerDialog;
 import client.gui.dialog.TraitDialog;
 import client.gui.dialog.UnitSelectionDialog;
 import client.gui.dialog.buildtableviewer.BuildTableViewer;

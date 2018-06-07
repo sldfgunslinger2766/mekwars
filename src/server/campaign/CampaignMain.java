@@ -1498,6 +1498,8 @@ public final class CampaignMain implements Serializable {
         // Double CA
         Commands.put("CHECKATTACK", new CheckAttackCommand());
         Commands.put("CA", new CheckAttackCommand());
+        //@Salient - used for discord bot
+        Commands.put("CHATBOT", new ChatBotHelperCommand());
         //
         Commands.put("CHECK", new CheckCommand());
         Commands.put("CHECKARMYELIGIBILITY", new CheckArmyEligibilityCommand());
