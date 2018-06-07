@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -65,14 +65,14 @@ public class RequestCommand implements Command {
          * A command which builds a new mech for a player if: 1)he has enough
          * money and influence, and the room in which to place a new unit 2)the
          * given factory is open to make that weight unit, and the PP to do so
-         * 
+         *
          * Note that players may define the planet they want to produce with, if
          * not, the planet is selected at random from the avaliable pool of
          * producing planets. This is in order to allow players to select world
          * with specific tech biases, or specific faction tables, if they so
          * desire (ie - a Marik really wants a unit from that captured Steiner
          * assault world).
-         * 
+         *
          * USAGE: /c request#Weighclass#Unit Type#Planet#Factory Name - Planet &
          * Factory are optional, but fac must be given if a planet is given
          */
@@ -220,17 +220,17 @@ public class RequestCommand implements Command {
                 return;
             }
 
-            //Enforce_Subfaction_Factory_Acess
+            //Enforce_Subfaction_Factory_Access
             //@Salient
-            if (CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Acess") &&
+            if (CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Access") &&
             	factory.getAccessLevel() != p.getSubFactionAccess())
             {
                 CampaignMain.cm.toUser("You do not have the correct rank to purchase a unit from " + factoryName + " on " + planetName + ".", Username);
                 return;
             }
-            
-            if (!CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Acess") &&
-            	factory.getAccessLevel() > p.getSubFactionAccess()) 
+
+            if (!CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Access") &&
+            	factory.getAccessLevel() > p.getSubFactionAccess())
             {
                 CampaignMain.cm.toUser("You do not have sufficient rank to purchase a unit from " + factoryName + " on " + planetName + ".", Username);
                 return;
@@ -283,7 +283,7 @@ public class RequestCommand implements Command {
         	int costPenalty = p.calculateHangarPenaltyForNextPurchase(type_id, weightclass);
         	mechCbills += costPenalty;
         }
-        
+
         // reduce flu cost to ceiling if over
         if (mechInfluence > CampaignMain.cm.getIntegerConfig("InfluenceCeiling")) {
             mechInfluence = CampaignMain.cm.getIntegerConfig("InfluenceCeiling");
