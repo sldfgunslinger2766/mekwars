@@ -16,15 +16,15 @@
 
 package server.campaign.commands;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+//import java.io.File;
+//import java.io.IOException;
+//import java.io.UnsupportedEncodingException;
+//import java.nio.file.Files;
+//import java.nio.file.Paths;
+//import java.nio.file.StandardOpenOption;
 import java.util.StringTokenizer;
-
-import common.CampaignData;
+//
+//import common.CampaignData;
 import server.MWClientInfo;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
@@ -115,30 +115,30 @@ public class MeCommand implements Command {
 	}
 	
 	//this works, but needs a bit of touch up, copy code from other command @salient
-	private void captureAllChatForBot(String Username, String chatMsg)
-	{
-		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_Bot_Chat"))) 
-			return;
-		
-		File file = new File(CampaignMain.cm.getConfig("Bot_Buffer_Location")); 
-		
-		try 
-		{
-			Files.write(Paths.get(file.toURI()), chatMsg.getBytes("utf-8"), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-			CampaignMain.cm.toUser(chatMsg,Username,true);
-
-		} 
-		catch (UnsupportedEncodingException e) 
-		{
-			CampaignData.mwlog.errLog(e);
-			CampaignMain.cm.toUser(e.toString(),Username,true);
-
-		} 
-		catch (IOException e) 
-		{
-			CampaignData.mwlog.errLog(e);
-			CampaignMain.cm.toUser(e.toString(),Username,true);
-
-		}
-	}
+//	private void captureAllChatForBot(String Username, String chatMsg)
+//	{
+//		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_Bot_Chat"))) 
+//			return;
+//		
+//		File file = new File(CampaignMain.cm.getConfig("Bot_Buffer_Location")); 
+//		
+//		try 
+//		{
+//			Files.write(Paths.get(file.toURI()), chatMsg.getBytes("utf-8"), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+//			CampaignMain.cm.toUser(chatMsg,Username,true);
+//
+//		} 
+//		catch (UnsupportedEncodingException e) 
+//		{
+//			CampaignData.mwlog.errLog(e);
+//			CampaignMain.cm.toUser(e.toString(),Username,true);
+//
+//		} 
+//		catch (IOException e) 
+//		{
+//			CampaignData.mwlog.errLog(e);
+//			CampaignMain.cm.toUser(e.toString(),Username,true);
+//
+//		}
+//	}
 }

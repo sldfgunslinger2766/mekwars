@@ -22,23 +22,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+//import java.nio.charset.Charset;
+//import java.nio.file.Files;
+//import java.nio.file.Paths;
+//import java.nio.file.StandardOpenOption;
 import java.util.StringTokenizer;
 
 
 import common.CampaignData;
-import server.MWClientInfo;
+//import server.MWClientInfo;
 import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
+//import server.campaign.SPlayer;
 
 
 /**
- * Moving the Me command from MWServ into the normal command structure.
- *
- * Syntax  /c me blah
+ * used for capturing chat to a file a discord bot can manipulate
  */
 public class ChatBotHelperCommand implements Command {
 

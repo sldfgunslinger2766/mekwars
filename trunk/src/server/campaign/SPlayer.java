@@ -81,7 +81,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private int experience = 0;
     private int influence = 50;
     private int currentReward = 0; // number of rewards a player has.
-    private int xpToReward = 0; // How much exp the have until the next reward
+    private int xpTillReward = 0; // counter until next RP injection triggered by XP gains, see XPRollOverCap in server options
+    private int xpTillFlu = 0; // @ Salient , same as above. counter until next flu injection triggered by XP gains.
     private int groupAllowance = 0;
 
     private int technicians = 0;// @urgru 7/17/04
@@ -1282,7 +1283,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         myLogo = " ";
         personalPilotQueue.flushQueue();
         rating = 1600;
-        xpToReward = 0;
+        xpTillReward = 0;
+        xpTillFlu = 0;
+        setMekToken(0);
         sellingto = " ";
         weightedArmyNumber = 0;
         setSave();
@@ -1496,7 +1499,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         // check reward, if not mod added. never reduce rollover counter.
         if (!modAdded && (i > 0)) {
 
-            int currentXP = xpToReward + i;
+            int currentXP = xpTillReward + i;
             int rollOver = (Integer.parseInt(getMyHouse().getConfig("XPRollOverCap")));
 
             // if XP is over rollover point, reduce until below again
@@ -1511,7 +1514,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 addReward(rpToAdd);
 
                 // reset the counter
-                setXPToReward(currentXP);
+                setXpTillReward(currentXP);
 
                 // set up and send upe rp link
                 String toSend = "You earned " + rpToAdd + " experience " + CampaignMain.cm.getConfig("RPShortName");
@@ -1519,7 +1522,40 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 CampaignMain.cm.toUser(toSend, name, true);
 
             } else {
-                setXPToReward(currentXP);
+                setXpTillReward(currentXP);
+            }
+        }
+        
+        //@salient
+        if (!modAdded && (i > 0)) 
+        {
+
+            int currentXP = xpTillFlu + i;
+            int rollOver = (Integer.parseInt(getMyHouse().getConfig("FluXPRollOverCap")));
+
+            // if XP is over rollover point, reduce until below again
+            if ((currentXP >= rollOver) && (rollOver > 0)) 
+            {
+
+                int fluToAdd = 0;
+                while (currentXP >= rollOver) 
+                {
+                    currentXP -= rollOver;
+                    fluToAdd++;
+                }
+                
+                addInfluence(fluToAdd);
+
+                // reset the counter
+                setXpTillFlu(currentXP);
+
+                String toSend = "You earned " + fluToAdd + CampaignMain.cm.getConfig("FluShortName") + " by gaining xp!";
+                CampaignMain.cm.toUser(toSend, name, true);
+
+            } 
+            else 
+            {
+                setXpTillFlu(currentXP);
             }
         }
 
@@ -2111,14 +2147,24 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         setReward(getReward() + toAdd);
     }
 
-    // sets how much exp the player has towards an award point.
-    public void setXPToReward(int xp) {
-        xpToReward = xp;
+    // sets counter to next RP injection triggered by XP gains.
+    public void setXpTillReward(int xp) {
+        xpTillReward = xp;
         setSave();
     }
 
-    public int getXPToReward() {
-        return xpToReward;
+    public int getXpTillReward() {
+        return xpTillReward;
+    }
+
+    // @salient sets counter to next flu injection triggered by XP gains.
+    public void setXpTillFlu(int xp) {
+        xpTillFlu = xp;
+        setSave();
+    }
+
+    public int getXpTillFlu() {
+        return xpTillFlu;
     }
 
     public void setMyLogo(String s) {
@@ -2551,7 +2597,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * These would normally be under the "methods" heading; however, they're so
      * huge (and important) that they get a separate block.
      */
-    public String toString(boolean toClient) {
+    public String toString(boolean toClient) { // salient - "Seems like instead of a boolean, this should be two seperate methods. One for client. one for save."
     	SerializedMessage result = new SerializedMessage("~");
         result.append("CP");
         result.append(name);
@@ -2602,7 +2648,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
              * We'll just save a 0 for now. Sometime in the future, this space
              * can be reclaimed. @urgru 12.28.05
              */
-            result.append(0);
+             //@salient - i'm going to reclaim it then for fluXProllover :)
+            result.append(getXpTillFlu());
         }
 
         if (CampaignMain.cm.isUsingAdvanceRepair()) {
@@ -2632,7 +2679,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 result.append(getMyLogo() + " ");
             }
         } else {
-            result.append(xpToReward);
+            result.append(xpTillReward);
             result.append("0");
             result.append(getPersonalPilotQueue().toString(toClient));
             result.append(getExclusionList().adminExcludeToString("$"));
@@ -2768,12 +2815,16 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
              * we'll be able to fully reclaim this space.
              */
 
-            int numberOfOptions = TokenReader.readInt(ST);
-            for (int i = 0; i < numberOfOptions; i++) {
-                TokenReader.readString(ST);// eat the option's Description
-                // token
-                TokenReader.readString(ST);// eat the options Setting token
-            }
+            // int numberOfOptions = TokenReader.readInt(ST);
+            // for (int i = 0; i < numberOfOptions; i++) {
+            //     TokenReader.readString(ST);// eat the option's Description
+            //     // token
+            //     TokenReader.readString(ST);// eat the options Setting token
+            // }
+
+            //@Salient i've reclaimed it for xp till flu injection
+            setXpTillFlu(TokenReader.readInt(ST));
+
             if (CampaignMain.cm.isUsingAdvanceRepair()) {
                 int greenTechs = TokenReader.readInt(ST);
                 int regTechs = greenTechs / 5;
@@ -2807,7 +2858,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 myHouse = CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"));
             }
 
-            setXPToReward(TokenReader.readInt(ST));
+            setXpTillReward(TokenReader.readInt(ST));
 
             TokenReader.readString(ST);// faction logo not saved.
 
@@ -3449,7 +3500,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 		}
 		return penalty;
 	}
-	
+
 	//@salient
 	public boolean hasUnusedMekTokens()
 	{
@@ -3457,7 +3508,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 		{
 			return true;
 		}
-		
-		return false;		
+
+		return false;
 	}
 }// end SPlayer()

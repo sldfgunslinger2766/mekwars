@@ -84,22 +84,23 @@ import megamek.client.ui.swing.GameOptionsDialog;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
-import megamek.common.IGame;
-import megamek.common.IGame.Phase;
+//import megamek.common.IGame;
+//import megamek.common.IGame.Phase;
 import megamek.common.Mech;
 import megamek.common.MechWarrior;
-import megamek.common.event.GameEntityRemoveEvent;
+//import megamek.common.event.GameEntityRemoveEvent;
 import megamek.common.event.GameEvent;
-import megamek.common.event.GamePhaseChangeEvent;
-import megamek.common.event.GameTurnChangeEvent;
-import megamek.common.event.GameVictoryEvent;
+//import megamek.common.event.GamePhaseChangeEvent;
+//import megamek.common.event.GameTurnChangeEvent;
+//import megamek.common.event.GameVictoryEvent;
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
 import megamek.common.preference.IClientPreferences;
 import megamek.common.preference.PreferenceManager;
 import megamek.server.Server;
 import net.sourceforge.mlf.metouia.MetouiaLookAndFeel;
-import server.campaign.CampaignMain;
+//import server.campaign.SHouse;
+//import server.campaign.CampaignMain;
 import client.campaign.CCampaign;
 import client.campaign.CPlayer;
 import client.campaign.CUnit;
@@ -111,9 +112,9 @@ import client.gui.SplashWindow;
 import client.gui.commands.IGUICommand;
 import client.gui.commands.MailGCmd;
 import client.gui.commands.PingGCmd;
+import client.gui.dialog.InfluencePointsDialog;
 import client.gui.dialog.RewardPointsDialog;
 import client.gui.dialog.SignonDialog;
-//import client.gui.dialog.SolFreeBuildDialog.TableUnit;
 import client.protocol.DataFetchClient;
 import client.util.RepairManagmentThread;
 import client.util.SalvageManagmentThread;
@@ -147,7 +148,7 @@ import common.campaign.clientutils.IGameHost;
 import common.campaign.clientutils.SerializeEntity;
 import common.campaign.clientutils.protocol.CConnector;
 import common.campaign.clientutils.protocol.IClient;
-import common.campaign.clientutils.protocol.TransportCodec;
+//import common.campaign.clientutils.protocol.TransportCodec;
 import common.campaign.clientutils.protocol.commands.AckSignonPCmd;
 import common.campaign.clientutils.protocol.commands.CommPCmd;
 import common.campaign.clientutils.protocol.commands.IProtCommand;
@@ -156,6 +157,7 @@ import common.campaign.clientutils.protocol.commands.PongPCmd;
 import common.util.ThreadManager;
 import common.util.TokenReader;
 import common.util.UnitUtils;
+
 
 public final class MWClient extends GameHost implements IClient, IGameHost {
 
@@ -2409,6 +2411,11 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         new RewardPointsDialog(this);
     }
 
+    //@Salient
+    public void influencePointsDialog() {
+        new InfluencePointsDialog(this);
+    }
+
     // IClient interface
     public void connectToServer() {
         connectToServer(Config.getParam("SERVERIP"),
@@ -3145,6 +3152,15 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         }
         return CampaignData.cd.getServerConfigs().getProperty(key).trim();
     }
+
+    //@Salient ... ugh... how can i get to the damn house configs
+//    public String getHouseConfigs(String key)
+//    {
+//    	//CampaignData.cd.ge
+//    	SHouse house = CampaignData.cd.getHouseByName(this.getPlayer().getHouse());
+//
+//    	return CampaignData.cd.getServerConfigs().getProperty(key).trim();
+//    }
 
     public Properties getserverConfigs() {
         return CampaignData.cd.getServerConfigs();
@@ -4045,7 +4061,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         return mmClientThreads;
     }
 
-    private void chatCaptureForBot(String username, String addon, String input)
+    private void chatCaptureForBot(String username, String addon, String input) //@salient
     {
 		if(!Boolean.parseBoolean(getserverConfigs("Enable_Bot_Chat")))
 			return;

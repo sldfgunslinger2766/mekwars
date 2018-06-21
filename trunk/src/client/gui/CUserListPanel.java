@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -79,9 +79,9 @@ import common.util.StringUtils;
  */
 
 public class CUserListPanel extends JPanel implements ActionListener{
-	
+
 	/**
-     * 
+     *
      */
     private static final long serialVersionUID = 6676029823454849117L;
     public static int SORTMODE_NAME = 0;
@@ -91,10 +91,10 @@ public class CUserListPanel extends JPanel implements ActionListener{
 	public static int SORTMODE_STATUS = 4;
 	public static int SORTMODE_USERLEVEL = 5;
 	public static int SORTMODE_COUNTRY = 6;
-	
+
 	public static int SORTORDER_ASCENDING = 1;
 	public static int SORTORDER_DESCENDING = 2;
-	
+
 	MWClient mwclient;
 	IClientConfig Config;
 	boolean LoggedIn = false;
@@ -102,7 +102,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 	JScrollPane UserListSP;
 	JList UserList;
 	CUserListModel Users;
-	
+
 	//additional info
 	JPanel countPanel = new JPanel();
 	JLabel CountLabel = new JLabel();
@@ -117,7 +117,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 	JPanel bottomPanel = new JPanel();
 
 	UserListPopupListener UserListPopup = new UserListPopupListener();
-	
+
 	private Icon link1Icon = null;
 	private Icon link2Icon = null;
 	private Icon link3Icon = null;
@@ -127,7 +127,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 	private Icon mouseDeactivateIcon = null;
 	private Icon activateFlashIcon = null;
 	private Icon deactivateFlashIcon = null;
-	
+
 	public CUserListPanel(MWClient client) {
 		mwclient = client;
 		Dedicateds = mwclient.getConfig().isParam("USERLISTDEDICATEDS");
@@ -135,7 +135,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		setPreferredSize(new Dimension(180, 480));
 		setMinimumSize(new Dimension(120, 100));
 		setMaximumSize(new Dimension(180, 2000));
-		
+
 		Users = new CUserListPanel.CUserListModel(mwclient);
 		UserList = new JList(Users);
 		UserList.setAlignmentX(0.0F);
@@ -148,7 +148,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		UserListSP.setBorder(new LineBorder(Color.black));
 		UserListSP.setViewportView(UserList);
 		add(UserListSP, BorderLayout.CENTER);
-		
+
 		UserList.setBackground(StringUtils.html2Color(mwclient.getConfigParam("BACKGROUNDCOLOR")));
 		//set up the countlabel
 		CountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -157,14 +157,14 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		CountLabel.setText("Player Count: " + UserList.getModel().getSize());
 		if (mwclient.getConfig().isParam("USERLISTCOUNT")) {CountLabel.setVisible(true);}
 		else {CountLabel.setVisible(false);}
-		
+
 		if ( new File("./data/images/activatebutton.png").exists() )
 			activateIcon = new ImageIcon("./data/images/activatebutton.png");
 		else if ( new File("./data/images/activatebutton.jpg").exists() )
 			activateIcon = new ImageIcon("./data/images/activatebutton.jpg");
 		else
 			activateIcon = null;
-		
+
 		if ( new File("./data/images/deactivatebutton.png").exists() )
 			deactivateIcon = new ImageIcon("./data/images/deactivatebutton.png");
 		else if ( new File("./data/images/deactivatebutton.jpg").exists() )
@@ -209,17 +209,17 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		ActivityButton.setRolloverEnabled(true);
 		ActivityButton.setRolloverIcon(mouseActivateIcon);
 		ActivityButton.setIcon(activateIcon);
-		
+
 		resetActivityButton();
-		
+
 		if (mwclient.getConfig().isParam("USERLISTACTIVITYBTN")) {ActivityButton.setVisible(true);}
 		else {ActivityButton.setVisible(false);}
-		
+
 		//add the button and label to CountPanel
 		countPanel.setLayout(new BoxLayout(countPanel, BoxLayout.Y_AXIS));
-		countPanel.add(ActivityButton);	
+		countPanel.add(ActivityButton);
 		countPanel.add(CountLabel);
-		
+
 		//@ Salient - toggle for link area
 		if(mwclient.getserverConfigs("Enable_Link_Area").equalsIgnoreCase("false"))
 		{
@@ -228,7 +228,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		}
 		else
 			createLinkArea();
-				
+
 		//restore the previous sort mode
 		String mode = mwclient.getConfig().getParam("SORTMODE");
 		if (mode.equals("HOUSE")) {((CUserListModel)UserList.getModel()).setSortMode(SORTMODE_HOUSE);}
@@ -243,20 +243,20 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		else if (mode.equals("USERLEVEL")) {((CUserListModel)UserList.getModel()).setSortMode(SORTMODE_USERLEVEL);}
 		else if (mode.equals("COUNTRY")) {((CUserListModel)UserList.getModel()).setSortMode(SORTMODE_COUNTRY);}
 		else {((CUserListModel)UserList.getModel()).setSortMode(SORTMODE_NAME);}
-		
+
 		//restore the previous sort order
 		String order = mwclient.getConfig().getParam("SORTORDER");
 		if (order.equals("DESCENDING")) {((CUserListModel)UserList.getModel()).setSortOrder(SORTORDER_DESCENDING);}
 		else {((CUserListModel)UserList.getModel()).setSortOrder(SORTORDER_ASCENDING);}
-		
+
 	}
 
-	private void createLinkArea() 
+	private void createLinkArea()
 	{
 		LinksLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		LinksLabel.setAlignmentY(Component.CENTER_ALIGNMENT);
 		LinksLabel.setText(mwclient.getserverConfigs("Link_Area_Label").trim());
-		
+
 		link1Icon = new ImageIcon(mwclient.getserverConfigs("Link1_Icon").trim());
 		LinkButton1.setEnabled(true);
 		LinkButton1.setIcon(link1Icon);
@@ -265,7 +265,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		LinkButton1.setPreferredSize(new Dimension(30,30));
 		LinkButton1.setMinimumSize(new Dimension(30,30));
 		LinkButton1.setMaximumSize(new Dimension(30,30));
-		
+
 		LinkButton1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
         	   Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
@@ -278,12 +278,12 @@ public class CUserListPanel extends JPanel implements ActionListener{
         	    }
             }
         });
-		
-		if (mwclient.getserverConfigs("Enable_Link1_Button").equalsIgnoreCase("true")) 
+
+		if (mwclient.getserverConfigs("Enable_Link1_Button").equalsIgnoreCase("true"))
 			LinkButton1.setVisible(true);
-		else 
+		else
 			LinkButton1.setVisible(false);
-		
+
 		//button2
 		link2Icon = new ImageIcon(mwclient.getserverConfigs("Link2_Icon").trim());
 		LinkButton2.setEnabled(true);
@@ -293,7 +293,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		LinkButton2.setPreferredSize(new Dimension(30,30));
 		LinkButton2.setMinimumSize(new Dimension(30,30));
 		LinkButton2.setMaximumSize(new Dimension(30,30));
-		
+
 		LinkButton2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
         	   Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
@@ -306,12 +306,12 @@ public class CUserListPanel extends JPanel implements ActionListener{
         	    }
             }
         });
-		
-		if (mwclient.getserverConfigs("Enable_Link2_Button").equalsIgnoreCase("true")) 
+
+		if (mwclient.getserverConfigs("Enable_Link2_Button").equalsIgnoreCase("true"))
 			LinkButton2.setVisible(true);
-		else 
+		else
 			LinkButton2.setVisible(false);
-		
+
 		//button3
 		link3Icon = new ImageIcon(mwclient.getserverConfigs("Link3_Icon").trim());
 		LinkButton3.setEnabled(true);
@@ -321,7 +321,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		LinkButton3.setPreferredSize(new Dimension(30,30));
 		LinkButton3.setMinimumSize(new Dimension(30,30));
 		LinkButton3.setMaximumSize(new Dimension(30,30));
-		
+
 		LinkButton3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
         	   Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
@@ -334,13 +334,13 @@ public class CUserListPanel extends JPanel implements ActionListener{
         	    }
             }
         });
-		
-		if (mwclient.getserverConfigs("Enable_Link3_Button").equalsIgnoreCase("true")) 
+
+		if (mwclient.getserverConfigs("Enable_Link3_Button").equalsIgnoreCase("true"))
 			LinkButton3.setVisible(true);
-		else 
+		else
 			LinkButton3.setVisible(false);
-		
-		
+
+
 		linksPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
 		linksPanel.setBackground(Color.LIGHT_GRAY);
 		linksPanel.setPreferredSize(new Dimension(175,34));
@@ -350,24 +350,24 @@ public class CUserListPanel extends JPanel implements ActionListener{
 		linksPanel.add(LinkButton1);
 		linksPanel.add(LinkButton2);
 		linksPanel.add(LinkButton3);
-	
+
 		bottomPanel.setLayout(new BorderLayout());
 		bottomPanel.add(countPanel, BorderLayout.CENTER);
 		bottomPanel.add(linksPanel, BorderLayout.SOUTH);
-		
+
 		add(bottomPanel, BorderLayout.SOUTH);
 	}
-	
+
 	public CUserListModel getUsers() {return Users;}
-	
+
 	public JList getUserList() {return UserList;}
-	
+
 	public synchronized void refresh() {
 		try {((CUserListModel)UserList.getModel()).refreshModel();}
 		catch (Exception ex) {CampaignData.mwlog.errLog(ex);}
 		CountLabel.setText("Player Count: " + UserList.getModel().getSize());
 	}
-	
+
 	public void setLoggedIn(boolean tloggedin) {
 		LoggedIn = tloggedin;
 		if (LoggedIn) {
@@ -379,9 +379,9 @@ public class CUserListPanel extends JPanel implements ActionListener{
 			setActivateButtonText("Login");
 		}
 	}
-	
+
 	public void setActivityButton(Boolean activate) {
-		
+
 		if ( activate ) {
 			setActivateButtonText("Activate");
 			if ( mwclient.getConfig().isParam("ENABLEDEACTIVATESOUND"))
@@ -397,9 +397,9 @@ public class CUserListPanel extends JPanel implements ActionListener{
 			animator.start();
 		}
 	}
-	
+
 	public void setActivateButtonText(String s) {
-		
+
 			if ( ActivityButton.getIcon() == null ) {
 				ActivityButton.setText(s);
 				//ActivityButton.setBorder(BorderFactory.createEtchedBorder());
@@ -409,26 +409,26 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				//ActivityButton.setBorder(BorderFactory.createEmptyBorder());
 			}
 	}
-	
+
 	public void resetActivityButton() {
 		if ( activateIcon != null  ) {
-			ActivityButton.setUI(new BasicButtonUI());	
+			ActivityButton.setUI(new BasicButtonUI());
 			Insets noInsets = new Insets(0,0,0,0);
-			ActivityButton.setMargin(noInsets);			
+			ActivityButton.setMargin(noInsets);
 			ActivityButton.setBorder(BorderFactory.createEmptyBorder());
 			ActivityButton.setContentAreaFilled(false);
 			ActivityButton.setLayout(null);
 			ActivityButton.setBorderPainted(false);
 		}
 	}
-	
+
 	public void setActivityButtonEnabled(boolean b) {
 		ActivityButton.setEnabled(b);
 	}
-	
+
 	/**
 	 * ActionPerformed method, to comply with ActionListener.
-	 * 
+	 *
 	 * If ActivityButton is pressed, look at Client's current
 	 * login/activity status and act accordingly.
 	 */
@@ -442,19 +442,19 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				mwclient.sendChat("/c login");
 		}
 	}
-	
+
 	class UserListPopupListener extends MouseAdapter implements ActionListener {
-		
+
 		@Override
 		public void mousePressed(MouseEvent e) {maybeShowPopup(e);}
-		
+
 		@Override
 		public void mouseReleased(MouseEvent e) {maybeShowPopup(e);}
-		
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getClickCount() == 2) {
-				
+
 				int row = UserList.locationToIndex(e.getPoint());
                 if (row > -1 && row < UserList.getModel().getSize()) {
                     //don't show mail/money/mute/noplay for player himself
@@ -464,32 +464,32 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					mwclient.getMainFrame().getMainPanel().getCommPanel().setInput(input);
 					mwclient.getMainFrame().getMainPanel().getCommPanel().focusInputField();
 				}
-                
+
 			}
 		}
-		
+
 		private void maybeShowPopup(MouseEvent e) {
 			JMenuItem item;
 			JPopupMenu popup;
 			int row = -1;
             String userName = "";
-			
+
 			popup = new JPopupMenu();
 			if (e.isPopupTrigger()) {
-				
+
 				row = UserList.locationToIndex(e.getPoint());
 				if (row > -1 && row < UserList.getModel().getSize()) {
 					//don't show mail/money/mute/noplay for player himself
                     CUser user = ((CUserListModel)UserList.getModel()).getUser(row);
-                    userName = user.getName(); 
-                    
+                    userName = user.getName();
+
                     /*
                      * MOD MENU @Torren 4.7.05
-                     * 
+                     *
                      * Most of the mod menu moved into a seperate
                      * admin package, since its a waste if bytes to
                      * have all players downloading things that only
-                     * a handful have access to. 
+                     * a handful have access to.
                      */
                     if (mwclient.isMod()) {
                         URLClassLoader loader = null;
@@ -515,38 +515,43 @@ public class CUserListPanel extends JPanel implements ActionListener{
 								CampaignData.mwlog.errLog(e1);
 							}
                         }
-                    
+
                         popup.addSeparator();
                     }
-                    
+
 
 					if (!userName.equalsIgnoreCase(mwclient.getPlayer().getName())) {
 						item = new JMenuItem("<HTML>Mail " + userName + "</b></HTML>");
 						item.setActionCommand("MA|"+userName);
 						item.addActionListener(this);
 						popup.add(item);
-						
+
 						//popup.addSeparator();
-						
+
 						if (LoggedIn && user.getStatus() != MWClient.STATUS_LOGGEDOUT) {
-							
+
 							JMenu sendMen = new JMenu("Send");
-							
+
 							item = new JMenuItem("Send "+mwclient.moneyOrFluMessage(true,false,-2));
 							item.setActionCommand("MO|"+userName);
 							item.addActionListener(this);
 							sendMen.add(item);
-							
+
 							item = new JMenuItem("Send " + mwclient.getserverConfigs("RPLongName"));
 							item.setActionCommand("MR|"+userName);
 							item.addActionListener(this);
 							sendMen.add(item);
 							
+							item = new JMenuItem("Send " + mwclient.getserverConfigs("FluLongName")); //@salient
+							item.setActionCommand("MI|"+userName);
+							item.addActionListener(this);
+							sendMen.add(item);
+
 							item = new JMenuItem("Send Unit");
 							item.setActionCommand("TU|"+userName);
 							item.addActionListener(this);
 							sendMen.add(item);
-							
+
 							if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowPersonalPilotQueues"))) {
 								item = new JMenuItem("Send Pilot");
 								item.setActionCommand("TP|"+userName);
@@ -560,20 +565,20 @@ public class CUserListPanel extends JPanel implements ActionListener{
 								item.addActionListener(this);
 								sendMen.add(item);
 							}
-							
+
 							popup.add(sendMen);
 						}
-						
+
 						JMenu blockMen = new JMenu("Block");
-						
+
 						/*
 						 * Mute/Unmute the player. Detect name string in the ignore
 						 * list and then display as appropriate. for Main.
 						 */
-						
+
 						String searchString = userName;
 						boolean matched = false;
-						
+
 						String ignoreList = mwclient.getConfig().getParam("IGNOREPUBLIC");
 						StringTokenizer st = new StringTokenizer(ignoreList,",");
 						while (st.hasMoreTokens() && !matched) {
@@ -581,7 +586,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 							if (currString.equalsIgnoreCase(searchString))
 								matched = true;
 						}
-						
+
 						if (!matched) {
 							item = new JMenuItem("Mute (Main)");
 							item.setActionCommand("MU|"+userName+"|PUBLIC");
@@ -594,7 +599,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 							item.addActionListener(this);
 							blockMen.add(item);
 						}
-						
+
 						/*
 						 * Mute/Unmute the player via PM
 						 */
@@ -606,7 +611,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 							if (currString.equalsIgnoreCase(searchString))
 								matched = true;
 						}
-						
+
 						if (!matched) {
 							item = new JMenuItem("Mute (Private)");
 							item.setActionCommand("MU|"+userName+"|PRIVATE");
@@ -619,10 +624,10 @@ public class CUserListPanel extends JPanel implements ActionListener{
 							item.addActionListener(this);
 							blockMen.add(item);
 						}
-						
+
 						//if in the same faction, also show faction mute
 						if (user.getHouse().equals(mwclient.getPlayer().getHouse())) {
-							
+
 							ignoreList = mwclient.getConfig().getParam("IGNOREHOUSE");
 							st = new StringTokenizer(ignoreList,",");
 							matched = false;
@@ -631,7 +636,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 								if (currString.equalsIgnoreCase(searchString))
 									matched = true;
 							}
-							
+
 							if (!matched) {
 								item = new JMenuItem("Mute (House)");
 								item.setActionCommand("MU|"+userName+"|HOUSE");
@@ -645,22 +650,22 @@ public class CUserListPanel extends JPanel implements ActionListener{
 								blockMen.add(item);
 							}
 						}
-						
+
 						/*
 						 * Add or remove the player to/from no-play list.
-						 * 
+						 *
 						 * Only show this option if list size >= 1. If the list
 						 * is disabled, its just a confusing extraneous option.
 						 */
 						if(Integer.parseInt(mwclient.getserverConfigs("NoPlayListSize")) >= 1) {
-							
+
 							if (LoggedIn && user.getStatus() != MWClient.STATUS_LOGGEDOUT) {
 								boolean isOnNoPlay = false;
 								if (mwclient.getPlayer().getAdminExcludes().contains(userName.toLowerCase()))
 									isOnNoPlay = true;
 								else if (mwclient.getPlayer().getPlayerExcludes().contains(userName.toLowerCase()))
 									isOnNoPlay = true;
-								
+
 								if (isOnNoPlay) {
 									item = new JMenuItem("Remove from No-Play");
 									item.setActionCommand("RNP|"+userName);
@@ -680,8 +685,8 @@ public class CUserListPanel extends JPanel implements ActionListener{
 							popup.addSeparator();
 						}//end if(should draw no-play menu items)
 						popup.add(blockMen);
-						
-					
+
+
 					}//end if(clicked player isn't THE player)
 					//Toggle ascending/decending order
 					if (((CUserListModel)UserList.getModel()).getSortOrder() == SORTORDER_DESCENDING) {
@@ -695,11 +700,11 @@ public class CUserListPanel extends JPanel implements ActionListener{
 						item.addActionListener(this);
 						popup.add(item);
 					}
-					
+
 					//Sort Sub-Menu
 					JMenu sortSub = new JMenu("Sort By");
 					popup.add(sortSub);
-					
+
 					item = new JMenuItem("Name");
 					item.setActionCommand("SM|N");
 					item.addActionListener(this);
@@ -732,12 +737,12 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					item.setActionCommand("SM|C");
 					item.addActionListener(this);
 					sortSub.add(item);
-					
+
 					popup.addSeparator();
-					
+
 					JMenu settingSub = new JMenu("List Settings");
 					popup.add(settingSub);
-					
+
 					//activity button
 					item = new JCheckBoxMenuItem("Activity Button");
 					if (mwclient.getConfig().isParam("USERLISTACTIVITYBTN"))
@@ -747,7 +752,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					item.setActionCommand("ULA|" + !item.isSelected());
 					item.addActionListener(this);
 					settingSub.add(item);
-					
+
 					//bold names
 					item = new JCheckBoxMenuItem("Bold Names");
 					if (mwclient.getConfig().isParam("USERLISTBOLD"))
@@ -757,7 +762,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					item.setActionCommand("ULB|" + !item.isSelected());
 					item.addActionListener(this);
 					settingSub.add(item);
-					
+
 					//color
 					item = new JCheckBoxMenuItem("Colored Names");
 					if (mwclient.getConfig().isParam("USERLISTCOLOR"))
@@ -767,7 +772,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					item.setActionCommand("ULC|" + !item.isSelected());
 					item.addActionListener(this);
 					settingSub.add(item);
-					
+
 					//deds
 					item = new JCheckBoxMenuItem("Dedicated Hosts");
 					if (Dedicateds)
@@ -777,7 +782,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					item.setActionCommand("TD");
 					item.addActionListener(this);
 					settingSub.add(item);
-					
+
 					//player count
 					item = new JCheckBoxMenuItem("Player Count");
 					if (mwclient.getConfig().isParam("USERLISTCOUNT"))
@@ -787,7 +792,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					item.setActionCommand("ULN|" + !item.isSelected());
 					item.addActionListener(this);
 					settingSub.add(item);
-					
+
 					//images
 					item = new JCheckBoxMenuItem("Status Images");
 					if (mwclient.getConfig().isParam("USERLISTIMAGE"))
@@ -802,18 +807,18 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				}
 			}
 		}
-		
+
 		public void actionPerformed(ActionEvent actionEvent)
 		{
 			String s = actionEvent.getActionCommand();
 			StringTokenizer st = new StringTokenizer(s,"|");
 			String command = st.nextToken();
 			String userName = "";
-			
+
 			//send mail
 			if (command.equals("MA") && st.hasMoreElements()) {
 				userName = st.nextToken();
-				if (true)					
+				if (true)
 					mwclient.getMainFrame().jMenuFileMail_actionPerformed(userName);
 				return;
 			}
@@ -824,40 +829,48 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					mwclient.getMainFrame().jMenuCommanderTransferMoney_actionPerformed(userName);
 				return;
 			}
-			
+
 			if (command.equals("MR") && st.hasMoreElements())
 			{
 				userName = st.nextToken();
 				mwclient.getMainFrame().jMenuCommanderTransferRewardPoints_actionPerformed(userName);
 				return;
 			}
-			
+
+			//@Salient
+			if (command.equals("MI") && st.hasMoreElements())
+			{
+				userName = st.nextToken();
+				mwclient.getMainFrame().jMenuCommanderTransferInfluence_actionPerformed(userName);
+				return;
+			}
+
 			if (command.equals("TU") && st.hasMoreElements()) {
 				userName = st.nextToken();
 				if (true)
 					mwclient.getMainFrame().jMenuCommanderTransferUnit_actionPerformed(userName, -1);
 				return;
 			}
-			
+
 			if (command.equals("TP") && st.hasMoreElements()) {
 				userName = st.nextToken();
 				if (true)
 					mwclient.getMainFrame().jMenuCommanderTransferPilot_actionPerformed(userName);
 				return;
 			}
-			
+
 			if (command.equals("DSU") && st.hasMoreElements()) {
 				userName = st.nextToken();
 				if (true)
 					mwclient.getMainFrame().jMenuCommanderDirectSell_actionPerformed(userName,null);
 				return;
 			}
-			
+
 			if (command.equals("MU") && st.hasMoreElements()) {
 				userName = st.nextToken();
 				String mode = st.nextToken();
 				if (true) {
-					
+
 					String searchString = userName;
 					String ignoreList = mwclient.getConfig().getParam("IGNORE" + mode);
 					String newList = "";
@@ -882,12 +895,12 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					UserList.repaint();
 				}
 			}//end mute
-			
+
 			if (command.equals("UMU") && st.hasMoreElements()) {
 				userName = st.nextToken();
 				String mode = st.nextToken();
 				if (true) {
-					
+
 					String searchString = userName;
 					String ignoreList = mwclient.getConfig().getParam("IGNORE" + mode);
 					String newList = "";
@@ -897,7 +910,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 						if (!currString.equals(searchString))
 							newList += currString + ",";
 						//else do nothing ...
-							
+
 					}//end while(more ignore tokens)
 					mwclient.getConfig().setParam("IGNORE" + mode,newList);
                     mwclient.setIgnorePublic();
@@ -909,24 +922,24 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					UserList.repaint();
 				}
 			}//end unmute
-			
+
 			if (command.equals("RNP") && st.hasMoreElements()) {
-				
+
 				userName = st.nextToken();
 				if (true) {
-					
+
 					mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c noplay#remove#" + userName);
 				}
 			}
-			
+
 			if (command.equals("ANP") && st.hasMoreElements()) {
 				userName = st.nextToken();
 				if (true) {
-					
+
 					mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c noplay#add#" + userName);
 				}
 			}
-		
+
 			//change sort mode
 			if (command.equals("SM") && st.hasMoreElements())
 			{
@@ -943,7 +956,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				else if (command.equals("S")) {((CUserListModel)UserList.getModel()).setSortMode(SORTMODE_STATUS);}
 				else if (command.equals("L")) {((CUserListModel)UserList.getModel()).setSortMode(SORTMODE_USERLEVEL);}
 				else if (command.equals("C")) {((CUserListModel)UserList.getModel()).setSortMode(SORTMODE_COUNTRY);}
-				
+
 				//saveblock
 				if (command.equals("H")) {mwclient.getConfig().setParam("SORTMODE","HOUSE");}
 				else if (command.equals("E")) {mwclient.getConfig().setParam("SORTMODE","EXP");}
@@ -953,7 +966,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				else if (command.equals("C")) {mwclient.getConfig().setParam("SORTMODE","COUNTRY");}
 				else {mwclient.getConfig().setParam("SORTMODE","NAME");}
 				mwclient.getConfig().saveConfig();
-				
+
 				return;
 			}
 			//change sort order
@@ -961,15 +974,15 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				command = st.nextToken();
 				if (command.equals("A")) {((CUserListModel)UserList.getModel()).setSortOrder(SORTORDER_ASCENDING);}
 				if (command.equals("D")) {((CUserListModel)UserList.getModel()).setSortOrder(SORTORDER_DESCENDING);}
-				
+
 				//saveblock
 				if (command.equals("D")) {mwclient.getConfig().setParam("SORTORDER","DESCENDING");}
 				else {mwclient.getConfig().setParam("SORTORDER","ASCENDING");}
 				mwclient.getConfig().saveConfig();
-				
+
 				return;
 			}
-			
+
 			//settingss
 			if (command.equals("TD")) {
 				Dedicateds = !Dedicateds;
@@ -1016,41 +1029,41 @@ public class CUserListPanel extends JPanel implements ActionListener{
 			 */
 		}
 	}
-	
+
 	public static class CUserListModel extends AbstractListModel {
 		/**
-         * 
+         *
          */
         private static final long serialVersionUID = 9141928592065940657L;
         SortedSet<CUser> Users;  //users set
 		UserListCellRenderer Renderer;  //list cells renderer
 		MWClient mwclient;  //client owning this model
 		boolean Dedicateds; //dedicated hosts visible
-		
-		
+
+
 		public CUserListModel(MWClient client) {
 			mwclient = client;
 			Dedicateds = mwclient.getConfig().isParam("USERLISTDEDICATEDS");
 			Users = Collections.synchronizedSortedSet(new TreeSet<CUser>(new UserComparator()));
 			Renderer = new UserListCellRenderer(this);
 		}
-		
+
 		public synchronized void clear() {Users.clear();}
-		
+
 		public void add(CUser user) {Users.add(user);}
-		
+
 		public synchronized void remove(CUser user) {Users.remove(user);}
-		
+
 		public synchronized void addAll(Collection<CUser> c) {Users.addAll(c);}
-		
+
 		public synchronized int getSize() {return Users.size();}
-		
+
 		public synchronized void refreshModel() {
-						
+
 			fireIntervalRemoved(this, 0, Users.size());
 			clear();
             int myLevel = mwclient.getUserLevel();
-            
+
             /*
              * Synch on mwclient.getUsers() to prevent ConcurrentModError
              * while rebuilding the CUserListPanel.
@@ -1065,42 +1078,42 @@ public class CUserListPanel extends JPanel implements ActionListener{
             		add(currU);
             	}
             }
- 
+
 			fireIntervalAdded(this, 0, Users.size());
 		}
-		
+
 		public void setDedicateds(boolean dedicateds) {Dedicateds = dedicateds;}
-		
+
 		public void setSortMode(int tsortmode)
 		{
 			((UserComparator)Users.comparator()).setMode(tsortmode);
 			refreshModel();
 		}
-		
+
 		public int getSortMode() {return ((UserComparator)Users.comparator()).getMode();}
-		
+
 		public void setSortOrder(int tsortorder)
 		{
 			((UserComparator)Users.comparator()).setOrder(tsortorder);
 			refreshModel();
 		}
-		
+
 		public int getSortOrder() {return ((UserComparator)Users.comparator()).getOrder();}
-		
+
 		public synchronized Object getElementAt(int index)
 		{
 			if (index < Users.size()) {return(((CUser)Users.toArray()[index]).getName());}
 			//else
 			return null;
 		}
-		
+
 		public synchronized CUser getUser(int index)
 		{
 			if (index < Users.size()) {return((CUser)Users.toArray()[index]);}
 			//else
 			return null;
 		}
-		
+
 		public synchronized CUser getUser(String name) {
 			for (Iterator<CUser> i = Users.iterator(); i.hasNext();) {
 				CUser user = i.next();
@@ -1108,13 +1121,13 @@ public class CUserListPanel extends JPanel implements ActionListener{
 			}
 			return new CUser();
 		}
-		
+
 		public UserListCellRenderer getRenderer() {return Renderer;}
-		
+
 		static class UserListCellRenderer extends JLabel implements ListCellRenderer {
-			
+
 			/**
-             * 
+             *
              */
             private static final long serialVersionUID = 4400213401819469963L;
             MWClient ulMwclient;
@@ -1127,22 +1140,22 @@ public class CUserListPanel extends JPanel implements ActionListener{
 			ImageIcon ReserveImage;
 			ImageIcon ActiveImage;
 			ImageIcon FightImage;
-			
+
 			public UserListCellRenderer (CUserListModel towner) {
 				Owner = towner;
 				ulMwclient = towner.mwclient;
 				TextBold = ulMwclient.getConfig().isParam("USERLISTBOLD");
 				TextColor = ulMwclient.getConfig().isParam("USERLISTCOLOR");
-				TextImage = ulMwclient.getConfig().isParam("USERLISTIMAGE");	
+				TextImage = ulMwclient.getConfig().isParam("USERLISTIMAGE");
 				LogoutImage = ulMwclient.getConfig().getImage("LOGOUT");
 				ReserveImage = ulMwclient.getConfig().getImage("RESERVE");
 				ActiveImage = ulMwclient.getConfig().getImage("ACTIVE");
 				FightImage = ulMwclient.getConfig().getImage("FIGHT");
 				setOpaque(true);
 			}
-			
+
 			public void setLoggedIn(boolean tloggedin) {LoggedIn = tloggedin;}
-			
+
 			public void refreshParams() {
 				TextBold = ulMwclient.getConfig().isParam("USERLISTBOLD");
 				TextColor = ulMwclient.getConfig().isParam("USERLISTCOLOR");
@@ -1150,42 +1163,42 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				LogoutImage = ulMwclient.getConfig().getImage("LOGOUT");
 				ReserveImage = ulMwclient.getConfig().getImage("RESERVE");
 				ActiveImage = ulMwclient.getConfig().getImage("ACTIVE");
-				FightImage = ulMwclient.getConfig().getImage("FIGHT");	
+				FightImage = ulMwclient.getConfig().getImage("FIGHT");
 			}
-			
+
 			//value to display, cell index, is selected, cell has focus?
-			public Component getListCellRendererComponent(JList list, Object value, int index, boolean selected, boolean focus) {  
+			public Component getListCellRendererComponent(JList list, Object value, int index, boolean selected, boolean focus) {
 				//have to make this renderer faster
 				int userlevel = 0;
 				int status;
-				
+
 				CUser user = Owner.getUser(index);
 				if (user == null) {return null;}
-				
+
 				userlevel = user.getUserlevel();
                 String invisFlag = " ";
-                
-                //if you can see them, and they are invis, then your level is >= to theres 
+
+                //if you can see them, and they are invis, then your level is >= to theres
                 if ( user.isInvis() )
                     invisFlag = "(I) ";
-                
+
 				if (userlevel < 30) {setText(user.getName());}
 				if (userlevel >= 30 && userlevel < 100) {setText("^"+invisFlag + user.getName());}
 				if (userlevel >= 100 && userlevel < 200) {setText("*"+invisFlag + user.getName());}
 				if (userlevel >= 200) {setText("@"+invisFlag + user.getName());}
-				
+
 				//check users No-Play status
 				boolean isOnNoPlay = false;
 				if (ulMwclient.getPlayer().getAdminExcludes().contains(user.getName().toLowerCase()))
 					isOnNoPlay = true;
 				else if (ulMwclient.getPlayer().getPlayerExcludes().contains(user.getName().toLowerCase()))
 					isOnNoPlay = true;
-				
+
 				//append mute/unmuted status. this is sickeningly inefficient when the whole
 				//list is being processed and should be rewritten eventually.
 				String searchString = user.getName().trim();
 				int isMuted = 0;
-				
+
                 if ( userlevel < 100){
     				String ignoreList = ulMwclient.getConfig().getParam("IGNOREPUBLIC");
     				StringTokenizer it = new StringTokenizer(ignoreList,",");
@@ -1194,7 +1207,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
     					if (currString.equalsIgnoreCase(searchString))
     						isMuted++;
     				}
-    				
+
     				//search PM mute as well
     				ignoreList = ulMwclient.getConfig().getParam("IGNOREPRIVATE");
     				it = new StringTokenizer(ignoreList,",");
@@ -1203,8 +1216,8 @@ public class CUserListPanel extends JPanel implements ActionListener{
     					if (currString.equalsIgnoreCase(searchString))
     						isMuted++;
     				}
-    				
-    				
+
+
     				//and the faction ...
     				if (user.getHouse().equals(ulMwclient.getPlayer().getHouse())) {
     					ignoreList = ulMwclient.getConfig().getParam("IGNOREHOUSE");
@@ -1219,7 +1232,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				String muteUps = "";
 				for (int i = 1; i < isMuted; i++)
 					muteUps += "+";
-				
+
 				if (isMuted > 0 && isOnNoPlay)
 					setText(getText() + " [muted" + muteUps + ", np]");
 				else if (isMuted > 0)
@@ -1227,7 +1240,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				else if (isOnNoPlay)
 					setText(getText() + " [np]");
 
-				
+
 				if (selected) {
 					setForeground(list.getSelectionForeground());
 					setBackground(list.getSelectionBackground());
@@ -1237,11 +1250,11 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					if (TextColor && LoggedIn) {setForeground(user.getRGBColor());}
 					else {setForeground(Color.black);}
 				}
-				
+
 				if (LoggedIn) {
 					status = user.getStatus();
 					if (status == MWClient.STATUS_LOGGEDOUT) {
-						
+
 						//logged out users are never bold
 						setFont(getFont().deriveFont(Font.PLAIN));
 						if (TextImage) {try {setIcon(LogoutImage);} catch (Exception ex) {CampaignData.mwlog.errLog(ex);}}
@@ -1249,7 +1262,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					else {
 						if (TextBold) {setFont(getFont().deriveFont(Font.BOLD));}
 						else {setFont(getFont().deriveFont(Font.PLAIN));}
-							
+
 						if (TextImage) {
 							if (status == MWClient.STATUS_RESERVE) {try {setIcon(ReserveImage);} catch (Exception ex) {CampaignData.mwlog.errLog(ex);}}
 							if (status == MWClient.STATUS_ACTIVE) {try {setIcon(ActiveImage);} catch (Exception ex) {CampaignData.mwlog.errLog(ex);}}
@@ -1262,32 +1275,32 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					setToolTipText(user.getInfo(ulMwclient.getConfig().isParam("NOIMGINCHAT")));
 				}
 				else {
-					
+
 					//logged out users don't see bold names OR icons
 					setFont(getFont().deriveFont(Font.PLAIN));
 					setIcon(null);
-					
+
 					setToolTipText(user.getShortInfo());
 				}
 				return this;
 			}
 		}
-		
+
 		public class UserComparator implements Comparator<CUser> {
-			
+
 			int Mode;
 			int Order;
-			
+
 			public UserComparator() {
 				Mode = SORTMODE_NAME;
 				Order = SORTORDER_ASCENDING;
 			}
-			
+
 			public int compare(CUser o1, CUser o2) {
 				CUser user1 = null;
 				CUser user2 = null;
 				int result = 0;
-				
+
 				if (Order == SORTORDER_DESCENDING) {
 					user1 = o2;
 					user2 = o1;
@@ -1295,7 +1308,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 					user1 = o1;
 					user2 = o2;
 				}
-				
+
 				if (Mode == SORTMODE_NAME) {return(user1.getName().compareToIgnoreCase(user2.getName()));}
 				if (Mode == SORTMODE_HOUSE) {result = user1.getHouse().compareToIgnoreCase(user2.getHouse());}
 				if (Mode == SORTMODE_COUNTRY) {result = user1.getCountry().compareToIgnoreCase(user2.getCountry());}
@@ -1314,11 +1327,11 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				//else
 				return result;
 			}
-			
+
 			public boolean equals(Object o1, Object o2) {
 				return(((CUser)o1).getName().equals(((CUser)o2).getName()));
 			}
-			
+
 			public void setMode(int tmode) {
 				if (tmode == SORTMODE_NAME || tmode == SORTMODE_HOUSE ||
 						tmode == SORTMODE_EXP || tmode == SORTMODE_RATING ||
@@ -1326,30 +1339,30 @@ public class CUserListPanel extends JPanel implements ActionListener{
 						tmode == SORTMODE_COUNTRY)
 				{Mode = tmode;}
 			}
-			
+
 			public int getMode() {return Mode;}
-			
+
 			public void setOrder(int torder) {
 				if (torder == SORTORDER_ASCENDING || torder == SORTORDER_DESCENDING)
 				{Order = torder;}
 			}
-			
+
 			public int getOrder() {return Order;}
 		}
-		
+
 	}
 }
 
 class ActivationThread extends Thread {
-	
+
 	Icon flashIcon = null;
 	Icon startIcon = null;
 	Icon finishIcon = null;
 	Icon rollOverIcon = null;
-	
+
 	MWClient mwclient = null;
 	JButton button = null;
-	
+
 	public ActivationThread(MWClient mwclient, JButton activityButton, Icon flash, Icon end, Icon roll) {;
 		this.mwclient = mwclient;
 		this.button = activityButton;
@@ -1368,11 +1381,11 @@ class ActivationThread extends Thread {
 				this.button.setIcon(startIcon);
 				Thread.sleep(550);
 			}catch(Exception ex) {
-				
+
 			}
 		}
 		this.button.setRolloverIcon(rollOverIcon);
 		this.button.setIcon(finishIcon);
 	}
-	
+
 }

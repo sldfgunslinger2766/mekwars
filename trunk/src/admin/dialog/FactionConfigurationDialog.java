@@ -151,6 +151,12 @@ public final class FactionConfigurationDialog implements ActionListener {
         baseTextField.setName("InfluenceCeiling");
         influenceSpring1.add(baseTextField);
 
+		baseTextField = new JTextField(5);
+		influenceSpring1.add(new JLabel("XP Rollover:", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("Amount of XP that will trigger 1 Flu to be given to player");
+		baseTextField.setName("FluXPRollOverCap");
+		influenceSpring1.add(baseTextField);
+
         baseTextField = new JTextField(5);
         influenceSpring1.add(new JLabel("Min Time for " + mwclient.moneyOrFluMessage(false, true, -1) + ":", SwingConstants.TRAILING));
         baseTextField.setToolTipText("Minimum active time to receive flu @ check.");
@@ -162,6 +168,18 @@ public final class FactionConfigurationDialog implements ActionListener {
         baseTextField.setToolTipText("Amount removed from TotalArmies when an Army abutts the MinBV");
         baseTextField.setName("FloorPenalty");
         influenceSpring1.add(baseTextField);
+
+		baseTextField = new JTextField(5); //@salient
+		influenceSpring1.add(new JLabel(mwclient.moneyOrFluMessage(true, true, -1) + " per " + mwclient.moneyOrFluMessage(false, true, -1), SwingConstants.TRAILING));
+		baseTextField.setToolTipText("The ability to convert Flu to CB and the number of CB given per 1 flu. Disabled if set to zero. ");
+		baseTextField.setName("Cbills_Per_Flu");
+		influenceSpring1.add(baseTextField);
+
+		baseTextField = new JTextField(5); //@salient
+		influenceSpring1.add(new JLabel(mwclient.moneyOrFluMessage(false, true, -1) + " to refresh", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("The amount of " + mwclient.moneyOrFluMessage(false, true, -1) + " needed to refresh a factory");
+		baseTextField.setName("FluToRefreshFactory");
+		influenceSpring1.add(baseTextField);
 
         SpringLayoutHelper.setupSpringGrid(influenceSpring1, 2);
 
@@ -3711,16 +3729,16 @@ public final class FactionConfigurationDialog implements ActionListener {
 		rewardSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
-		rewardSpring2.add(new JLabel("XP for Reward:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("Rollover for 1 RP");
+		rewardSpring1.add(new JLabel("XP Rollover:", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("Amount of XP that will trigger 1 RP to be given to player");
         baseTextField.setName("XPRollOverCap");
-		rewardSpring2.add(baseTextField);
+		rewardSpring1.add(baseTextField);
 
-        baseTextField = new JTextField(5);
-		rewardSpring1.add(new JLabel("Techs for RP:", SwingConstants.TRAILING));
+		baseTextField = new JTextField(5);
+        rewardSpring1.add(new JLabel("Techs per " + mwclient.getserverConfigs("RPShortName"), SwingConstants.TRAILING));
         baseTextField.setToolTipText("Number of techs hired with 1 RP");
         baseTextField.setName("TechsForARewardPoint");
-		rewardSpring1.add(baseTextField);
+        rewardSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
 		rewardSpring1.add(new JLabel("Rare Multiplier:", SwingConstants.TRAILING));
@@ -3764,7 +3782,7 @@ public final class FactionConfigurationDialog implements ActionListener {
 
 		//set up spring2
         baseTextField = new JTextField(5);
-        rewardSpring2.add(new JLabel("Flu for RP:", SwingConstants.TRAILING));
+        rewardSpring2.add(new JLabel(mwclient.moneyOrFluMessage(false, true, -1) + " per " + mwclient.getserverConfigs("RPShortName"), SwingConstants.TRAILING));
         baseTextField.setToolTipText("Amount of flu given in exhcange for 1 RP");
         baseTextField.setName("InfluenceForARewardPoint");
         rewardSpring2.add(baseTextField);
@@ -3777,7 +3795,7 @@ public final class FactionConfigurationDialog implements ActionListener {
 
 		// @Author Salient (mwosux@gmail.com) , Add RP for CBills
 		baseTextField = new JTextField(5);
-		rewardSpring2.add(new JLabel("Flu for CBills:", SwingConstants.TRAILING));
+		rewardSpring2.add(new JLabel(mwclient.moneyOrFluMessage(true, true, -1) + " per " + mwclient.getserverConfigs("RPShortName"), SwingConstants.TRAILING));
 		baseTextField.setToolTipText("Amount of CBills given in exhcange for 1 RP");
 		baseTextField.setName("CBillsForARewardPoint");
 		rewardSpring2.add(baseTextField);

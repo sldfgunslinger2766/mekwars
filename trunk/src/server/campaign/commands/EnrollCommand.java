@@ -142,8 +142,8 @@ public class EnrollCommand implements Command {
 
 		String unitInfo = nh.getNewSOLUnits(newPlayer,null);
 		newPlayer.addMoney(CampaignMain.cm.getIntegerConfig("PlayerBaseMoney"));
-		//@Salient adding option to give new player
-		newPlayer.addReward(CampaignMain.cm.getIntegerConfig("PlayerBaseRP"));
+		newPlayer.addReward(CampaignMain.cm.getIntegerConfig("PlayerBaseRP"));  //@Salient adding option to give new player RP
+		newPlayer.addInfluence(CampaignMain.cm.getIntegerConfig("PlayerBaseFlu")); //@Salient adding option to give new player Flu
 
 		String result = new String("AM:<font color=\"navy\">WELCOME TO MEKWARS!</font>"
 				+ "<br><br>You've been assigned to " + nh.getNameAsLink() + ", "

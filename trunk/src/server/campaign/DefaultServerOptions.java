@@ -1369,8 +1369,7 @@ public class DefaultServerOptions {
         defaults.setProperty("Sol_FreeBuild_LimitPostDefOnly", "false");
         // can't go active if you can still get more free meks
         defaults.setProperty("Sol_FreeBuild_LimitGoActive", "false");
-
-        // New buttons for client @Salient
+        // New buttons for client
         defaults.setProperty("Enable_Link_Area", "false");
         defaults.setProperty("Link_Area_Label", "Links:");
         // HTML location for new rules panel
@@ -1385,12 +1384,19 @@ public class DefaultServerOptions {
         defaults.setProperty("Enable_Link3_Button", "false");
         defaults.setProperty("Link3_URL", "https://facebook.com");
         defaults.setProperty("Link3_Icon", "./data/images/misc/facebook.png");
-        //Bot Options @Salient
+        //Bot Options
         defaults.setProperty("Enable_Bot_Chat", "false");
         defaults.setProperty("Bot_Buffer_Location", "./data/allchatforbot.txt");
-        //Subfaction Options @Salient
+        //Subfaction Options
         defaults.setProperty("Enforce_Subfaction_Factory_Access", "false");
         defaults.setProperty("Self_Promote_Subfaction", "false");
+        //Additional Influence Options
+        defaults.setProperty("Cbills_Per_Flu", "0");
+        defaults.setProperty("AllowFluTransfer", "false");
+        defaults.setProperty("PlayerBaseFlu", "0");
+        defaults.setProperty("FluXPRollOverCap", "0");
+        defaults.setProperty("FluToRefreshFactory", "0");
+
 
         // Tracker - let's move stuff out of the server config file and into
         // Campaign configs so we can edit it while the server is live, shall we?

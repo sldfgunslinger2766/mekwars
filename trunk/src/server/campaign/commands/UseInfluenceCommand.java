@@ -40,15 +40,11 @@ import common.util.UnitUtils;
 
 /**
  *
- * @author Torren Aug 28, 2004
- * allows users to redeem award points.
- * they can redeem for techs, influence, or units
- * syntax for techs and influence: /c userewardpoints#typeofreward#amountofrewardpointstouse
- * syntax for units /c userewardpoints#typeofreward#unittype#unitweight#[faction]/[rare]
- * items in brackets are optional. purchasing a rare unit will cost more rewardpoints
+ * @author Salient
+ * allows users to redeem influence, copy of userewardpoints
  *
  */
-public class UseRewardPointsCommand implements Command {
+public class UseInfluenceCommand implements Command {
 
 	int accessLevel = 0;
 	String syntax = "";
@@ -74,6 +70,8 @@ public class UseRewardPointsCommand implements Command {
 		 * 3 Repair
 		 * 4 Cbills
 		 */
+
+		int influence = 0;
 
 		int rewardSelection = Integer.parseInt(command.nextToken());
 		int rewardPoints = 0;
@@ -347,37 +345,40 @@ public class UseRewardPointsCommand implements Command {
             player.setSave();
             break;
 
-		// @Author Salient (mwosux@gmail.com) , Add RP for CBills
+		// @Author Salient (mwosux@gmail.com) , Add CBills per Flu
 		case 4: //buying CBills
-			rewardPoints = Integer.parseInt(command.nextToken());
+			influence = Integer.parseInt(command.nextToken());
 
-			if (rewardPoints < 0) {
-				CampaignMain.cm.toUser("AM:Invalid input - negative " + CampaignMain.cm.getConfig("RPLongName") + ".",Username,true);
+			if (influence < 0)
+			{
+				CampaignMain.cm.toUser("AM:Invalid input - negative " + CampaignMain.cm.getConfig("FluLongName") + ".",Username,true);
 				return;
 			}
 
-			if ( !(new Boolean(house.getConfig("AllowCBillsForRewards")).booleanValue())){
-				CampaignMain.cm.toUser("Sorry but you are not allowed to buy CBills with " + CampaignMain.cm.getConfig("RPLongName") + ".",Username,true);
+			if ( (Integer.parseInt(house.getConfig("Cbills_Per_Flu"))) <= 0)
+			{
+				CampaignMain.cm.toUser("Sorry but you are not allowed to buy CBills with " + CampaignMain.cm.getConfig("FluLongName") + ".",Username,true);
 				return;
 			}
 
-			if (rewardPoints > player.getReward()) {
-
-				if (player.getReward() == 0)
-					CampaignMain.cm.toUser("AM:You don't have any " + CampaignMain.cm.getConfig("RPLongName") + ". Purchase fails.",Username,true);
-				else {
-					String toSend = "AM:You only have " + player.getReward() + CampaignMain.cm.getConfig("RPLongName") + StringUtils.addAnS(player.getReward()) + ". Try again.";
+			if (influence > player.getInfluence())
+			{
+				if (player.getInfluence() == 0)
+					CampaignMain.cm.toUser("AM:You don't have any " + CampaignMain.cm.getConfig("FluLongName") + ". Purchase fails.",Username,true);
+				else
+				{
+					String toSend = "AM:You only have " + player.getInfluence() + CampaignMain.cm.getConfig("FluLongName") + StringUtils.addAnS(player.getInfluence()) + ". Try again.";
 					CampaignMain.cm.toUser(toSend,Username,true);
 				}
 
 				return;
 			}
 
-			int amountOfCBillsBought = (Integer.parseInt(house.getConfig("CBillsForARewardPoint")));
-			amountOfCBillsBought *= rewardPoints;
-			CampaignMain.cm.toUser("AM:You've bought " + CampaignMain.cm.moneyOrFluMessage(true,false,amountOfCBillsBought)+" for " + rewardPoints + " "+ CampaignMain.cm.getConfig("RPLongName") + ".",Username,true);
+			int amountOfCBillsBought = (Integer.parseInt(house.getConfig("Cbills_Per_Flu")));
+			amountOfCBillsBought *= influence;
+			CampaignMain.cm.toUser("AM:You've bought " + CampaignMain.cm.moneyOrFluMessage(true,false,amountOfCBillsBought)+" for " + influence + " "+ CampaignMain.cm.getConfig("FluLongName") + ".",Username,true);
 
-			player.addReward(-rewardPoints);
+			player.addInfluence(-influence);
 			player.addMoney(amountOfCBillsBought);
 			break;
 		}

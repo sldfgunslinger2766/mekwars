@@ -145,6 +145,7 @@ public class CMainFrame extends JFrame {
     JMenuItem jMenuCampaignDirectSell = new JMenuItem();
     JMenuItem jMenuCampaignDefect = new JMenuItem();
     JMenuItem jMenuCampaignRewardPoints = new JMenuItem();
+    JMenuItem jMenuCampaignInfluencePoints = new JMenuItem();
     JMenuItem jMenuCampaignPartsCache = new JMenuItem();
 
     JMenuItem jMenuSubCampaignFireTechs = new JMenuItem();
@@ -804,6 +805,15 @@ public class CMainFrame extends JFrame {
             }
         });
 
+        //@Salient
+        jMenuCampaignInfluencePoints.setText("Use " + mwclient.getserverConfigs("FluLongName"));
+        //jMenuCampaignRewardPoints.setMnemonic('P');
+        jMenuCampaignInfluencePoints.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mwclient.influencePointsDialog();
+            }
+        });
+
         jMenuCampaignPartsCache.setText("View Parts");
         jMenuCampaignPartsCache.setMnemonic('V');
         jMenuCampaignPartsCache.addActionListener(new ActionListener() {
@@ -1243,6 +1253,7 @@ public class CMainFrame extends JFrame {
         jMenuCampaignSubOther.add(jMenuCampaignLogo);
         jMenuCampaignSubOther.add(jMenuCampaignDefect);
         jMenuCampaignSubOther.add(jMenuCampaignRewardPoints);
+        jMenuCampaignSubOther.add(jMenuCampaignInfluencePoints);
         if (Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsBlackMarket"))) {
             jMenuCampaignSubOther.add(jMenuCampaignPartsCache);
         }
@@ -1553,6 +1564,35 @@ public class CMainFrame extends JFrame {
         }
 
     	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transferrewardpoints#" + targetPlayer + "#" + Amount);
+    }
+
+    //@Salient
+    public void jMenuCommanderTransferInfluence_actionPerformed(String name)
+    {
+    	String targetPlayer;
+    	String Amount;
+
+    	if ((name == null) || name.trim().equals(""))
+    	{
+    		PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Transfer Recipient", PlayerNameDialog.FACTION_ONLY);
+    		pnd.setVisible(true);
+    		targetPlayer = pnd.getPlayerName();
+    		pnd.dispose();
+    	} else {
+            targetPlayer = name;
+        }
+
+    	if (targetPlayer == null) {
+            return;
+        }
+
+    	Amount = JOptionPane.showInputDialog(getContentPane(), "Amount", "Send " + mwclient.getserverConfigs("FluShortName") + " to " + targetPlayer, JOptionPane.PLAIN_MESSAGE);
+
+    	if (Amount == null) {
+            return;
+        }
+
+    	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transferinfluence#" + targetPlayer + "#" + Amount);
     }
 
 
