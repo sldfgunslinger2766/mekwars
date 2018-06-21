@@ -222,7 +222,7 @@ public final class CampaignMain implements Serializable {
 
     //private TreeMap<String, String> NewsFeed = new TreeMap<String, String>();
     private Feed newsFeed = new Feed();
-    
+
     private boolean isArchiving = false;
 
     private Random r = new Random(System.currentTimeMillis());
@@ -1719,7 +1719,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("SINGASONG", new SingASongCommand());
         Commands.put("SAS", new SingASongCommand());
         //@Salient for sol free build option
-        Commands.put("SOLCREATEUNIT", new SolCreateUnitCommand());
+        Commands.put("SOLCREATEUNIT", new FreeBuildCreateUnitCommand());
         Commands.put("SOLDELETEUNIT", new SolDeleteUnitCommand());
         Commands.put("STARTCHRISTMAS", new StartChristmasCommand());
         Commands.put("STOPREPAIRJOB", new StopRepairJobCommand());
@@ -1733,6 +1733,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("TRANSFERMONEY", new TransferMoneyCommand());
         Commands.put("TRANSFERPILOT", new TransferPilotCommand());
         Commands.put("TRANSFERUNIT", new TransferUnitCommand());
+        Commands.put("TRANSFERINFLUENCE", new TransferInfluenceCommand()); //@salient
         Commands.put("TRANSFERREWARDPOINTS", new TransferRewardPointsCommand());
         Commands.put("UPDATEOPERATIONS", new UpdateOperationsCommand());
         Commands.put("UPDATESERVERUNITSCACHE", new UpdateServerUnitsCacheCommand());
@@ -1742,6 +1743,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("UNITPOSITION", new UnitPositionCommand());
         Commands.put("UNLOCKLANCES", new UnlockLancesCommand());
         Commands.put("USEREWARDPOINTS", new UseRewardPointsCommand());
+        Commands.put("USEINFLUENCE", new UseInfluenceCommand());
         Commands.put("VIEWFACTIONPARTSCACHE", new ViewFactionPartsCacheCommand());
         Commands.put("VIEWPLAYERPARTS", new ViewPlayerPartsCommand());
         Commands.put("VIEWPLAYERPERSONALPILOTQUEUE", new ViewPlayerPersonalPilotQueueCommand());
@@ -4095,7 +4097,7 @@ public final class CampaignMain implements Serializable {
 		this.scheduler = scheduler;
 	}
 
-	
+
 	/**
 	 * Send a message to a Discord Webhook
 	 * @param message the message to send

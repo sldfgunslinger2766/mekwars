@@ -1,10 +1,10 @@
 /*
  * MekWars - Copyright (C) 2011
- * 
- * 
+ *
+ *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
@@ -30,12 +30,12 @@ import common.util.SpringLayoutHelper;
 public class InfluencePanel extends JPanel {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -5359808432287239311L;
 
     private JTextField baseTextField = new JTextField(5);
-    
+
     public InfluencePanel(MWClient mwclient) {
 		super();
 		/*
@@ -58,6 +58,12 @@ public class InfluencePanel extends JPanel {
         influenceSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
+        influenceSpring1.add(new JLabel("XP Rollover:", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("Amount of XP that will trigger 1 Flu to be given to player");
+        baseTextField.setName("FluXPRollOverCap");
+        influenceSpring1.add(baseTextField);
+
+        baseTextField = new JTextField(5);
         influenceSpring1.add(new JLabel("Min Time for " + mwclient.moneyOrFluMessage(false, true, -1) + ":", SwingConstants.TRAILING));
         baseTextField.setToolTipText("Minimum active time to receive flu @ check.");
         baseTextField.setName("InfluenceTimeMin");
@@ -68,6 +74,18 @@ public class InfluencePanel extends JPanel {
         baseTextField.setToolTipText("Amount removed from TotalArmies when an Army abutts the MinBV");
         baseTextField.setName("FloorPenalty");
         influenceSpring1.add(baseTextField);
+
+		baseTextField = new JTextField(5); //@salient
+		influenceSpring1.add(new JLabel(mwclient.moneyOrFluMessage(true, true, -1) + " per " + mwclient.moneyOrFluMessage(false, true, -1), SwingConstants.TRAILING));
+		baseTextField.setToolTipText("The ability to convert Flu to CB and the number of CB given per 1 flu. Disabled if set to zero. ");
+		baseTextField.setName("Cbills_Per_Flu");
+		influenceSpring1.add(baseTextField);
+
+		baseTextField = new JTextField(5); //@salient
+		influenceSpring1.add(new JLabel(mwclient.moneyOrFluMessage(false, true, -1) + " to refresh", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("The amount of " + mwclient.moneyOrFluMessage(false, true, -1) + " needed to refresh a factory. Disabled if set to zero.");
+		baseTextField.setName("FluToRefreshFactory");
+		influenceSpring1.add(baseTextField);
 
         SpringLayoutHelper.setupSpringGrid(influenceSpring1, 2);
 
@@ -96,5 +114,5 @@ public class InfluencePanel extends JPanel {
         // =)
         add(influenceBoxPanel);
 	}
-	
+
 }

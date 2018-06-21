@@ -125,26 +125,26 @@ public class RewardPanel extends JPanel {
         rewardSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
-        rewardSpring1.add(new JLabel("XP for Reward:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("Rollover for 1 RP");
+        rewardSpring1.add(new JLabel("XP Rollover:", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("Amount of XP that will trigger 1 RP to be given to player");
         baseTextField.setName("XPRollOverCap");
         rewardSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
-        rewardSpring1.add(new JLabel("Techs for RP:", SwingConstants.TRAILING));
+        rewardSpring1.add(new JLabel("Techs per " + mwclient.getserverConfigs("RPShortName"), SwingConstants.TRAILING));
         baseTextField.setToolTipText("Number of techs hired with 1 RP");
         baseTextField.setName("TechsForARewardPoint");
         rewardSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
-        rewardSpring1.add(new JLabel("Flu for RP:", SwingConstants.TRAILING));
+        rewardSpring1.add(new JLabel(mwclient.moneyOrFluMessage(false, true, -1) + " per " + mwclient.getserverConfigs("RPShortName"), SwingConstants.TRAILING));
         baseTextField.setToolTipText("Amount of flu given in exhcange for 1 RP");
         baseTextField.setName("InfluenceForARewardPoint");
         rewardSpring1.add(baseTextField);
 
 		// @Author Salient (mwosux@gmail.com) , Add RP for CBills
 		baseTextField = new JTextField(5);
-		rewardSpring1.add(new JLabel("CBills for RP:", SwingConstants.TRAILING));
+		rewardSpring1.add(new JLabel(mwclient.moneyOrFluMessage(true, true, -1) + " per " + mwclient.getserverConfigs("RPShortName"), SwingConstants.TRAILING));
 		baseTextField.setToolTipText("Amount of CBills given in exhcange for 1 RP");
 		baseTextField.setName("CBillsForARewardPoint");
 		rewardSpring1.add(baseTextField);

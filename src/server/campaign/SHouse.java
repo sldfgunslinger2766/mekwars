@@ -1444,7 +1444,58 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         int rand = CampaignMain.cm.getRandomNumber(factionPossible.size());
         return (factionPossible.elementAt(rand));
     }
+    
+    /**
+     *@Salient , this is for subfaction enforcement rule when player presses buy new, it pulls from correct factory
+     * 
+     */
+    public SUnitFactory getNativeAccessableFactoryForProduction(int type, int weight, int subFactionLvl, String Username) {
 
+        //CampaignMain.cm.toUser("DEBUG: subfactionLvl:" + subFactionLvl , Username, true);
+
+        // get all possible @ weight and type and return if none exist
+        Vector<SUnitFactory> allPossible = getPossibleFactoryForProduction(type, weight, false);
+        if (allPossible.size() == 0) {
+            return null;
+        }
+
+        // sort out non-faction factories and return if none exist
+        Vector<SUnitFactory> factionPossible = new Vector<SUnitFactory>(1, 1);
+        for (SUnitFactory currFac : allPossible) 
+        {
+            //CampaignMain.cm.toUser("DEBUG: All List:" + currFac.getFounder() + " AccessLvL: " + currFac.getAccessLevel() , Username, true);
+
+            if (currFac.getFounder().equalsIgnoreCase(getName())) 
+            {
+                factionPossible.add(currFac);
+            }
+        }
+        if (factionPossible.size() == 0) {
+            return null;
+        }
+        
+        // sort out unaccessable factories and return if none exist
+        Vector<SUnitFactory> accessPossible = new Vector<SUnitFactory>(1, 1);
+        for (SUnitFactory currFac : factionPossible) 
+        {
+            //CampaignMain.cm.toUser("DEBUG: House List:" + currFac.getFounder() + " AccessLvL: " + currFac.getAccessLevel() , Username, true);
+
+            if (currFac.getAccessLevel() == subFactionLvl) 
+            {
+                //CampaignMain.cm.toUser("DEBUG: ADDED TO ACCESS:" + currFac.getFounder() + " AccessLvL: " + currFac.getAccessLevel() , Username, true);
+                accessPossible.add(currFac);
+            }
+        }
+        if (accessPossible.size() == 0) {
+            //CampaignMain.cm.toUser("DEBUG: NumFactories: " + accessPossible.size() , Username, true);
+            return null;
+        }
+
+        // select a random factory to return
+        int rand = CampaignMain.cm.getRandomNumber(accessPossible.size());
+        return (accessPossible.elementAt(rand));
+    }
+    
     public int getMaxAllowedPP(int weight, int type_id) {
     	String unitAPMax = "";
         if(CampaignMain.cm.getBooleanConfig("UseAutoProdNew")) {

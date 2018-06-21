@@ -57,8 +57,15 @@ public class FactionPanel extends JPanel {
 		//@Salient adding option to give new player starting RP
 		baseTextField = new JTextField(5);
 		factionSpring1.add(new JLabel("Starting "+ mwclient.getserverConfigs("RPShortName") + ":", SwingConstants.TRAILING));
-		baseTextField.setToolTipText("Number of "+ mwclient.getserverConfigs("RPLongName") +" given to a new SOL player");
+		baseTextField.setToolTipText("Number of "+ mwclient.getserverConfigs("RPLongName") +" given to a new SOL player.");
 		baseTextField.setName("PlayerBaseRP");
+		factionSpring1.add(baseTextField);
+		
+		//@Salient adding option to give new player starting Flu
+		baseTextField = new JTextField(5);
+		factionSpring1.add(new JLabel("Starting "+ mwclient.getserverConfigs("FluShortName") + ":", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("Number of "+ mwclient.getserverConfigs("FluLongName") +" given to a new SOL player. Note that 50 is hard coded in when you set this value. -50 is 0.");
+		baseTextField.setName("PlayerBaseFlu");
 		factionSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);

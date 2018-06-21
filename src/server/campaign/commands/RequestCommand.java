@@ -53,8 +53,9 @@ public class RequestCommand implements Command {
 
     public void process(StringTokenizer command, String Username) {
 
+    	int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+    	
         if (accessLevel != 0) {
-            int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
                 CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;
@@ -255,10 +256,22 @@ public class RequestCommand implements Command {
          * we should return a failure.
          */
         else {
-            factory = p.getMyHouse().getNativeFactoryForProduction(type_id, weightclass, true);
-            if (factory != null) {
-                planet = factory.getPlanet();
-            }
+        	//@salient Enforce_Subfaction_Factory_Access
+        	if(CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Access"))
+        	{
+                factory = p.getMyHouse().getNativeAccessableFactoryForProduction(type_id, weightclass, p.getSubFactionAccess(), Username);
+                if (factory != null) 
+                {
+                    planet = factory.getPlanet();
+                }
+        	}
+        	else
+        	{
+        		factory = p.getMyHouse().getNativeFactoryForProduction(type_id, weightclass, true);
+        		if (factory != null) {
+        			planet = factory.getPlanet();
+        		}        		
+        	}
         }
         if (planet == null || factory == null) {
             CampaignMain.cm.toUser("AM:No " + p.getMyHouse().getName() + " factory is available to fill your order at this time (Click on icon in House Status to use captured factories).", Username, true);
