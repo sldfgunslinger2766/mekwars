@@ -184,7 +184,7 @@ public class RewardPanel extends JPanel {
 
         baseTextField = new JTextField(5);
         rewardSpring1.add(new JLabel("Repod Cost:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>How much should the repod cost<br>Random repods cost 1/2 this</htlm>");
+        baseTextField.setToolTipText("<html>How much should the repod cost<br>Random repods cost 1/2 this</html>");
         baseTextField.setName("GlobalRepodWithRPCost");
         rewardSpring1.add(baseTextField);
 

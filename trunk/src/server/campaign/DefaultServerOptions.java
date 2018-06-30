@@ -1362,13 +1362,16 @@ public class DefaultServerOptions {
         // Or set this to true to just use all of them instead
         defaults.setProperty("Sol_FreeBuild_UseAll", "false");
         // -1 disables limits, 0 disables build, otherwise it is a limiter
-        defaults.setProperty("Sol_FreeBuild_Limit", "-1");
-        // allows player to build free mechs in the house they defected to
-        defaults.setProperty("Sol_FreeBuild_PostDefection", "false");
+        //can be set in faction configuration panel to differ per faction
+        defaults.setProperty("FreeBuild_Limit", "-1"); 
+        // allows player to build free meks in the house they defected to
+        defaults.setProperty("FreeBuild_PostDefection", "false");
         // if true, the mekToken limit only applies outside of SOL
-        defaults.setProperty("Sol_FreeBuild_LimitPostDefOnly", "false");
+        defaults.setProperty("FreeBuild_LimitPostDefOnly", "false");
         // can't go active if you can still get more free meks
-        defaults.setProperty("Sol_FreeBuild_LimitGoActive", "false");
+        defaults.setProperty("FreeBuild_LimitGoActive", "false");
+        // allow no duplicate variants when using freebuild
+        defaults.setProperty("FreeBuild_AllowDuplicates", "true");
         // New buttons for client
         defaults.setProperty("Enable_Link_Area", "false");
         defaults.setProperty("Link_Area_Label", "Links:");
@@ -1396,6 +1399,10 @@ public class DefaultServerOptions {
         defaults.setProperty("PlayerBaseFlu", "0");
         defaults.setProperty("FluXPRollOverCap", "0");
         defaults.setProperty("FluToRefreshFactory", "0");
+        //defaults.setProperty("FluToRepod", "0");
+        //MISC
+        defaults.setProperty("AllowEmoji", "false");
+
 
 
         // Tracker - let's move stuff out of the server config file and into

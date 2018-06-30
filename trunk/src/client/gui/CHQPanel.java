@@ -404,7 +404,7 @@ public class CHQPanel extends JPanel {
             }
             //also spawn button if post defection option is set
             if (!player.getMyHouse().getName().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName"))
-                    && mwclient.getserverConfigs("Sol_FreeBuild_PostDefection").equalsIgnoreCase("true")) {
+                    && mwclient.getserverConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true")) {
                 solFreeBuildButton.setText("Create Unit");
                 solFreeBuildButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {

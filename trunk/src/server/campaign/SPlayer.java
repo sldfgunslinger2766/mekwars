@@ -1894,6 +1894,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public String getColoredName() {
         return "<font color=\"" + getHouseFightingFor().getHouseColor() + "\">" + name + "</font>";
     }
+    
+    public String getColoredNameBold() { //@salient
+        return "<font color=\"" + getHouseFightingFor().getHouseColor() + "\"><b>" + name + "</b></font>";
+    }
 
     public void setName(String s) {
 
@@ -3504,7 +3508,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 	//@salient
 	public boolean hasUnusedMekTokens()
 	{
-		if(getMekToken() < Integer.parseInt((CampaignMain.cm.getConfig("Sol_FreeBuild_Limit"))) )
+		
+		if( getMekToken() < Integer.parseInt(getMyHouse().getConfig("FreeBuild_Limit")) )
 		{
 			return true;
 		}
