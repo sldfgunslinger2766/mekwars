@@ -87,6 +87,12 @@ public class InfluencePanel extends JPanel {
 		baseTextField.setName("FluToRefreshFactory");
 		influenceSpring1.add(baseTextField);
 
+//		baseTextField = new JTextField(5);
+//		influenceSpring1.add(new JLabel("Repod Cost:", SwingConstants.TRAILING));
+//		baseTextField.setToolTipText("<html>Set to 0 to disable.<br>How much flu needed to repod omni mech<br>Random repods costs 1/2 this value</html>");
+//		baseTextField.setName("FluToRepod");
+//		influenceSpring1.add(baseTextField);
+
         SpringLayoutHelper.setupSpringGrid(influenceSpring1, 2);
 
         // then set up spring2

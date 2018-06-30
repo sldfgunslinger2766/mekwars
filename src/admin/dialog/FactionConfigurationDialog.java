@@ -125,6 +125,7 @@ public final class FactionConfigurationDialog implements ActionListener {
         JPanel mekPilotSkillsPanel = new JPanel();// allows SO's to select what pilot skills they want for Meks
         JPanel unitLimitsPanel = new JPanel(); // Set limits on units in a player's hangar
         JPanel autoProdPanel = new JPanel(); // Autoproduction
+        JPanel freeBuildPanel = new JPanel(); // @salient
 
         /*
          * INFLUENCE PANEL CONSTRUCTION
@@ -139,10 +140,12 @@ public final class FactionConfigurationDialog implements ActionListener {
         JPanel influenceFlowPanel = new JPanel();
         JPanel influenceSpring1 = new JPanel(new SpringLayout());// 7 items
         JPanel influenceSpring2 = new JPanel(new SpringLayout());// 7 items
+        JPanel influenceSpring3 = new JPanel(new SpringLayout());
         influenceBoxPanel.setLayout(new BoxLayout(influenceBoxPanel, BoxLayout.Y_AXIS));
         influenceBoxPanel.add(influenceFlowPanel);
         influenceFlowPanel.add(influenceSpring1);
         influenceFlowPanel.add(influenceSpring2);
+        influenceFlowPanel.add(influenceSpring3);
 
         // load spring1 first
         baseTextField = new JTextField(5);
@@ -157,18 +160,6 @@ public final class FactionConfigurationDialog implements ActionListener {
 		baseTextField.setName("FluXPRollOverCap");
 		influenceSpring1.add(baseTextField);
 
-        baseTextField = new JTextField(5);
-        influenceSpring1.add(new JLabel("Min Time for " + mwclient.moneyOrFluMessage(false, true, -1) + ":", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("Minimum active time to receive flu @ check.");
-        baseTextField.setName("InfluenceTimeMin");
-        influenceSpring1.add(baseTextField);
-
-        baseTextField = new JTextField(5);
-        influenceSpring1.add(new JLabel("Floor Penalty:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("Amount removed from TotalArmies when an Army abutts the MinBV");
-        baseTextField.setName("FloorPenalty");
-        influenceSpring1.add(baseTextField);
-
 		baseTextField = new JTextField(5); //@salient
 		influenceSpring1.add(new JLabel(mwclient.moneyOrFluMessage(true, true, -1) + " per " + mwclient.moneyOrFluMessage(false, true, -1), SwingConstants.TRAILING));
 		baseTextField.setToolTipText("The ability to convert Flu to CB and the number of CB given per 1 flu. Disabled if set to zero. ");
@@ -181,13 +172,26 @@ public final class FactionConfigurationDialog implements ActionListener {
 		baseTextField.setName("FluToRefreshFactory");
 		influenceSpring1.add(baseTextField);
 
+
         SpringLayoutHelper.setupSpringGrid(influenceSpring1, 2);
 
         // then set up spring2
         baseTextField = new JTextField(5);
+        influenceSpring2.add(new JLabel("Min Time for " + mwclient.moneyOrFluMessage(false, true, -1) + ":", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("Minimum active time to receive flu @ check.");
+        baseTextField.setName("InfluenceTimeMin");
+        influenceSpring2.add(baseTextField);
+
+        baseTextField = new JTextField(5);
         influenceSpring2.add(new JLabel("Ceiling Penalty:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("Amount removed from TotalArmies when an Army abutts the MaxBV");
         baseTextField.setName("CeilingPenalty");
+        influenceSpring2.add(baseTextField);
+
+        baseTextField = new JTextField(5);
+        influenceSpring2.add(new JLabel("Floor Penalty:", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("Amount removed from TotalArmies when an Army abutts the MinBV");
+        baseTextField.setName("FloorPenalty");
         influenceSpring2.add(baseTextField);
 
         baseTextField = new JTextField(5);
@@ -203,6 +207,19 @@ public final class FactionConfigurationDialog implements ActionListener {
         influenceSpring2.add(baseTextField);
 
         SpringLayoutHelper.setupSpringGrid(influenceSpring2, 2);
+
+//        influenceSpring3.setBorder(BorderFactory.createTitledBorder("REPOD"));
+//
+//		baseTextField = new JTextField(5); //@salient
+//		influenceSpring3.add(new JLabel("Repod Cost:", SwingConstants.TRAILING));
+//		baseTextField.setToolTipText("<html>Set to 0 to disable.<br>How much flu needed to repod omni mech<br>Random repods costs 1/2 this value</html>");
+//		baseTextField.setName("FluToRepod");
+//		influenceSpring3.add(baseTextField);
+//
+//		influenceSpring3.add(new JLabel("Rewards Repod Folder: ", SwingConstants.TRAILING));
+//		influenceSpring3.add(new JLabel("**Use the one in Rewards Tab**", SwingConstants.TRAILING));
+//
+//        SpringLayoutHelper.setupSpringGrid(influenceSpring3, 2);
 
         // springs are it for now. if CBoxes come later, stick them in the box
         // =)
@@ -3845,8 +3862,29 @@ public final class FactionConfigurationDialog implements ActionListener {
 		rewardBox.add(rewardGrid);
 		rewardPanel.add(rewardBox);
 
-        // unitLimitsPanel construction
+        /* @salient
+         * FREEBUILD PANEL CONSTRUCTION
+         */
+        JPanel freeBuildBoxPanel = new JPanel();
+        JPanel freeBuildFlowPanel = new JPanel();
+        JPanel freeBuildSpring1 = new JPanel(new SpringLayout());// 7 items
 
+        freeBuildBoxPanel.setLayout(new BoxLayout(freeBuildBoxPanel, BoxLayout.Y_AXIS));
+        freeBuildBoxPanel.add(freeBuildFlowPanel);
+        freeBuildFlowPanel.add(freeBuildSpring1);
+
+		baseTextField = new JTextField(5);
+		freeBuildSpring1.add(new JLabel("Build Limit", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("<html>How many units are players allowed to build. Zero or less disables limit.</html>");
+		baseTextField.setName("FreeBuild_Limit");
+		freeBuildSpring1.add(baseTextField);
+
+		SpringLayoutHelper.setupSpringGrid(freeBuildSpring1, 2);
+
+		freeBuildPanel.add(freeBuildBoxPanel);
+        //END FREE BUILD PANEL
+
+		// unitLimitsPanel construction
         JPanel uLimitsPanel = new JPanel();
         JPanel ulTopPanel = new JPanel();
         JPanel ulBottomPanel = new JPanel();
@@ -4093,7 +4131,8 @@ public final class FactionConfigurationDialog implements ActionListener {
 
 		ConfigPane.addTab("Direct Sales",null,directSellPanel,"Units the lifeblood of the game");
 		ConfigPane.addTab("Faction",null,factionPanel,"House Stuff");
-		ConfigPane.addTab("Factory Options",null,productionPanel,"Factories That Can Do");
+		ConfigPane.addTab("Factory Options",null,productionPanel,"Factory Options");
+		ConfigPane.addTab("Free Build",null,freeBuildPanel,"Free Build Options");
 		ConfigPane.addTab("Influence",null,influencePanel,"Influence");
         ConfigPane.addTab("Pilots",null,pilotsPanel,"Pilot Options");
         ConfigPane.addTab("Pilot Skills(Mek)", null, mekPilotSkillsPanel, "Server Configurable Pilot Skills (Mek)");

@@ -1528,6 +1528,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("DISPLAYUNITREPAIRJOBS", new DisplayUnitRepairJobsCommand());
         Commands.put("DONATE", new DonateCommand());
         Commands.put("DONATEPILOT", new DonatePilotCommand());
+        Commands.put("EC", new EmojiCommand()); //@salient
         // Double EHM
         Commands.put("EHM", new EmployeeHouseMailCommand());
         Commands.put("EMPLOYEEHOUSEMAIL", new EmployeeHouseMailCommand());

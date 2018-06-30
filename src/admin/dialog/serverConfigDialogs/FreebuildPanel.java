@@ -44,6 +44,7 @@ public class FreebuildPanel extends JPanel {
 			JPanel panel0 = new JPanel();
 			JPanel panel1 = new JPanel();
 			JPanel panel2 = new JPanel();
+			JPanel panel3 = new JPanel();
 
 			panel0.add(new JLabel(description));
 
@@ -68,29 +69,37 @@ public class FreebuildPanel extends JPanel {
 			baseTextField = new JTextField(5);
 			panel1.add(new JLabel("Build Limit", SwingConstants.TRAILING));
 			baseTextField.setToolTipText("<html>How many units are players allowed to build. Zero or less disables limit.</html>");
-			baseTextField.setName("Sol_FreeBuild_Limit");
+			baseTextField.setName("FreeBuild_Limit");
 			panel1.add(baseTextField);
 
 			panel2.setBorder(BorderFactory.createTitledBorder("Post Defection Free Build"));
 
 			baseCheckBox = new JCheckBox("Allow Free Build Post Defection");
 			baseCheckBox.setToolTipText("<HTML>Set this if you want players to be able to build free units after defection. Uses house table.</HTML>");
-			baseCheckBox.setName("Sol_FreeBuild_PostDefection");
+			baseCheckBox.setName("FreeBuild_PostDefection");
 			panel2.add(baseCheckBox);
 
 			baseCheckBox = new JCheckBox("Limit Post Defection Only");
 			baseCheckBox.setToolTipText("<HTML>Set this if you want SOL free build to work without limits, and only limit free build after defection</HTML>");
-			baseCheckBox.setName("Sol_FreeBuild_LimitPostDefOnly");
+			baseCheckBox.setName("FreeBuild_LimitPostDefOnly");
 			panel2.add(baseCheckBox);
+			
+			panel3.setBorder(BorderFactory.createTitledBorder("Misc Options"));
 
-			baseCheckBox = new JCheckBox("Must Create All FreeMeks Before Able to Go Active");
+			baseCheckBox = new JCheckBox("Enforce token usage before going Active");
 			baseCheckBox.setToolTipText("<HTML>Set this if you want to disable going active if player has free meks remaining</HTML>");
-			baseCheckBox.setName("Sol_FreeBuild_LimitGoActive");
-			panel2.add(baseCheckBox);
+			baseCheckBox.setName("FreeBuild_LimitGoActive");
+			panel3.add(baseCheckBox);
+			
+			baseCheckBox = new JCheckBox("Allow Dupes");
+			baseCheckBox.setToolTipText("<HTML>Can only create 1 of each variant</HTML>");
+			baseCheckBox.setName("FreeBuild_AllowDuplicates");
+			panel3.add(baseCheckBox);
 
 			add(panel0);
 			add(panel1);
 			add(panel2);
+			add(panel3);
 
 	}
 

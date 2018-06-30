@@ -45,17 +45,17 @@ public class SolDeleteUnitCommand implements Command {
 		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
 		SPlayer p = CampaignMain.cm.getPlayer(Username);
 		SHouse h = p.getMyHouse();
-		
+
 		if(userLevel < getExecutionLevel()) {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;
 		}
-		
+
 		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild"))) {
 			CampaignMain.cm.toUser("AM:This command is disabled on this server.",Username,true);
 			return;
 		}
-			
+
 		if( !h.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName"))) {
 			CampaignMain.cm.toUser("AM: Only players in " + CampaignMain.cm.getConfig("NewbieHouseName") + " can use this command.",Username,true);
 			return;
@@ -72,16 +72,17 @@ public class SolDeleteUnitCommand implements Command {
 			return;
 		}
 
-		//tell the player 
+		//tell the player
 		CampaignMain.cm.toUser("AM:"+ Username + "'s " + u.getModelName() + " was removed.", Username, true);
 
 		p.removeUnit(unitID, true);
-		
+
 		//if the limit is on for SOL players, they have the ability to use this command to delete units
 		//So, when they do, we need to subtract one from their free mek counter.
-		if( CampaignMain.cm.getConfig("Sol_FreeBuild_LimitPostDefOnly").equalsIgnoreCase("false") &&
+		//though.. i think this may be dead code, pretty sure if there is a limit the del option wont show
+		if( CampaignMain.cm.getConfig("FreeBuild_LimitPostDefOnly").equalsIgnoreCase("false") &&
 			h.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName")) &&
-			Integer.parseInt((CampaignMain.cm.getConfig("Sol_FreeBuild_Limit"))) > 0)
+			Integer.parseInt((h.getConfig("FreeBuild_Limit"))) > 0)
 		{
 			p.addMekToken(-1);
 		}

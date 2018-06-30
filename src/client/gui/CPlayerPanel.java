@@ -170,7 +170,7 @@ public class CPlayerPanel extends JScrollPane {
         InfoPanel.add(lblTechs);
         if (Boolean.parseBoolean(client.getserverConfigs("ShowReward")))
             InfoPanel.add(lblRewardPoints);
-        if (Integer.parseInt(client.getserverConfigs("Sol_FreeBuild_Limit")) > 0) //@Salient for free build
+        if (Integer.parseInt(client.getserverConfigs("FreeBuild_Limit")) > 0) //@Salient for free build
         	InfoPanel.add(lblFreeMeks);
         InfoPanel.add(lblNextTick);
         if (logo) {PlayerPanel.add(InfoPanel, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, center, none, insets, 0, 0));}
@@ -237,7 +237,7 @@ public class CPlayerPanel extends JScrollPane {
         }
             
         lblRewardPoints.setText(PP_REWARD + " " + player.getRewardPoints() + "/" + mwclient.getserverConfigs("XPRewardCap"));
-        lblFreeMeks.setText(PP_FREEUNITS + " " + mwclient.getPlayer().getMekToken() + " / " + mwclient.getserverConfigs("Sol_FreeBuild_Limit")); //@Salient for free build
+        lblFreeMeks.setText(PP_FREEUNITS + " " + mwclient.getPlayer().getMekToken() + " / " + mwclient.getserverConfigs("FreeBuild_Limit")); //@Salient for free build
     }
     
     public void setNextTick(long nextTick) {

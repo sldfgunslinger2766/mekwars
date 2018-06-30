@@ -154,7 +154,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         item.setActionCommand("RFUL|" + userName);
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("ResetFreeMeks") &&
-            Integer.parseInt(mwclient.getserverConfigs("Sol_FreeBuild_Limit")) > 0)
+            Integer.parseInt(mwclient.getserverConfigs("FreeBuild_Limit")) > 0)
             unitsMen.add(item);
         item = new JMenuItem("Donate");
         item.setActionCommand("DU|" + userName);

@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import java.util.List;
 import java.util.Iterator;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ import server.campaign.pilot.SPilot;
  * This was originally created for new players only, however it has been expanded to allow
  * the player to create their starting hangar after defecting to a new faction.
  *
- * @Salient 
+ * @Salient
  * 2017.9.01
  */
 public class FreeBuildCreateUnitCommand implements Command
@@ -60,6 +61,7 @@ public class FreeBuildCreateUnitCommand implements Command
 	private Boolean postDefectionFreeBuild;
 	private Boolean useAllBuildTables;
 	private Boolean limitOnlyPostDefection;
+	private Boolean allowDupes;
 	private int userlvl;
 	private int freeBuildLimit;
 	private String username;
@@ -82,7 +84,7 @@ public class FreeBuildCreateUnitCommand implements Command
 
 		unit = readCommandReturnSUnit(command);
 		if(unit == null)
-			return;
+			return;		
 
 		houseTable = null; //used if 'useall' flag or post defection is set to true in SO
 		if(command.hasMoreElements())
@@ -110,16 +112,17 @@ public class FreeBuildCreateUnitCommand implements Command
 
 	private void initVars()
 	{
-		solFreeBuild = Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild"));
-		postDefectionFreeBuild = Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild_PostDefection"));
-		freeBuildLimit = Integer.parseInt(CampaignMain.cm.getConfig("Sol_FreeBuild_Limit"));
-		newbieHouseName = CampaignMain.cm.getConfig("NewbieHouseName");
-		useAllBuildTables = Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild_UseAll"));
-		buildTableForFreeBuild = CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable");
-		limitOnlyPostDefection = Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild_LimitPostDefOnly"));
 		userlvl = CampaignMain.cm.getServer().getUserLevel(username);
 		player = CampaignMain.cm.getPlayer(username);
 		house = player.getMyHouse();
+		solFreeBuild = Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild"));
+		postDefectionFreeBuild = Boolean.parseBoolean(CampaignMain.cm.getConfig("FreeBuild_PostDefection"));
+		newbieHouseName = CampaignMain.cm.getConfig("NewbieHouseName");
+		useAllBuildTables = Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild_UseAll"));
+		buildTableForFreeBuild = CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable");
+		limitOnlyPostDefection = Boolean.parseBoolean(CampaignMain.cm.getConfig("FreeBuild_LimitPostDefOnly"));
+		freeBuildLimit = Integer.parseInt(house.getConfig("FreeBuild_Limit"));
+		allowDupes = Boolean.parseBoolean(CampaignMain.cm.getConfig("FreeBuild_AllowDuplicates"));
 	}
 
 	/**
@@ -147,7 +150,7 @@ public class FreeBuildCreateUnitCommand implements Command
     		return false;
     	}
 
-    	// if the player isn't in SOL and Sol_FreeBuild_PostDefection is false, return
+    	// if the player isn't in SOL and FreeBuild_PostDefection is false, return
     	if(!house.getName().equalsIgnoreCase(newbieHouseName) && !postDefectionFreeBuild)
     	{
     		CampaignMain.cm.toUser("AM: Only players in " + newbieHouseName + " can use this command.",username,true);
@@ -215,6 +218,20 @@ public class FreeBuildCreateUnitCommand implements Command
 				CampaignMain.cm.toUser("AM:You do not have enough free bays to create this unit. You can delete an existing unit by right clicking on it and choosing transactions -> delete to make some room.",username,true);
 				return false;
 			}
+		}
+		
+		if(!allowDupes)
+		{
+			Vector<SUnit> playersUnits = player.getUnits();
+			
+			for(SUnit aUnit : playersUnits)
+			{
+				if(aUnit.getVerboseModelName().equalsIgnoreCase(unit.getVerboseModelName()))
+				{
+					CampaignMain.cm.toUser("AM:Freebuild duplicates are not allowed on this server! Please choose a different variant or unit.",username,true);
+					return false;
+				}
+			}			
 		}
 
 		return true;

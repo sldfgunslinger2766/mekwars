@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 //import java.util.StringTokenizer;
 import java.util.TreeSet;
 //import java.util.Vector;
@@ -42,7 +43,7 @@ import javax.swing.SwingConstants;
 
 import client.MWClient;
 //import client.campaign.CUnit;
-
+import client.campaign.CUnit;
 import common.House;
 import common.Planet;
 //import common.Unit;
@@ -69,7 +70,7 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 
 	//private final static String amountCommand = "Amount";
 
-	private static String windowName = "Influence Points";
+	private static String windowName;
 
 
 	//BUTTONS
@@ -108,6 +109,7 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 	//STOCK DIALOUG AND PANE
 	private JDialog dialog;
 	private JOptionPane pane;
+//	private int fluToRepod;
 
 	JTabbedPane ConfigPane = new JTabbedPane(SwingConstants.TOP);
 
@@ -117,22 +119,22 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 		this.mwclient = c;
 		windowName = mwclient.getserverConfigs("FluLongName");
 		amountLabel = new JLabel(mwclient.getserverConfigs("FluShortName") + " to use:",SwingConstants.TRAILING);
+//		fluToRepod = Integer.parseInt(mwclient.getserverConfigs("FluToRepod")); 
 		//House house = c.getPlayer().getMyHouse();
-
 
 		//COMBO BOXES
 		TreeSet<String> names = new TreeSet<String>();
-		names.add("Pick an Option"); //start with the common faction
+//		TreeSet<String> factionNames = new TreeSet<String>();
 //		for (Iterator<House> factions = mwclient.getData().getAllHouses().iterator(); factions.hasNext();)
-//			names.add( factions.next().getName());
+//			factionNames.add( factions.next().getName());
 
 		//check for the use of rare and add if used
 //		if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowRareUnitsForRewards")))
-//		    names.add("Rare");
+//		    factionNames.add("Rare");
 //
-//		factionComboBox = new JComboBox<Object>(names.toArray());
+//		factionComboBox = new JComboBox<Object>(factionNames.toArray());
 //
-//		names = new TreeSet<String>();
+//		
 //		if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowTechsForRewards")))
 //		    names.add("Techs");
 //		if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowInfluenceForRewards")))
@@ -164,13 +166,15 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 //          unitComboBox = new JComboBox<Object>(unitList.toArray());
 //       }
 
-//		if (Boolean.parseBoolean(mwclient.getserverConfigs("GlobalRepodAllowed"))) {
+//		if (fluToRepod > 0) 
+//		{
 //		    names.add(repodCommand);
 //		    TreeSet<String> repodOptions = new TreeSet<String>();
 //
 //		    if (Boolean.parseBoolean(mwclient.getserverConfigs("RandomRepodOnly")))
 //		        repodOptions.add("Random");
-//		    else{
+//		    else
+//		    {
 //		        if (Boolean.parseBoolean(mwclient.getserverConfigs("RandomRepodAllowed")))
 //		            repodOptions.add("Random");
 //		        repodOptions.add("Select");
@@ -179,7 +183,8 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 //		    repodComboBox = new JComboBox<Object>(repodOptions.toArray());
 //		    repodOptions.clear();
 //		    Iterator<CUnit> units = c.getPlayer().getHangar().iterator();
-//		    while (units.hasNext()){
+//		    while (units.hasNext())
+//		    {
 //		        CUnit unit = units.next();
 //		        if ( !unit.isOmni() )
 //		            continue;
@@ -223,6 +228,9 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 		    }
 		    refreshComboBox = new JComboBox<Object>(factories.toArray());
 		}
+        
+        if(names.isEmpty())
+        	names.add("None Available");
 
 		rewardsComboBox = new JComboBox<Object>(names.toArray());
 
@@ -292,7 +300,7 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 //        comboPanel.add(repodLabel);
 //		repodComboBox.setToolTipText("Repod Selection Type");
 //		comboPanel.add(repodComboBox);
-//
+
 		comboPanel.add(refreshLabel);
 		refreshComboBox.setToolTipText("Refresh Factory");
 		comboPanel.add(refreshComboBox);
@@ -377,13 +385,15 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 //    		        costLabel.setText("Result: Hire " +total+" Techs");
 //                }
 //		    }
-//		    else if ( selection.equals("Repod") ){
-//		        cost = Integer.parseInt(mwclient.getserverConfigs("GlobalRepodWithRPCost"));
+//		    if ( selection.equals(repodCommand) )
+//		    {
+//		        cost = fluToRepod;
 //		        if ( ((String)repodComboBox.getSelectedItem()).equals("Random") )
 //		            cost /= 2;
-//				costLabel.setText(mwclient.getserverConfigs("RPLongName") + " Required: "+cost+" " + mwclient.getserverConfigs("RPShortName"));
+//				costLabel.setText(mwclient.getserverConfigs("FluLongName") + " Required: "+cost+" " + mwclient.getserverConfigs("FluShortName"));
 //		    }
-		    if ( selection.equals(refreshCommand) ){
+		    if ( selection.equals(refreshCommand) )
+		    {
 		        cost = Integer.parseInt(mwclient.getserverConfigs("FluToRefreshFactory"));
 		        costLabel.setText(mwclient.getserverConfigs("FluLongName") + " Required: "+cost+" " + mwclient.getserverConfigs("FluShortName"));
 		        dialog.repaint();
@@ -422,16 +432,18 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 //                else
 //                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c userewardpoints#0#"+ amountText.getText());
 //		    }
-//		    else if ( selection.equals("Repod") ){
+//		    if ( selection.equals(repodCommand) )
+//		    {
 //		        if ( pUnitsComboBox.getComponentCount() < 1)
 //		            dialog.dispose();
-//		        String options = "#GLOBAL";
+//		        String options = "#GLOBALFLU";
 //		        if ( ((String)repodComboBox.getSelectedItem()).equals("Random") )
-//		        options +="#RANDOM";
+//		        	options +="#RANDOM";
 //		        StringTokenizer unitid = new StringTokenizer((String)pUnitsComboBox.getSelectedItem()," ");
 //		        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c repod"+unitid.nextToken()+options);
 //		    }
-		    if ( selection.equals(refreshCommand) ){
+		    if ( selection.equals(refreshCommand) )
+		    {
 		        if ( refreshComboBox.getComponentCount() < 1)
 		            dialog.dispose();
 		        String factoryInfo = (String)refreshComboBox.getSelectedItem();
@@ -495,16 +507,18 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 //    				costLabel.repaint();
 //                }
 //		    }
-//		    else if ( selection.equals("Repod") ){
+//		    if ( selection.equals(repodCommand) )
+//		    {
 //		        if ( pUnitsComboBox.getItemCount() >= 1)
 //		            pUnitsComboBox.setSelectedIndex(0);
-//		        cost = Integer.parseInt(mwclient.getserverConfigs("GlobalRepodWithRPCost"));
+//		        cost = fluToRepod;
 //		        if ( ((String)repodComboBox.getSelectedItem()).equals("Random") )
 //		            cost /= 2;
-//				costLabel.setText(mwclient.getserverConfigs("RPShortName") + " Required: "+cost+" " + mwclient.getserverConfigs("RPShortName"));
+//				costLabel.setText(mwclient.getserverConfigs("FluShortName") + " Required: "+cost+" " + mwclient.getserverConfigs("FluShortName"));
 //				makeVisible(false,true,false);
 //		    }
-		    if ( selection.equals(refreshCommand) ){
+		    if ( selection.equals(refreshCommand) )
+		    {
 		        if ( refreshComboBox.getItemCount() >= 1)
 		           refreshComboBox.setSelectedIndex(0);
 		        cost = Integer.parseInt(mwclient.getserverConfigs("FluToRefreshFactory"));

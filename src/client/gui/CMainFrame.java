@@ -209,6 +209,18 @@ public class CMainFrame extends JFrame {
     JMenuItem jMenuHelpPilotSkills = new JMenuItem();
     JMenuItem jMenuHelpOpViewer = new JMenuItem();
 
+    // Emoji Menu
+    JMenu jMenuEmoji = new JMenu();
+
+    JMenuItem jMenuEmojiFlip = new JMenuItem();
+    JMenuItem jMenuEmojiBear = new JMenuItem();
+    JMenuItem jMenuEmojiShrug = new JMenuItem();
+    JMenuItem jMenuEmojiFingers = new JMenuItem();
+    JMenuItem jMenuEmojiKiss = new JMenuItem();
+    JMenuItem jMenuEmojiSmile = new JMenuItem();
+    JMenuItem jMenuEmojiDeal = new JMenuItem();
+
+
     // These are simple holders for when real menus
     // is generated/returned from the admin plugin.
     JMenu jMenuMod = new JMenu();
@@ -1192,6 +1204,77 @@ public class CMainFrame extends JFrame {
         jMenuMegamekRFE.addActionListener(megamekRFEListener);
         jMenuMekwarsRFE.addActionListener(mekwarsRFEListener);
 
+        //@sal emojis
+        
+        jMenuEmoji.setText("Emojis");
+        
+        if(Boolean.parseBoolean(mwclient.getserverConfigs("AllowEmoji")))
+        {
+        	jMenuEmojiFlip.setText("(╯°□°)╯︵ ┻━┻");
+        	jMenuEmojiFlip.addActionListener(new ActionListener() 
+            {
+            	public void actionPerformed(ActionEvent e) 
+            	{
+            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#fl");
+            	}
+            });
+        	
+//        	jMenuEmojiBear.setText("ʕ •ᴥ•ʔ");
+//        	jMenuEmojiBear.addActionListener(new ActionListener() 
+//            {
+//            	public void actionPerformed(ActionEvent e) 
+//            	{
+//            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#be");
+//            	}
+//            });
+        	
+        	jMenuEmojiShrug.setText("¯\\_(ツ)_/¯");
+        	jMenuEmojiShrug.addActionListener(new ActionListener() 
+            {
+            	public void actionPerformed(ActionEvent e) 
+            	{
+            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#sh");
+            	}
+            });
+        	
+        	jMenuEmojiFingers.setText("t(-.-t)");
+        	jMenuEmojiFingers.addActionListener(new ActionListener() 
+            {
+            	public void actionPerformed(ActionEvent e) 
+            	{
+            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#fi");
+            	}
+            });
+        	
+        	jMenuEmojiKiss.setText("( ˘ ³˘)♥");
+        	jMenuEmojiKiss.addActionListener(new ActionListener() 
+            {
+            	public void actionPerformed(ActionEvent e) 
+            	{
+            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#ki");
+            	}
+            });
+        	
+        	jMenuEmojiSmile.setText("◉‿◉");
+        	jMenuEmojiSmile.addActionListener(new ActionListener() 
+            {
+            	public void actionPerformed(ActionEvent e) 
+            	{
+            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#sm");
+            	}
+            });
+        	
+        	jMenuEmojiDeal.setText("•_•) ( •_•)>⌐■-■ (⌐■_■)");
+        	jMenuEmojiDeal.addActionListener(new ActionListener() 
+            {
+            	public void actionPerformed(ActionEvent e) 
+            	{
+            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#de");
+            	}
+            });
+        }
+        	
+
         /*
          * FORMATTING BLOCK
          */
@@ -1329,6 +1412,17 @@ public class CMainFrame extends JFrame {
         jMenuHelp.addSeparator();
         jMenuHelp.add(jMenuMekwarsRFE);
         jMenuHelp.add(jMenuMegamekRFE);
+        
+        //@salient emoji
+        jMenuEmoji.add(jMenuEmojiFlip);
+        //jMenuEmoji.add(jMenuEmojiBear);
+        jMenuEmoji.add(jMenuEmojiShrug);
+        jMenuEmoji.add(jMenuEmojiFingers);
+        jMenuEmoji.add(jMenuEmojiKiss);
+        jMenuEmoji.add(jMenuEmojiSmile);
+        jMenuEmoji.add(jMenuEmojiDeal);
+        
+        
 
         /*
          * Admin menu setup used to be here. @urgru
@@ -1345,6 +1439,11 @@ public class CMainFrame extends JFrame {
         jMenuBar1.add(jMenuOptions);
         jMenuBar1.add(jMenuLeaderShip);
         jMenuBar1.add(jMenuHelp);
+        
+        if(Boolean.parseBoolean(mwclient.getserverConfigs("AllowEmoji")))
+        {
+        	jMenuBar1.add(jMenuEmoji);
+        }
         /*
          * jMenuBar1.add(jMenuMod); jMenuBar1.add(jMenuAdmin);
          */

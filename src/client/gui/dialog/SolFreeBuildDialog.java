@@ -169,7 +169,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         
         // If player is not in newbie house AND post defection is true add only their house to list
         if(!mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName")) &&
-        	mwclient.getserverConfigs("Sol_FreeBuild_PostDefection").equalsIgnoreCase("true"))
+        	mwclient.getserverConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true"))
         {
         	factionNames.clear();
         	factionNames.add(mwclient.getPlayer().getHouse().trim());
@@ -1356,13 +1356,13 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         	createButton.setEnabled(false);
         	
         	if(mwclient.getserverConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true") ||
-        	   mwclient.getserverConfigs("Sol_FreeBuild_PostDefection").equalsIgnoreCase("true")) //may not need this, command will always check house table if postdefection is enabled.
+        	   mwclient.getserverConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true")) //may not need this, command will always check house table if postdefection is enabled.
         	{
         		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + factionCombo.getSelectedItem().toString());
         	}
         	// else if this isn't a sol player, but post defection free build is enabled
         	/*else if(!mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName")) &&
-                	mwclient.getserverConfigs("Sol_FreeBuild_PostDefection").equalsIgnoreCase("true"))
+                	mwclient.getserverConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true"))
         	{
         		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
         	} ... dont need this?*/

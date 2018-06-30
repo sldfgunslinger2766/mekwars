@@ -270,6 +270,11 @@ public class MiscOptionsPanel extends JPanel {
         BaseCheckBox.setName("UseFullCapacityInDetailDisplay");
         miscCBoxSpring.add(BaseCheckBox);
         
+        BaseCheckBox = new JCheckBox("Allow Emojis");
+        BaseCheckBox.setToolTipText("<html>allows use of the emoji commands, see /ec#list </html>");
+        BaseCheckBox.setName("AllowEmoji");
+        miscCBoxSpring.add(BaseCheckBox);
+        
         SpringLayoutHelper.setupSpringGrid(miscCBoxSpring, 3);
 
         // finalize layout
