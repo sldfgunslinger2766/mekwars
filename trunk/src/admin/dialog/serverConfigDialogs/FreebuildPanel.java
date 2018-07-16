@@ -11,13 +11,15 @@
 
 package admin.dialog.serverConfigDialogs;
 
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.ToolTipManager;
+
+import client.MWClient;
+
 import javax.swing.JCheckBox;
 import common.VerticalLayout;
 
@@ -32,7 +34,8 @@ public class FreebuildPanel extends JPanel {
 		private JTextField baseTextField = new JTextField(5);
 		private JCheckBox baseCheckBox = new JCheckBox();
 
-		private void init() {
+		public FreebuildPanel(MWClient mwclient) {
+			super();
 
 			setLayout(new VerticalLayout(5, VerticalLayout.CENTER, VerticalLayout.TOP));
 
@@ -45,8 +48,16 @@ public class FreebuildPanel extends JPanel {
 			JPanel panel1 = new JPanel();
 			JPanel panel2 = new JPanel();
 			JPanel panel3 = new JPanel();
+			JPanel panel3a = new JPanel();
+			JPanel panel3b = new JPanel();
+			
+//	        String fluName = mwclient.getserverConfigs("FluShortName");
+//	        String rpName = mwclient.getserverConfigs("RPShortName");
+//	        String cbName = mwclient.getserverConfigs("MoneyShortName");
 
-			panel0.add(new JLabel(description));
+	        panel0.setBorder(BorderFactory.createTitledBorder("Free Build"));
+	        
+	        panel0.add(new JLabel(description));
 
 			panel1.setBorder(BorderFactory.createTitledBorder("SOL Free Build"));
 
@@ -85,26 +96,62 @@ public class FreebuildPanel extends JPanel {
 			panel2.add(baseCheckBox);
 			
 			panel3.setBorder(BorderFactory.createTitledBorder("Misc Options"));
+			panel3.setLayout(new VerticalLayout(5, VerticalLayout.CENTER, VerticalLayout.TOP));
 
 			baseCheckBox = new JCheckBox("Enforce token usage before going Active");
 			baseCheckBox.setToolTipText("<HTML>Set this if you want to disable going active if player has free meks remaining</HTML>");
 			baseCheckBox.setName("FreeBuild_LimitGoActive");
-			panel3.add(baseCheckBox);
+			panel3a.add(baseCheckBox);
 			
 			baseCheckBox = new JCheckBox("Allow Dupes");
 			baseCheckBox.setToolTipText("<HTML>Can only create 1 of each variant</HTML>");
 			baseCheckBox.setName("FreeBuild_AllowDuplicates");
-			panel3.add(baseCheckBox);
-
+			panel3a.add(baseCheckBox);
+			
+			baseCheckBox = new JCheckBox("Use Dupe Limits");
+			baseCheckBox.setToolTipText("<HTML>Set how many dupes are allowed</HTML>");
+			baseCheckBox.setName("FreeBuild_DupeLimits");
+			panel3a.add(baseCheckBox);
+			
+			panel3b.add(new JLabel("Dupe Limits -> ", SwingConstants.TRAILING));
+			
+			baseTextField = new JTextField(5);
+			panel3b.add(new JLabel("Meks", SwingConstants.TRAILING));
+			baseTextField.setToolTipText("<HTML>(-1 for no limit) number of duplicate mek models that can be chosen using freebuild mektokens </HTML>");
+			baseTextField.setName("FreeBuild_NumOfDuplicateMeks");
+			panel3b.add(baseTextField);
+			
+			baseTextField = new JTextField(5);
+			panel3b.add(new JLabel("Vees", SwingConstants.TRAILING));
+			baseTextField.setToolTipText("<HTML>(-1 for no limit) number of duplicate vee models that can be chosen using freebuild mektokens </HTML>");
+			baseTextField.setName("FreeBuild_NumOfDuplicateVees");
+			panel3b.add(baseTextField);
+			
+			baseTextField = new JTextField(5);
+			panel3b.add(new JLabel("Inf", SwingConstants.TRAILING));
+			baseTextField.setToolTipText("<HTML>(-1 for no limit) number of duplicate inf models that can be chosen using freebuild mektokens </HTML>");
+			baseTextField.setName("FreeBuild_NumOfDuplicateInf");
+			panel3b.add(baseTextField);
+			
+			baseTextField = new JTextField(5);
+			panel3b.add(new JLabel("BA", SwingConstants.TRAILING));
+			baseTextField.setToolTipText("<HTML>(-1 for no limit) number of duplicate BA models that can be chosen using freebuild mektokens </HTML>");
+			baseTextField.setName("FreeBuild_NumOfDuplicateBA");
+			panel3b.add(baseTextField);
+			
+			baseTextField = new JTextField(5);
+			panel3b.add(new JLabel("Aero", SwingConstants.TRAILING));
+			baseTextField.setToolTipText("<HTML>(-1 for no limit) number of duplicate Aero models that can be chosen using freebuild mektokens </HTML>");
+			baseTextField.setName("FreeBuild_NumOfDuplicateAero");
+			panel3b.add(baseTextField);
+						
+			panel3.add(panel3a);
+			panel3.add(panel3b);
+			
 			add(panel0);
 			add(panel1);
 			add(panel2);
 			add(panel3);
 
-	}
-
-	public FreebuildPanel() {
-		super();
-		init();
 	}
 }

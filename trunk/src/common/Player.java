@@ -33,7 +33,22 @@ public class Player {
 	private boolean autoReorderParts = false;
 	protected PlayerFlags flags = new PlayerFlags();
 	protected PlayerFlags defaultPlayerFlags = new PlayerFlags(); // This is only going to be set for staff
-	protected int mekToken = 0; // A counter for how many meks a player is allowed to create
+	protected int mekToken = 0; // A counter for how many meks a player is allowed to create in freebuild
+	protected int bvTracker = 0; // used to track hangar BV in mini campaigns
+	
+	/**
+	 * @return bvTracker value
+	 */
+	public int getBVTracker() {
+		return bvTracker;
+	}
+
+	/**
+	 * @param set the bvTracker value
+	 */
+	public void setBVTracker(int bvtracker) {
+		bvTracker = bvtracker;
+	}
 	
 	/**
 	 * @return the mekToken

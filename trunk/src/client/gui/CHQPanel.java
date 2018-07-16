@@ -117,6 +117,8 @@ public class CHQPanel extends JPanel {
     //@Salient (mwosux@gmail.com) added for SolFreeBuild option
     private JButton solFreeBuildButton;
     private boolean useAdvanceRepairs = false;
+    private boolean useMiniCampaign = false;
+    private boolean useUnitLocking = false;
 
     public CHQPanel(MWClient client) {
         mwclient = client;
@@ -195,6 +197,7 @@ public class CHQPanel extends JPanel {
         gridBagConstraints.weighty = 1.0;
         add(pnlMeks, gridBagConstraints);
         useAdvanceRepairs = mwclient.isUsingAdvanceRepairs();
+        useUnitLocking = Boolean.parseBoolean(mwclient.getserverConfigs("LockUnits"));
     }
 
     private void createMeksPanel() {
@@ -3310,15 +3313,12 @@ public class CHQPanel extends JPanel {
                     } else if (cm.getStatus() == Unit.STATUS_UNMAINTAINED) {
                         // a nice rusty orange for unmaintained units
                         c.setBackground(new Color(190, 150, 55));
+                    } else if (useUnitLocking && cm.isLocked()) { //@Salient - mini campaign lock
+                        c.setBackground(new Color(128, 0, 128)); //purple, i think.
                     } else if (!mwclient.getConfig().isUsingStatusIcons()) {
 
-                        if (cm.getPilot().getName().equals("Vacant")) {// RFE
-                            // 1545928
-                            // -
-                            // Color
-                            // for
-                            // pilotless
-                            // units
+                        if (cm.getPilot().getName().equals("Vacant")) {
+                        	// RFE 1545928 -Color for pilotless units
                             c.setBackground(new Color(160, 190, 115));
                         } else if (useAdvanceRepairs && UnitUtils.isRepairing(cm.getEntity())) {
                             c.setBackground(new Color(0, 255, 127));
@@ -3330,13 +3330,18 @@ public class CHQPanel extends JPanel {
                             c.setBackground(new Color(238, 238, 0));
                         } else if (useAdvanceRepairs && !UnitUtils.hasAllAmmo(cm.getEntity())) {
                             c.setBackground(new Color(255, 128, 255));
-                        } else if (cm.getStatus() == Unit.STATUS_UNMAINTAINED) {
-                            // a nice rusty orange for unmaintained units
-                            c.setBackground(new Color(190, 150, 55));
-                        } else if (cm.getStatus() == Unit.STATUS_FORSALE) {
-                            // a mild green for units that are on sale
-                            c.setBackground(new Color(50, 170, 35));
-                        } else if ((l == null) && (inNumberofArmies > 0)) {
+                        } 
+                        //@salient this is also irrelevant, due to else-if order of operations.
+//                        else if (cm.getStatus() == Unit.STATUS_UNMAINTAINED) {
+//                            // a nice rusty orange for unmaintained units
+//                            c.setBackground(new Color(190, 150, 55));
+//                        }
+                        //@salient, isnt this the same as the first if statement? duplicate condition.
+//                        else if (cm.getStatus() == Unit.STATUS_FORSALE) {
+//                            // a mild green for units that are on sale
+//                            c.setBackground(new Color(50, 170, 35));
+//                        } 
+                        else if ((l == null) && (inNumberofArmies > 0)) {
                             if (scheme.equals("classic")) {
                                 c.setBackground(new Color(65, 170, 55));// dark
                                 // green

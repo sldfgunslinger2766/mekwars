@@ -36,13 +36,14 @@ public class SelfPromoteCommand implements Command {
         accessLevel = i;
     }
 
-    String syntax = "";
+    String syntax = "/selfpromote SubFactionName";
 
     public String getSyntax() {
         return syntax;
     }
 
-    public void process(StringTokenizer command, String Username) 
+
+	public void process(StringTokenizer command, String Username) 
     {	
     	if(!CampaignMain.cm.getBooleanConfig("Self_Promote_Subfaction"))
     	{
@@ -70,6 +71,12 @@ public class SelfPromoteCommand implements Command {
         SPlayer user = CampaignMain.cm.getPlayer(Username);
         String subFactionName;
         SubFaction subFaction = null;
+        
+        if(user.getSubFactionAccess() > 0) 
+        {
+            CampaignMain.cm.toUser("AM:You have already chosen a subfaction.", Username, true);
+            return;
+        }
 
         try 
         {

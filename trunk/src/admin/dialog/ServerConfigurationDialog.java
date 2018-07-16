@@ -38,6 +38,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.ToolTipManager;
 
 import org.jdatepicker.impl.JDatePickerImpl;
 
@@ -57,6 +58,7 @@ import admin.dialog.serverConfigDialogs.InfluencePanel;
 import admin.dialog.serverConfigDialogs.FreebuildPanel;
 import admin.dialog.serverConfigDialogs.LinksPanel;
 import admin.dialog.serverConfigDialogs.LossCompensationPanel;
+import admin.dialog.serverConfigDialogs.MiniCampaignPanel;
 import admin.dialog.serverConfigDialogs.MiscOptionsPanel;
 import admin.dialog.serverConfigDialogs.NewbieHousePanel;
 import admin.dialog.serverConfigDialogs.NoPlayPanel;
@@ -122,6 +124,11 @@ public final class ServerConfigurationDialog implements ActionListener {
         // Get the screen dimensions - the Units tab is too tall for smaller than 1280 x 1024
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         screenSize = toolkit.getScreenSize();
+        
+        // @salient adding tooltip settings
+		ToolTipManager.sharedInstance().setDismissDelay(7000);
+		ToolTipManager.sharedInstance().setInitialDelay(400);
+		//ToolTipManager.sharedInstance().setReshowDelay(100);
 
         // TAB PANELS (these are added to the root pane as tabs)
         JPanel unitsPanel;
@@ -164,7 +171,8 @@ public final class ServerConfigurationDialog implements ActionListener {
         ChristmasPanel christmasPanel = new ChristmasPanel();
         SchedulerPanel schedulerPanel = new SchedulerPanel();
         LinksPanel linksPanel = new LinksPanel(); // @salient
-        FreebuildPanel freebuildPanel = new FreebuildPanel(); // @salient
+        FreebuildPanel freebuildPanel = new FreebuildPanel(mwclient); // @salient
+        MiniCampaignPanel miniCampaignPanel = new MiniCampaignPanel(mwclient); // @salient
         TrackerPanel trackerPanel = new TrackerPanel(mwclient.getserverConfigs("TrackerUUID"));
 
         // Set the actions to generate
@@ -198,6 +206,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Influence", null, influencePanel, "Influence");
         ConfigPane.addTab("Links & Rules", null, linksPanel, "Configure/Enable Links Area and Rules Panel"); //@salient
         ConfigPane.addTab("Loss Compensation", null, lossCompensationPanel, "Extra Payments for salvaged/destroyed units.");
+        ConfigPane.addTab("Mini Campaigns", null, miniCampaignPanel, "Mini Campaigns"); //@salient
         ConfigPane.addTab("Misc Options", null, miscOptionsPanel, "Misc Stuff");
         ConfigPane.addTab("No Play", null, noPlayPanel, "Personal Blacklist/Exclusion options");
         ConfigPane.addTab("Payout Mods", null, payoutModPanel, "Modifications to ops payout");

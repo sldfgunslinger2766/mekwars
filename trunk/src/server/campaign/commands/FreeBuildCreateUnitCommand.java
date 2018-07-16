@@ -62,8 +62,10 @@ public class FreeBuildCreateUnitCommand implements Command
 	private Boolean useAllBuildTables;
 	private Boolean limitOnlyPostDefection;
 	private Boolean allowDupes;
+	private Boolean useDupeLimits;
 	private int userlvl;
 	private int freeBuildLimit;
+	private int dupeLimitMeks, dupeLimitVees, dupeLimitInf, dupeLimitBA, dupeLimitAero;
 	private String username;
 	private String newbieHouseName;
 	private String buildTableForFreeBuild;
@@ -75,9 +77,8 @@ public class FreeBuildCreateUnitCommand implements Command
 
 	public void process(StringTokenizer command,String Username)
 	{
-		username = Username;
-
-		initVars();
+		
+		initVars(Username);
 
 		if(!accessChecks())
 			return;
@@ -110,8 +111,9 @@ public class FreeBuildCreateUnitCommand implements Command
 
 	}
 
-	private void initVars()
+	private void initVars(String Username)
 	{
+		username = Username;
 		userlvl = CampaignMain.cm.getServer().getUserLevel(username);
 		player = CampaignMain.cm.getPlayer(username);
 		house = player.getMyHouse();
@@ -122,7 +124,14 @@ public class FreeBuildCreateUnitCommand implements Command
 		buildTableForFreeBuild = CampaignMain.cm.getConfig("Sol_FreeBuild_BuildTable");
 		limitOnlyPostDefection = Boolean.parseBoolean(CampaignMain.cm.getConfig("FreeBuild_LimitPostDefOnly"));
 		freeBuildLimit = Integer.parseInt(house.getConfig("FreeBuild_Limit"));
-		allowDupes = Boolean.parseBoolean(CampaignMain.cm.getConfig("FreeBuild_AllowDuplicates"));
+		allowDupes = Boolean.parseBoolean(house.getConfig("FreeBuild_AllowDuplicates"));
+		useDupeLimits = Boolean.parseBoolean(house.getConfig("FreeBuild_DupeLimits"));
+		dupeLimitMeks = Integer.parseInt(house.getConfig("FreeBuild_NumOfDuplicateMeks"));
+		dupeLimitVees = Integer.parseInt(house.getConfig("FreeBuild_NumOfDuplicateVees"));
+		dupeLimitInf = Integer.parseInt(house.getConfig("FreeBuild_NumOfDuplicateInf"));
+		dupeLimitBA = Integer.parseInt(house.getConfig("FreeBuild_NumOfDuplicateBA"));
+		dupeLimitAero = Integer.parseInt(house.getConfig("FreeBuild_NumOfDuplicateAero"));
+		
 	}
 
 	/**
@@ -233,10 +242,92 @@ public class FreeBuildCreateUnitCommand implements Command
 				}
 			}			
 		}
+		
+		if(useDupeLimits)
+		{
+			Vector<SUnit> playersUnits = player.getUnits();
+			int unitCount = 0;
+			
+			for(SUnit aUnit : playersUnits)
+			{
+				if(aUnit.getVerboseModelName().equalsIgnoreCase(unit.getVerboseModelName()))
+				{
+					unitCount++;
+				}
+			}
+			
+			if(unitCount != 0)
+			{
+				return checkDupeLimits(unitCount);
+			}
+		}
 
 		return true;
 	}
 
+	private Boolean checkDupeLimits(int unitCount) 
+	{
+		switch(unit.getType())
+		{
+		case 0:
+		case 6:
+			if(dupeLimitMeks == -1)
+				return true;
+			if(dupeLimitMeks > unitCount)
+				return true;
+			else
+			{
+				player.toSelf("AM: You have reached the limit for duplicate meks! Please choose a different mek or variant.");
+				return false;
+			}
+		case 1:
+			if(dupeLimitVees == -1)
+				return true;
+			if(dupeLimitVees > unitCount)
+				return true;
+			else
+			{
+				player.toSelf("AM: You have reached the limit for duplicate vees! Please choose a different vee or variant.");
+				return false;
+			}
+		case 2:
+			if(dupeLimitInf == -1)
+				return true;
+			if(dupeLimitInf > unitCount)
+				return true;
+			else
+			{
+				player.toSelf("AM: You have reached the limit for duplicate infantry! Please choose a different vee or variant.");
+				return false;
+			}
+		case 3:
+		case 4:
+			if(dupeLimitBA == -1)
+				return true;
+			if(dupeLimitBA > unitCount)
+				return true;
+			else
+			{
+				player.toSelf("AM: You have reached the limit for duplicate BA! Please choose a different BA or variant.");
+				return false;
+			}
+		case 5:
+			if(dupeLimitAero == -1)
+				return true;
+			if(dupeLimitAero > unitCount)
+				return true;
+			else
+			{
+				player.toSelf("AM: You have reached the limit for duplicate Aero! Please choose a different Aero or variant.");
+				return false;
+			}
+				
+		}
+		
+		CampaignData.mwlog.errLog("No case for this unit type in FreeBuildCreateUnit.java -> checkDupeLimits. Type is.. " + unit.getType());
+		return false;
+	}
+	
 	/**
 	 * 	Get a collection of all houses in game and covert it to a list
      *  Need to set the list of houses before calling checkiflegal method

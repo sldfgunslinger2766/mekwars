@@ -212,7 +212,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @param - weight class to check.
      */
     public boolean mayUse(int weightClass) {
-        //@Salient addint this in for Gunny
+        //@Salient adding this in for Gunny
         if (weightClass == Unit.LIGHT) {
             if (Integer.parseInt(getMyHouse().getConfig("MinEXPforLight")) > experience) {
                 return false;
@@ -1525,25 +1525,25 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 setXpTillReward(currentXP);
             }
         }
-        
+
         //@salient
-        if (!modAdded && (i > 0)) 
+        if (!modAdded && (i > 0))
         {
 
             int currentXP = xpTillFlu + i;
             int rollOver = (Integer.parseInt(getMyHouse().getConfig("FluXPRollOverCap")));
 
             // if XP is over rollover point, reduce until below again
-            if ((currentXP >= rollOver) && (rollOver > 0)) 
+            if ((currentXP >= rollOver) && (rollOver > 0))
             {
 
                 int fluToAdd = 0;
-                while (currentXP >= rollOver) 
+                while (currentXP >= rollOver)
                 {
                     currentXP -= rollOver;
                     fluToAdd++;
                 }
-                
+
                 addInfluence(fluToAdd);
 
                 // reset the counter
@@ -1552,8 +1552,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 String toSend = "You earned " + fluToAdd + CampaignMain.cm.getConfig("FluShortName") + " by gaining xp!";
                 CampaignMain.cm.toUser(toSend, name, true);
 
-            } 
-            else 
+            }
+            else
             {
                 setXpTillFlu(currentXP);
             }
@@ -1578,11 +1578,35 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @author Jason Tighe.
      * @return the total bv of the player's units.
      */
-    private int getHangarBV() {
+    public int getHangarBV() {
         int bv = 0;
         for (SUnit currU : units) {
             bv += currU.getBVForMatch();
-        }
+        }      
+        return bv;
+    }
+    
+    //@salient - do the same as above but also some other BV calcs.
+    private int getHangarBVforMC() 
+    {
+        int bv = 0;
+        boolean removeLockedBV = CampaignMain.cm.getBooleanConfig("LockedUnits_RemoveBV");
+        
+        for (SUnit currU : units) 
+        {
+            if(removeLockedBV) // do not add BV of units that are locked.
+            {
+            	if(!currU.isLocked())
+            	{            		
+            		bv += currU.getBVForMatch();
+            	}
+            }
+            else 
+            {
+            	bv += currU.getBVForMatch();            	
+            }
+        }      
+        
         return bv;
     }
 
@@ -1631,12 +1655,404 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     public boolean mayAcquireWelfareUnits() {
 
-        if ((getHangarBV() < Integer.parseInt(getMyHouse().getConfig("WelfareTotalUnitBVCeiling"))) && (getMoney() < Integer.parseInt(getMyHouse().getConfig("WelfareCeiling")))) {
+        if ((getHangarBV() < getMyHouse().getIntegerConfig("WelfareTotalUnitBVCeiling")) 
+        && (getMoney() < getMyHouse().getIntegerConfig("WelfareCeiling"))) 
+        {
             return true;
         }
 
         // else
         return false;
+    }
+    
+    //MINI CAMPAIGN CODE
+    /**
+     * @author Salient
+     * @return if enabled, this method will initiate a 'currency' injection if hangar is below
+     * 			a certain threshold. This occurs AFTER a match.
+     */
+    public void checkHangarRestock()
+    {
+    	if(!getMyHouse().getBooleanConfig("Enable_MiniCampaign"))
+    	{
+    		toSelf("AM: Mini Campaigns are disabled on the server!");
+    		return;
+    	}
+    	
+    	//debug
+    	CampaignData.mwlog.errLog(getName() + "'s BV: " + getHangarBVforMC());
+    	
+    	//set states and cache configs
+    	boolean restock = false;
+    	boolean minBVRestock = false; 
+    	boolean percentRestock = false;
+    	boolean unitRestock = false;
+    	
+    	boolean lockUnits = getMyHouse().getBooleanConfig("LockUnits");
+    	int lockedLimit = getMyHouse().getIntegerConfig("UnlockUnits_Percentage");
+    	
+    	int minBVLimit = getMyHouse().getIntegerConfig("MinBV_HangarRestock");
+    	int percentBVLimit = getMyHouse().getIntegerConfig("Percent_HangarRestock");
+    	int minUnitLimit = getMyHouse().getIntegerConfig("Unit_HangarRestock");
+    	
+    	int restockCB = getMyHouse().getIntegerConfig("RestockCB_Injection");
+    	int restockRP = getMyHouse().getIntegerConfig("RestockRP_Injection");
+    	int restockFLU = getMyHouse().getIntegerConfig("RestockFLU_Injection");
+    	int restockMT = getMyHouse().getIntegerConfig("RestockMT_Injection");
+   	
+    	//check if we should restock
+    	if( minBVLimit != -1 && getHangarBVforMC() < minBVLimit )
+    	{
+    		restock = true;
+    		minBVRestock = true;
+    		
+    		CampaignData.mwlog.modLog(getName() + " has gone under BV limit and a restock should occur");
+    	}
+
+    	if( percentBVLimit != -1 && getHangarBVforMC() < getBVResetPoint()  )
+    	{
+    		restock = true;
+    		percentRestock = true;
+    		setBVTracker(0); //return this to default zero. on activation, it will be set to new value.
+    		
+    		CampaignData.mwlog.modLog(getName() + " has gone under % BV limit and a restock should occur");
+    	}
+    	
+    	if( minUnitLimit != -1 && getUnitCount() < getUnitResetPoint())
+    	{
+    		restock = true;
+    		unitRestock = true;
+    		
+    		CampaignData.mwlog.modLog(getName() + " has gone under Unit limit and a restock should occur");
+    	}
+  	
+    	if( !restock && !minBVRestock && minBVLimit != -1)
+    	{
+    		toSelf("AM: Your hangar is at "+ getHangarBVforMC() + "BV. When you drop below " 
+    				+ minBVLimit + "BV your mini campaign will restart");		
+    	}
+    	
+    	if ( !restock && !percentRestock && percentBVLimit != -1)
+    	{
+    		toSelf("AM: Your hangar is at "+ getHangarBVforMC() + "BV. When you drop below " 
+    				+ getBVResetPoint() + "BV your mini campaign will restart");		
+    	}
+    	
+    	if ( !restock && !unitRestock && minUnitLimit != -1)
+    	{
+    		toSelf("AM: Your hangar is at "+ getUnitCount() + "Units. When you drop below " 
+    				+ getUnitResetPoint() + "Units your mini campaign will restart");		
+    	}
+    	
+    	//if too many of the players units are locked to continue, unlock all units
+    	if ( !restock && lockUnits && lockedLimit != -1)
+    		if (percentLockedUnitsMC() >= lockedLimit)
+    		{
+    			unlockAllUnitsMC();
+    			setSave();
+    		}
+    	
+    	if( !restock )
+    		return;
+    	  	
+    	if( restock )
+    	{  		
+        	if( restockRP != -1 ) 
+        	{
+        		//CampaignData.mwlog.errLog(getName() + "'s RP: " + getReward() + " (before)" );
+        		addReward(-getReward()); //clear before reset
+        		addReward(restockRP);
+        		toSelf("AM: You have received " + getReward() + " " + CampaignMain.cm.getConfig("RPLongName") 
+        			+ ". Restock your forces before continuing.");
+        		//CampaignData.mwlog.errLog(getName() + "'s RP: " + getReward() + " (after)");
+        	}
+
+        	if( restockFLU != -1 ) 
+        	{
+        		//CampaignData.mwlog.errLog(getName() + "'s FLU: " + getInfluence() + " (before)");
+        		addInfluence(-getInfluence()); //clear before reset
+        		addInfluence(restockFLU);
+        		toSelf("AM: You have received " + getInfluence() + " " + CampaignMain.cm.getConfig("FluLongName") 
+        			+ ". Restock your forces before continuing.");
+        		//CampaignData.mwlog.errLog(getName() + "'s FLU: " + getInfluence() + " (after)");
+        	}
+
+        	if( restockMT != -1 )
+        	{
+        		//CampaignData.mwlog.errLog(getName() + "'s MT: " + getMekToken() + " (before)");
+        		addMekToken(-getMekToken()); // clear 
+        		addMekToken(getMekTokenLimit());//have to go to limit to clear to 0, counts up
+        		addMekToken(-restockMT); //subtract since it counts up
+        		toSelf("AM: You have received " + getRemainingMekTokens() 
+        			+ " free mek tokens. Restock your forces before continuing.");
+        		//CampaignData.mwlog.errLog(getName() + "'s MT: " + getMekToken() + " (after)");
+        	}
+        	
+        	if( restockCB != -1 ) 
+        	{
+        		//CampaignData.mwlog.errLog(getName() + "'s CB: " + getMoney() + " (before)");
+        		addMoney(-getMoney()); // clear 
+        		addMoney(restockCB);
+        		toSelf("AM: You have received " + getMoney() + " " + CampaignMain.cm.getConfig("MoneyLongName") 
+        			+ ". Restock your forces before continuing.");
+        		//CampaignData.mwlog.errLog(getName() + "'s CB: " + getMoney() + " (after)");
+        	}
+        	
+        	unlockAllUnitsMC();
+        	setSave();
+
+    	}
+
+    	return;
+    }
+    
+    /**
+     * @author Salient
+     * @return checks if a player can go active for the next cycle in his/her mini campaign
+     */
+    public boolean canActivateForMiniCampaign() 
+    {
+    	if(!getMyHouse().getBooleanConfig("Enable_MiniCampaign"))
+    	{
+    		toSelf("AM: Mini Campaigns are disabled on the server!");
+    		return false;
+    	}
+    	
+    	int minBVLimit = getMyHouse().getIntegerConfig("MinBV_HangarRestock");
+    	int percentBVLimit = getMyHouse().getIntegerConfig("Percent_HangarRestock");
+    	int minUnitLimit = getMyHouse().getIntegerConfig("Unit_HangarRestock");
+    	
+    	int restockCB = getMyHouse().getIntegerConfig("RestockCB_Injection");
+    	int restockRP = getMyHouse().getIntegerConfig("RestockRP_Injection");
+    	int restockFLU = getMyHouse().getIntegerConfig("RestockFLU_Injection");
+    	int restockMT = getMyHouse().getIntegerConfig("RestockMT_Injection");
+    	
+    	float percentCB = getMyHouse().getIntegerConfig("RestockCB_LeewayPercentage") / 100.0f;
+    	float percentRP = getMyHouse().getIntegerConfig("RestockRP_LeewayPercentage") / 100.0f;
+    	float percentFLU = getMyHouse().getIntegerConfig("RestockFLU_LeewayPercentage") / 100.0f;  	
+    	float percentMT = getMyHouse().getIntegerConfig("RestockMT_LeewayPercentage") / 100.0f;
+    	
+    	int leewayCB = (int) (getMoney() * percentCB);
+    	int leewayRP = (int) (getReward() * percentRP);
+    	int leewayFLU = (int) (getInfluence() * percentFLU);
+    	int leewayMT = (int) (getRemainingMekTokens() * percentMT);
+    	
+    	boolean result = true;
+    	
+    	//check if hangar BV has increased (maybe via salvage? or trades?), if so update to new value. 
+        if ( percentBVLimit != -1  && getHangarBVforMC() > getBVTracker() )
+        {
+        	setBVTracker(getHangarBVforMC());
+        	CampaignData.mwlog.modLog(getName() + "'s BV reset point set to " + getBVResetPoint() + " BV");
+        }
+    	
+        if ( minBVLimit != -1  && getHangarBVforMC() < minBVLimit ) 
+        {
+        	toSelf("AM: To go active you must raise your hangar BV! You have " + getHangarBVforMC() 
+        		+ " and need at least " + minBVLimit + " to go active!");
+        	return false;
+        }
+       
+        if ( minUnitLimit != -1  && getUnitCount() < getUnitResetPoint() ) 
+        {
+        	toSelf("AM: To go active you must raise your hangar Unit Count! You have " + getUnitCount() 
+        		+ " and need at least " + getUnitResetPoint() + " to go active!");
+        	return false;
+        }
+    	
+    	if( restockCB != -1 && getMoney() > leewayCB )
+    	{
+    		toSelf("AM: You have too many " + CampaignMain.cm.getCurrencyName("money", false) + " to go active!" );
+    		result = false;
+    	}
+    	
+    	if( restockRP != -1 && getReward() > leewayRP )
+    	{
+    		toSelf("AM: You have too many " + CampaignMain.cm.getCurrencyName("rp", false) + " to go active!" );
+    		result = false;
+    	}
+    	
+    	if( restockFLU != -1 && getInfluence() > leewayFLU )
+    	{
+    		toSelf("AM: You have too much " + CampaignMain.cm.getCurrencyName("flu", false) + " to go active!" );
+    		result = false;
+    	}
+    	
+    	if( restockMT != -1 && getRemainingMekTokens() > leewayMT )
+    	{
+    		toSelf("AM: You must use up more of your free meks to go active!" );
+    		result = false;
+    	}
+    	
+    	if( result ) // can go active, starting a new mini campaign cycle
+    	{
+    		removeInjectedCurrencyMC(restockCB, restockRP, restockFLU, restockMT);
+    		
+    		unlockAllUnitsMC();
+        	
+    		if ( percentBVLimit != -1 ) 
+        	{  
+        		setBVTracker(getHangarBVforMC());// set new hangar BV for tracking   			
+        		
+        		CampaignData.mwlog.modLog(getName() + "'s BV reset point set to " + getBVResetPoint() + " BV");
+        		
+        		toSelf("AM: Next mini campaign cycle will begin when your hangar BV falls below " + getBVResetPoint());
+        	}
+    		
+    		setSave();
+    	}
+    	
+    	return result;
+    }
+    
+    //@salient - made a new command called RG (refresh gui)
+    public void refreshGUI()
+    {
+    	CampaignMain.cm.toUser("RG|" + " ", name, false);
+    }
+    
+    //@salient
+    public void unlockAllUnitsMC()
+    {
+    	
+    	if(!getMyHouse().getBooleanConfig("LockUnits"))
+    		return;
+    	
+    	for (SUnit aUnit : getUnits()) 
+    	{
+    		aUnit.setLocked(false);
+    	}
+    	
+    	toSelf("AM: Units have been unlocked!");
+    }
+    
+    //@salient - returns the percent of players units that are locked.
+    public int percentLockedUnitsMC()
+    {
+    	int numLocked = 0;
+    	
+    	for (SUnit aUnit : getUnits()) 
+    	{
+    		if(aUnit.isLocked())
+    			numLocked++;
+    	}
+    	
+    	float result = getUnitCount() / numLocked;
+    	
+    	return (int) (result * 100);
+    	
+    }
+    
+    //@salient 
+    private void removeInjectedCurrencyMC(int restockCB, int restockRP, int restockFLU, int restockMT)
+    {
+    	if(hasMoney() && restockCB != 1)
+    	{
+    		addMoney(-getMoney());
+    	}
+    	
+    	if(hasRP() && restockRP != 1)
+    	{
+    		addReward(-getReward());
+    	}
+    	
+    	if(hasFlu() && restockFLU != 1)
+    	{
+    		addInfluence(-getInfluence());
+    	}
+    	
+    	if(hasMT() && restockMT != 1)
+    	{
+    		addMekToken(-getMekToken()); // clear 
+    		addMekToken(getMekTokenLimit());//have to go to limit to clear to 0, counts up  
+    	}   	
+    }
+    
+    //@salient - using a percentage set by SO, this returns the BV at which point the mini campaign will end
+    public int getBVResetPoint() 
+    {
+    	float percent = getMyHouse().getIntegerConfig("Percent_HangarRestock") / 100.0f;
+    	int resetPt = (int) (getBVTracker() * percent);
+    	return resetPt;
+    }
+    
+    //@salient - using a value set by SO, this returns the Unit count at which point the mini campaign will end
+    public int getUnitResetPoint() 
+    {
+    	int resetPt = getMyHouse().getIntegerConfig("Unit_HangarRestock");
+    	return resetPt;
+    }
+    
+    //@salient
+    public void removeCurrency()
+    {
+    	addMoney(-getMoney());
+    	addInfluence(-getInfluence());
+    	addReward(-getReward());
+    	
+		addMekToken(-getMekToken()); // clear 
+		addMekToken(getMekTokenLimit());//have to go to limit to clear to 0, counts up   	
+    }
+    
+    //@salient
+    public boolean hasCurrency()
+    {
+    	if( getMoney() != 0 || getInfluence() != 0 || getReward() != 0 || getRemainingMekTokens() != 0 )
+    		return true;
+    	else
+    		return false;
+    }
+    
+    //@salient
+    public boolean hasMoney()
+    {
+    	if( getMoney() != 0 )
+    		return true;
+    	else
+    		return false;
+    }
+    
+    //@salient
+    public boolean hasFlu()
+    {
+    	if( getInfluence() != 0 )
+    		return true;
+    	else
+    		return false;
+    }
+    
+    //@salient
+    public boolean hasRP()
+    {
+    	if( getReward() != 0 )
+    		return true;
+    	else
+    		return false;
+    }
+    
+    //@salient
+    public boolean hasMT()
+    {
+    	if( getRemainingMekTokens() != 0 )
+    		return true;
+    	else
+    		return false;
+    }
+
+    //@salient
+    public int getRemainingMekTokens()
+    {
+    	int limit = getMyHouse().getIntegerConfig("FreeBuild_Limit");
+
+    	return limit - getMekToken(); //mek tokens count up to limit
+    }
+    
+    //@salient
+    public int getMekTokenLimit()
+    {
+    	int limit = Integer.parseInt(getMyHouse().getConfig("FreeBuild_Limit"));
+
+    	return limit; //mek tokens count up to limit
     }
 
     /**
@@ -1894,7 +2310,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public String getColoredName() {
         return "<font color=\"" + getHouseFightingFor().getHouseColor() + "\">" + name + "</font>";
     }
-    
+
     public String getColoredNameBold() { //@salient
         return "<font color=\"" + getHouseFightingFor().getHouseColor() + "\"><b>" + name + "</b></font>";
     }
@@ -1943,6 +2359,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
     public Vector<SUnit> getUnits() {
         return units;
+    }
+    
+    //@salient
+    public int getUnitCount() {
+        return units.size();
     }
 
     // Comparable
@@ -2597,11 +3018,13 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     // TOSTRING AND FROMSTRING METHODS
+    // salient - "Seems like instead of a boolean, this should be two separate methods. 
+    //            One for client. one for server."
     /*
      * These would normally be under the "methods" heading; however, they're so
      * huge (and important) that they get a separate block.
      */
-    public String toString(boolean toClient) { // salient - "Seems like instead of a boolean, this should be two seperate methods. One for client. one for save."
+    public String toString(boolean toClient) { 
     	SerializedMessage result = new SerializedMessage("~");
         result.append("CP");
         result.append(name);
@@ -2684,7 +3107,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             }
         } else {
             result.append(xpTillReward);
-            result.append("0");
+            result.append(getBVTracker()); //@Salient for mini campaigns
+            //result.append("0"); //@Salient the code i replaced
             result.append(getPersonalPilotQueue().toString(toClient));
             result.append(getExclusionList().adminExcludeToString("$"));
             result.append(getExclusionList().playerExcludeToString("$"));
@@ -2852,7 +3276,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
              */
 
             // TODO: Remove this after the next few updates from 0.1.51.2
-            TokenReader.readString(ST);
+            TokenReader.readInt(ST); 
 
             setMekToken(TokenReader.readInt(ST));
 
@@ -2864,7 +3288,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             setXpTillReward(TokenReader.readInt(ST));
 
-            TokenReader.readString(ST);// faction logo not saved.
+            setBVTracker(TokenReader.readInt(ST)); // @Salient for mini campaigns
+            //TokenReader.readString(ST);
 
             getPersonalPilotQueue().fromString(TokenReader.readString(ST), "$");
 
@@ -3166,6 +3591,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
     public void checkForPromotion() {
 
+    	if(CampaignMain.cm.getBooleanConfig("Disable_Promote_Subfaction")) //@salient
+    	{
+    		return;
+    	}
+
         if (!canBePromoted()) {
             return;
         }
@@ -3182,6 +3612,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     public void checkForDemotion() {
+
+    	if(CampaignMain.cm.getBooleanConfig("Disable_Demote_Subfaction")) //@salient
+    	{
+    		return;
+    	}
 
         SubFaction subfaction = getSubFaction();
 
@@ -3508,12 +3943,18 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 	//@salient
 	public boolean hasUnusedMekTokens()
 	{
-		
+
 		if( getMekToken() < Integer.parseInt(getMyHouse().getConfig("FreeBuild_Limit")) )
 		{
 			return true;
 		}
 
 		return false;
+	}
+	
+	//@salient send msg to self
+	public void toSelf(String msg) 
+	{
+		CampaignMain.cm.toUser(msg, getName(), true);
 	}
 }// end SPlayer()

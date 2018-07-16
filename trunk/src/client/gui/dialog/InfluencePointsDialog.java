@@ -463,7 +463,7 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
             }
 		    else
 		    {
-		        mwclient.sendChat("Did not pick an option.");
+		    	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "mail "+mwclient.getUsername()+ "No Influence Spent. Options are disabled on this server.");
 		    }
 
 			dialog.dispose();
@@ -544,10 +544,10 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 				costLabel.setText("Result: Gain "+mwclient.moneyOrFluMessage(true,true,total));
 				makeVisible(false,false,false);
 			}
-//		    else
-//		    {
-//				//makeVisible(false,false,false);
-//		    }
+		    else
+		    {
+				makeVisible(true,false,false);
+		    }
 		}
 //		else if ( command.equals(repodCommand)){
 //	        cost = Integer.parseInt(mwclient.getserverConfigs("GlobalRepodWithRPCost"));

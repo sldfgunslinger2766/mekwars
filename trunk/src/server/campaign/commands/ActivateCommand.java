@@ -243,6 +243,22 @@ public class ActivateCommand implements Command {
         	return;
         }
         
+        // @salient
+        // Check mini campaign settings
+        if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign"))
+        {
+        	if(hasLockedUnitsInArmies(p.getArmies()))
+        	{
+        		p.toSelf("AM: To go active you must first remove locked units from your armies.");
+        		return;
+        	}
+        	//handles all checks, resets currency, and msgs to player
+	        if(!p.canActivateForMiniCampaign())
+	        {
+	        	return;
+	        }
+        }
+        
         
         for (SArmy army : p.getArmies()) {
             CampaignMain.cm.getOpsManager().checkOperations(army, false);
@@ -381,6 +397,28 @@ public class ActivateCommand implements Command {
         }
 
         // no units with partial ammobins found. return false.
+        return false;
+    }
+    
+    /**
+     * @author Salient
+     * see if any units in armies are locked, if so return true.
+     * 
+     */
+    private boolean hasLockedUnitsInArmies(Vector<SArmy> armies) 
+    {
+        for (SArmy army : armies) 
+        {
+            Iterator<Unit> units = army.getUnits().iterator();
+            while (units.hasNext()) 
+            {
+                SUnit unit = (SUnit) units.next();
+                if (unit.isLocked()) 
+                {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
