@@ -3100,6 +3100,38 @@ public final class CampaignMain implements Serializable {
 
         return result.trim();
     }
+    
+    //@salient
+    public String getCurrencyName(String cType, boolean shortDescription) 
+    {
+       
+        switch (cType.toLowerCase().trim()) 
+        {
+        case "money":
+        case "cb": 
+        	if(shortDescription)
+        		return cm.getConfig("MoneyShortName");
+        	else
+        		return cm.getConfig("MoneyLongName");
+        case "rewards":
+        case "reward":
+        case "rp":  
+        	if(shortDescription)
+        		return cm.getConfig("RPShortName");
+        	else
+        		return cm.getConfig("RPLongName");
+        case "influence":
+        case "flu":  
+        	if(shortDescription)
+        		return cm.getConfig("FluShortName");
+        	else
+        		return cm.getConfig("FluLongName");
+        default:
+        	CampaignData.mwlog.errLog(cType + "is not a valid currency");
+            return null;
+        }
+        
+    }
 
     public void updateISPLists(SPlayer player) {
     	BufferedReader buff = null;

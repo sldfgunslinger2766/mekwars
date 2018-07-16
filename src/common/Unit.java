@@ -651,5 +651,23 @@ public class Unit {
 	public void setChristmasUnit(boolean christmasUnit) {
 		ChristmasUnit = christmasUnit;
 	}
+	
+	/**
+	 * @author Salient
+	 * @return the christmasUnit
+	 * piggy back off of xmas
+	 */
+	public boolean isLocked() {
+		return ChristmasUnit;
+	}
+
+	/**
+	 * @author Salient
+	 * @param christmasUnit the christmasUnit to set
+	 * piggy back off of xmas
+	 */
+	public void setLocked(boolean lockUnit) {
+		ChristmasUnit = lockUnit;
+	}
     
 }

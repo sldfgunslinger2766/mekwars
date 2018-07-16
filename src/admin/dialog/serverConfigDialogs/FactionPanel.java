@@ -16,6 +16,7 @@
 
 package admin.dialog.serverConfigDialogs;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -222,12 +223,6 @@ public class FactionPanel extends JPanel {
         baseTextField.setName("factionLeaderLevel");
         factionSpring2.add(baseTextField);
 
-        baseTextField = new JTextField(5);
-        factionSpring2.add(new JLabel("Days Between Promotions:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>Integer Field, How many days a player has to wait before they can be promoted again<br>after their last promotion/demotion.</html>");
-        baseTextField.setName("daysbetweenpromotions");
-        factionSpring2.add(baseTextField);
-
         SpringLayoutHelper.setupSpringGrid(factionSpring2, 2);
 
         // setup CBoxes
@@ -248,16 +243,6 @@ public class FactionPanel extends JPanel {
         baseCheckBox.setName("ShowCompleteGameInfoInNews");
         factionCBoxSpring.add(baseCheckBox);
 
-        baseCheckBox = new JCheckBox("Auto Promote Sub Factions");
-        baseCheckBox.setToolTipText("<html>If checked, a player will be automatically promoted<br>to the next higher sub faction,<br>if they are qualified.</html>");
-        baseCheckBox.setName("autoPromoteSubFaction");
-        factionCBoxSpring.add(baseCheckBox);
-
-        baseCheckBox = new JCheckBox("Disable Player Demotion Notifications");
-        baseCheckBox.setToolTipText("<html>If checked, House Leaders will not be notified <br>when a player no longer qualifies for a subfaction.</html>");
-        baseCheckBox.setName("disableDemotionNotification");
-        factionCBoxSpring.add(baseCheckBox);
-
         baseCheckBox = new JCheckBox("Allow Planets in MOTD");
         baseCheckBox.setToolTipText("If checked, players can use the new <planet> tags in their MOTD");
         baseCheckBox.setName("AllowPlanetsInMOTD");
@@ -268,18 +253,51 @@ public class FactionPanel extends JPanel {
         baseCheckBox.setName("AllowLinksInMOTD");
         factionCBoxSpring.add(baseCheckBox);
         
-        baseCheckBox = new JCheckBox("Enforce Subfaction Factory Access");
-        baseCheckBox.setToolTipText("If checked, subfaction level MUST be equal to factory level to use it");
-        baseCheckBox.setName("Enforce_Subfaction_Factory_Access");
-        factionCBoxSpring.add(baseCheckBox);
+        SpringLayoutHelper.setupSpringGrid(factionCBoxSpring, 3);
+        
+        //SubFaction Options
+        JPanel subFactionSpring = new JPanel(new SpringLayout());
+        
+        subFactionSpring.setBorder(BorderFactory.createTitledBorder("SubFaction Options"));
+
+        baseTextField = new JTextField(5);
+        subFactionSpring.add(new JLabel("Days Between Promotions:", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("<html>Integer Field, How many days a player has to wait before they can be promoted again<br>after their last promotion/demotion.</html>");
+        baseTextField.setName("daysbetweenpromotions");
+        subFactionSpring.add(baseTextField);
+
+        baseCheckBox = new JCheckBox("Auto Promote Sub Factions");
+        baseCheckBox.setToolTipText("<html>If checked, a player will be automatically promoted<br>to the next higher sub faction,<br>if they are qualified.</html>");
+        baseCheckBox.setName("autoPromoteSubFaction");
+        subFactionSpring.add(baseCheckBox);
+        
+        baseCheckBox = new JCheckBox("Disable Player Demotion Notifications");
+        baseCheckBox.setToolTipText("<html>If checked, House Leaders will not be notified <br>when a player no longer qualifies for a subfaction.</html>");
+        baseCheckBox.setName("disableDemotionNotification");
+        subFactionSpring.add(baseCheckBox);        
         
         baseCheckBox = new JCheckBox("Allow Subfaction Self Promotion");
         baseCheckBox.setToolTipText("If checked, a user will be allowed to self promote into a subfaction, can be used once.");
         baseCheckBox.setName("Self_Promote_Subfaction");
-        factionCBoxSpring.add(baseCheckBox);
-
-
-        SpringLayoutHelper.setupSpringGrid(factionCBoxSpring, 3);
+        subFactionSpring.add(baseCheckBox);
+        
+        baseCheckBox = new JCheckBox("Disable Subfaction Std Promotion");
+        baseCheckBox.setToolTipText("Meant to be enabled with self promote. Disables the normal methods of player subfaction promtion. Likely used with disable demotion to lock player into subfaction.");
+        baseCheckBox.setName("Disable_Promote_Subfaction");
+        subFactionSpring.add(baseCheckBox);
+        
+        baseCheckBox = new JCheckBox("Disable Subfaction Std Demotion");
+        baseCheckBox.setToolTipText("Disables the normal methods of player subfaction demotion. Likely used with disable premotion to lock player into subfaction.");
+        baseCheckBox.setName("Disable_Demote_Subfaction");
+        subFactionSpring.add(baseCheckBox);
+        
+        baseCheckBox = new JCheckBox("Enforce Subfaction Factory Access");
+        baseCheckBox.setToolTipText("If checked, subfaction level MUST be equal to factory level to use it");
+        baseCheckBox.setName("Enforce_Subfaction_Factory_Access");
+        subFactionSpring.add(baseCheckBox);
+        
+        
+        SpringLayoutHelper.setupSpringGrid(subFactionSpring, 3);
 
         // finalize the layout
         JPanel factionBox = new JPanel();
@@ -289,6 +307,7 @@ public class FactionPanel extends JPanel {
         factionSpringFlow.add(factionSpring2);
         factionBox.add(factionSpringFlow);
         factionBox.add(factionCBoxSpring);
+        factionBox.add(subFactionSpring);
 
         add(factionBox);
 	}

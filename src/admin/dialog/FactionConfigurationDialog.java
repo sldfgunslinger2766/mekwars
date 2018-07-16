@@ -108,6 +108,10 @@ public final class FactionConfigurationDialog implements ActionListener {
         this.mwclient = mwclient;
         this.houseName = houseName;
         this.windowName = "MekWars "+houseName+" Configuration";
+        
+        String fluName = mwclient.getserverConfigs("FluShortName");
+        String rpName = mwclient.getserverConfigs("RPShortName");
+        String cbName = mwclient.getserverConfigs("MoneyShortName");
 
 		//TAB PANELS (these are added to the root pane as tabs)
 		JPanel repodPanel = new JPanel();
@@ -3868,10 +3872,18 @@ public final class FactionConfigurationDialog implements ActionListener {
         JPanel freeBuildBoxPanel = new JPanel();
         JPanel freeBuildFlowPanel = new JPanel();
         JPanel freeBuildSpring1 = new JPanel(new SpringLayout());// 7 items
+        //JPanel miniCampaign = new JPanel();
+        JPanel fbdPanel3 = new JPanel();
+        JPanel fbdPanel3a = new JPanel();
+        JPanel fbdPanel3b = new JPanel();
+
 
         freeBuildBoxPanel.setLayout(new BoxLayout(freeBuildBoxPanel, BoxLayout.Y_AXIS));
         freeBuildBoxPanel.add(freeBuildFlowPanel);
+        freeBuildFlowPanel.setLayout(new VerticalLayout(5, VerticalLayout.CENTER, VerticalLayout.TOP));
         freeBuildFlowPanel.add(freeBuildSpring1);
+        freeBuildFlowPanel.add(fbdPanel3);
+        //freeBuildBoxPanel.add(miniCampaign);
 
 		baseTextField = new JTextField(5);
 		freeBuildSpring1.add(new JLabel("Build Limit", SwingConstants.TRAILING));
@@ -3880,8 +3892,62 @@ public final class FactionConfigurationDialog implements ActionListener {
 		freeBuildSpring1.add(baseTextField);
 
 		SpringLayoutHelper.setupSpringGrid(freeBuildSpring1, 2);
+		
+		fbdPanel3.setBorder(BorderFactory.createTitledBorder("Misc Options"));
+		fbdPanel3.setLayout(new VerticalLayout(5, VerticalLayout.CENTER, VerticalLayout.TOP));
 
+		BaseCheckBox = new JCheckBox("Enforce token usage before going Active");
+		BaseCheckBox.setToolTipText("<HTML>Set this if you want to disable going active if player has free meks remaining</HTML>");
+		BaseCheckBox.setName("FreeBuild_LimitGoActive");
+		fbdPanel3a.add(BaseCheckBox);
+		
+		BaseCheckBox = new JCheckBox("Allow Dupes");
+		BaseCheckBox.setToolTipText("<HTML>Can only create 1 of each variant</HTML>");
+		BaseCheckBox.setName("FreeBuild_AllowDuplicates");
+		fbdPanel3a.add(BaseCheckBox);
+		
+		BaseCheckBox = new JCheckBox("Use Dupe Limits");
+		BaseCheckBox.setToolTipText("<HTML>Set how many dupes are allowed</HTML>");
+		BaseCheckBox.setName("FreeBuild_DupeLimits");
+		fbdPanel3a.add(BaseCheckBox);
+		
+		fbdPanel3b.add(new JLabel("Dupe Limits -> ", SwingConstants.TRAILING));
+		
+		baseTextField = new JTextField(5);
+		fbdPanel3b.add(new JLabel("Meks", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("<HTML>(-1 for no limit) number of duplicate mek models that can be chosen using freebuild mektokens </HTML>");
+		baseTextField.setName("FreeBuild_NumOfDuplicateMeks");
+		fbdPanel3b.add(baseTextField);
+		
+		baseTextField = new JTextField(5);
+		fbdPanel3b.add(new JLabel("Vees", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("<HTML>(-1 for no limit) number of duplicate vee models that can be chosen using freebuild mektokens </HTML>");
+		baseTextField.setName("FreeBuild_NumOfDuplicateVees");
+		fbdPanel3b.add(baseTextField);
+		
+		baseTextField = new JTextField(5);
+		fbdPanel3b.add(new JLabel("Inf", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("<HTML>(-1 for no limit) number of duplicate inf models that can be chosen using freebuild mektokens </HTML>");
+		baseTextField.setName("FreeBuild_NumOfDuplicateInf");
+		fbdPanel3b.add(baseTextField);
+		
+		baseTextField = new JTextField(5);
+		fbdPanel3b.add(new JLabel("BA", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("<HTML>(-1 for no limit) number of duplicate BA models that can be chosen using freebuild mektokens </HTML>");
+		baseTextField.setName("FreeBuild_NumOfDuplicateBA");
+		fbdPanel3b.add(baseTextField);
+		
+		baseTextField = new JTextField(5);
+		fbdPanel3b.add(new JLabel("Aero", SwingConstants.TRAILING));
+		baseTextField.setToolTipText("<HTML>(-1 for no limit) number of duplicate Aero models that can be chosen using freebuild mektokens </HTML>");
+		baseTextField.setName("FreeBuild_NumOfDuplicateAero");
+		fbdPanel3b.add(baseTextField);
+				
+		fbdPanel3.add(fbdPanel3a);
+		fbdPanel3.add(fbdPanel3b);
 		freeBuildPanel.add(freeBuildBoxPanel);
+		
+
         //END FREE BUILD PANEL
 
 		// unitLimitsPanel construction

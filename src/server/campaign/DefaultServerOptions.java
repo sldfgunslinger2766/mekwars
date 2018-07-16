@@ -1354,7 +1354,7 @@ public class DefaultServerOptions {
         defaults.setProperty("Scheduler_PlayerActivity_flu", "300");
         defaults.setProperty("Scheduler_FactionSave", "900");
 
-        // New SOL options @Salient (mwosux@gmail.com) 9-1-17
+        // New options by @Salient 
         // This property allows SOL to create units from a build table for free
         defaults.setProperty("Sol_FreeBuild", "false");
         // Set which build table used for SOL freebuild
@@ -1370,8 +1370,14 @@ public class DefaultServerOptions {
         defaults.setProperty("FreeBuild_LimitPostDefOnly", "false");
         // can't go active if you can still get more free meks
         defaults.setProperty("FreeBuild_LimitGoActive", "false");
-        // allow no duplicate variants when using freebuild
+        // allow duplicate variants when using freebuild
         defaults.setProperty("FreeBuild_AllowDuplicates", "true");
+        defaults.setProperty("FreeBuild_DupeLimits", "false");
+        defaults.setProperty("FreeBuild_NumOfDuplicateMeks", "-1");
+        defaults.setProperty("FreeBuild_NumOfDuplicateVees", "-1");
+        defaults.setProperty("FreeBuild_NumOfDuplicateInf", "-1");
+        defaults.setProperty("FreeBuild_NumOfDuplicateBA", "-1");
+        defaults.setProperty("FreeBuild_NumOfDuplicateAero", "-1"); 
         // New buttons for client
         defaults.setProperty("Enable_Link_Area", "false");
         defaults.setProperty("Link_Area_Label", "Links:");
@@ -1393,6 +1399,8 @@ public class DefaultServerOptions {
         //Subfaction Options
         defaults.setProperty("Enforce_Subfaction_Factory_Access", "false");
         defaults.setProperty("Self_Promote_Subfaction", "false");
+        defaults.setProperty("Disable_Promote_Subfaction", "false");
+        defaults.setProperty("Disable_Demote_Subfaction", "false");
         //Additional Influence Options
         defaults.setProperty("Cbills_Per_Flu", "0");
         defaults.setProperty("AllowFluTransfer", "false");
@@ -1400,6 +1408,27 @@ public class DefaultServerOptions {
         defaults.setProperty("FluXPRollOverCap", "0");
         defaults.setProperty("FluToRefreshFactory", "0");
         //defaults.setProperty("FluToRepod", "0");
+        //Mini Campaigns
+        defaults.setProperty("Enable_MiniCampaign", "false");
+        //if BV of players hangar reaches this state, initiate 'restock'
+        defaults.setProperty("MinBV_HangarRestock", "-1");
+        defaults.setProperty("Percent_HangarRestock", "-1");
+        defaults.setProperty("Unit_HangarRestock", "-1");
+        //inject RP/FLU and or mek tokens when BV hits this value
+        defaults.setProperty("RestockCB_Injection", "-1");
+        defaults.setProperty("RestockRP_Injection", "-1");
+        defaults.setProperty("RestockFLU_Injection", "-1");
+        defaults.setProperty("RestockMT_Injection", "-1");
+        //user must use 'most' of the injection to go active, this sets the leeway
+        defaults.setProperty("RestockCB_LeewayPercentage", "100");
+        defaults.setProperty("RestockRP_LeewayPercentage", "100");
+        defaults.setProperty("RestockFLU_LeewayPercentage", "100");
+        defaults.setProperty("RestockMT_LeewayPercentage", "100");
+        //lock units
+        defaults.setProperty("LockUnits", "false");
+        defaults.setProperty("LockSalvagedUnits", "false");
+        defaults.setProperty("UnlockUnits_Percentage", "-1");
+        defaults.setProperty("LockedUnits_RemoveBV", "false");
         //MISC
         defaults.setProperty("AllowEmoji", "false");
 

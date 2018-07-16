@@ -306,10 +306,8 @@ public class ShortResolver {
         assembleSalvageStrings(o, so);
         
         handleOperationImpact(o, so);
-
         
-        
-       
+        checkAllPlayersForRestock(); //@salient - first part of new mini campaign system
 
     }// end resolveShortAttack
 
@@ -807,6 +805,8 @@ public class ShortResolver {
             loser.setSave();
         }
 		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "All Done!");
+		
+        checkAllPlayersForRestock(); //@salient - first part of new mini campaign system
 
     }
 
@@ -1470,7 +1470,7 @@ public class ShortResolver {
      * possibleSalvageFromDisconnection
      */
     private void assembleSalvageStrings(Operation o, ShortOperation so) {
-
+    	
         // set up the units cost tree and string tree
     	if (null == unitStrings) {
     		unitStrings = new TreeMap<String, String>();
@@ -1514,6 +1514,14 @@ public class ShortResolver {
             }
 
             SUnit currU = owner.getUnit(currEntity.getID());
+            
+            //@salient - mini campaigns lock unit
+        	if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign")
+        	&& CampaignMain.cm.getBooleanConfig("LockUnits"))
+        	{
+        	    currU.setLocked(true);
+        	    CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+        	}
 
             // Attacker was able to flee the unit so that means they get to keep
             // it even if they
@@ -1592,6 +1600,15 @@ public class ShortResolver {
             String oldOwnerName = currEntity.getOwnerName().toLowerCase();
             SPlayer oldOwner = CampaignMain.cm.getPlayer(oldOwnerName);
             SUnit currU = oldOwner.getUnit(currEntity.getID());
+            
+            //@salient - mini campaigns lock unit
+        	if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign")
+        	&& CampaignMain.cm.getBooleanConfig("LockUnits")
+        	&& CampaignMain.cm.getBooleanConfig("LockSalvagedUnits"))
+        	{
+        	    currU.setLocked(true);
+        	    CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+        	}
 
             // apply battle damage if there is any to be applied.
             try {
@@ -4739,6 +4756,24 @@ public class ShortResolver {
     	
     	return land;
     }
+    
+	/**
+	 * @salient - added for mini campaigns
+	 * If enabled, this will check SO's for appropriate currency injection if the player's hangar BV has been reduced
+	 * to a certain BV.
+	 */
+	private void checkAllPlayersForRestock() 
+	{
+        if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign"))
+        {
+        	for(SPlayer player : allPlayers.values())
+        	{
+        		player.checkHangarRestock();
+        	}
+        }
+	}
+	
+	
     
     private void removePreCaptured(ShortOperation so, int unitId) {
         synchronized (so.preCapturedUnits) {
