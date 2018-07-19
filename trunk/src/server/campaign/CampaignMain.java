@@ -1470,6 +1470,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("ADMINTERMINATEALL", new AdminTerminateAllCommand());
         Commands.put("ADMINTRANSFER", new AdminTransferCommand());
         Commands.put("ADMINUNLOCKCAMPAIGN", new AdminUnlockCampaignCommand());
+        Commands.put("ADMINUNLOCKUNITSMC", new AdminUnlockUnitsCommandMC());
         Commands.put("ADMINUPDATECLIENTPARAM", new AdminUpdateClientParamCommand());
         Commands.put("ADMINUPDATEPLANETOWNERSHIP", new AdminUpdatePlanetOwnershipCommand());
         Commands.put("ADMINUPDATEDEFAULTPLAYERFLAGS", new AdminUpdateDefaultPlayerFlagsCommand());
