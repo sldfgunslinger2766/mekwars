@@ -36,6 +36,7 @@ import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -521,7 +522,8 @@ public class MechInfo extends JPanel {
                 CampaignData.mwlog.errLog("Unable to read data/images/units/mechset.txt");
             }
         }// end if(null tileset)
-        return mt.imageFor(m, c, -1);
+        //@Salient - from what i can tell from the megamek code, passing in the component does nothing.
+        return mt.imageFor(m, c, -1); 
     }
 
     public void setPreviewIcon(ImageIcon preview) {
@@ -563,7 +565,27 @@ public class MechInfo extends JPanel {
         ImageIcon camoicon = null;
         Entity m = cm.getEntity();
 
-        unit = getImageFor(m, lblImage).getScaledInstance(84, 72, Image.SCALE_DEFAULT);
+        try // @ salient, this should fix the gui problem.
+        {
+        	unit = getImageFor(m, lblImage).getScaledInstance(84, 72, Image.SCALE_DEFAULT);     	
+        }
+        catch (Exception ex)
+        {
+        	CampaignData.mwlog.errLog(ex);
+        	
+        	try 
+        	{
+        	    File pathToFile = new File("./data/images/activatebutton.png");
+        	    unit = ImageIO.read(pathToFile);
+        	    unit = unit.getScaledInstance(84, 72, Image.SCALE_DEFAULT);
+        	    CampaignData.mwlog.errLog("missing img in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
+        	} 
+        	catch (IOException ex2) 
+        	{
+        	    CampaignData.mwlog.errLog("missing img in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
+        	    CampaignData.mwlog.errLog(ex2);
+        	}
+        }
 
         // look for a config image to load. if no config exists,
         // try to load the preview icon.

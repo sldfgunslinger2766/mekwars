@@ -153,8 +153,13 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         item = new JMenuItem("Reset Free Unit Limit");
         item.setActionCommand("RFUL|" + userName);
         item.addActionListener(this);
-        if (userLevel >= mwclient.getData().getAccessLevel("ResetFreeMeks") &&
-            Integer.parseInt(mwclient.getserverConfigs("FreeBuild_Limit")) > 0)
+        if (userLevel >= mwclient.getData().getAccessLevel("ResetFreeMeks") && Integer.parseInt(mwclient.getserverConfigs("FreeBuild_Limit")) > 0)
+        	unitsMen.add(item);        	
+        //@Salient added for mini campaigns
+        item = new JMenuItem("Unlock Units MC");
+        item.setActionCommand("UUM|" + userName);
+        item.addActionListener(this);
+        if (userLevel >= mwclient.getData().getAccessLevel("ADMINUNLOCKUNITSMC") && Boolean.parseBoolean(mwclient.getserverConfigs("LockUnits")))       
             unitsMen.add(item);
         item = new JMenuItem("Donate");
         item.setActionCommand("DU|" + userName);
@@ -453,13 +458,21 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             if (result == JOptionPane.YES_OPTION)
                 mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c stripunits#" + userName);
         }
-        if (command.equals("RFUL") && st.hasMoreElements()) {
+        if (command.equals("RFUL") && st.hasMoreElements()) { //@salient
 
             userName = st.nextToken();
             // confirm action
-            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want reset " + userName + "'s free mek limit?");
+            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to reset " + userName + "'s free mek limit?");
             if (result == JOptionPane.YES_OPTION)
                 mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c resetfreemeks#" + userName);
+        }
+        if (command.equals("UUM") && st.hasMoreElements()) { //@salient
+
+            userName = st.nextToken();
+            // confirm action
+            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to unlock " + userName + "'s units?");
+            if (result == JOptionPane.YES_OPTION)
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ADMINUNLOCKUNITSMC#" + userName);
         }
         if (command.equals("SU") && st.hasMoreElements()) {
 
