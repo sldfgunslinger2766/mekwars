@@ -793,6 +793,8 @@ public class ShortResolver {
             CampaignMain.cm.postToDiscord(newsFeedBody);
         }
 
+        checkAllPlayersForRestock(); //@salient - first part of new mini campaign system
+
 		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "check for promotions and then save again?");
         if (winner != null) {
             winner.checkForPromotion();
@@ -806,7 +808,6 @@ public class ShortResolver {
         }
 		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "All Done!");
 		
-        checkAllPlayersForRestock(); //@salient - first part of new mini campaign system
 
     }
 

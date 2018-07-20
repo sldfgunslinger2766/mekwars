@@ -16,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.ToolTipManager;
 
 import client.MWClient;
 
@@ -44,7 +43,10 @@ public class MiniCampaignPanel extends JPanel
 			String description = "<HTML>Mini Campaign allows for a different form of play. Every player has a cycle that limits<br>"
 					+ " their ability to purchase, or even use, their units. Each personal cycle has a trigger that initiates<br>"
 					+ " a currency injection. This signals the end of the players personal campaign cycle. They can then<br>"
-					+ " purchase new forces, once they go active all currency is striped until next cycle.<br>";
+					+ " purchase new forces, once they go active all 'injected' currency is striped until next cycle.<br>"
+					+ " NOTE: Not compatible with christmas unit code/features<br>"
+					+ " NOTE: Makes use of player fluff text, players can not be allowed to set their own fluff.<br>"
+					+ " Admins may set fluff text, so long as '(restockedMC)' is not present at end of fluff text.";
 
 			JPanel panel0 = new JPanel();
 			JPanel panel4 = new JPanel();
@@ -53,6 +55,7 @@ public class MiniCampaignPanel extends JPanel
 			JPanel panel4c = new JPanel();
 			JPanel panel4d = new JPanel();
 			JPanel panel4e = new JPanel();
+			JPanel panel4f = new JPanel();
 		
 	        String fluName = mwclient.getserverConfigs("FluShortName");
 	        String rpName = mwclient.getserverConfigs("RPShortName");
@@ -164,12 +167,20 @@ public class MiniCampaignPanel extends JPanel
 			baseCheckBox.setToolTipText("<HTML> With this set, Locked units do NOT count towards hangar BV calculations. Injections WILL occur due to locked units. </HTML>");
 			baseCheckBox.setName("LockedUnits_RemoveBV");
 			panel4e.add(baseCheckBox);
+			
+			panel4f.add(new JLabel("Misc Options -> ", SwingConstants.TRAILING));
+			
+			baseCheckBox = new JCheckBox("Enforce Unit Limit on Injection");
+			baseCheckBox.setToolTipText("<HTML>For a very controled MC cycle, player must buy back up to unit limit for all defined type/weight limits.</HTML>");
+			baseCheckBox.setName("BaysFullMC");
+			panel4f.add(baseCheckBox);
 								
 			panel4.add(panel4a);
 			panel4.add(panel4b);
 			panel4.add(panel4c);
 			panel4.add(panel4d);
 			panel4.add(panel4e);
+			panel4.add(panel4f);
 
 			add(panel0);
 			add(panel4);

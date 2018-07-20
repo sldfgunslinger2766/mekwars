@@ -144,6 +144,7 @@ public class CMainFrame extends JFrame {
     JMenuItem jMenuCampaignDonatePersonalPilot = new JMenuItem();
     JMenuItem jMenuCampaignDirectSell = new JMenuItem();
     JMenuItem jMenuCampaignDefect = new JMenuItem();
+    JMenuItem jMenuCampaignSelfPromote = new JMenuItem(); //@salient
     JMenuItem jMenuCampaignRewardPoints = new JMenuItem();
     JMenuItem jMenuCampaignInfluencePoints = new JMenuItem();
     JMenuItem jMenuCampaignPartsCache = new JMenuItem();
@@ -808,7 +809,15 @@ public class CMainFrame extends JFrame {
                 jMenuCommanderDefect_actionPerformed();
             }
         });
-
+ 	
+    	jMenuCampaignSelfPromote.setText("Self Promote");
+    	//jMenuCampaignDefect.setMnemonic('D');
+    	jMenuCampaignSelfPromote.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+    			jMenuCommanderSelfPromote_actionPerformed();
+    		}
+    	});
+        
         jMenuCampaignRewardPoints.setText("Use " + mwclient.getserverConfigs("RPLongName"));
         jMenuCampaignRewardPoints.setMnemonic('P');
         jMenuCampaignRewardPoints.addActionListener(new ActionListener() {
@@ -1205,75 +1214,75 @@ public class CMainFrame extends JFrame {
         jMenuMekwarsRFE.addActionListener(mekwarsRFEListener);
 
         //@sal emojis
-        
+
         jMenuEmoji.setText("Emojis");
-        
+
         if(Boolean.parseBoolean(mwclient.getserverConfigs("AllowEmoji")))
         {
         	jMenuEmojiFlip.setText("(╯°□°)╯︵ ┻━┻");
-        	jMenuEmojiFlip.addActionListener(new ActionListener() 
+        	jMenuEmojiFlip.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e) 
+            	public void actionPerformed(ActionEvent e)
             	{
             		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#fl");
             	}
             });
-        	
+
 //        	jMenuEmojiBear.setText("ʕ •ᴥ•ʔ");
-//        	jMenuEmojiBear.addActionListener(new ActionListener() 
+//        	jMenuEmojiBear.addActionListener(new ActionListener()
 //            {
-//            	public void actionPerformed(ActionEvent e) 
+//            	public void actionPerformed(ActionEvent e)
 //            	{
 //            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#be");
 //            	}
 //            });
-        	
+
         	jMenuEmojiShrug.setText("¯\\_(ツ)_/¯");
-        	jMenuEmojiShrug.addActionListener(new ActionListener() 
+        	jMenuEmojiShrug.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e) 
+            	public void actionPerformed(ActionEvent e)
             	{
             		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#sh");
             	}
             });
-        	
+
         	jMenuEmojiFingers.setText("t(-.-t)");
-        	jMenuEmojiFingers.addActionListener(new ActionListener() 
+        	jMenuEmojiFingers.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e) 
+            	public void actionPerformed(ActionEvent e)
             	{
             		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#fi");
             	}
             });
-        	
+
         	jMenuEmojiKiss.setText("( ˘ ³˘)♥");
-        	jMenuEmojiKiss.addActionListener(new ActionListener() 
+        	jMenuEmojiKiss.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e) 
+            	public void actionPerformed(ActionEvent e)
             	{
             		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#ki");
             	}
             });
-        	
+
         	jMenuEmojiSmile.setText("◉‿◉");
-        	jMenuEmojiSmile.addActionListener(new ActionListener() 
+        	jMenuEmojiSmile.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e) 
+            	public void actionPerformed(ActionEvent e)
             	{
             		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#sm");
             	}
             });
-        	
+
         	jMenuEmojiDeal.setText("•_•) ( •_•)>⌐■-■ (⌐■_■)");
-        	jMenuEmojiDeal.addActionListener(new ActionListener() 
+        	jMenuEmojiDeal.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e) 
+            	public void actionPerformed(ActionEvent e)
             	{
             		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#de");
             	}
             });
         }
-        	
+
 
         /*
          * FORMATTING BLOCK
@@ -1335,9 +1344,14 @@ public class CMainFrame extends JFrame {
         // other sub menu
         jMenuCampaignSubOther.add(jMenuCampaignLogo);
         jMenuCampaignSubOther.add(jMenuCampaignDefect);
+        if (Boolean.parseBoolean(mwclient.getserverConfigs("Self_Promote_Subfaction"))) //@salient
+        {        	
+        	jMenuCampaignSubOther.add(jMenuCampaignSelfPromote);
+        }
         jMenuCampaignSubOther.add(jMenuCampaignRewardPoints);
         jMenuCampaignSubOther.add(jMenuCampaignInfluencePoints);
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsBlackMarket"))) {
+        if (Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsBlackMarket"))) 
+        {
             jMenuCampaignSubOther.add(jMenuCampaignPartsCache);
         }
 
@@ -1412,7 +1426,7 @@ public class CMainFrame extends JFrame {
         jMenuHelp.addSeparator();
         jMenuHelp.add(jMenuMekwarsRFE);
         jMenuHelp.add(jMenuMegamekRFE);
-        
+
         //@salient emoji
         jMenuEmoji.add(jMenuEmojiFlip);
         //jMenuEmoji.add(jMenuEmojiBear);
@@ -1421,8 +1435,8 @@ public class CMainFrame extends JFrame {
         jMenuEmoji.add(jMenuEmojiKiss);
         jMenuEmoji.add(jMenuEmojiSmile);
         jMenuEmoji.add(jMenuEmojiDeal);
-        
-        
+
+
 
         /*
          * Admin menu setup used to be here. @urgru
@@ -1439,7 +1453,7 @@ public class CMainFrame extends JFrame {
         jMenuBar1.add(jMenuOptions);
         jMenuBar1.add(jMenuLeaderShip);
         jMenuBar1.add(jMenuHelp);
-        
+
         if(Boolean.parseBoolean(mwclient.getserverConfigs("AllowEmoji")))
         {
         	jMenuBar1.add(jMenuEmoji);
@@ -2169,6 +2183,28 @@ public class CMainFrame extends JFrame {
 
         // send unconfirmed defection command
         mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c defect#" + House);
+    }
+
+    public void jMenuCommanderSelfPromote_actionPerformed() 
+    {
+
+//        SelfPromoteDialog factionDialog = new SelfPromoteDialog(mwclient, "Promote to Subfaction:", false, true);
+//        factionDialog.setVisible(true);
+//        House = factionDialog.getHouseName();
+//        factionDialog.dispose();
+
+        SubFactionNameDialog subFactionDialog = new SubFactionNameDialog(mwclient, "SubFaction", mwclient.getPlayer().getHouse());
+        subFactionDialog.setVisible(true);
+        String subFactionName = subFactionDialog.getSubFactionName();
+        subFactionDialog.dispose();
+
+        if ((subFactionName == null) || (subFactionName.length() == 0)) {
+            return;
+        }
+
+        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c selfpromote#"+ subFactionName);
+
+
     }
 
     public void jMenuCommanderFireTechs_actionPerformed() {

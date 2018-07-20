@@ -571,18 +571,17 @@ public class MechInfo extends JPanel {
         }
         catch (Exception ex)
         {
-        	CampaignData.mwlog.errLog(ex);
-        	
+        	CampaignData.mwlog.errLog(ex);   	
         	try 
         	{
         	    File pathToFile = new File("./data/images/activatebutton.png");
         	    unit = ImageIO.read(pathToFile);
         	    unit = unit.getScaledInstance(84, 72, Image.SCALE_DEFAULT);
-        	    CampaignData.mwlog.errLog("missing img in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
+        	    CampaignData.mwlog.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
         	} 
         	catch (IOException ex2) 
         	{
-        	    CampaignData.mwlog.errLog("missing img in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
+        	    CampaignData.mwlog.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
         	    CampaignData.mwlog.errLog(ex2);
         	}
         }
