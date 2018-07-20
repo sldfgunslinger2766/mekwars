@@ -1590,13 +1590,13 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private int getHangarBVforMC() 
     {
         int bv = 0;
-        boolean removeLockedBV = CampaignMain.cm.getBooleanConfig("LockedUnits_RemoveBV");
+        boolean removeLockedBV = getMyHouse().getBooleanConfig("LockedUnits_RemoveBV");
         
         for (SUnit currU : units) 
         {
             if(removeLockedBV) // do not add BV of units that are locked.
             {
-            	if(!currU.isLocked())
+            	if(currU.isLocked() == false) //if unit is locked, ignore it
             	{            		
             		bv += currU.getBVForMatch();
             	}
@@ -1745,7 +1745,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	}
     	
     	//if too many of the players units are locked to continue, unlock all units
-    	if ( !restock && lockUnits && lockedLimit != -1)
+    	if ( !restock && lockUnits && lockedLimit != -1) //do only if feature enabled
     		if (percentLockedUnitsMC() >= lockedLimit)
     		{
     			unlockAllUnitsMC();
@@ -1753,7 +1753,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		}
     	
     	if( !restock )
+    	{
+    		setSave(); // needed if shortresolver is handling unit locking
     		return;
+    	}
     	  	
     	if( restock )
     	{  		
@@ -1798,6 +1801,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         		//CampaignData.mwlog.errLog(getName() + "'s CB: " + getMoney() + " (after)");
         	}
         	
+        	setFluffForMC();
         	unlockAllUnitsMC();
         	setSave();
 
@@ -1837,7 +1841,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	int leewayFLU = (int) (getInfluence() * percentFLU);
     	int leewayMT = (int) (getRemainingMekTokens() * percentMT);
     	
-    	boolean result = true;
+    	boolean requireFullHangar = getMyHouse().getBooleanConfig("BaysFullMC");
+    	
+    	boolean canActivate = true;
     	
     	//check if hangar BV has increased (maybe via salvage? or trades?), if so update to new value. 
         if ( percentBVLimit != -1  && getHangarBVforMC() > getBVTracker() )
@@ -1863,48 +1869,83 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	if( restockCB != -1 && getMoney() > leewayCB )
     	{
     		toSelf("AM: You have too many " + CampaignMain.cm.getCurrencyName("money", false) + " to go active!" );
-    		result = false;
+    		canActivate = false;
     	}
     	
     	if( restockRP != -1 && getReward() > leewayRP )
     	{
     		toSelf("AM: You have too many " + CampaignMain.cm.getCurrencyName("rp", false) + " to go active!" );
-    		result = false;
+    		canActivate = false;
     	}
     	
     	if( restockFLU != -1 && getInfluence() > leewayFLU )
     	{
     		toSelf("AM: You have too much " + CampaignMain.cm.getCurrencyName("flu", false) + " to go active!" );
-    		result = false;
+    		canActivate = false;
     	}
     	
     	if( restockMT != -1 && getRemainingMekTokens() > leewayMT )
     	{
     		toSelf("AM: You must use up more of your free meks to go active!" );
-    		result = false;
+    		canActivate = false;
     	}
     	
-    	if( result ) // can go active, starting a new mini campaign cycle
+    	if ( requireFullHangar && checkFluffForMC() && isAtUnitLimits() == false )
+    	{
+    		toSelf("AM: You must reach the limit for each unit type/weight before restarting your mini campaign!");
+    		canActivate = false;
+    	}
+    	
+    	if( canActivate ) // this occurs any time the user goes active.
     	{
     		removeInjectedCurrencyMC(restockCB, restockRP, restockFLU, restockMT);
     		
-    		unlockAllUnitsMC();
+    		//unlockAllUnitsMC(); // unlocked during injection
         	
-    		if ( percentBVLimit != -1 ) 
+    		if ( percentBVLimit != -1 && checkFluffForMC() ) //should only occur once after injection
         	{  
         		setBVTracker(getHangarBVforMC());// set new hangar BV for tracking   			
         		
         		CampaignData.mwlog.modLog(getName() + "'s BV reset point set to " + getBVResetPoint() + " BV");
         		
-        		toSelf("AM: Next mini campaign cycle will begin when your hangar BV falls below " + getBVResetPoint());
         	}
     		
+    		if ( percentBVLimit != -1 )
+    		{
+    			toSelf("AM: Current Hangar BV is " + getHangarBV());
+    			toSelf("AM: Next mini campaign cycle will begin when your hangar BV falls below " + getBVResetPoint());
+    		}
+    		
+    		resetFluffForMC();
     		setSave();
     	}
     	
-    	return result;
+    	return canActivate;
     }
     
+    //@salient - add this to fluff so we know where we are in process
+    private void setFluffForMC()
+    {
+    	setFluffText(fluffText + "(restockedMC)");
+    	//fluffText += "(restockedMC)";
+    }
+    
+    private boolean checkFluffForMC()
+    {
+    	if(fluffText.contains("(restockedMC)"))
+    		return true;
+    	else
+    		return false;
+    }
+    
+    private void resetFluffForMC()
+    {
+    	if(checkFluffForMC())
+    	{
+    		setFluffText(fluffText.replace("(restockedMC)", ""));
+    	}
+    }
+       
     //@salient - made a new command called RG (refresh gui)
     public void refreshGUI()
     {
@@ -3811,6 +3852,35 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             }
         }
         return false;
+    }
+    
+    /**
+     * @author Salient
+     * A method to determine if player is at the unit limits
+     *
+     * @return true if at all limits, false otherwise
+     */
+    public boolean isAtUnitLimits() 
+    {
+    	boolean result = false;
+    	
+        for (int t = Unit.MEK; t <= Unit.AERO; t++) 
+        {
+            for (int w = Unit.LIGHT; w <= Unit.ASSAULT; w++) 
+            {
+                int limit = getMyHouse().getUnitLimit(t, w);
+                int inHangar = countUnits(t, w);
+                
+                if(limit != -1)
+                {
+                	if (inHangar == limit)   
+                		result = true;
+                	else
+                		return false;                               	
+                }
+            }
+        }
+        return result;
     }
 
     /**

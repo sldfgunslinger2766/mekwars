@@ -1355,6 +1355,7 @@ public class DefaultServerOptions {
         defaults.setProperty("Scheduler_FactionSave", "900");
 
         // New options by @Salient 
+        // --- Free Build ---
         // This property allows SOL to create units from a build table for free
         defaults.setProperty("Sol_FreeBuild", "false");
         // Set which build table used for SOL freebuild
@@ -1378,7 +1379,7 @@ public class DefaultServerOptions {
         defaults.setProperty("FreeBuild_NumOfDuplicateInf", "-1");
         defaults.setProperty("FreeBuild_NumOfDuplicateBA", "-1");
         defaults.setProperty("FreeBuild_NumOfDuplicateAero", "-1"); 
-        // New buttons for client
+        // --- Link & Rules Area --- 
         defaults.setProperty("Enable_Link_Area", "false");
         defaults.setProperty("Link_Area_Label", "Links:");
         // HTML location for new rules panel
@@ -1393,22 +1394,22 @@ public class DefaultServerOptions {
         defaults.setProperty("Enable_Link3_Button", "false");
         defaults.setProperty("Link3_URL", "https://facebook.com");
         defaults.setProperty("Link3_Icon", "./data/images/misc/facebook.png");
-        //Bot Options
+        //---Bot Options---
         defaults.setProperty("Enable_Bot_Chat", "false");
         defaults.setProperty("Bot_Buffer_Location", "./data/allchatforbot.txt");
-        //Subfaction Options
+        //---Subfaction Options---
         defaults.setProperty("Enforce_Subfaction_Factory_Access", "false");
         defaults.setProperty("Self_Promote_Subfaction", "false");
         defaults.setProperty("Disable_Promote_Subfaction", "false");
         defaults.setProperty("Disable_Demote_Subfaction", "false");
-        //Additional Influence Options
+        //---Additional Influence Options---
         defaults.setProperty("Cbills_Per_Flu", "0");
         defaults.setProperty("AllowFluTransfer", "false");
         defaults.setProperty("PlayerBaseFlu", "0");
         defaults.setProperty("FluXPRollOverCap", "0");
         defaults.setProperty("FluToRefreshFactory", "0");
         //defaults.setProperty("FluToRepod", "0");
-        //Mini Campaigns
+        //---Mini Campaigns---
         defaults.setProperty("Enable_MiniCampaign", "false");
         //if BV of players hangar reaches this state, initiate 'restock'
         defaults.setProperty("MinBV_HangarRestock", "-1");
@@ -1429,7 +1430,9 @@ public class DefaultServerOptions {
         defaults.setProperty("LockSalvagedUnits", "false");
         defaults.setProperty("UnlockUnits_Percentage", "-1");
         defaults.setProperty("LockedUnits_RemoveBV", "false");
-        //MISC
+        //MC Misc Options
+        defaults.setProperty("BaysFullMC", "false");
+        //---MISC---
         defaults.setProperty("AllowEmoji", "false");
 
 

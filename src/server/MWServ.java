@@ -610,7 +610,7 @@ public class MWServ {
 					clientSend("PM|SERVER|You joined " + hostName + ". Please remember where you parked.", name);
 				}
 
-			} else if (task.equals("SHS")) {
+			} else if (task.equals("SHS")) { //@salient - i found this elsewhere -> Set Host Status (SHS|<GameID>|<Status>) US = Users
 
 				MMGame toUpdate = games.get(st.nextToken());
 				if (toUpdate.getHostName().startsWith("[Dedicated]") || name.equals(toUpdate.getHostName())) {

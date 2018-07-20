@@ -104,4 +104,9 @@ public class SubFaction{
 			setConfig(key, value);
 		}
 	}
+	
+	public String getName()
+	{
+		return factionSettings.getProperty("Name");
+	}
 }
