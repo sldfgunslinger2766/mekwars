@@ -50,6 +50,8 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	@Expose(serialize = true, deserialize = true)
 	private EvictingQueue<Integer> historicalGames;
 	@Expose(serialize = true, deserialize = true)
+	private EvictingQueue<Integer> historicalCompletedGames;
+	@Expose(serialize = true, deserialize = true)
 	private int maxPlayers;
 	@Expose(serialize = true, deserialize = true)
 	private int maxGames;
@@ -377,6 +379,7 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 		// 7 days = 1008 entries
 		historicalGames = EvictingQueue.create(1008);
 		historicalPlayers = EvictingQueue.create(1008);
+		historicalCompletedGames = EvictingQueue.create(1008);
 	}
 	
 	/**
@@ -384,6 +387,15 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	 */
 	public void setTracker(HPGNet t) {
 		tracker = t;
+	}
+	
+	/**
+	 * Adds a game to the CompletedGames EvictingQueue
+	 * @param completedGames
+	 */
+	public void addHistoricalCompletedGamesElement(int completedGames) {
+		historicalCompletedGames.add(completedGames);
+		calculateCompletedGames();
 	}
 	
 	/**
@@ -429,15 +441,28 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	}
 	
 	/**
+	 * Iterates through the completed games queue, calculating the total
+	 */
+	private void calculateCompletedGames() {
+		int total = 0;
+		Iterator<Integer> iter = historicalCompletedGames.iterator();
+		while (iter.hasNext()) {
+			total += iter.next();
+		}
+		setTotalGames(total);
+	}
+	
+	/**
 	 * Called when a server updates its statistics
 	 * @param players the number of players on the server
 	 * @param games the number of games in progress
 	 */
-	public void update(int players, int games) {
+	public void update(int players, int games, int completedGames) {
 		addHistoricalPlayersElement(players);
 		setCurrentPlayers(players);
 		addHistoricalGamesElement(games);
 		setCurrentGames(games);
+		addHistoricalCompletedGamesElement(completedGames);
 		setLastUpdated(new Date());
 		calculateThreatLevel();
 		generateHTMLString();
@@ -479,6 +504,13 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	 */
 	private String buildColumn(String data) {
 		return "<td>" + data + "</td>";
+	}
+	
+	/**
+	 * Games completed since last update.  This should force a calculation of total games
+	 */
+	public void setCompletedGames(int completedGames) {
+		addHistoricalCompletedGamesElement(completedGames);
 	}
 	
 	/**
