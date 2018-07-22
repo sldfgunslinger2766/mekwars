@@ -133,7 +133,7 @@ import java.util.StringTokenizer;
 				sub.setMWVersion(version);
 				sub.setDescription(desc);
 				sub.setLegacy(true);
-				sub.update(0, 0);
+				sub.update(0, 0, 0);
 
 				if(isNew) {
 					tracker.registerNewSubscriber(sub);
@@ -177,7 +177,7 @@ import java.util.StringTokenizer;
 				sub.setLegacy(true);
 				
 				if(isNew) {
-					sub.update(0, 0);
+					sub.update(0, 0, 0);
 					tracker.registerNewSubscriber(sub);
 				}
 				
@@ -195,7 +195,7 @@ import java.util.StringTokenizer;
 				tracker.addToLog("PH% from " + name);
 				String numPlayers = st.nextToken();
 				String numGames = st.nextToken();
-				String totalGames = st.nextToken();
+				String completedGames = st.nextToken();
 				
 				HPGSubscriber sub = tracker.getSubscriber(name);
 				
@@ -209,13 +209,13 @@ import java.util.StringTokenizer;
 				
 				sub.setName(name);
 				sub.setLegacy(true);
-				sub.setTotalGames(Integer.parseInt(totalGames));
+				//sub.setCompletedGames(Integer.parseInt(completedGames));
 				
 				if(isNew) {
-					sub.update(0, 0);
+					sub.update(0, 0, 0);
 					tracker.registerNewSubscriber(sub);
 				} else {
-					sub.update(Integer.parseInt(numPlayers), Integer.parseInt(numGames));
+					sub.update(Integer.parseInt(numPlayers), Integer.parseInt(numGames), Integer.parseInt(completedGames));
 				}
 				
 				sub.setLastUpdated(new Date());
