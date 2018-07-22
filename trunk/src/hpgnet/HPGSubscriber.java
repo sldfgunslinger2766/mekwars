@@ -489,7 +489,7 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 		sb.append(buildColumn(Integer.toString(getCurrentPlayers())));
 		sb.append(buildColumn(Integer.toString(getCurrentGames())));
 		sb.append(buildColumn(Integer.toString(getMaxPlayers())));
-		sb.append(buildColumn(Integer.toString(getMaxGames())));
+		sb.append(buildColumn(Integer.toString(getTotalGames())));
 		sb.append(buildColumn(getDescription()));
 		//sb.append(buildColumn(getLastUpdated().toString()));
 		sb.append(buildDateColumn(getLastUpdated().toString()));

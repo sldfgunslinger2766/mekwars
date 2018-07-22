@@ -254,7 +254,8 @@ public final class HPGNet {
 	/**
 	 * Reads an HPGSubscriber from disk and into the TreeSet
 	 * @param filename
-	 * @return the HPGSubscriber
+	 * @return the HPGSubscribcleaR
+	 * er
 	 */
 	private HPGSubscriber load(String filename) {
 		HPGSubscriber sub = null;
