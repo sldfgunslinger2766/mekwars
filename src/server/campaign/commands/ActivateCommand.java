@@ -245,13 +245,18 @@ public class ActivateCommand implements Command {
         
         // @salient
         // Check mini campaign settings
-        if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign"))
+        // seperated out locked unit check so it can be used without mini campaigns.
+        if(CampaignMain.cm.getBooleanConfig("LockUnits"))
         {
         	if(hasLockedUnitsInArmies(p.getArmies()))
         	{
         		p.toSelf("AM: To go active you must first remove locked units from your armies.");
         		return;
-        	}
+        	}        	
+        }
+        
+        if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign"))
+        {
         	//handles all checks, resets currency, and msgs to player
 	        if(!p.canActivateForMiniCampaign())
 	        {

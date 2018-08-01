@@ -1640,6 +1640,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("RECALL", new RecallCommand());
         Commands.put("RECALLBID", new RecallBidCommand());
         Commands.put("REPOD", new RepodCommand());
+        Commands.put("REPORTSTATUSMC", new ReportStatusMC()); //@salient
         Commands.put("REFRESHFACTORY", new RefreshFactoryCommand());
         Commands.put("REFUSECONTRACT", new RefuseContractCommand());
         Commands.put("RELOADALLAMMO", new ReloadAllAmmoCommand());

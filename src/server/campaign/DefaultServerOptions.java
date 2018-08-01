@@ -1354,7 +1354,7 @@ public class DefaultServerOptions {
         defaults.setProperty("Scheduler_PlayerActivity_flu", "300");
         defaults.setProperty("Scheduler_FactionSave", "900");
 
-        // New options by @Salient 
+        // New options by @Salient
         // --- Free Build ---
         // This property allows SOL to create units from a build table for free
         defaults.setProperty("Sol_FreeBuild", "false");
@@ -1364,7 +1364,7 @@ public class DefaultServerOptions {
         defaults.setProperty("Sol_FreeBuild_UseAll", "false");
         // -1 disables limits, 0 disables build, otherwise it is a limiter
         //can be set in faction configuration panel to differ per faction
-        defaults.setProperty("FreeBuild_Limit", "-1"); 
+        defaults.setProperty("FreeBuild_Limit", "-1");
         // allows player to build free meks in the house they defected to
         defaults.setProperty("FreeBuild_PostDefection", "false");
         // if true, the mekToken limit only applies outside of SOL
@@ -1378,8 +1378,8 @@ public class DefaultServerOptions {
         defaults.setProperty("FreeBuild_NumOfDuplicateVees", "-1");
         defaults.setProperty("FreeBuild_NumOfDuplicateInf", "-1");
         defaults.setProperty("FreeBuild_NumOfDuplicateBA", "-1");
-        defaults.setProperty("FreeBuild_NumOfDuplicateAero", "-1"); 
-        // --- Link & Rules Area --- 
+        defaults.setProperty("FreeBuild_NumOfDuplicateAero", "-1");
+        // --- Link & Rules Area ---
         defaults.setProperty("Enable_Link_Area", "false");
         defaults.setProperty("Link_Area_Label", "Links:");
         // HTML location for new rules panel
@@ -1405,7 +1405,7 @@ public class DefaultServerOptions {
         //---Additional Influence Options---
         defaults.setProperty("Cbills_Per_Flu", "0");
         defaults.setProperty("AllowFluTransfer", "false");
-        defaults.setProperty("PlayerBaseFlu", "0");
+        defaults.setProperty("PlayerBaseFlu", "0"); 
         defaults.setProperty("FluXPRollOverCap", "0");
         defaults.setProperty("FluToRefreshFactory", "0");
         //defaults.setProperty("FluToRepod", "0");
@@ -1421,17 +1421,19 @@ public class DefaultServerOptions {
         defaults.setProperty("RestockFLU_Injection", "-1");
         defaults.setProperty("RestockMT_Injection", "-1");
         //user must use 'most' of the injection to go active, this sets the leeway
-        defaults.setProperty("RestockCB_LeewayPercentage", "100");
-        defaults.setProperty("RestockRP_LeewayPercentage", "100");
-        defaults.setProperty("RestockFLU_LeewayPercentage", "100");
-        defaults.setProperty("RestockMT_LeewayPercentage", "100");
+        defaults.setProperty("RestockCB_LeewayPercentage", "-1");
+        defaults.setProperty("RestockRP_LeewayPercentage", "-1");
+        defaults.setProperty("RestockFLU_LeewayPercentage", "-1");
+        defaults.setProperty("RestockMT_LeewayPercentage", "-1");
         //lock units
         defaults.setProperty("LockUnits", "false");
         defaults.setProperty("LockSalvagedUnits", "false");
         defaults.setProperty("UnlockUnits_Percentage", "-1");
         defaults.setProperty("LockedUnits_RemoveBV", "false");
+        defaults.setProperty("LockUnits_ForOneFightOnly", "false");
         //MC Misc Options
-        defaults.setProperty("BaysFullMC", "false");
+        defaults.setProperty("AtUnitLimitsMC", "false");
+        defaults.setProperty("AtOrOverUnitLimitsMC", "false");
         //---MISC---
         defaults.setProperty("AllowEmoji", "false");
 
