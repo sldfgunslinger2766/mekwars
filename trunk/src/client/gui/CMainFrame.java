@@ -145,6 +145,7 @@ public class CMainFrame extends JFrame {
     JMenuItem jMenuCampaignDirectSell = new JMenuItem();
     JMenuItem jMenuCampaignDefect = new JMenuItem();
     JMenuItem jMenuCampaignSelfPromote = new JMenuItem(); //@salient
+    JMenuItem jMenuCampaignReportStatusMC = new JMenuItem(); //@salient 
     JMenuItem jMenuCampaignRewardPoints = new JMenuItem();
     JMenuItem jMenuCampaignInfluencePoints = new JMenuItem();
     JMenuItem jMenuCampaignPartsCache = new JMenuItem();
@@ -810,11 +811,19 @@ public class CMainFrame extends JFrame {
             }
         });
  	
-    	jMenuCampaignSelfPromote.setText("Self Promote");
+    	jMenuCampaignSelfPromote.setText("Self Promote"); //@salient
     	//jMenuCampaignDefect.setMnemonic('D');
     	jMenuCampaignSelfPromote.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			jMenuCommanderSelfPromote_actionPerformed();
+    		}
+    	});
+    	
+    	jMenuCampaignReportStatusMC.setText("Check MiniCampaign Status"); //@salient for mini campaign
+    	//jMenuCampaignDefect.setMnemonic('D');
+    	jMenuCampaignReportStatusMC.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+    			jMenuCommanderReportStatusMC_actionPerformed();
     		}
     	});
         
@@ -1347,6 +1356,10 @@ public class CMainFrame extends JFrame {
         if (Boolean.parseBoolean(mwclient.getserverConfigs("Self_Promote_Subfaction"))) //@salient
         {        	
         	jMenuCampaignSubOther.add(jMenuCampaignSelfPromote);
+        }
+        if (Boolean.parseBoolean(mwclient.getserverConfigs("Enable_MiniCampaign"))) //@salient
+        {        	
+        	jMenuCampaignSubOther.add(jMenuCampaignReportStatusMC);
         }
         jMenuCampaignSubOther.add(jMenuCampaignRewardPoints);
         jMenuCampaignSubOther.add(jMenuCampaignInfluencePoints);
@@ -2188,11 +2201,6 @@ public class CMainFrame extends JFrame {
     public void jMenuCommanderSelfPromote_actionPerformed() 
     {
 
-//        SelfPromoteDialog factionDialog = new SelfPromoteDialog(mwclient, "Promote to Subfaction:", false, true);
-//        factionDialog.setVisible(true);
-//        House = factionDialog.getHouseName();
-//        factionDialog.dispose();
-
         SubFactionNameDialog subFactionDialog = new SubFactionNameDialog(mwclient, "SubFaction", mwclient.getPlayer().getHouse());
         subFactionDialog.setVisible(true);
         String subFactionName = subFactionDialog.getSubFactionName();
@@ -2203,8 +2211,11 @@ public class CMainFrame extends JFrame {
         }
 
         mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c selfpromote#"+ subFactionName);
-
-
+    } 
+    
+    public void jMenuCommanderReportStatusMC_actionPerformed() 
+    {
+        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c reportstatusmc#");    
     }
 
     public void jMenuCommanderFireTechs_actionPerformed() {

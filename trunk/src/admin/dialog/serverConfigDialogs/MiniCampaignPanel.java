@@ -44,9 +44,7 @@ public class MiniCampaignPanel extends JPanel
 					+ " their ability to purchase, or even use, their units. Each personal cycle has a trigger that initiates<br>"
 					+ " a currency injection. This signals the end of the players personal campaign cycle. They can then<br>"
 					+ " purchase new forces, once they go active all 'injected' currency is striped until next cycle.<br>"
-					+ " NOTE: Not compatible with christmas unit code/features<br>"
-					+ " NOTE: Makes use of player fluff text, players can not be allowed to set their own fluff.<br>"
-					+ " Admins may set fluff text, so long as '(restockedMC)' is not present at end of fluff text.";
+					+ " NOTE: Not compatible with christmas unit code/features<br>";
 
 			JPanel panel0 = new JPanel();
 			JPanel panel4 = new JPanel();
@@ -54,8 +52,11 @@ public class MiniCampaignPanel extends JPanel
 			JPanel panel4b = new JPanel();
 			JPanel panel4c = new JPanel();
 			JPanel panel4d = new JPanel();
-			JPanel panel4e = new JPanel();
+			//JPanel panel4e = new JPanel();
 			JPanel panel4f = new JPanel();
+			JPanel panel5 = new JPanel();
+			JPanel panel5a = new JPanel();
+			JPanel panel5b = new JPanel();
 		
 	        String fluName = mwclient.getserverConfigs("FluShortName");
 	        String rpName = mwclient.getserverConfigs("RPShortName");
@@ -123,67 +124,82 @@ public class MiniCampaignPanel extends JPanel
 			
 			baseTextField = new JTextField(5);
 			panel4d.add(new JLabel(cbName, SwingConstants.TRAILING));
-			baseTextField.setToolTipText("<HTML> % of currency player must use before being able to go active and start the next cycle </HTML>");
+			baseTextField.setToolTipText("<HTML>(-1 to disable)<br> % of currency player must use before being able to go active and start the next cycle </HTML>");
 			baseTextField.setName("RestockCB_LeewayPercentage");
 			panel4d.add(baseTextField);
 			
 			baseTextField = new JTextField(5);
 			panel4d.add(new JLabel(rpName, SwingConstants.TRAILING));
-			baseTextField.setToolTipText("<HTML> % of currency player must use before being able to go active and start the next cycle </HTML>");
+			baseTextField.setToolTipText("<HTML>(-1 to disable)<br> % of currency player must use before being able to go active and start the next cycle </HTML>");
 			baseTextField.setName("RestockRP_LeewayPercentage");
 			panel4d.add(baseTextField);
 			
 			baseTextField = new JTextField(5);
 			panel4d.add(new JLabel(fluName, SwingConstants.TRAILING));
-			baseTextField.setToolTipText("<HTML> % of currency player must use before being able to go active and start the next cycle </HTML>");
+			baseTextField.setToolTipText("<HTML>(-1 to disable)<br> % of currency player must use before being able to go active and start the next cycle </HTML>");
 			baseTextField.setName("RestockFLU_LeewayPercentage");
 			panel4d.add(baseTextField);
 			
 			baseTextField = new JTextField(5);
 			panel4d.add(new JLabel("MT", SwingConstants.TRAILING));
-			baseTextField.setToolTipText("<HTML>(MT = MekTokens used with freebuild limits)(-1 to disable)(PostDefection freebuild w/limit must be enabled)<br> % of currency player must use before being able to go active and start the next cycle </HTML>");
+			baseTextField.setToolTipText("<HTML>(MT = MekTokens used with freebuild limits)<br>(-1 to disable)(PostDefection freebuild w/limit must be enabled)<br> % of currency player must use before being able to go active and start the next cycle </HTML>");
 			baseTextField.setName("RestockMT_LeewayPercentage");
 			panel4d.add(baseTextField);
-			
-			panel4e.add(new JLabel("Unit Lock Options -> ", SwingConstants.TRAILING));
-			
-			baseCheckBox = new JCheckBox("Enable Locking");
-			baseCheckBox.setToolTipText("<HTML>Enable unit locking, units are locked after used, meaning they can only be used once per mini campaign cycle.</HTML>");
-			baseCheckBox.setName("LockUnits");
-			panel4e.add(baseCheckBox);
-			
-			baseCheckBox = new JCheckBox("Lock Salvage");
-			baseCheckBox.setToolTipText("<HTML>Units awarded by salvage after a match are awarded locked</HTML>");
-			baseCheckBox.setName("LockSalvagedUnits");
-			panel4e.add(baseCheckBox);
-			
-			baseTextField = new JTextField(5);
-			panel4e.add(new JLabel("Reset %", SwingConstants.TRAILING));
-			baseTextField.setToolTipText("<HTML>(-1 to disable)<br> Example: if set to 70 -> if 70 percent of the players units are locked all units unlock without ending the cycle. Injections will NOT occur.  </HTML>");
-			baseTextField.setName("UnlockUnits_Percentage");
-			panel4e.add(baseTextField);
-			
-			baseCheckBox = new JCheckBox("Remove BV");
-			baseCheckBox.setToolTipText("<HTML> With this set, Locked units do NOT count towards hangar BV calculations. Injections WILL occur due to locked units. </HTML>");
-			baseCheckBox.setName("LockedUnits_RemoveBV");
-			panel4e.add(baseCheckBox);
 			
 			panel4f.add(new JLabel("Misc Options -> ", SwingConstants.TRAILING));
 			
 			baseCheckBox = new JCheckBox("Enforce Unit Limit on Injection");
 			baseCheckBox.setToolTipText("<HTML>For a very controled MC cycle, player must buy back up to unit limit for all defined type/weight limits.</HTML>");
-			baseCheckBox.setName("BaysFullMC");
+			baseCheckBox.setName("AtUnitLimitsMC");
 			panel4f.add(baseCheckBox);
+			
+			baseCheckBox = new JCheckBox("Enforce Limits, Allow OverLimit");
+			baseCheckBox.setToolTipText("<HTML>For a very controled MC cycle, player must buy back up to unit limit for all defined type/weight limits.<br> However, also allow activation if the player is OVER the unit limit (via salvage).</HTML>");
+			baseCheckBox.setName("AtOrOverUnitLimitsMC");
+			panel4f.add(baseCheckBox);
+			
+			panel5.setBorder(BorderFactory.createTitledBorder("Unit Locking"));
+			panel5.setLayout(new VerticalLayout(5, VerticalLayout.CENTER, VerticalLayout.TOP));
+			
+			baseCheckBox = new JCheckBox("Enable Unit Locking");
+			baseCheckBox.setToolTipText("<HTML>(This feature CAN be used without mini campaigns, use reset% option to manage unlocks.)<br>Enable unit locking, units are locked after use, meaning they can only be used once per mini campaign cycle.</HTML>");
+			baseCheckBox.setName("LockUnits");
+			panel5a.add(baseCheckBox);
+			
+			baseCheckBox = new JCheckBox("Lock Salvage");
+			baseCheckBox.setToolTipText("<HTML>Units awarded by salvage after a match are awarded locked</HTML>");
+			baseCheckBox.setName("LockSalvagedUnits");
+			panel5b.add(baseCheckBox);
+			
+			baseTextField = new JTextField(5);
+			panel5b.add(new JLabel("Reset %", SwingConstants.TRAILING));
+			baseTextField.setToolTipText("<HTML>(-1 to disable)(Likely to be used when using unit locking w/o mini campaigns)<br> Example: if set to 70 -> if 70 percent of the players units are locked all units unlock without ending the cycle. Injections will NOT occur.  </HTML>");
+			baseTextField.setName("UnlockUnits_Percentage");
+			panel5b.add(baseTextField);
+			
+			baseCheckBox = new JCheckBox("Remove BV");
+			baseCheckBox.setToolTipText("<HTML> With this set, Locked units do NOT count towards hangar BV calculations. Injections WILL occur due to locked units. </HTML>");
+			baseCheckBox.setName("LockedUnits_RemoveBV");
+			panel5b.add(baseCheckBox);
+			
+			baseCheckBox = new JCheckBox("1 Match Only");
+			baseCheckBox.setToolTipText("<HTML> With this set, units only stayed locked for one match. Likely to be used without mini campaigns. </HTML>");
+			baseCheckBox.setName("LockUnits_ForOneFightOnly");
+			panel5b.add(baseCheckBox);
+			
 								
 			panel4.add(panel4a);
 			panel4.add(panel4b);
 			panel4.add(panel4c);
 			panel4.add(panel4d);
-			panel4.add(panel4e);
+			//panel4.add(panel4e);
 			panel4.add(panel4f);
+			panel5.add(panel5a);
+			panel5.add(panel5b);
 
 			add(panel0);
 			add(panel4);
+			add(panel5);
 
 	}
 }

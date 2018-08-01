@@ -26,7 +26,7 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import client.MWClient;
-
+import common.VerticalLayout;
 import common.util.SpringLayoutHelper;
 
 public class FactionPanel extends JPanel {
@@ -65,7 +65,7 @@ public class FactionPanel extends JPanel {
 		//@Salient adding option to give new player starting Flu
 		baseTextField = new JTextField(5);
 		factionSpring1.add(new JLabel("Starting "+ mwclient.getserverConfigs("FluShortName") + ":", SwingConstants.TRAILING));
-		baseTextField.setToolTipText("Number of "+ mwclient.getserverConfigs("FluLongName") +" given to a new SOL player. Note that 50 is hard coded in when you set this value. -50 is 0.");
+		baseTextField.setToolTipText("Number of "+ mwclient.getserverConfigs("FluLongName") +" given to a new SOL player.");
 		baseTextField.setName("PlayerBaseFlu");
 		factionSpring1.add(baseTextField);
 
@@ -132,12 +132,6 @@ public class FactionPanel extends JPanel {
         factionSpring1.add(new JLabel("Scraps Allowed:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("Number of scraps players are allowed each tick.");
         baseTextField.setName("ScrapsAllowed");
-        factionSpring1.add(baseTextField);
-        baseTextField = new JTextField(5);
-
-        factionSpring1.add(new JLabel("Max MOTD Length:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("Max number of characters allowed in the MOTD.");
-        baseTextField.setName("MaxMOTDLength");
         factionSpring1.add(baseTextField);
 
 
@@ -222,6 +216,12 @@ public class FactionPanel extends JPanel {
         baseTextField.setToolTipText("<html>Integer Field, Access Level given to a player when they are promoted to the faction leadership<br>NOTE: if their access level is already higher then this it will not be changed.</html>");
         baseTextField.setName("factionLeaderLevel");
         factionSpring2.add(baseTextField);
+        
+        baseTextField = new JTextField(5);
+        factionSpring2.add(new JLabel("Max MOTD Length:", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("Max number of characters allowed in the MOTD.");
+        baseTextField.setName("MaxMOTDLength");
+        factionSpring2.add(baseTextField);
 
         SpringLayoutHelper.setupSpringGrid(factionSpring2, 2);
 
@@ -256,15 +256,17 @@ public class FactionPanel extends JPanel {
         SpringLayoutHelper.setupSpringGrid(factionCBoxSpring, 3);
         
         //SubFaction Options
+        JPanel subFactionMain = new JPanel(new VerticalLayout(5, VerticalLayout.CENTER, VerticalLayout.TOP));
+        JPanel subFactionSpring0 = new JPanel();
         JPanel subFactionSpring = new JPanel(new SpringLayout());
         
-        subFactionSpring.setBorder(BorderFactory.createTitledBorder("SubFaction Options"));
+        subFactionMain.setBorder(BorderFactory.createTitledBorder("SubFaction Options"));
 
         baseTextField = new JTextField(5);
-        subFactionSpring.add(new JLabel("Days Between Promotions:", SwingConstants.TRAILING));
+        subFactionSpring0.add(new JLabel("Days Between Promotions:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("<html>Integer Field, How many days a player has to wait before they can be promoted again<br>after their last promotion/demotion.</html>");
         baseTextField.setName("daysbetweenpromotions");
-        subFactionSpring.add(baseTextField);
+        subFactionSpring0.add(baseTextField);
 
         baseCheckBox = new JCheckBox("Auto Promote Sub Factions");
         baseCheckBox.setToolTipText("<html>If checked, a player will be automatically promoted<br>to the next higher sub faction,<br>if they are qualified.</html>");
@@ -298,6 +300,9 @@ public class FactionPanel extends JPanel {
         
         
         SpringLayoutHelper.setupSpringGrid(subFactionSpring, 3);
+        
+        subFactionMain.add(subFactionSpring0);
+        subFactionMain.add(subFactionSpring);
 
         // finalize the layout
         JPanel factionBox = new JPanel();
@@ -307,7 +312,7 @@ public class FactionPanel extends JPanel {
         factionSpringFlow.add(factionSpring2);
         factionBox.add(factionSpringFlow);
         factionBox.add(factionCBoxSpring);
-        factionBox.add(subFactionSpring);
+        factionBox.add(subFactionMain);
 
         add(factionBox);
 	}

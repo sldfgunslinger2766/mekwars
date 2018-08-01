@@ -107,7 +107,7 @@ public class ShortResolver {
     int currentBV = 0;
 
     int loserBV = 0;
-    
+
     int attackerBV = 0;
 
     int buildingsLeft = -1;
@@ -131,7 +131,7 @@ public class ShortResolver {
     private ShortOperation shortOp = null;
 
     boolean nonDestructionMode = false;
-    
+
     private PayoutModifier payoutModifier = new PayoutModifier();
 
     // CONSTRUCTORS
@@ -170,7 +170,7 @@ public class ShortResolver {
         currentBV = 0;
         loserBV = 0;
         attackerBV = 0;
-        
+
         buildingsLeft = -1;
         buildingsDestroyed = 0;
 
@@ -227,7 +227,7 @@ public class ShortResolver {
 
         init(so);
 
-        
+
         // First token is a winner list, deliminted by *'s.
         StringTokenizer winnerTokenizer = new StringTokenizer(reportTokenizer.nextToken(), "*");
 
@@ -298,16 +298,20 @@ public class ShortResolver {
         possibleSalvageFromReport(reportTokenizer, so);
 
 
+        unlockAllPlayerUnits(); //@salient - this is only active if using locked units w/ one fight only option
         /*
          * put together the salvage strings, and move units around. also
          * determine cost of player's salvage. save these costs so they may be
          * used to adjust players' paystrings.
          */
         assembleSalvageStrings(o, so);
-        
+
         handleOperationImpact(o, so);
         
-        checkAllPlayersForRestock(); //@salient - first part of new mini campaign system
+        //removeLockedUnitsFromAllPlayersArmiesMC(); //@salient 
+        
+
+        checkAllPlayersForRestockMC(); //@salient - first part of new mini campaign system
 
     }// end resolveShortAttack
 
@@ -350,7 +354,7 @@ public class ShortResolver {
         processCapturedUnits(so);
 
         repodUnits(so, o);
-        
+
         /*
          * Check to see if this resolves a long operation.
          */
@@ -367,10 +371,10 @@ public class ShortResolver {
         // Set Player Flags as a result of the operation
         String wFlags = o.getValue("WinnerFlags");
         String lFlags = o.getValue("LoserFlags");
-        
+
         StringTokenizer wST = new StringTokenizer(wFlags, "$");
         StringTokenizer lST = new StringTokenizer(lFlags, "$");
-        
+
         while(wST.hasMoreElements()) {
         	StringTokenizer element = new StringTokenizer(wST.nextToken());
         	String flag = element.nextToken();
@@ -390,7 +394,7 @@ public class ShortResolver {
         	if (shouldApply) {
         		for (String cp : so.getWinners().keySet()) {
             		CampaignMain.cm.toUser("PF|SF|" + flag + "|" + value + "|", cp, false);
-            	}	
+            	}
         	}
         }
 
@@ -415,7 +419,7 @@ public class ShortResolver {
         	if (shouldApply) {
         		for (String cp : so.getLosers().keySet()) {
             		CampaignMain.cm.toUser("PF|SF|" + flag + "|" + value + "|", cp, false);
-            	}	
+            	}
         	}
         }
         /*
@@ -623,10 +627,12 @@ public class ShortResolver {
                 winner.addUnit(unit, true);
             }
         }
-        
+
         CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "break " + loserName + "'s units in living/salvagable/dead, etc.");
         possibleSalvageFromInProgressInfo(so, loser);
 
+        unlockAllPlayerUnits(); //@salient - this is only active if using locked units w/ one fight only option
+        
         /*
          * assemble the winner and loser strings, and the final status info
          * string. NOTE: This is where meta-impacts are applied. See method for
@@ -665,7 +671,7 @@ public class ShortResolver {
          * players who are no longer connected, but its not going to kill the
          * server.
          */
-         
+
         CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Unlock all participating armies");
         for (SArmy currA : allArmies.values()) {
             currA.setLocked(false);
@@ -792,8 +798,10 @@ public class ShortResolver {
             CampaignMain.cm.addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
             CampaignMain.cm.postToDiscord(newsFeedBody);
         }
+        
+        // removeLockedUnitsFromAllPlayersArmiesMC(); //@salient
 
-        checkAllPlayersForRestock(); //@salient - first part of new mini campaign system
+        checkAllPlayersForRestockMC(); //@salient - first part of new mini campaign system
 
 		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "check for promotions and then save again?");
         if (winner != null) {
@@ -807,7 +815,7 @@ public class ShortResolver {
             loser.setSave();
         }
 		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "All Done!");
-		
+
 
     }
 
@@ -1280,7 +1288,7 @@ public class ShortResolver {
                 	} else {
                 		techFiringWarning += "You weren't able to pay all of your leased bays. ";
                 		techFiringWarning += (techsLost == 1) ? "One was " : (techsLost + " were ");
-                		techFiringWarning += "repossessed.";                		
+                		techFiringWarning += "repossessed.";
                 	}
                 }
 
@@ -1471,7 +1479,7 @@ public class ShortResolver {
      * possibleSalvageFromDisconnection
      */
     private void assembleSalvageStrings(Operation o, ShortOperation so) {
-    	
+
         // set up the units cost tree and string tree
     	if (null == unitStrings) {
     		unitStrings = new TreeMap<String, String>();
@@ -1515,13 +1523,12 @@ public class ShortResolver {
             }
 
             SUnit currU = owner.getUnit(currEntity.getID());
-            
-            //@salient - mini campaigns lock unit
-        	if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign")
-        	&& CampaignMain.cm.getBooleanConfig("LockUnits"))
+
+            //@salient - unit locking, 'usually' used with mini campaigns
+        	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
         	{
         	    currU.setLocked(true);
-        	    CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+        	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
         	}
 
             // Attacker was able to flee the unit so that means they get to keep
@@ -1601,10 +1608,9 @@ public class ShortResolver {
             String oldOwnerName = currEntity.getOwnerName().toLowerCase();
             SPlayer oldOwner = CampaignMain.cm.getPlayer(oldOwnerName);
             SUnit currU = oldOwner.getUnit(currEntity.getID());
-            
-            //@salient - mini campaigns lock unit
-        	if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign")
-        	&& CampaignMain.cm.getBooleanConfig("LockUnits")
+
+            //@salient - Unit Locking, 'usually' used with mini campaigns
+        	if(CampaignMain.cm.getBooleanConfig("LockUnits")
         	&& CampaignMain.cm.getBooleanConfig("LockSalvagedUnits"))
         	{
         	    currU.setLocked(true);
@@ -2209,7 +2215,7 @@ public class ShortResolver {
      * checked/applied. Some have commented that this is too procedural and not
      * very OO; however, it works. Anyone who cares to beautify the process is
      * more than welcome to do so.
-     * 
+     *
      * @urgru 8.26.05
      */
     private void assembleDescriptionStrings(Operation o, ShortOperation so) {
@@ -2562,13 +2568,13 @@ public class ShortResolver {
                 // save the planet
                 SPlanet target = so.getTargetWorld();
 
-            	Double ratingMultiplier = 1.0;  
+            	Double ratingMultiplier = 1.0;
             	boolean modifyBasedOnPosition = false;
             	boolean alwaysReduceLand = CampaignMain.cm.getBooleanConfig("AlwaysReduceLandTransfer");
                 if (CampaignMain.cm.getBooleanConfig("ModifyOpPayoutByELO") && so.getAllPlayerNames().size() <= 2) { // This will really only work for 2-player games
                 	Double myRating;
                 	Double hisRating;
-                	
+
                 	myRating = so.getWinners().get(so.getWinners().keySet().iterator().next()).getRating();
                 	hisRating = so.getLosers().get(so.getLosers().keySet().iterator().next()).getRating();
                 	if(alwaysReduceLand) {
@@ -2576,8 +2582,8 @@ public class ShortResolver {
                 	} else {
                 		ratingMultiplier = hisRating / myRating;
                 	}
-                	
-                	
+
+
                 	if (ratingMultiplier >= 1.0 && CampaignMain.cm.getBooleanConfig("ModifyOpPayoutByELOForLower")) {
                 		modifyBasedOnPosition = true;
                 	} else if (ratingMultiplier <= 1.0 && CampaignMain.cm.getBooleanConfig("ModifyOpPayoutByELOForHigher")) {
@@ -2606,11 +2612,11 @@ public class ShortResolver {
                             totalConquest += (int) (Math.floor(so.getStartingBV() / conquestBVAdjust));
                         }
                         if (modifyBasedOnPosition) {
-                        	totalConquest = (int)(Math.floor(totalConquest *  (Math.pow(ratingMultiplier, CampaignMain.cm.getDoubleConfig("ModifyOpPayoutByELO_Multiplier"))) + 0.5));                      	
+                        	totalConquest = (int)(Math.floor(totalConquest *  (Math.pow(ratingMultiplier, CampaignMain.cm.getDoubleConfig("ModifyOpPayoutByELO_Multiplier"))) + 0.5));
                         }
-                        
+
                         totalConquest = maybeModifyLandByExperience(totalConquest, so);
-                        
+
                         if (totalConquest > conquestCap) {
                             totalConquest = conquestCap;
                         }
@@ -2824,42 +2830,42 @@ public class ShortResolver {
                                 int maxTotalBVToAward = 0;
                                 int numUnitsAwarded = 0;
                                 int bvAwarded = 0;
-                                
+
                                 if (numUnitsToAward > 0) {
                                 	//Calculate the maxmium BV of a single unit that can be awarded
                                 	//This stops people from trying to capture a Warship with a single ASF
                                 	int bvAwardPercent = o.getIntValue("AttackerAwardFactoryUnitsTakenToPlayerBVPercent");
                                 	int bvMaxAwardPercent = o.getIntValue("AttackerAwardFactoryUnitsTakenToPlayerMaxBVPercent");
                                 	int totalAttackerBV = so.getAttackersBV();
-                                	
+
                                 	maxBVToAward = (int)(((double)totalAttackerBV * (double)bvAwardPercent) / 100D);
                                 	maxTotalBVToAward = (int)(((double)totalAttackerBV * (double)bvMaxAwardPercent) / 100D);
-                                	
+
                                 	CampaignData.mwlog.debugLog("bvAwardPercent -> " + bvAwardPercent);
                                 	CampaignData.mwlog.debugLog("bvMaxAwardPercent -> " + bvMaxAwardPercent);
                                 	CampaignData.mwlog.debugLog("totalAttackerBV -> " + totalAttackerBV);
                                 	CampaignData.mwlog.debugLog("maxBVToAward -> " + maxBVToAward);
                                 	CampaignData.mwlog.debugLog("maxTotalBVToAward -> " + maxTotalBVToAward);
                                 }
-                                
+
                             	StringBuilder sendToPlayerString = new StringBuilder();
-                            	
+
                             	if (null == unitStrings) {
                             		unitStrings = new TreeMap<String, String>();
                             	}
-                            	
+
                                 for (SUnit unit : capturedUnits) {
                                     loserHSUpdates.append(aLoser.getHouseFightingFor().getHSUnitRemovalString(unit));
-                                    
+
                                     boolean sendToPlayer = ((numUnitsToAward > numUnitsAwarded) && (unit.getBaseBV() <= maxBVToAward) && ((bvAwarded + unit.getBaseBV()) <= maxTotalBVToAward));
-                                    
+
                                     if (sendToPlayer) {
                                         String newPilot = handleDeadPilot(aWinner, unit, null, so);
                                         aWinner.addUnit(unit, true);
-                                        
+
                                         numUnitsAwarded++;
                                         bvAwarded += unit.getBaseBV();
-                                        
+
                                         sendToPlayerString.append("Your logistics and procurement officer managed to get you a " + unit.getModelName() + " for your efforts." + newPilot + "<br>");
                                     } else {
                                     	winnerHSUpdates.append(aWinner.getHouseFightingFor().addUnit(unit, false));
@@ -2870,7 +2876,7 @@ public class ShortResolver {
                                 if (sendToPlayerString.length() > 0) {
 	                                // add new pilot info to this unit's string
 	                                String curUS = unitStrings.get(aWinner.getName().toLowerCase());
-	                                
+
 	                                if (null != curUS) {
 	                                	if (curUS.endsWith("<br>")) {
 	                                		curUS = curUS.substring(0, curUS.length() - 4);// remove "<br>"
@@ -2878,7 +2884,7 @@ public class ShortResolver {
 	                                } else {
 	                                	curUS = "";
 	                                }
-	                                
+
 	                                unitStrings.put(aWinner.getName().toLowerCase(), curUS + sendToPlayerString.toString());
                                 }
                                 // setup leadin
@@ -2971,8 +2977,8 @@ public class ShortResolver {
                                 if (!currFacility.canProduce(type)) {
                                     continue;
                                 }
-                                
-                                
+
+
                                 // skip if the operation doesn't allow capturing of this unit type
                                 if (!currFacility.canBeRaided(type, o)) {
                                 	continue;
@@ -2995,12 +3001,12 @@ public class ShortResolver {
                                     	 * than ''ppToCapture', it will still take everything from the factory
                                     	 * eventhough it should only take what it needs to take to fullfil the
                                     	 * capture amount
-                                    	 * 
+                                    	 *
                                     	 * 17 Sept 2011 - Cord Awtry
                                     	 */
-                                    	
+
                                         int toTake = ppToCapture - ppCaptured;
-                                        
+
                                         if (toTake > 0) {
 	                                        if (toTake > ppAvailable) {
 	                                            toTake = ppAvailable;
@@ -3008,12 +3014,12 @@ public class ShortResolver {
 	                                        loserHSUpdates.append(aLoser.getHouseFightingFor().addPP(currWeight, type, -toTake, false));
 	                                        winnerHSUpdates.append(aWinner.getHouseFightingFor().addPP(currWeight, type, toTake, false));
 	                                        ppCaptured += toTake;
-	
+
 	                                        if (hasLoss) {
 	                                            winnerMetaString += ",";
 	                                            loserMetaString += ",";
 	                                        }
-	
+
 	                                        winnerMetaString += " stole " + toTake + " " + Unit.getWeightClassDesc(currWeight) + " " + Unit.getTypeClassDesc(type) + " components";
 	                                        loserMetaString += " lost " + toTake + " " + Unit.getWeightClassDesc(currWeight) + " " + Unit.getTypeClassDesc(type) + " components";
 	                                        hasLoss = true;
@@ -3195,7 +3201,7 @@ public class ShortResolver {
                                         noPP = true;
                                     } else {
                                         int toDestroy = ppToDestroy - ppDestroyed;
-                                        
+
                                         if (toDestroy > 0) {
 	                                        if (toDestroy > ppAvailable) {
 	                                            toDestroy = ppAvailable;
@@ -3204,12 +3210,12 @@ public class ShortResolver {
 	                                        // aWinner.getHouseFightingFor().addPP(currWeight,type,
 	                                        // toTake);
 	                                        ppDestroyed += toDestroy;
-	
+
 	                                        if (hasLoss) {
 	                                            winnerMetaString += ",";
 	                                            loserMetaString += ",";
 	                                        }
-	
+
 	                                        winnerMetaString += " destroyed " + toDestroy + " " + Unit.getWeightClassDesc(currWeight) + " " + Unit.getTypeClassDesc(type) + " components";
 	                                        loserMetaString += " lost " + toDestroy + " " + Unit.getWeightClassDesc(currWeight) + " " + Unit.getTypeClassDesc(type) + " components";
 	                                        hasLoss = true;
@@ -3245,11 +3251,11 @@ public class ShortResolver {
                         if (totalConquest > conquestCap) {
                         }
                         if (modifyBasedOnPosition) {
-                        	totalConquest = (int)(Math.floor(totalConquest *  (Math.pow(ratingMultiplier, CampaignMain.cm.getDoubleConfig("ModifyOpPayoutByELO_Multiplier"))) + 0.5));                      	
+                        	totalConquest = (int)(Math.floor(totalConquest *  (Math.pow(ratingMultiplier, CampaignMain.cm.getDoubleConfig("ModifyOpPayoutByELO_Multiplier"))) + 0.5));
                         }
-                        
+
                         totalConquest = maybeModifyLandByExperience(totalConquest, so);
-                        
+
                         if (totalConquest > conquestCap) {
                             totalConquest = conquestCap;
                         }
@@ -3487,7 +3493,7 @@ public class ShortResolver {
             int gyroedScrapChance = o.getIntValue("GyroedUnitsScrappedChance");
 
 			String errorUnit = ""; // Will be used to inform the mods of the errors we're getting.  Temporary.
-			
+
             try {
                 // loop through all units in the string
                 while (reportTokenizer.hasMoreTokens()) {
@@ -3495,7 +3501,7 @@ public class ShortResolver {
                     String currentUnit = reportTokenizer.nextToken();
                     // We're getting errors in this module.  Let's find out why
                     errorUnit = currentUnit;
-                    //CampaignData.mwlog.errLog("Testing unit: " + currentUnit); 
+                    //CampaignData.mwlog.errLog("Testing unit: " + currentUnit);
 
                     // MechWarrior
                     if (currentUnit.startsWith("MW*")) {
@@ -3835,11 +3841,11 @@ public class ShortResolver {
             	 * to get the type, we should be able to get it from the passed in unit. But instead of
             	 * re-factoring all the calls to this, we'll just default to the unit's type and
             	 * override it with the entity's type if one exists
-            	 * 
+            	 *
             	 * Aug 5, 2011 - Cord Awtry
             	 */
             	int entityType = unit.getType();
-            	
+
             	if (null != entity) {
             		entityType = entity.getType();
             	}
@@ -4723,26 +4729,26 @@ public class ShortResolver {
     	if (!CampaignMain.cm.getBooleanConfig("ModifyLandExchangeByExp")) {
     		return land;
     	}
-    	
+
     	// This will only work for 2-player games
     	if (so.getAllPlayerNames().size() > 2) {
     		return land;
     	}
-    	
+
     	// If it's a non-land game, don't bother calculating
     	if (land == 0) {
     		return land;
     	}
-    	
+
     	int base = CampaignMain.cm.getIntegerConfig("ModifyLandExchangeByExp_Base");
     	int maximum = CampaignMain.cm.getIntegerConfig("ModifyLandExchangeByExp_Max");
 
     	int attackerExp = CampaignMain.cm.getPlayer(so.getAttackers().firstKey()).getExperience();
     	int defenderExp = CampaignMain.cm.getPlayer(so.getDefenders().firstKey()).getExperience();
-    	
+
     	double aMult = Math.min(1.0, ( (double) (base + attackerExp))/ (double) maximum);
     	double dMult = Math.min(1.0, ( (double) (base + defenderExp))/ (double) maximum);
-//    	
+//
 //    	CampaignData.mwlog.debugLog("maybeModifyLandByExperience:");
 //    	CampaignData.mwlog.debugLog(" --> base: " + base);
 //    	CampaignData.mwlog.debugLog(" --> maximum: " + maximum);
@@ -4751,31 +4757,53 @@ public class ShortResolver {
 //    	CampaignData.mwlog.debugLog(" --> defenderExp: " + defenderExp);
 //    	CampaignData.mwlog.debugLog(" --> dMult: " + dMult);
 //    	CampaignData.mwlog.debugLog(" --> Initial Land: " + land);
-    	
+
     	land *= (aMult * dMult);
     	CampaignData.mwlog.debugLog(" --> Final Land: " + land);
-    	
+
     	return land;
     }
-    
+
 	/**
 	 * @salient - added for mini campaigns
 	 * If enabled, this will check SO's for appropriate currency injection if the player's hangar BV has been reduced
 	 * to a certain BV.
 	 */
-	private void checkAllPlayersForRestock() 
+	private void checkAllPlayersForRestockMC()
 	{
-        if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign"))
-        {
-        	for(SPlayer player : allPlayers.values())
-        	{
-        		player.checkHangarRestock();
-        	}
-        }
+    	for(SPlayer player : allPlayers.values())
+    	{
+    		player.checkHangarRestockMC();
+    	}
 	}
 	
+//	/**  
+//	 * @salient - added for mini campaigns / locked units
+//	 * If unit locking is enabled, it will remove those locked units from their armies
+//	 */
+//	private void removeLockedUnitsFromAllPlayersArmiesMC()
+//	{
+//    	for(SPlayer player : allPlayers.values())
+//    	{
+//    		player.removeLockedUnitsFromArmiesMC(); // <--- isnt working
+//    	}
+//	}
 	
-    
+	/**
+	 * @salient - added for locked units
+	 * Likely to be used when using locked units without mini campaigns
+	 */
+	private void unlockAllPlayerUnits()
+	{
+    	for(SPlayer player : allPlayers.values())
+    	{
+    		if(player.getMyHouse().getBooleanConfig("LockUnits_ForOneFightOnly"))
+    			player.unlockAllUnitsMC();
+    	}
+	}
+
+
+
     private void removePreCaptured(ShortOperation so, int unitId) {
         synchronized (so.preCapturedUnits) {
 			for (int pos = 0; pos < so.preCapturedUnits.size(); pos++) {
