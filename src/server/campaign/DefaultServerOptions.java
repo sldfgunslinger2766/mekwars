@@ -1396,6 +1396,7 @@ public class DefaultServerOptions {
         defaults.setProperty("Link3_Icon", "./data/images/misc/facebook.png");
         //---Bot Options---
         defaults.setProperty("Enable_Bot_Chat", "false");
+        defaults.setProperty("Enable_BotPlayerInfo", "false");
         defaults.setProperty("Bot_Buffer_Location", "./data/allchatforbot.txt");
         //---Subfaction Options---
         defaults.setProperty("Enforce_Subfaction_Factory_Access", "false");
@@ -1425,11 +1426,14 @@ public class DefaultServerOptions {
         defaults.setProperty("RestockRP_LeewayPercentage", "-1");
         defaults.setProperty("RestockFLU_LeewayPercentage", "-1");
         defaults.setProperty("RestockMT_LeewayPercentage", "-1");
+        //ignore types
+        defaults.setProperty("IgnoreAeroBV", "false");
         //lock units
         defaults.setProperty("LockUnits", "false");
         defaults.setProperty("LockSalvagedUnits", "false");
         defaults.setProperty("UnlockUnits_Percentage", "-1");
         defaults.setProperty("LockedUnits_RemoveBV", "false");
+        defaults.setProperty("LockedUnits_DecrementUnitCount", "false");
         defaults.setProperty("LockUnits_ForOneFightOnly", "false");
         //MC Misc Options
         defaults.setProperty("AtUnitLimitsMC", "false");

@@ -1674,9 +1674,10 @@ public final class CampaignMain implements Serializable {
         Commands.put("RETRIEVEALLMULS", new RetrieveAllMulsCommand());
         Commands.put("RETIREPILOT", new RetirePilotCommand());
         Commands.put("SALVAGEUNIT", new SalvageUnitCommand());
+        Commands.put("SAVETOJSON", new SPlayerToJsonCommand()); //@salient - for discord bot
         Commands.put("SCRAP", new ScrapCommand());
         Commands.put("SENDCLIENTDATA", new SendClientDataCommand());
-        Commands.put("SELFPROMOTE", new SelfPromoteCommand()); //@salient
+        Commands.put("SELFPROMOTE", new SelfPromoteCommand()); //@salient - for subfactions
         Commands.put("SELL", new SellCommand());
         Commands.put("SELLBAYS", new SellBaysCommand());
         Commands.put("SENDTOMISC", new SendToMiscCommand());
@@ -1738,6 +1739,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("TRANSFERUNIT", new TransferUnitCommand());
         Commands.put("TRANSFERINFLUENCE", new TransferInfluenceCommand()); //@salient
         Commands.put("TRANSFERREWARDPOINTS", new TransferRewardPointsCommand());
+        Commands.put("UPDATEDISCORDINFO", new UpdateDiscordInfoCommand());
         Commands.put("UPDATEOPERATIONS", new UpdateOperationsCommand());
         Commands.put("UPDATESERVERUNITSCACHE", new UpdateServerUnitsCacheCommand());
         Commands.put("UPLOADMUL", new UploadMulCommand());

@@ -2683,33 +2683,42 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
 
         salvageBox.add(attackerBox);
         salvageBox.add(defenderBox);
+        //masterBox.add(salvageBox);
 
         BaseCheckBox = new JCheckBox("Attacker Salvages Own Units");
         BaseCheckBox.setToolTipText("if true attacker gets all his salvageables");
         BaseCheckBox.setName("AttackerAlwaysSalvagesOwnUnits");
         masterBox.add(BaseCheckBox);
-        masterBox.add(salvageBox);
+
 
         BaseCheckBox = new JCheckBox("Winner Salvages Own Units");
         BaseCheckBox.setToolTipText("if true winner gets all his salvageables");
         BaseCheckBox.setName("WinnerAlwaysSalvagesOwnUnits");
         masterBox.add(BaseCheckBox);
-        masterBox.add(salvageBox);
+        //masterBox.add(salvageBox);
 
         BaseCheckBox = new JCheckBox("Defender Salvages Own Units");
         BaseCheckBox.setToolTipText("if true defender gets all his salvageables");
         BaseCheckBox.setName("DefenderAlwaysSalvagesOwnUnits");
         masterBox.add(BaseCheckBox);
-        masterBox.add(salvageBox);
+        //masterBox.add(salvageBox);
 
         BaseCheckBox = new JCheckBox("Support Units Go To Salvage Pool");
         BaseCheckBox.setToolTipText("if true support units, arty, mul armies, and others go to the salvage pool instead of going away");
         BaseCheckBox.setName("SupportUnitsAreSalvageable");
         masterBox.add(BaseCheckBox);
-        masterBox.add(salvageBox);
+        //masterBox.add(salvageBox);
+
+        BaseCheckBox = new JCheckBox("Destroy All Salvage");
+        BaseCheckBox.setToolTipText("move salvage list to the destroyed list, effectively causing all salvage to be destroyed");
+        BaseCheckBox.setName("DestroyAllSalvage");
+        masterBox.add(BaseCheckBox);
+        //masterBox.add(salvageBox);
 
         SpringLayoutHelper.setupSpringGrid(masterBox, 2);
+        salvagePanel.setLayout(new VerticalLayout(5, VerticalLayout.CENTER, VerticalLayout.TOP));
         salvagePanel.add(masterBox);
+        salvagePanel.add(salvageBox);
 
         /*
          * Newbie Operations

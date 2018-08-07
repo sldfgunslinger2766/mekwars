@@ -84,7 +84,7 @@ public class DefaultOperation {
          * PercentageToAttackOnWorld   - % required to launch an attack on-planet
          * PercentageToAttackOffWorld  - % required to launch an attack off-planet
          * MinPlanetOwnership          - % a faction must own for world to be legal target     - AFC=235
-         * MinPlanetOwnershipIgnoredByDefender - if partially owned and MinPlanetOwnership>0 then MinPlanetOwnership will be ignored for the defender's legibility for the op //Baruk Khazad! - 20151003  
+         * MinPlanetOwnershipIgnoredByDefender - if partially owned and MinPlanetOwnership>0 then MinPlanetOwnership will be ignored for the defender's legibility for the op //Baruk Khazad! - 20151003
          * MaxPlanetOwnership          - If faction owns > max %, world is not a legal target  - AFC=236
          * OnlyAgainstHomeWorlds       - Limit attack to planets that are homeworlds
          * OnlyAgainstNonHomeWorlds    - Limit attack to planets that are not homeworlds
@@ -106,7 +106,7 @@ public class DefaultOperation {
          * AttackerBriefing            - Message attacking player receives when launching
          * DefenderBriefing            - Message defending player receives when launching
          * AutoresolveBattle           - Determines if the battle is played with megamek or autoresolved
-         *          
+         *
          * NOTE: Colours are HTML hexidecimal. Keywords cannot be used. # must
          *       lead the string or massive fuck-ups will ensue.
          *
@@ -130,7 +130,7 @@ public class DefaultOperation {
         operationsDefaults.put("PercentageToAttackOnWorld", "50");// own or push to attack
         operationsDefaults.put("PercentageToAttackOffWorld", "50");// own or push to attack
         operationsDefaults.put("MinPlanetOwnership", "0");// attack anywhere
-        operationsDefaults.put("MinPlanetOwnershipIgnoredByDefender", "false");//Baruk Khazad! - 20151003 
+        operationsDefaults.put("MinPlanetOwnershipIgnoredByDefender", "false");//Baruk Khazad! - 20151003
         operationsDefaults.put("MaxPlanetOwnership", "100");// attack anywhere
         operationsDefaults.put("OnlyAgainstHomeWorlds", "false");
         operationsDefaults.put("OnlyAgainstNonHomeWorlds", "false");
@@ -970,7 +970,7 @@ public class DefaultOperation {
         operationsDefaults.put("MinDefenderAeroPercent", "0");
         operationsDefaults.put("MaxAttackerAeroPercent", "100");
         operationsDefaults.put("MinAttackerAeroPercent", "0");
-        
+
         operationsDefaults.put("MaxAttackerNonInfantry", "10000000");
         operationsDefaults.put("MinAttackerNonInfantry", "0");
         operationsDefaults.put("MaxDefenderNonInfantry", "10000000");
@@ -1214,7 +1214,7 @@ public class DefaultOperation {
 
         operationsDefaults.put("AttackerPayBVforRP", "0");
         operationsDefaults.put("DefenderPayBVforRP", "0");
-        
+
         operationsDefaults.put("AttackerWinModifierCBillsFlat", "0");
         operationsDefaults.put("DefenderWinModifierCBillsFlat", "0");
         operationsDefaults.put("AttackerLossModifierCBillsFlat", "0");
@@ -1259,6 +1259,8 @@ public class DefaultOperation {
         operationsDefaults.put("SupportUnitsAreSalvageable", "false");
         operationsDefaults.put("DefenderAlwaysSalvagesOwnUnits", "false");
         operationsDefaults.put("AttackerAlwaysSalvagesOwnUnits", "false");
+
+        operationsDefaults.put("DestroyAllSalvage", "false"); //@salient
 
         operationsDefaults.put("BaseAttackerSalvagePercent", "50");
         operationsDefaults.put("BaseDefenderSalvagePercent", "50");
@@ -1590,15 +1592,15 @@ public class DefaultOperation {
         operationsDefaults.put("LPlayerLaunchExp", "0");
 
         operationsDefaults.put("LPlayerLaunchMezzo", "0");
-        
+
         operationsDefaults.put("IgnorePilotsForBVSpread", "false");
-        
+
         operationsDefaults.put("UseClanEquipmentRatios", "false");
         operationsDefaults.put("AttackerMaxClanEquipmentPercent", "100.0");
         operationsDefaults.put("AttackerMinClanEquipmentPercent", "0.0");
         operationsDefaults.put("DefenderMaxClanEquipmentPercent", "100.0");
         operationsDefaults.put("DefenderMinClanEquipmentPercent", "0.0");
-        
+
         operationsDefaults.put("CountSupportUnits", "True");
         operationsDefaults.put("MinAttackerSupportUnits", "0");
         operationsDefaults.put("MaxAttackerSupportUnits", "999");
@@ -1615,8 +1617,8 @@ public class DefaultOperation {
         operationsDefaults.put("MaxAttackerNonSupportUnits", "999");
         operationsDefaults.put("MinDefenderNonSupportUnits", "0");
         operationsDefaults.put("MaxDefenderNonSupportUnits", "999");
-        
-        
+
+
         // Flags
         operationsDefaults.put("AttackerFlags", "");
         operationsDefaults.put("DefenderFlags", "");
