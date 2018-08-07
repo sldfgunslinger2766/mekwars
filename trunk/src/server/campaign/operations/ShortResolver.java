@@ -297,8 +297,9 @@ public class ShortResolver {
         // break units in living/salvagable/dead, etc.
         possibleSalvageFromReport(reportTokenizer, so);
 
-
-        unlockAllPlayerUnits(); //@salient - this is only active if using locked units w/ one fight only option
+        //@salient - this is only active if using locked units w/ one fight only option
+        unlockAllPlayerUnits();
+        
         /*
          * put together the salvage strings, and move units around. also
          * determine cost of player's salvage. save these costs so they may be
@@ -1500,6 +1501,13 @@ public class ShortResolver {
             destroyedUnits.clear();
             pilots.clear();
         }
+        
+        //@salient added operation option for gunny.. idea being maximize unit turnover
+        if (o.getBooleanValue("DestroyAllSalvage"))
+        {
+        	destroyedUnits.putAll(salvagableUnits);
+        	salvagableUnits.clear();
+        }
 
         /*
          * First, dispose of the living units. Iterate through the survivors,
@@ -1614,7 +1622,7 @@ public class ShortResolver {
         	&& CampaignMain.cm.getBooleanConfig("LockSalvagedUnits"))
         	{
         	    currU.setLocked(true);
-        	    CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+        	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
         	}
 
             // apply battle damage if there is any to be applied.
@@ -2125,7 +2133,7 @@ public class ShortResolver {
         }// end foreach(savlageable unit)
 
         /*
-         * Finally, and most pleasuably, we get to DESTROY things!
+         * Finally, and most pleasurably, we get to DESTROY things!
          */
         for (OperationEntity currEntity : destroyedUnits.values()) {
 

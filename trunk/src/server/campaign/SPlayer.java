@@ -16,6 +16,7 @@
 
 package server.campaign;
 
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -51,6 +52,10 @@ import common.util.TokenReader;
 import common.util.UnitComponents;
 import common.util.UnitUtils;
 
+
+
+//import org.json.simple.JSONObject;
+
 /**
  * A class representing a Player DOCU is not finished
  *
@@ -75,26 +80,19 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private static final String RESTOCK_MC = "restockmc"; //@salient for minicampaigns
     private static final String ACTIVE_MC = "activemc"; //@salient for minicampaigns
 
-
     // DATA VARIABLES (SAVED. Most have gets and sets.)
     private String name = "";
     private String fluffText = "";
     private String myLogo = "";
     private String lastISP = "";
 
-    //@salient , I foresee mini campaigns becoming ever more complex
-    //this section will contain strings to be saved together as a
-    //serialized message embedded into the player save.
-    private String phaseMC = ACTIVE_MC;
-
     private int money = 0;
     private int experience = 0;
     private int influence = 0; //@salient - changed from 50 to 0, starting flu can be set in SO faction.
-    private int currentReward = 0; // number of rewards a player has.
+    private int rewardPoints = 0; // number of rewards a player has. //@salient changed name to rewardPoints
     private int xpTillReward = 0; // counter until next RP injection triggered by XP gains, see XPRollOverCap in server options
     private int xpTillFlu = 0; // @ Salient , same as above. counter until next flu injection triggered by XP gains.
     private int groupAllowance = 0;
-
     private int technicians = 0;// @urgru 7/17/04
     private int baysOwned = 0;
     private int currentTechPayment = -1;// num Cbills owed to techs after game
@@ -105,7 +103,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
     private Vector<SUnit> units = new Vector<SUnit>(1, 1);
     private Vector<SArmy> armies = new Vector<SArmy>(1, 1);
-
     private Vector<Integer> totalTechs = new Vector<Integer>(4, 1);
     private Vector<Integer> availableTechs = new Vector<Integer>(4, 1);
 
@@ -113,6 +110,15 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private ExclusionList exclusionList = new ExclusionList();
 
     // SEMI-PERMANENT VARIABLES. Not saved to String.
+    
+    //@salient , I foresee mini campaigns becoming ever more complex
+    //this section will contain strings to be saved together as a
+    //serialized message embedded into the player save.
+    private String phaseMC = ACTIVE_MC;
+    //Same goes for discord Info for use by bot
+    private String discordID = ""; //@salient will be set by DiscordInfo
+
+    
     private int scrapsThisTick = 0;
     private int donationsThisTick = 0;
 
@@ -134,7 +140,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private UnitComponents unitParts = new UnitComponents();
 
     private int DBId = 0;
-    private int forumID = 0;
+    private int forumID = 0; 
     private boolean userValidated = false;
 
     boolean isLoading = false; // Player was getting saved multiple times
@@ -143,7 +149,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     // issues.
 
     private String subFaction = "";
-
+    
     private long lastPromoted = 0;
 
     public volatile int leechCount = 0;
@@ -1287,7 +1293,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         totalTechs.clear();
         technicians = 0;
         fluffText = " ";
-        currentReward = 0;
+        rewardPoints = 0;
         groupAllowance = 0;
         influence = 0;
         myHouse = CampaignMain.cm.getHouseFromPartialString(getMyHouse().getConfig("NewbieHouseName"), null);
@@ -1602,6 +1608,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     {
         int bv = 0;
         boolean removeLockedBV = getMyHouse().getBooleanConfig("LockedUnits_RemoveBV");
+        boolean ignoreAeroBV = getMyHouse().getBooleanConfig("IgnoreAeroBV");
 
         for (SUnit currU : units)
         {
@@ -1609,12 +1616,18 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             {
             	if(currU.isLocked() == false) //if unit is locked, ignore it
             	{
-            		bv += currU.getBVForMatch();
+            		if(ignoreAeroBV && currU.getType() == 5) // ignore aero units
+            			continue;
+            		else
+            			bv += currU.getBVForMatch();           			
             	}
             }
-            else
+            else // add up all unit bv
             {
-            	bv += currU.getBVForMatch();
+        		if(ignoreAeroBV && currU.getType() == 5) // ignore aero units
+        			continue;
+        		else
+        			bv += currU.getBVForMatch();
             }
         }
 
@@ -1879,9 +1892,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         	return false;
         }
 
-        if ( minUnitLimit != -1  && getUnitCount() < minUnitLimit )
+        if ( minUnitLimit != -1  && getUnitCountMC() < minUnitLimit )
         {
-        	toSelf("AM: To go active you must raise your hangar Unit Count! You have " + getUnitCount()
+        	toSelf("AM: To go active you must raise your hangar Unit Count! You have " + getUnitCountMC()
         		+ " and need at least " + minUnitLimit + " to go active!");
         	return false;
         }
@@ -1958,7 +1971,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
 		if ( minUnitLimit != -1 )
 		{
-			toSelf("AM: Current Unit Count: " + getUnitCount());
+			toSelf("AM: Current Unit Count: " + getUnitCountMC());
 			toSelf("AM: Next mini campaign cycle will if your Unit Count falls below " + minUnitLimit);
 		}
 
@@ -2043,24 +2056,24 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	refreshGUI();
     	toSelf("AM: Units have been unlocked!");
     }
-    
-// doesnt work, dunno why...
+
+// doesnt work, dunno why... might work, just didn't work in shortresolver?
 //    //@salient
 //    public void removeLockedUnitsFromArmiesMC()
 //    {
 //    	if(!getMyHouse().getBooleanConfig("LockUnits"))
 //    		return;
-//    	
+//
 //    	getLockedArmy();
-//        for (SArmy army : getArmies()) 
-//        {       	
+//        for (SArmy army : getArmies())
+//        {
 //        	for (Unit aUnit : army.getUnits())
 //        	{
 //        		if(aUnit.isLocked())
 //        			army.removeUnit(aUnit.getId());
 //        	}
 //        }
-//    	
+//
 //    	refreshGUI();
 //    	toSelf("AM: Locked Units Removed From Army!");
 //    }
@@ -2121,6 +2134,26 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	int resetPt = getMyHouse().getIntegerConfig("Unit_HangarRestock");
     	return resetPt;
     }
+    
+    // -- DISCORD BOT DATA SAVE/LOAD --
+    private String saveDiscordInfo()
+    {
+    	SerializedMessage result = new SerializedMessage("&");
+    	result.append(discordID);
+    	return result.toString();
+    }
+    
+    private void loadDiscordInfo(String data)
+    {
+    	StringTokenizer st = new StringTokenizer(data, "&");
+    	if(st.hasMoreTokens())
+    	{
+    		discordID = TokenReader.readString(st);
+    	}    	
+    	else
+    		CampaignData.mwlog.errLog("loadDiscordInfo failed! no token available!");
+    }
+
 
     //@salient
     public void removeCurrency()
@@ -2462,6 +2495,21 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         name = s;
         setSave();
     }
+    
+    public String getDiscordID() {
+        return discordID;
+    }
+    
+    public void setDiscordID(String _discordID) 
+    {
+        if ( _discordID == null || _discordID == "" ) 
+        {
+        	toSelf("AM:You must enter a discord ID to set!");
+            return;
+        }
+        discordID = _discordID;
+        setSave();
+    }
 
     public SArmy getArmy(int id) {
 
@@ -2503,6 +2551,25 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     //@salient
     public int getUnitCount() {
         return units.size();
+    }
+    
+    //@salient - includes SO check to count only unlocked units LockedUnits_DecrementUnitCount
+    private int getUnitCountMC() 
+    {
+    	if(getMyHouse().getBooleanConfig("LockedUnits_DecrementUnitCount"))
+    	{
+	    	int count = 0;
+	    	for(SUnit aUnit : units)
+	    	{
+	    		if(aUnit.isLocked() == false)
+	    			count++;
+	    	}
+	    	return count;
+    	}
+    	else
+    	{
+    		return units.size();    		
+    	}
     }
 
     // Comparable
@@ -2689,21 +2756,21 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
     // get current amount of reward points a player has
     public int getReward() {
-        return currentReward;
+        return rewardPoints;
     }
 
     // set the current amount of reward points a player has.
     public void setReward(int i) {
-        currentReward = i;
-        if (currentReward > (Integer.parseInt(getMyHouse().getConfig("XPRewardCap")))) {
-            currentReward = (Integer.parseInt(getMyHouse().getConfig("XPRewardCap")));
+        rewardPoints = i;
+        if (rewardPoints > (Integer.parseInt(getMyHouse().getConfig("XPRewardCap")))) {
+            rewardPoints = (Integer.parseInt(getMyHouse().getConfig("XPRewardCap")));
         }
 
-        if (currentReward < 0) {
-            currentReward = 0;
+        if (rewardPoints < 0) {
+            rewardPoints = 0;
         }
 
-        CampaignMain.cm.toUser("PL|SRP|" + currentReward, name, false);
+        CampaignMain.cm.toUser("PL|SRP|" + rewardPoints, name, false);
         setSave();
     }
 
@@ -3157,7 +3224,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     // TOSTRING AND FROMSTRING METHODS
-    // salient - "Seems like instead of a boolean, this should be two separate methods.
+    // @salient - "Seems like instead of a boolean, this should be two separate methods.
     //            One for client. one for server."
     /*
      * These would normally be under the "methods" heading; however, they're so
@@ -3224,7 +3291,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             result.append(technicians);// used when saving to houses.dat
         }
         // above is used when sending to client bad hack but needed for now
-        result.append(currentReward); // saving current reward points
+        result.append(rewardPoints); // saving current reward points
         /*
          * In older code, player's price modifier (mezzo) was saved here. This
          * feature has been eliminated, and the spaces can be reclaimed. @urgru
@@ -3248,7 +3315,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         } else {
             result.append(xpTillReward);
             result.append(getBVTracker()); //@Salient for mini campaigns
-            //result.append("0"); //@Salient the code i replaced
             result.append(getPersonalPilotQueue().toString(toClient));
             result.append(getExclusionList().adminExcludeToString("$"));
             result.append(getExclusionList().playerExcludeToString("$"));
@@ -3300,9 +3366,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             result.append(getLastPromoted());
         }
         result.append(exportFlags().length() > 1 ? exportFlags() : CampaignMain.cm.getDefaultPlayerFlags().export());
+        result.append(saveDiscordInfo()); //@salient adding new field to save
         return result.getMessage();
     }
-
+    
     /**
      * @author jtighe
      * @param s
@@ -3375,22 +3442,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             fluffText = TokenReader.readString(ST).trim();
 
-            /*
-             * This space used to be occupied by player-set game options. Do not
-             * use the node until we're sure all servers have reset and removed
-             * any residual data. For now, we'll READ the data correctly, but
-             * write out 0's during all saves. At some point in the future,
-             * we'll be able to fully reclaim this space.
-             */
-
-            // int numberOfOptions = TokenReader.readInt(ST);
-            // for (int i = 0; i < numberOfOptions; i++) {
-            //     TokenReader.readString(ST);// eat the option's Description
-            //     // token
-            //     TokenReader.readString(ST);// eat the options Setting token
-            // }
-
-            //@Salient i've reclaimed it for xp till flu injection
+            //@Salient i've reclaimed unused token for xp till flu injection
             setXpTillFlu(TokenReader.readInt(ST));
 
             if (CampaignMain.cm.isUsingAdvanceRepair()) {
@@ -3408,15 +3460,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 technicians = (mt != -1) ? Math.min(te, mt) : te;
             }
 
-            currentReward = TokenReader.readInt(ST);
+            rewardPoints = TokenReader.readInt(ST);
 
-            /*
-             * Eat the next token. Formerly used to save mezzo data. Can be
-             * reclaimed soon-ish, as no server used the feature. @urgru 9/30/06
-             */
-
-            // TODO: Remove this after the next few updates from 0.1.51.2
-            //@salient reclaiming this for mini campaign data
+            //@salient reclaimed token for mini campaign data
             loadStatusMC(TokenReader.readString(ST));
 
             setMekToken(TokenReader.readInt(ST));
@@ -3519,7 +3565,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             		flags.loadPersonal(flagString);
             	}
             }
-
+            
+            if (ST.hasMoreTokens()) //@salient... i sure hope this doesnt break anything
+            	loadDiscordInfo(TokenReader.readString(ST));
 
             if ((password != null) && (password.getPasswd().trim().length() <= 2)) {
                 password.setAccess(IAuthenticator.GUEST);

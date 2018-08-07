@@ -24,7 +24,7 @@ import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.operations.OperationManager;
 import server.campaign.util.scheduler.MWScheduler;
-
+import server.util.SPlayerToJSON;
 import common.CampaignData;
 import common.Unit;
 import common.campaign.operations.Operation;
@@ -258,10 +258,16 @@ public class ActivateCommand implements Command {
         if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign"))
         {
         	//handles all checks, resets currency, and msgs to player
-	        if(!p.canActivateForMiniCampaign())
+	        if(p.canActivateForMiniCampaign() == false)
 	        {
 	        	return;
 	        }
+        }
+        
+        if(CampaignMain.cm.getBooleanConfig("Enable_BotPlayerInfo"))
+        {
+        	//update json file for this player (used with discord bot)
+        	SPlayerToJSON.writeToFile(p);
         }
         
         

@@ -166,22 +166,27 @@ public class LinksPanel extends JPanel {
 		panel4.add(panel4a);
 		panel4.add(panel4b);
 		
-		panel5.setLayout(new FlowLayout(FlowLayout.CENTER));
-		panel5a.setLayout(new GridLayout(2,1,0,5));
-		panel5b.setLayout(new GridLayout(2,1));
+		panel5.setLayout(new VerticalLayout(5, VerticalLayout.CENTER, VerticalLayout.TOP));
 		panel5.setBorder(BorderFactory.createTitledBorder("Bot Panel"));
 		
-		baseCheckBox = new JCheckBox("Enable Bot Chat");
+		baseCheckBox = new JCheckBox("Enable Bot Data Capture");
+		baseCheckBox.setToolTipText("<HTML>This allows the saving of player data to a JSON file for the discord bot to read from</HTML>");
+		baseCheckBox.setName("Enable_BotPlayerInfo");
+		panel5a.add(baseCheckBox);
+
+		
+		baseCheckBox = new JCheckBox("Enable Bot Chat Capture");
+		baseCheckBox.setToolTipText("<HTML>Logs all chat to a file which the discord bot can read from</HTML>");
 		baseCheckBox.setName("Enable_Bot_Chat");
 		panel5a.add(baseCheckBox);
-		panel5b.add(new JLabel(""));
+
 
 		baseLabel = new JLabel("Chat Buffer Location:");
 		baseLabel.setHorizontalAlignment(JLabel.RIGHT);
 		baseTextField = new JTextField(30);
 		baseTextField.setToolTipText("<HTML>Location of file to use with bot, the code 'should' generate this file if it does not exit </HTML>");
 		baseTextField.setName("Bot_Buffer_Location");
-		panel5a.add(baseLabel);
+		panel5b.add(baseLabel);
 		panel5b.add(baseTextField);
 		
 		panel5.add(panel5a);

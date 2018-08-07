@@ -1,14 +1,14 @@
 /*
  * MekWars - Copyright (C) 2004
- * 
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -196,7 +196,8 @@ public final class ConfigurationDialog implements ActionListener {
     private final JCheckBox armyPopUpBox = new JCheckBox();
     private final JCheckBox autoReOrder = new JCheckBox();
     private final JCheckBox testBuildTableBox = new JCheckBox();
-    
+    private final JCheckBox expandedUnitToolTipBox = new JCheckBox();
+
     // chat options
     private final JCheckBox hmInMainBox = new JCheckBox();
     private final JCheckBox pmInMainBox = new JCheckBox();
@@ -294,6 +295,7 @@ public final class ConfigurationDialog implements ActionListener {
         JPanel dedicatedHostPanel = new JPanel();// Dedicated Host Panel
         JPanel unitHUDLayoutPanel = new JPanel();// Unit Status Panel
         JPanel devPanel = new JPanel(); // Dev options
+        JPanel miscPanel = new JPanel(); // @salient - misc options
 
         /*
          * Format the PLAYER panel. Spring layout.
@@ -402,7 +404,7 @@ public final class ConfigurationDialog implements ActionListener {
         showUnitTechBaseCheckBox.setText("Show Unit Tech Base");
         showUnitTechBaseCheckBox.setToolTipText("<html>When checked, unit Tool Tip will include Clan/IS indication.</html>");
         playerUpperCBoxesPanel.add(showUnitTechBaseCheckBox);
-        
+
         showUnitBaseBVCheckBox.setText("Show Base BV");
         showUnitBaseBVCheckBox.setToolTipText("<html>If selected, BV without pilot skills will be shown in the unit display</html>");
         playerUpperCBoxesPanel.add(showUnitBaseBVCheckBox);
@@ -967,7 +969,7 @@ public final class ConfigurationDialog implements ActionListener {
         dopeCBox6.setEnabled(false);
         dopeCBox6.setHorizontalAlignment(SwingConstants.CENTER);
         tabVisibilitySpring.add(dopeCBox6);
-        
+
         tabVisibilitySpring.add(new JLabel("Rules:", SwingConstants.TRAILING)); //@salient
         rulesTabVisBox.setHorizontalAlignment(SwingConstants.CENTER);
         rulesTabonTopBox.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1073,8 +1075,8 @@ public final class ConfigurationDialog implements ActionListener {
             tabNamingSpring.add(bmeTabNameField);
             tabNamingSpring.add(bmeTabMnemonicField);
         }
-        
-        tabNamingSpring.add(new JLabel("Role Play:", SwingConstants.TRAILING)); //@salient
+
+        tabNamingSpring.add(new JLabel("Rules:", SwingConstants.TRAILING)); //@salient
         tabNamingSpring.add(rulesTabNameField);
         tabNamingSpring.add(rulesTabMnemonicField);
 
@@ -1126,27 +1128,48 @@ public final class ConfigurationDialog implements ActionListener {
          */
         JPanel tabVisWrapper = new JPanel();
         tabVisWrapper.add(tabVisibilityPanel);
-        
+
         /*
          * Developer options panel.  First, a warning.
          */
         devPanel.setLayout(new VerticalLayout(5));
-        
+
         JPanel panel = new JPanel();
         JLabel warning = new JLabel();
         warning.setText("Please don't check these unless you know what you are doing.");
         panel.setBorder(BorderFactory.createTitledBorder("WARNING!!!"));
         panel.add(warning);
         devPanel.add(panel);
-        
+
         panel = new JPanel();
         panel.setLayout(new SpringLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Test Options"));
         panel.add(new JLabel("Test Build Table Viewer", SwingConstants.TRAILING));
         panel.add(testBuildTableBox);
-        
+
         SpringLayoutHelper.setupSpringGrid(panel, 2);
         devPanel.add(panel);
+
+        /*
+         * Developer options panel.  First, a warning.
+         */
+        miscPanel.setLayout(new VerticalLayout(5));
+
+        panel = new JPanel();
+        warning = new JLabel();
+        warning.setText("The place lazy devs cram in their options!");
+        panel.setBorder(BorderFactory.createTitledBorder("Miscellaneous Options"));
+        panel.add(warning);
+        miscPanel.add(panel);
+
+        panel = new JPanel();
+        panel.setLayout(new SpringLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Hangar"));
+        panel.add(new JLabel("Expanded Unit Tool Tips", SwingConstants.TRAILING));
+        panel.add(expandedUnitToolTipBox);
+
+        SpringLayoutHelper.setupSpringGrid(panel, 2);
+        miscPanel.add(panel);
 
         ConfigPane.addTab("User", null, playerPanel, "Player and Formatting options");
         ConfigPane.addTab("Chat", null, chatPanel, "Chat and Messaging options");
@@ -1156,8 +1179,9 @@ public final class ConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Tab Naming", null, tabNamingPanel, "Tab name configuration");
         ConfigPane.addTab("FKeys", null, keyBindPanel, "Function Key configuration");
         ConfigPane.addTab("Host Setup", null, dedicatedHostPanel, "Host Configuration");
+        ConfigPane.addTab("Miscellaneous", null, miscPanel, "Miscellaneous Options");
         ConfigPane.addTab("Developer Options", null, devPanel, "Developer Options");
-        
+
 
         // Create the panel that will hold the entire UI
         JPanel mainConfigPanel = new JPanel();
@@ -1322,7 +1346,7 @@ public final class ConfigurationDialog implements ActionListener {
         hqTabMnemonicField.setText(mwclient.getConfig().getParam("HQMNEMONIC"));
         hqTabonTopBox.setSelected(mwclient.getConfig().isParam("HQINTOPROW"));
         hqTabVisBox.setSelected(mwclient.getConfig().isParam("HQTABVISIBLE"));
-        
+
         rulesTabNameField.setText(mwclient.getConfig().getParam("RULESTABNAME")); //@salient
         rulesTabMnemonicField.setText(mwclient.getConfig().getParam("RULESMNEMONIC"));
         rulesTabonTopBox.setSelected(mwclient.getConfig().isParam("RULESINTOPROW"));
@@ -1431,7 +1455,8 @@ public final class ConfigurationDialog implements ActionListener {
         leftCommanderCB.setSelected(mwclient.getConfig().isParam("LEFTCOMMANDER"));
 
         testBuildTableBox.setSelected(mwclient.getConfig().isParam("USETESTBUILDTABLEVIEWER"));
-        
+        expandedUnitToolTipBox.setSelected(mwclient.getConfig().isParam("EXPANDEDUNITTOOLTIP"));
+
         // Show the dialog and get the user's input
         dialog.setModal(true);
         dialog.pack();
@@ -1492,8 +1517,9 @@ public final class ConfigurationDialog implements ActionListener {
 
             mwclient.getConfig().setParam("MAXPMMESSAGE", maxMailTabStringField.getText());
             mwclient.getConfig().setParam("MAXPMTABS", maxNumberOfMailTabsField.getText());
-            
+
             mwclient.getConfig().setParam("USETESTBUILDTABLEVIEWER", Boolean.toString(testBuildTableBox.isSelected()));
+            mwclient.getConfig().setParam("EXPANDEDUNITTOOLTIP", Boolean.toString(expandedUnitToolTipBox.isSelected()));
 
             // set the HQCOLORSCHEME based on selected button.
             // private final String[] schemeChoices = {"Grey", "Tan",
@@ -1611,7 +1637,7 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.getConfig().setParam("HQMNEMONIC", hqTabMnemonicField.getText());
             mwclient.getConfig().setParam("HQINTOPROW", Boolean.toString(hqTabonTopBox.isSelected()));
             mwclient.getConfig().setParam("HQTABVISIBLE", Boolean.toString(hqTabVisBox.isSelected()));
-            
+
             mwclient.getConfig().setParam("RULESTABNAME", rulesTabNameField.getText()); //@salient
             mwclient.getConfig().setParam("RULESMNEMONIC", rulesTabMnemonicField.getText());
             mwclient.getConfig().setParam("RULESINTOPROW", Boolean.toString(rulesTabonTopBox.isSelected()));

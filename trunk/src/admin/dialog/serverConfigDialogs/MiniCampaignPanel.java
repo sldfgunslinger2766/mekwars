@@ -57,6 +57,7 @@ public class MiniCampaignPanel extends JPanel
 			JPanel panel5 = new JPanel();
 			JPanel panel5a = new JPanel();
 			JPanel panel5b = new JPanel();
+			JPanel panel5c = new JPanel();
 		
 	        String fluName = mwclient.getserverConfigs("FluShortName");
 	        String rpName = mwclient.getserverConfigs("RPShortName");
@@ -146,7 +147,7 @@ public class MiniCampaignPanel extends JPanel
 			baseTextField.setName("RestockMT_LeewayPercentage");
 			panel4d.add(baseTextField);
 			
-			panel4f.add(new JLabel("Misc Options -> ", SwingConstants.TRAILING));
+			panel4f.add(new JLabel("Misc -> ", SwingConstants.TRAILING));
 			
 			baseCheckBox = new JCheckBox("Enforce Unit Limit on Injection");
 			baseCheckBox.setToolTipText("<HTML>For a very controled MC cycle, player must buy back up to unit limit for all defined type/weight limits.</HTML>");
@@ -156,6 +157,11 @@ public class MiniCampaignPanel extends JPanel
 			baseCheckBox = new JCheckBox("Enforce Limits, Allow OverLimit");
 			baseCheckBox.setToolTipText("<HTML>For a very controled MC cycle, player must buy back up to unit limit for all defined type/weight limits.<br> However, also allow activation if the player is OVER the unit limit (via salvage).</HTML>");
 			baseCheckBox.setName("AtOrOverUnitLimitsMC");
+			panel4f.add(baseCheckBox);
+			
+			baseCheckBox = new JCheckBox("Ignore Aero BV");
+			baseCheckBox.setToolTipText("<HTML>Ignore Aeros in Hangar BV calculation</HTML>");
+			baseCheckBox.setName("IgnoreAeroBV");
 			panel4f.add(baseCheckBox);
 			
 			panel5.setBorder(BorderFactory.createTitledBorder("Unit Locking"));
@@ -171,21 +177,27 @@ public class MiniCampaignPanel extends JPanel
 			baseCheckBox.setName("LockSalvagedUnits");
 			panel5b.add(baseCheckBox);
 			
-			baseTextField = new JTextField(5);
-			panel5b.add(new JLabel("Reset %", SwingConstants.TRAILING));
-			baseTextField.setToolTipText("<HTML>(-1 to disable)(Likely to be used when using unit locking w/o mini campaigns)<br> Example: if set to 70 -> if 70 percent of the players units are locked all units unlock without ending the cycle. Injections will NOT occur.  </HTML>");
-			baseTextField.setName("UnlockUnits_Percentage");
-			panel5b.add(baseTextField);
 			
 			baseCheckBox = new JCheckBox("Remove BV");
 			baseCheckBox.setToolTipText("<HTML> With this set, Locked units do NOT count towards hangar BV calculations. Injections WILL occur due to locked units. </HTML>");
 			baseCheckBox.setName("LockedUnits_RemoveBV");
 			panel5b.add(baseCheckBox);
-			
-			baseCheckBox = new JCheckBox("1 Match Only");
-			baseCheckBox.setToolTipText("<HTML> With this set, units only stayed locked for one match. Likely to be used without mini campaigns. </HTML>");
-			baseCheckBox.setName("LockUnits_ForOneFightOnly");
+					
+			baseCheckBox = new JCheckBox("Decrement Count");
+			baseCheckBox.setToolTipText("<HTML> With this set, Locked units do NOT count towards hangar unit count. Injections WILL occur due to locked units reducing unit count. </HTML>");
+			baseCheckBox.setName("LockedUnits_DecrementUnitCount");
 			panel5b.add(baseCheckBox);
+			
+			baseTextField = new JTextField(5);
+			panel5c.add(new JLabel("Reset %", SwingConstants.TRAILING));
+			baseTextField.setToolTipText("<HTML>(-1 to disable)(Likely to be used when using unit locking w/o mini campaigns)<br> Example: if set to 70 -> if 70 percent of the players units are locked all units unlock without ending the cycle. Injections will NOT occur.  </HTML>");
+			baseTextField.setName("UnlockUnits_Percentage");
+			panel5c.add(baseTextField);
+
+			baseCheckBox = new JCheckBox("1 Match Only");
+			baseCheckBox.setToolTipText("<HTML> Likely to be used without mini campaigns. With this set, units only stayed locked for one match.</HTML>");
+			baseCheckBox.setName("LockUnits_ForOneFightOnly");
+			panel5c.add(baseCheckBox);
 			
 								
 			panel4.add(panel4a);
@@ -196,6 +208,7 @@ public class MiniCampaignPanel extends JPanel
 			panel4.add(panel4f);
 			panel5.add(panel5a);
 			panel5.add(panel5b);
+			panel5.add(panel5c);
 
 			add(panel0);
 			add(panel4);

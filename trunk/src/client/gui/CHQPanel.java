@@ -58,8 +58,10 @@ import javax.swing.table.TableCellRenderer;
 import megamek.client.ui.swing.MechTileset;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
+import megamek.common.EntityMovementType;
 import megamek.common.Infantry;
 import megamek.common.Mech;
+import megamek.common.options.Quirks;
 import client.MWClient;
 import client.campaign.CArmy;
 import client.campaign.CBMUnit;
@@ -79,6 +81,7 @@ import common.CampaignData;
 import common.Unit;
 import common.campaign.pilot.Pilot;
 import common.util.SpringLayoutHelper;
+import common.util.TokenReader;
 import common.util.UnitUtils;
 
 /**
@@ -3290,6 +3293,69 @@ public class CHQPanel extends JPanel {
                     	C3Text.append("[Support]<br>");
                     }
 
+                    //@salient EXPANDEDUNITTOOLTIP
+                    if(Boolean.parseBoolean(mwclient.getConfig().getParam("EXPANDEDUNITTOOLTIP")))
+                    {      	
+                    	C3Text.append("<font color=\"purple\">");
+                    	C3Text.append("<b>[General]</b><br>");
+                    	C3Text.append("Weight: "+cm.getEntity().getWeight()+" Tons ("+ cm.getEntity().getWeightClassName() +")<br>");
+                    	C3Text.append("Armor: "+cm.getEntity().getArmorWeight()+" Tons ("+ cm.getEntity().getTotalArmor() + " Pts)<br>");
+                    	int walk = cm.getEntity().getWalkMP();
+                    	int run = cm.getEntity().getRunMPwithoutMASC();
+                    	int jump = cm.getEntity().getJumpMP();
+                    	int masc = cm.getEntity().getRunMP();
+                    	C3Text.append("Movement: "+walk+"/"+run); 
+                    	
+                    	if(cm.getEntity().getMASC() != null)
+                    		C3Text.append("("+masc+")"); 
+                    	
+                    	if(jump != 0)
+                    		C3Text.append("/"+jump+"<br>");
+                    	else
+                    		C3Text.append("<br>");
+                                	
+                    	C3Text.append("Heat Capacity: "+cm.getEntity().getHeatCapacity()+"<br>");
+                    	                   	
+//                    	if(cm.getEntity().hasQuirk("no_twist"))
+//                    		C3Text.append("Torso Twist: <font color=\"green\">NO</font><br>");
+//                    	else
+//                    		C3Text.append("Torso Twist: <font color=\"red\">YES</font><br>");
+                    	
+                    	if(cm.getEntity().canFlipArms())
+                    		C3Text.append("Arms Flip: <font color=\"green\">YES</font><br>");
+                    	else
+                    		C3Text.append("Arms Flip: <font color=\"red\">NO</font><br>");
+                    	       
+                    	C3Text.append("</font>"); 
+                    	//End General (purple)
+                    	
+                    	C3Text.append("<font color=\"blue\">");
+                    	C3Text.append("<b>[Weapons]</b><br>");
+                    	cm.getEntity().getWeaponList().forEach(weapon -> {
+                    		C3Text.append(weapon.getName() + " (");
+                    		if(weapon.isRearMounted())
+                    			C3Text.append(cm.getEntity().getLocationAbbr(weapon.getLocation()) + ") (R)<br>"); 
+                    		else                  			
+                    			C3Text.append(cm.getEntity().getLocationAbbr(weapon.getLocation()) + ")<br>"); 
+                    		
+                    		});
+                		C3Text.append("</font>"); 
+                		//End Weapons (blue)
+                    	
+                		//this doesnt work since MekWars apparently does not support quirks
+//                		C3Text.append("<font color=\"teal\">");
+//                		C3Text.append("<b>[Quirks]</b><br>");
+//                		StringTokenizer st = new StringTokenizer(cm.getEntity().getQuirkList("&"), "&");
+//                		if(st.hasMoreTokens() == false)
+//                			C3Text.append( "NONE" + "<br>");
+//                	
+//                    	while(st.hasMoreTokens())
+//                    		C3Text.append(TokenReader.readString(st) + "<br>");
+//                    	
+//                    	C3Text.append("</font>"); 
+//                		//End Quirks (teal)
+                    }
+
                     // If you have a unit in more then one army, list all the
                     // armies it is in.
                     if (inNumberofArmies > 1) {
@@ -3330,7 +3396,7 @@ public class CHQPanel extends JPanel {
                             c.setBackground(new Color(238, 238, 0));
                         } else if (useAdvanceRepairs && !UnitUtils.hasAllAmmo(cm.getEntity())) {
                             c.setBackground(new Color(255, 128, 255));
-                        } 
+                        }
                         //@salient this is also irrelevant, due to else-if order of operations.
 //                        else if (cm.getStatus() == Unit.STATUS_UNMAINTAINED) {
 //                            // a nice rusty orange for unmaintained units
@@ -3340,7 +3406,7 @@ public class CHQPanel extends JPanel {
 //                        else if (cm.getStatus() == Unit.STATUS_FORSALE) {
 //                            // a mild green for units that are on sale
 //                            c.setBackground(new Color(50, 170, 35));
-//                        } 
+//                        }
                         else if ((l == null) && (inNumberofArmies > 0)) {
                             if (scheme.equals("classic")) {
                                 c.setBackground(new Color(65, 170, 55));// dark
