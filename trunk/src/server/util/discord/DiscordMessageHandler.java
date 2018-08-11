@@ -52,7 +52,7 @@ public class DiscordMessageHandler {
 	 * @param message the message to send
 	 */
 	public void post(String message) {		
-		if(webhookAddress.equalsIgnoreCase("")) {
+		if(webhookAddress.equalsIgnoreCase("") || webhookAddress.length() < 1 || webhookAddress == null) {
 			return;
 		}
 		
