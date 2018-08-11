@@ -41,6 +41,9 @@ public class DiscordMessageHandler {
 	private String webhookAddress = "";
 	
 	public DiscordMessageHandler() {
+		if(!CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
+			return;
+		}
 		webhookAddress = CampaignMain.cm.getConfig("DiscordWebHookAddress");
 	}
 	
@@ -48,7 +51,7 @@ public class DiscordMessageHandler {
 	 * Post a message to the webhook
 	 * @param message the message to send
 	 */
-	public void post(String message) {
+	public void post(String message) {		
 		if(webhookAddress.equalsIgnoreCase("")) {
 			return;
 		}

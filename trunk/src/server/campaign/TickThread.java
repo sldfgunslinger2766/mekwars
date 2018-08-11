@@ -82,7 +82,9 @@ public class TickThread extends Thread {
 				
 				if (this.tickid % 8 == 0) {
 					this.myCampaign.addToNewsFeed("Faction Rankings", "Server News", Statistics.getReadableHouseRanking(false));
-					CampaignMain.cm.postToDiscord(Statistics.getReadableHouseRanking(false));
+					if(CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
+						CampaignMain.cm.postToDiscord(Statistics.getReadableHouseRanking(false));
+					}
 					
 					try {
 						FileWriter out = new FileWriter(myCampaign.getConfig("HouseRankPath"), true); // opened in APPEND mode; will be controlled by config setting

@@ -1455,6 +1455,7 @@ public class DefaultServerOptions {
 
         //Discord Integration
         defaults.setProperty("DiscordWebHookAddress", "");
+        defaults.setProperty("DiscordEnable", "false");
     }
 
     /**

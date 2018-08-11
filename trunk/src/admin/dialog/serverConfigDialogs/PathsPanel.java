@@ -75,6 +75,8 @@ public class PathsPanel extends JPanel {
         baseTextField.setToolTipText("Path to who.html");
         baseTextField.setName("HTMLWhoPath");
         pathsSubPanel.add(baseTextField);
+
+        
         
         baseTextField = new JTextField();
         pathsSubPanel.add(new JLabel("Discord Webhook Address", SwingConstants.TRAILING));
@@ -95,6 +97,12 @@ public class PathsPanel extends JPanel {
         BaseCheckBox.setToolTipText("Uncheck to disable html output [ranking, etc.]");
         BaseCheckBox.setName("HTMLOUTPUT");
         pathsBox.add(BaseCheckBox);
+                
+        BaseCheckBox = new JCheckBox("Enable Discord Integration");
+        BaseCheckBox.setName("DiscordEnable");
+        BaseCheckBox.setToolTipText("Enable rankings and game output to be sent to a Discord channel");
+        pathsBox.add(BaseCheckBox);
+        
         this.add(pathsBox);
 	}
 }

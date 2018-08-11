@@ -4140,6 +4140,7 @@ public final class CampaignMain implements Serializable {
 	 * @param message the message to send
 	 */
 	public void postToDiscord(String message) {
+		
 		DiscordMessageHandler handler = new DiscordMessageHandler();
 		handler.post(message);
 	}
