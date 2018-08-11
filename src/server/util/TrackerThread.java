@@ -96,7 +96,8 @@ public class TrackerThread extends Thread {
 			return;
 		} finally {
 			try {
-				sock.close();
+				if(sock != null)
+					sock.close();
 			} catch (IOException e) {
 				CampaignData.mwlog.errLog(e);
 			}
