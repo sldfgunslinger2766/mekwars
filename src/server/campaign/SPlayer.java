@@ -3566,8 +3566,14 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             	}
             }
             
-            if (ST.hasMoreTokens()) //@salient... i sure hope this doesnt break anything
-            	loadDiscordInfo(TokenReader.readString(ST));
+            if (ST.hasMoreTokens()) {
+            	//@salient... i sure hope this doesnt break anything
+            	String discordData = TokenReader.readString(ST);
+            	if (CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
+            		loadDiscordInfo(discordData);
+            	} 	
+            }
+            	
 
             if ((password != null) && (password.getPasswd().trim().length() <= 2)) {
                 password.setAccess(IAuthenticator.GUEST);
