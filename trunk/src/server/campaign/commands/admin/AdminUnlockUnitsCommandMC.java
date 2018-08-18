@@ -23,7 +23,7 @@ import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.commands.Command;
 
-//@salient - unlocks all units - used with mini campaign
+//@salient - unlocks all units - used with mini campaign 
 public class AdminUnlockUnitsCommandMC implements Command 
 {
 

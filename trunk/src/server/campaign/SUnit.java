@@ -49,6 +49,7 @@ import server.campaign.pilot.skills.SPilotSkill;
 import server.campaign.pilot.skills.TraitSkill;
 import server.campaign.pilot.skills.WeaponSpecialistSkill;
 import server.campaign.util.SerializedMessage;
+import server.util.QuirkHandler;
 import common.CampaignData;
 import common.MegaMekPilotOption;
 import common.Unit;
@@ -547,6 +548,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         msg.append(getCurrentRepairCost());
         msg.append(getLifeTimeRepairCost());
         msg.append(this.isChristmasUnit());
+        //@salient
+        msg.append(QuirkHandler.getInstance().returnQuirkSave(this));
         
         return msg.getMessage();
     }
@@ -698,6 +701,11 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             setRepairCosts(TokenReader.readInt(ST), TokenReader.readInt(ST));
             
             setChristmasUnit(TokenReader.readBoolean(ST));
+            
+            // quirks might be changed by SO, drop old quirks, then reset them.
+            if(ST.hasMoreTokens())
+            	TokenReader.readString(ST); 
+            QuirkHandler.getInstance().setQuirks(this); //checks if quirks are enabled, if not does nothing
 
             return s;
         } catch (Exception ex) {

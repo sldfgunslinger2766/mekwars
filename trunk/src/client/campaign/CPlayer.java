@@ -20,7 +20,9 @@ package client.campaign;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.StringJoiner;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -617,6 +619,35 @@ CampaignData.mwlog.infoLog("My Player Flags: " + flags.export());
             }
         }
         return null;
+    }
+    
+    //@salient- compare client quirks with server
+    // lol while this works, realized the way i'm doing things makes this check meaningless... 
+    // what needs to be checked is the hosts xmls, not the client quirks
+    // which are already set by the server anyway....
+    public String getAllQuirkInfoForActivation()
+    {
+    	StringJoiner quirksList = new StringJoiner("*");
+    	List<Integer> idList = new ArrayList<Integer>();
+    	
+        for (CArmy currA : Armies) 
+        {
+        	for (Unit currU : currA.getUnits())
+        	{
+        		CUnit currCU = (CUnit) currU;
+        		if(currCU.hasQuirks())
+        		{
+        			int ID = currCU.getId();
+        			if(idList.contains(ID)) //skip dupes
+        				continue;
+        			idList.add(ID);
+        			quirksList.add(String.valueOf(ID));
+        			quirksList.add(currCU.getQuirksList());        			
+        		}
+        	}
+        }
+        CampaignData.mwlog.debugLog(quirksList.toString());
+        return quirksList.toString();
     }
 
     public int getAmountOfTimesUnitExistsInArmies(int unitID) {

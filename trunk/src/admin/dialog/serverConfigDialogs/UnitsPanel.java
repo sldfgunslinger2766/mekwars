@@ -43,12 +43,22 @@ public class UnitsPanel extends JPanel {
 
     private JTextField baseTextField = new JTextField(5);
     private JCheckBox baseCheckBox = new JCheckBox();
-    private Dimension screenSize;
+    //private Dimension screenSize; //not used?
     
 	private void init() {
 		// Set up the costs (cbills, flu, PP)
 		JPanel leftPanel = new JPanel();
 		JPanel rightPanel = new JPanel();
+		
+		String quirksToolTip = "<html> Allows mekwars to 'see' quirks, also checks to make sure that the quirk file in use<br>" 
+				+ "by the server is the same as the client/host. This option requires the following files to exist <br>"
+				+ "on client AND server:<br>data/unitQuirksSchema.xsl <br>data/canonUnitQuirks.xml <br>"
+				+ "data/mmconf/unitQuirksOverride.xml<br>"
+				+ "Note that the override list is checked first, as such while you 'can' edit the canon list<br>"
+				+ "you should use the override xml file to add or remove quirks you do no want<br>"
+				+ "See the xml files themselves for more information.<br>"
+				+ "Note that the Host must have stratOps quirks enabled as well for quirks to work<br>"
+				+ "</html>" ;
 		
 		// Left Panel Setup - unit costs
 		JPanel costGrid = new JPanel(new SpringLayout());
@@ -199,8 +209,13 @@ public class UnitsPanel extends JPanel {
         baseCheckBox.setToolTipText("<html>Check to use MM calculated costs for each unit.<br>The calculated cost will be used or the unit set price which ever is higher<br>Requires a reboot of the server.</html>");
         baseCheckBox.setName("UseCalculatedCosts");
         miscCheckBoxPanel.add(baseCheckBox);
+        
+        baseCheckBox = new JCheckBox("Enable Quirks");
+        baseCheckBox.setToolTipText(quirksToolTip);
+        baseCheckBox.setName("EnableQuirks");
+        miscCheckBoxPanel.add(baseCheckBox);
             
-        SpringLayoutHelper.setupSpringGrid(miscCheckBoxPanel, 4);
+        SpringLayoutHelper.setupSpringGrid(miscCheckBoxPanel, 5);
         miscCheckBoxPanel.setBorder(BorderFactory.createTitledBorder("Unit Options"));
         
         JPanel weightPanel = new JPanel();

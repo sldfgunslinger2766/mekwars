@@ -298,6 +298,11 @@ public class FactionPanel extends JPanel {
         baseCheckBox.setName("Enforce_Subfaction_Factory_Access");
         subFactionSpring.add(baseCheckBox);
         
+        baseCheckBox = new JCheckBox("Only Subfactions Can Activate");
+        baseCheckBox.setToolTipText("Only players in subfactions can activate");
+        baseCheckBox.setName("Activate_Subfaction_Only");
+        subFactionSpring.add(baseCheckBox);
+        
         
         SpringLayoutHelper.setupSpringGrid(subFactionSpring, 3);
         

@@ -34,6 +34,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -117,7 +119,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
     JButton closeButton = new JButton("Close");
     JButton refreshButton = new JButton("Reload Data");
-    JButton createButton = new JButton("Create");
+    JButton createButton = new JButton("Create (ALT+C)");
 
     // model and whatnot for refreshing
     TableViewerModel tvModel;
@@ -134,7 +136,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     // constructor
     public SolFreeBuildDialog(MWClient client) {
         super("Free Unit Browser");
-
+        
         mwclient = client;
         currentUnits = new TreeMap<Object, TableUnit>();
         generalScrollPane = new JScrollPane();
@@ -270,6 +272,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         
         createButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         createButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+        createButton.setMnemonic(KeyEvent.VK_C);
         createButton.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
@@ -1377,4 +1380,5 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
         }
     }
+
 }// end SolFreeBuildDialog class

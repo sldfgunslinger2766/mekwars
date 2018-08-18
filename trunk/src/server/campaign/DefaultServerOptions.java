@@ -1403,6 +1403,7 @@ public class DefaultServerOptions {
         defaults.setProperty("Self_Promote_Subfaction", "false");
         defaults.setProperty("Disable_Promote_Subfaction", "false");
         defaults.setProperty("Disable_Demote_Subfaction", "false");
+        defaults.setProperty("Activate_Subfaction_Only", "false");
         //---Additional Influence Options---
         defaults.setProperty("Cbills_Per_Flu", "0");
         defaults.setProperty("AllowFluTransfer", "false");
@@ -1426,8 +1427,17 @@ public class DefaultServerOptions {
         defaults.setProperty("RestockRP_LeewayPercentage", "-1");
         defaults.setProperty("RestockFLU_LeewayPercentage", "-1");
         defaults.setProperty("RestockMT_LeewayPercentage", "-1");
-        //ignore types
+        //ignore
         defaults.setProperty("IgnoreAeroBV", "false");
+        defaults.setProperty("IgnoreAeroUnitLimit", "false");
+        //end of cycle rewards
+        defaults.setProperty("MC_Reward_BAYS", "0");
+        defaults.setProperty("MC_Reward_TECHS", "0");
+        defaults.setProperty("MC_Reward_XP", "0");
+        defaults.setProperty("MC_Reward_RP", "0");
+        defaults.setProperty("MC_Reward_FLU", "0");
+        defaults.setProperty("MC_Reward_CB", "0");
+        defaults.setProperty("MC_Reward_MT", "0");
         //lock units
         defaults.setProperty("LockUnits", "false");
         defaults.setProperty("LockSalvagedUnits", "false");
@@ -1440,6 +1450,7 @@ public class DefaultServerOptions {
         defaults.setProperty("AtOrOverUnitLimitsMC", "false");
         //---MISC---
         defaults.setProperty("AllowEmoji", "false");
+        defaults.setProperty("EnableQuirks", "false");
 
 
 
