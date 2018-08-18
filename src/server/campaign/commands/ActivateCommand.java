@@ -25,6 +25,7 @@ import server.campaign.SUnit;
 import server.campaign.operations.OperationManager;
 import server.campaign.util.scheduler.MWScheduler;
 import server.util.SPlayerToJSON;
+import server.util.StringUtil;
 import common.CampaignData;
 import common.Unit;
 import common.campaign.operations.Operation;
@@ -66,7 +67,7 @@ public class ActivateCommand implements Command {
         if (command.hasMoreTokens()) {
             p.setPlayerClientVersion(command.nextToken());
         }
-
+        
         // Put it into a try block. One user was causing FormatExceptions
         try {
             if (!(MWServ.SERVER_VERSION).substring(0, server.MWServ.SERVER_VERSION.lastIndexOf(".")).equals(p.getPlayerClientVersion().substring(0, p.getPlayerClientVersion().lastIndexOf(".")))) {
@@ -268,6 +269,15 @@ public class ActivateCommand implements Command {
         {
         	//update json file for this player (used with discord bot)
         	SPlayerToJSON.writeToFile(p);
+        }
+        
+        if(CampaignMain.cm.getBooleanConfig("Activate_Subfaction_Only"))
+        {
+        	if(StringUtil.isNullOrEmpty(p.getSubFactionName()))
+        	{
+        		p.toSelf("AM: You must first join a subfaction before you can activate!");
+        		return;
+        	}
         }
         
         

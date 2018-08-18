@@ -2476,6 +2476,16 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 
         ArrayList<Unit> meks;
         ArrayList<CUnit> autoArmy;
+        
+        //@salient - check quirk xml file sizes with server
+        if(Boolean.parseBoolean(getserverConfigs("EnableQuirks")))
+        {
+			File canon = new File("data" + File.separator + "canonUnitQuirks.xml");
+			File custom = new File("data" + File.separator + "mmconf" + File.separator + "unitQuirksOverride.xml");
+			long canonFileLength = canon.length(); // returns 0L if does not exist
+			long customFileLength = custom.length();		
+			sendChat(MWClient.CAMPAIGN_PREFIX + "c QUIRKCHECK#" + canonFileLength + "#" + customFileLength); 
+        }
 
         // reread the config to allow the user to change setting during runtime
         String ip = "127.0.0.1";

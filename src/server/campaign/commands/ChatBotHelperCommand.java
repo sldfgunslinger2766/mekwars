@@ -59,59 +59,6 @@ public class ChatBotHelperCommand implements Command {
         
         captureAllChatForBot(Username, buffer.toString());
 
-/*        while (command.hasMoreTokens()){
-        	buffer.append("#");
-            buffer.append(command.nextToken());
-        }*/
-
-
-/*        StringTokenizer channels = new StringTokenizer(buffer.toString(),"|");
-
-        String toSend = "";
-        String channel = "";
-
-        if ( channels.hasMoreTokens() )
-        	toSend = channels.nextToken();
-        else
-        	toSend = buffer.toString();
-
-    	if (toSend.trim().length() == 0)
-			return;
-        if (channels.hasMoreTokens())
-        	channel = channels.nextToken();*/
-
-        //if client is somehow null, just send the message
-/*        MWClientInfo client = CampaignMain.cm.getServer().getUser(Username);
-        if (client == null) {
-        	CampaignMain.cm.doSendToAllOnlinePlayers(Username + "|#me " + toSend,true);
-        	return;
-        }
-
-        //check to see if the player is muted
-        boolean generalMute = CampaignMain.cm.getServer().getIgnoreList().indexOf(client.getName()) > -1;
-        boolean factionMute = CampaignMain.cm.getServer().getFactionLeaderIgnoreList().indexOf(client.getName()) > -1;
-
-        if (generalMute || factionMute)
-            CampaignMain.cm.toUser("AM:You've been set to ignore mode and cannot participate in chat.", Username,true);
-        else
-		if ( channel.equalsIgnoreCase("hm") ){
-			SPlayer player = CampaignMain.cm.getPlayer(Username);
-			CampaignMain.cm.doSendHouseMail(player.getHouseFightingFor(),Username,"#me " + toSend);
-		}
-		else if ( channel.equalsIgnoreCase("mm") ){
-			CampaignMain.cm.doSendModMail(Username,"#me " + toSend);
-		}
-		else if ( channel.equalsIgnoreCase("ic") ){
-			CampaignMain.cm.doSendToAllOnlinePlayers("(In Character)"+Username + ":#me " + toSend,true);
-		}
-		else if ( channel.equalsIgnoreCase("mail") ){
-			String reciever = channels.nextToken();
-			CampaignMain.cm.getServer().doStoreMail(reciever+",#me " + toSend, Username);
-		}
-		else {
-	        CampaignMain.cm.doSendToAllOnlinePlayers(Username+"|#me " + toSend,true);
-	        captureAllChatForBot(Username, toSend);
-		}*/
 	}
 	
 	private Boolean accessChecks(String Username)  
@@ -140,15 +87,12 @@ public class ChatBotHelperCommand implements Command {
 
 		File file = new File(CampaignMain.cm.getConfig("Bot_Buffer_Location"));
 
-//		try
+
 		try(FileWriter fw = new FileWriter(CampaignMain.cm.getConfig("Bot_Buffer_Location"), true);
 			    BufferedWriter bw = new BufferedWriter(fw);
 			    PrintWriter out = new PrintWriter(bw))
 		{
-			//FileUtils.writeStringToFile(file, chatMsg, Charset.forName("UTF-8")); //(file, "String to append", true);
-//			Files.write(Paths.get(file.toURI()), chatMsg.getBytes("utf-8"),
-//					Files.exists(Paths.get(file.toURI())) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
-			//CampaignMain.cm.toUser(chatMsg,Username,true);
+
 		    out.println(chatMsg);
 
 		}

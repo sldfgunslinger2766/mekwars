@@ -138,6 +138,7 @@ import server.campaign.votes.VoteManager;
 import server.dataProvider.Server;
 import server.util.AutomaticBackup;
 import server.util.MWPasswd;
+import server.util.QuirkHandler;
 import server.util.RepairTrackingThread;
 import server.util.StringUtil;
 import server.util.discord.DiscordMessageHandler;
@@ -246,6 +247,8 @@ public final class CampaignMain implements Serializable {
     private MWScheduler scheduler;
 
     private ChristmasHandler christmas;
+    
+    private QuirkHandler quirkHandler;
 
     // CONSTRUCTOR
     public CampaignMain(MWServ serv) {
@@ -437,6 +440,9 @@ public final class CampaignMain implements Serializable {
         // Load the Christmas Handler and set the start and end dates
         christmas = ChristmasHandler.getInstance();
         christmas.schedule();
+        
+        //@Salient for quirks
+		quirkHandler = QuirkHandler.getInstance();
 
         // create & start a data provider
         int dataport = -1;
@@ -1427,6 +1433,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("ADMINPURGEHOUSEBAYS", new AdminPurgeHouseBaysCommand());
         Commands.put("ADMINPURGEHOUSECONFIGS", new AdminPurgeHouseConfigsCommand());
         Commands.put("ADMINRANDOMLYSETPLANETPRODUCTION", new AdminRandomlySetPlanetProductionCommand());
+        Commands.put("ADMINRECALCHANGARBVMC", new AdminRecalcHangarBvCommandMC());  //@salient
         Commands.put("ADMINRELOADHOUSECONFIGS", new AdminReloadHouseConfigsCommand());
         Commands.put("ADMINRELOADHTMLSANITIZERCONFIGS", new AdminReloadHTMLSanitizerConfigsCommand());
         Commands.put("ADMINRELOADSUPPORTUNITS", new AdminReloadSupportUnitsCommand());
@@ -1636,6 +1643,7 @@ public final class CampaignMain implements Serializable {
         Commands.put("PROMOTEPLAYER", new PromotePlayerCommand());
         Commands.put("PROMOTEPILOT", new PromotePilotCommand());
         Commands.put("PURCHASEFACTORY", new PurchaseFactoryCommand());
+        Commands.put("QUIRKCHECK", new QuirkCheckCommand()); //@salient
         Commands.put("RANGE", new RangeCommand());
         Commands.put("RECALL", new RecallCommand());
         Commands.put("RECALLBID", new RecallBidCommand());

@@ -21,6 +21,8 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.StringJoiner;
 import java.util.StringTokenizer;
 
 import megamek.common.AmmoType;
@@ -32,6 +34,8 @@ import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.OffBoardDirection;
 import megamek.common.WeaponType;
+import megamek.common.options.IOption;
+import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
 import client.MWClient;
 
@@ -59,6 +63,8 @@ public class CUnit extends Unit {
     private int scrappableFor = 0;// value if scrapped
     private boolean pilotIsRepairing = false;
     private MWClient mwclient;
+    private String htmlQuirkList = " ";
+    private String quirkList = " ";
 
     // CONSTRUCTORS
     public CUnit() {
@@ -247,6 +253,12 @@ public class CUnit extends Unit {
 
         setChristmasUnit(TokenReader.readBoolean(ST));
         
+        //@salient Quirks - set unit quirks, or drop data if quirks have been turned off
+        if(ST.hasMoreTokens() && Boolean.parseBoolean(mwclient.getserverConfigs("EnableQuirks")))
+        	setUnitQuirks(TokenReader.readString(ST));
+        else if (ST.hasMoreTokens())
+        	TokenReader.readString(ST);
+        
         unitEntity.setExternalId(getId());
 
         if (unitDamage != null) {
@@ -257,8 +269,88 @@ public class CUnit extends Unit {
 
         return (true);
     }
+    
+    //@salient this method is only accessible when quirks are enabled.
+    private void setUnitQuirks(String data) 
+    {
+		StringTokenizer st = new StringTokenizer(data, "!");
+		if(st.hasMoreTokens())
+		{
+			htmlQuirkList = TokenReader.readString(st);
+			quirkList = TokenReader.readString(st);
+		}
+		
+		if(quirkList != null)
+		{
+			st = new StringTokenizer(quirkList, "&");
+			while(st.hasMoreTokens())
+			{
+				String quirk = TokenReader.readString(st);
+				if(quirk.equalsIgnoreCase("none") == false)
+					unitEntity.getQuirks().getOption(quirk).setValue(true);
+				//mwclient.sendChat(quirk); //debug
+			}   		
+		}   		
+			
+	}
+    
+    public String getHtmlQuirksList()
+    {
+    	return htmlQuirkList;
+    }
+    
+    public String getQuirksList()
+    {
+    	return quirkList;
+    }
+    
+    //@salient debug method, i really just used this once to make sure the quirks were being set
+    //but i'll leave it in case one day someone needs it.
+    public String quirkCheck()
+    {
+		StringJoiner quirksList = new StringJoiner("&");
+        
+        for (Enumeration<IOptionGroup> optionGroups = unitEntity.getQuirks().getGroups(); optionGroups.hasMoreElements();) 
+        {
+          IOptionGroup group = optionGroups.nextElement();
+          if (unitEntity.getQuirks().count(group.getKey()) > 0) 
+          {
+            for (Enumeration<IOption> options = group.getOptions(); options.hasMoreElements();) 
+            {
+              IOption option = options.nextElement();
+              if (option != null && option.booleanValue()) 
+              {
+                quirksList.add(option.getName());
+              }
+            }
+          }
+        }
+		return quirksList.toString();
+    }
+    
+    public boolean hasQuirks()
+    {
+		//StringJoiner quirksList = new StringJoiner("&");
+        
+        for (Enumeration<IOptionGroup> optionGroups = unitEntity.getQuirks().getGroups(); optionGroups.hasMoreElements();) 
+        {
+          IOptionGroup group = optionGroups.nextElement();
+          if (unitEntity.getQuirks().count(group.getKey()) > 0) 
+          {
+            for (Enumeration<IOption> options = group.getOptions(); options.hasMoreElements();) 
+            {
+              IOption option = options.nextElement();
+              if (option != null && option.booleanValue()) 
+              {
+                return true;
+              }
+            }
+          }
+        }
+		return false;
+    }
 
-    /**
+	/**
      * Method which generates data for an auto unit. Since auto units have no
      * unique properties this can be assembled client side rather than sent from
      * the server.

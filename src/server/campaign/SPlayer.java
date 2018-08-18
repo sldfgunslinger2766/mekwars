@@ -17,6 +17,7 @@
 package server.campaign;
 
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ import server.campaign.util.SerializedMessage;
 import server.campaign.util.scheduler.UserActivityComponentsJob;
 import server.campaign.util.scheduler.UserActivityInfluenceJob;
 import server.util.MWPasswdRecord;
-
+import server.util.QuirkHandler;
 import common.CampaignData;
 import common.Player;
 import common.SubFaction;
@@ -110,7 +111,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private ExclusionList exclusionList = new ExclusionList();
 
     // SEMI-PERMANENT VARIABLES. Not saved to String.
-    
+
     //@salient , I foresee mini campaigns becoming ever more complex
     //this section will contain strings to be saved together as a
     //serialized message embedded into the player save.
@@ -118,7 +119,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     //Same goes for discord Info for use by bot
     private String discordID = ""; //@salient will be set by DiscordInfo
 
-    
+
     private int scrapsThisTick = 0;
     private int donationsThisTick = 0;
 
@@ -140,7 +141,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private UnitComponents unitParts = new UnitComponents();
 
     private int DBId = 0;
-    private int forumID = 0; 
+    private int forumID = 0;
     private boolean userValidated = false;
 
     boolean isLoading = false; // Player was getting saved multiple times
@@ -149,7 +150,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     // issues.
 
     private String subFaction = "";
-    
+
     private long lastPromoted = 0;
 
     public volatile int leechCount = 0;
@@ -257,8 +258,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * Add a unit to the player. Pass-though to addUnit(SUnit,boolean,boolean).
      * This version should be called in almost all situations.
      */
-    public void addUnit(SUnit m, boolean isNew) {
-        this.addUnit(m, isNew, true);
+    public void addUnit(SUnit m, boolean isNew) 
+    {
+			this.addUnit(m, isNew, true);
     }
 
     /**
@@ -287,11 +289,15 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             m.setStatus(Unit.STATUS_OK);
         }
 
-        // strip illegal ammos
+        // strip illegal ammo
         SUnit.checkAmmoForUnit(m, myHouse);
+        
+        //@salient add quirks to entity
+        QuirkHandler.getInstance().setQuirks(m);
 
         m.setPosId(getFreeID());
-        synchronized(units) {
+        synchronized(units) 
+        {   
         	units.add(m);
         }
 
@@ -1604,7 +1610,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     //@salient - do the same as above but also some other BV calcs.
-    private int getHangarBVforMC()
+    public int getHangarBVforMC()
     {
         int bv = 0;
         boolean removeLockedBV = getMyHouse().getBooleanConfig("LockedUnits_RemoveBV");
@@ -1619,7 +1625,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             		if(ignoreAeroBV && currU.getType() == 5) // ignore aero units
             			continue;
             		else
-            			bv += currU.getBVForMatch();           			
+            			bv += currU.getBVForMatch();
             	}
             }
             else // add up all unit bv
@@ -1697,8 +1703,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     public void checkHangarRestockMC()
     {
-    	//at this point is should probably make a new method that deals with unit unlocking
-    	//however... i am lazy right now.
     	//adding this in before method exit, since i want to be able to allow
     	//unit locking while mini campaign is disabled.
     	boolean activeMC = getMyHouse().getBooleanConfig("Enable_MiniCampaign");
@@ -1787,8 +1791,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	if ( !restock && lockUnits && lockedLimit != -1) //do only if feature enabled
     		if (percentLockedUnitsMC() >= lockedLimit)
     		{
-    			unlockAllUnitsMC();
-    			setSave();
+    			unlockAllUnitsMC(); // sets save now
+    			//setSave();
     		}
 
     	if( !restock )
@@ -1834,8 +1838,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         	}
 
         	setPhaseRestockMC();
-        	unlockAllUnitsMC();
-        	setSave();
+        	unlockAllUnitsMC(); // sets save
+        	addRewardsMC();
+        	//setSave();
 
     	}
 
@@ -1983,30 +1988,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
     }
 
-    //@salient - add this to fluff so we know where we are in process
-//    private void setFluffForMC()
-//    {
-//    	setFluffText(fluffText + "(restockedMC)");
-//    	//fluffText += "(restockedMC)";
-//    }
-//
-//    private boolean checkFluffForMC()
-//    {
-//    	if(fluffText.contains("(restockedMC)"))
-//    		return true;
-//    	else
-//    		return false;
-//    }
-//
-//    private void resetFluffForMC()
-//    {
-//    	if(checkFluffForMC())
-//    	{
-//    		setFluffText(fluffText.replace("(restockedMC)", ""));
-//    	}
-//    }
 
-    //@salient - replacing flufftext operations with statusMC string
     // -- MC DATA SAVE/LOAD --
     private String saveStatusMC()
     {
@@ -2035,7 +2017,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private void setPhaseActiveMC() {	phaseMC = ACTIVE_MC;	}
     private void setPhaseRestockMC() {	phaseMC = RESTOCK_MC;	}
 
-    //@salient - made a new command called RG (refresh gui)
+    //@salient - made a new command called RG (refresh gui) not really sure it works tbh..
     public void refreshGUI()
     {
     	CampaignMain.cm.toUser("RG|" + " ", name, false);
@@ -2053,7 +2035,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		aUnit.setLocked(false);
     	}
 
-    	refreshGUI();
+        CampaignMain.cm.toUser("PS|" + this.toString(true), name, false);
+        setSave();
+        CampaignMain.cm.toUser("PL|SHP|" + buildHangarPenaltyString(), name, false);
+
+    	//refreshGUI();
     	toSelf("AM: Units have been unlocked!");
     }
 
@@ -2077,6 +2063,30 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 //    	refreshGUI();
 //    	toSelf("AM: Locked Units Removed From Army!");
 //    }
+    
+    /**
+     * @author Salient
+     * 			adds rewards to player at end of mini campaign cycle
+     */
+    private void addRewardsMC()
+    {        
+        int rewardBays = this.getMyHouse().getIntegerConfig("MC_Reward_BAYS");
+        int rewardTechs = this.getMyHouse().getIntegerConfig("MC_Reward_TECHS");
+        int rewardXP = this.getMyHouse().getIntegerConfig("MC_Reward_XP");
+        int rewardRP = this.getMyHouse().getIntegerConfig("MC_Reward_RP");
+        int rewardFLU = this.getMyHouse().getIntegerConfig("MC_Reward_FLU");
+        int rewardCB = this.getMyHouse().getIntegerConfig("MC_Reward_CB");
+        int rewardMT = this.getMyHouse().getIntegerConfig("MC_Reward_MT");
+        
+        this.addBays(rewardBays);
+        this.addTechnicians(rewardTechs);
+        this.addExperience(rewardXP, false);
+        this.addReward(rewardRP);
+        this.addInfluence(rewardFLU);
+        this.addMoney(rewardCB);
+        this.addMekToken(-rewardMT); // counts up to limit
+    	
+    }
 
     //@salient - returns the percent of players units that are locked.
     public int percentLockedUnitsMC()
@@ -2134,7 +2144,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	int resetPt = getMyHouse().getIntegerConfig("Unit_HangarRestock");
     	return resetPt;
     }
-    
+
     // -- DISCORD BOT DATA SAVE/LOAD --
     private String saveDiscordInfo()
     {
@@ -2142,16 +2152,19 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	result.append(discordID);
     	return result.toString();
     }
-    
+
     private void loadDiscordInfo(String data)
     {
-    	StringTokenizer st = new StringTokenizer(data, "&");
-    	if(st.hasMoreTokens())
+    	if(CampaignMain.cm.getBooleanConfig("Enable_BotPlayerInfo"))
     	{
-    		discordID = TokenReader.readString(st);
-    	}    	
-    	else
-    		CampaignData.mwlog.errLog("loadDiscordInfo failed! no token available!");
+    		StringTokenizer st = new StringTokenizer(data, "&");
+    		if(st.hasMoreTokens())
+    		{
+    			discordID = TokenReader.readString(st);
+    		}
+    		else
+    			CampaignData.mwlog.debugLog("loadDiscordInfo failed! no token available!");   		
+    	}
     }
 
 
@@ -2496,13 +2509,15 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         setSave();
     }
     
+    //@salient
     public String getDiscordID() {
         return discordID;
     }
     
-    public void setDiscordID(String _discordID) 
+    //@salient
+    public void setDiscordID(String _discordID)
     {
-        if ( _discordID == null || _discordID == "" ) 
+        if ( _discordID == null || _discordID == "" )
         {
         	toSelf("AM:You must enter a discord ID to set!");
             return;
@@ -2510,6 +2525,35 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         discordID = _discordID;
         setSave();
     }
+    
+    //@salient- compare client quirks with server
+    // lol while this works, realized the way i'm doing things
+    // makes this check meaningless... what needs to be checked is the hosts xmls, not the client quirks
+    // which are already set by the server anyway....
+//    public boolean checkAllQuirkInfoForActivation(String data)
+//    {
+//    	StringTokenizer st = new StringTokenizer(data,"*");
+//    	int debugCounter = 0;
+//    	
+//        while(st.hasMoreTokens()) 
+//        {
+//        	SUnit currU = this.getUnit(TokenReader.readInt(st));
+//        	String quirks = QuirkHandler.getInstance().returnQuirkList(currU);
+//        	if(quirks.equalsIgnoreCase(TokenReader.readString(st)))
+//        	{
+//        		if(debugCounter < 10)
+//        		{
+//        			debugCounter++;
+//        			//CampaignData.mwlog.debugLog(currU.getVerboseModelName()+quirks+" MATCHED");
+//        		}
+//        		continue;        		
+//        	}
+//        	else
+//        		return false;
+//        }
+//
+//        return true;
+//    }
 
     public SArmy getArmy(int id) {
 
@@ -2552,9 +2596,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public int getUnitCount() {
         return units.size();
     }
-    
+
     //@salient - includes SO check to count only unlocked units LockedUnits_DecrementUnitCount
-    private int getUnitCountMC() 
+    private int getUnitCountMC()
     {
     	if(getMyHouse().getBooleanConfig("LockedUnits_DecrementUnitCount"))
     	{
@@ -2568,7 +2612,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	}
     	else
     	{
-    		return units.size();    		
+    		return units.size();
     	}
     }
 
@@ -3369,7 +3413,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         result.append(saveDiscordInfo()); //@salient adding new field to save
         return result.getMessage();
     }
-    
+
     /**
      * @author jtighe
      * @param s
@@ -3559,13 +3603,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             loadFlags(CampaignMain.cm.getDefaultPlayerFlags().export());
 
-            if (ST.hasMoreTokens()) {
-            	String flagString = TokenReader.readString(ST);
-            	if (flagString.length() > 1) {
-            		flags.loadPersonal(flagString);
-            	}
-            }
-            
+
+        	String flagString = TokenReader.readString(ST);
+        	if (flagString.length() > 1)
+        		flags.loadPersonal(flagString);
+
+
             if (ST.hasMoreTokens()) {
             	//@salient... i sure hope this doesnt break anything
             	String discordData = TokenReader.readString(ST);
@@ -4018,7 +4061,14 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     {
     	boolean result = false;
 
-        for (int t = Unit.MEK; t <= Unit.AERO; t++)
+    	boolean dontCountAero = CampaignMain.cm.getBooleanConfig("IgnoreAeroUnitLimit");
+
+    	int uType = Unit.AERO;
+
+    	if (dontCountAero)
+    		uType = Unit.BATTLEARMOR;
+
+        for (int t = Unit.MEK; t <= uType; t++)
         {
             for (int w = Unit.LIGHT; w <= Unit.ASSAULT; w++)
             {
@@ -4047,7 +4097,14 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     {
     	boolean result = false;
 
-        for (int t = Unit.MEK; t <= Unit.AERO; t++)
+    	boolean dontCountAero = CampaignMain.cm.getBooleanConfig("IgnoreAeroUnitLimit");
+
+    	int uType = Unit.AERO;
+
+    	if (dontCountAero)
+    		uType = Unit.BATTLEARMOR;
+
+        for (int t = Unit.MEK; t <= uType; t++)
         {
             for (int w = Unit.LIGHT; w <= Unit.ASSAULT; w++)
             {

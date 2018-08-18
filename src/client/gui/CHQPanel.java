@@ -3342,18 +3342,22 @@ public class CHQPanel extends JPanel {
                 		C3Text.append("</font>"); 
                 		//End Weapons (blue)
                     	
-                		//this doesnt work since MekWars apparently does not support quirks
-//                		C3Text.append("<font color=\"teal\">");
-//                		C3Text.append("<b>[Quirks]</b><br>");
-//                		StringTokenizer st = new StringTokenizer(cm.getEntity().getQuirkList("&"), "&");
-//                		if(st.hasMoreTokens() == false)
-//                			C3Text.append( "NONE" + "<br>");
-//                	
-//                    	while(st.hasMoreTokens())
-//                    		C3Text.append(TokenReader.readString(st) + "<br>");
-//                    	
-//                    	C3Text.append("</font>"); 
-//                		//End Quirks (teal)
+                		//Quirks...
+                		if(Boolean.parseBoolean(mwclient.getserverConfigs("EnableQuirks")))
+                		{
+                			C3Text.append("<font color=\"teal\">");
+                			C3Text.append("<b>[Quirks]</b><br>");
+
+                			StringTokenizer st = new StringTokenizer(cm.getHtmlQuirksList(), "*");
+              				
+            				while(st.hasMoreTokens())
+            					C3Text.append(TokenReader.readString(st));                				
+
+                			
+                			//C3Text.append(cm.quirkCheck());
+                			C3Text.append("</font>"); 
+                			//End Quirks (teal)                			
+                		}
                     }
 
                     // If you have a unit in more then one army, list all the

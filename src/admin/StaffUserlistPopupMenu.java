@@ -153,13 +153,22 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         item = new JMenuItem("Reset Free Unit Limit");
         item.setActionCommand("RFUL|" + userName);
         item.addActionListener(this);
-        if (userLevel >= mwclient.getData().getAccessLevel("ResetFreeMeks") && Integer.parseInt(mwclient.getserverConfigs("FreeBuild_Limit")) > 0)
+        if (userLevel >= mwclient.getData().getAccessLevel("ResetFreeMeks") 
+        && Integer.parseInt(mwclient.getserverConfigs("FreeBuild_Limit")) > 0)
         	unitsMen.add(item);        	
-        //@Salient added for mini campaigns
-        item = new JMenuItem("Unlock Units MC");
+        //@Salient added for locked units
+        item = new JMenuItem("Unlock Units [MC]");
         item.setActionCommand("UUM|" + userName);
         item.addActionListener(this);
-        if (userLevel >= mwclient.getData().getAccessLevel("ADMINUNLOCKUNITSMC") && Boolean.parseBoolean(mwclient.getserverConfigs("LockUnits")))       
+        if (userLevel >= mwclient.getData().getAccessLevel("ADMINUNLOCKUNITSMC") 
+        && Boolean.parseBoolean(mwclient.getserverConfigs("LockUnits")))       
+            unitsMen.add(item);
+        //@Salient added for mini campaigns
+        item = new JMenuItem("Recalc Hangar BV [MC]");
+        item.setActionCommand("RBM|" + userName);
+        item.addActionListener(this);
+        if (userLevel >= mwclient.getData().getAccessLevel("ADMINRECALCHANGARBVMC") 
+        && Boolean.parseBoolean(mwclient.getserverConfigs("Enable_MiniCampaign")))       
             unitsMen.add(item);
         item = new JMenuItem("Donate");
         item.setActionCommand("DU|" + userName);
@@ -473,6 +482,14 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to unlock " + userName + "'s units?");
             if (result == JOptionPane.YES_OPTION)
                 mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ADMINUNLOCKUNITSMC#" + userName);
+        }
+        if (command.equals("RBM") && st.hasMoreElements()) { //@salient
+
+            userName = st.nextToken();
+            // confirm action
+            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to recalc " + userName + "'s hangar bv?");
+            if (result == JOptionPane.YES_OPTION)
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ADMINRECALCHANGARBVMC#" + userName);
         }
         if (command.equals("SU") && st.hasMoreElements()) {
 

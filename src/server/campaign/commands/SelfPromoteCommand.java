@@ -60,8 +60,8 @@ public class SelfPromoteCommand implements Command {
                 CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;
             }
-            //should make it so you can only use this once... i hope
-            if (userLevel > getExecutionLevel()) 
+            //should make it so you can only use this once... i hope (unless you are a mod)
+            if (userLevel > getExecutionLevel() && userLevel < 100) 
             {
                 CampaignMain.cm.toUser("AM:Access level is too high for this command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;
