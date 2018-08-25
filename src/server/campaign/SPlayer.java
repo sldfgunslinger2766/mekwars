@@ -17,7 +17,6 @@
 package server.campaign;
 
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -293,7 +292,16 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         SUnit.checkAmmoForUnit(m, myHouse);
         
         //@salient add quirks to entity
-        QuirkHandler.getInstance().setQuirks(m);
+        //as seen recently, an improperly setup quirks xml can cause a npe here.
+        //so i'll add a try/catch
+        try {
+        	QuirkHandler.getInstance().setQuirks(m);        				
+		} catch (Exception e) {
+			CampaignData.mwlog.errLog(e);
+			CampaignData.mwlog.errLog(m.getUnitFilename() + " " + m.getVerboseModelName() 
+				+ " quirk error, check the XML files for this unit, likely xml error" );
+		}
+
 
         m.setPosId(getFreeID());
         synchronized(units) 
@@ -1703,13 +1711,13 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     public void checkHangarRestockMC()
     {
-    	//adding this in before method exit, since i want to be able to allow
-    	//unit locking while mini campaign is disabled.
-    	boolean activeMC = getMyHouse().getBooleanConfig("Enable_MiniCampaign");
+    	boolean enabledMC = getMyHouse().getBooleanConfig("Enable_MiniCampaign");
     	boolean lockUnits = getMyHouse().getBooleanConfig("LockUnits");
-    	int lockedLimit = getMyHouse().getIntegerConfig("UnlockUnits_Percentage");
 
-    	if ( !activeMC && lockUnits && lockedLimit != -1)
+    	//adding this in before method exit, since i want to be able to allow
+    	//unit locking while mini campaign is disabled yes locked units is not
+    	int lockedLimit = getMyHouse().getIntegerConfig("UnlockUnits_Percentage");
+    	if ( !enabledMC && lockUnits && lockedLimit != -1)
     	{
     		if (percentLockedUnitsMC() >= lockedLimit)
     		{
@@ -1718,7 +1726,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		}
     	}
 
-    	if(!activeMC)
+    	if(!enabledMC)
     	{
     		toSelf("AM: Mini Campaigns are disabled on the server!");
     		return;
@@ -1752,7 +1760,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		CampaignData.mwlog.modLog(getName() + " has gone under BV limit and a restock should occur");
     	}
 
-    	if( percentBVLimit != -1 && getHangarBVforMC() < getBVResetPointMC()  )
+    	if( percentBVLimit != -1 && getHangarBVforMC() < getBVResetPointMC() )
     	{
     		restock = true;
     		percentRestock = true;
@@ -1761,7 +1769,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		CampaignData.mwlog.modLog(getName() + " has gone under % BV limit and a restock should occur");
     	}
 
-    	if( minUnitLimit != -1 && getUnitCount() < minUnitLimit)
+    	if( minUnitLimit != -1 && getUnitCountMC() < minUnitLimit )
     	{
     		restock = true;
     		unitRestock = true;
@@ -1783,7 +1791,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
     	if ( !restock && !unitRestock && minUnitLimit != -1)
     	{
-    		toSelf("AM: Your hangar is at "+ getUnitCount() + "Units. When you drop below "
+    		toSelf("AM: Your hangar is at "+ getUnitCountMC() + "Units. When you drop below "
     				+ minUnitLimit + "Units your mini campaign will restart");
     	}
 
@@ -1839,9 +1847,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         	setPhaseRestockMC();
         	unlockAllUnitsMC(); // sets save
-        	addRewardsMC();
-        	//setSave();
-
+        	addRewardsMC(); // adds currencies not involved with injection/restocking
+        	
     	}
 
     	return;
@@ -1873,15 +1880,15 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	float percentFLU = getMyHouse().getIntegerConfig("RestockFLU_LeewayPercentage") / 100.0f;
     	float percentMT = getMyHouse().getIntegerConfig("RestockMT_LeewayPercentage") / 100.0f;
 
-    	int leewayCB = (int) (getMoney() * percentCB);
-    	int leewayRP = (int) (getReward() * percentRP);
-    	int leewayFLU = (int) (getInfluence() * percentFLU);
-    	int leewayMT = (int) (getRemainingMekTokens() * percentMT);
+    	int leewayCB = (int) (restockCB * percentCB);
+    	int leewayRP = (int) (restockRP * percentRP);
+    	int leewayFLU = (int) (restockFLU * percentFLU);
+    	int leewayMT = (int) (restockMT * percentMT);
 
     	boolean requireUnitsAtLimit = getMyHouse().getBooleanConfig("AtUnitLimitsMC");
     	boolean requireUnitsAtOrOverLimit = getMyHouse().getBooleanConfig("AtOrOverUnitLimitsMC");
 
-    	boolean canActivate = true;
+    	//boolean canActivate = true;
 
     	//check if hangar BV has increased (maybe via salvage? or trades?), if so update to new value.
         if ( percentBVLimit != -1  && getHangarBVforMC() > getBVTracker() )
@@ -1889,76 +1896,75 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         	setBVTracker(getHangarBVforMC());
         	CampaignData.mwlog.modLog(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
         }
-
-        if ( minBVLimit != -1  && getHangarBVforMC() < minBVLimit )
-        {
-        	toSelf("AM: To go active you must raise your hangar BV! You have " + getHangarBVforMC()
+        
+        if(isPhaseRestockMC())
+        {       	
+        	if ( minBVLimit != -1  && getHangarBVforMC() < minBVLimit )
+        	{
+        		toSelf("AM: To go active you must raise your hangar BV! You have " + getHangarBVforMC()
         		+ " and need at least " + minBVLimit + " to go active!");
-        	return false;
-        }
-
-        if ( minUnitLimit != -1  && getUnitCountMC() < minUnitLimit )
-        {
-        	toSelf("AM: To go active you must raise your hangar Unit Count! You have " + getUnitCountMC()
+        		return false;
+        	}
+        	
+        	if ( minUnitLimit != -1  && getUnitCountMC() < minUnitLimit )
+        	{
+        		toSelf("AM: To go active you must raise your hangar Unit Count! You have " + getUnitCountMC()
         		+ " and need at least " + minUnitLimit + " to go active!");
-        	return false;
-        }
+        		return false;
+        	}
+        	
+        	if( restockCB != -1 && leewayCB > 0f && getMoney() > leewayCB )
+        	{
+        		toSelf("AM: You have too many " + CampaignMain.cm.getCurrencyName("money", false) + " to go active!" );
+        		return false;
+        	}
+        	
+        	if( restockRP != -1 && leewayRP > 0f && getReward() > leewayRP )
+        	{
+        		toSelf("AM: You have too many " + CampaignMain.cm.getCurrencyName("rp", false) + " to go active!" );
+        		return false;
+        	}
+        	
+        	if( restockFLU != -1 && leewayFLU > 0f && getInfluence() > leewayFLU )
+        	{
+        		toSelf("AM: You have too much " + CampaignMain.cm.getCurrencyName("flu", false) + " to go active!" );
+        		return false;
+        	}
+        	
+        	if( restockMT != -1 && leewayMT > 0f && getRemainingMekTokens() > leewayMT )
+        	{
+        		toSelf("AM: You must use up more of your free meks to go active!" );
+        		return false;
+        	}
+        	
+        	if ( requireUnitsAtOrOverLimit && isPhaseRestockMC() && isAtOrOverUnitLimits() == false )
+        	{
+        		toSelf("AM: You must reach or exceed the limit for each unit type/weight before "
+        				+ "restarting your mini campaign!");
+        		return false;
+        	}
+        	else if ( requireUnitsAtLimit && isPhaseRestockMC() && isAtUnitLimits() == false )
+        	{
+        		toSelf("AM: You must reach the limit for each unit type/weight before restarting your "
+        				+ "mini campaign!");
+        		return false;
+        	}
+        	
+        	//At this point we assume that the player can activate and leave restock state.
+			removeInjectedCurrencyMC(restockCB, restockRP, restockFLU, restockMT);
 
-    	if( restockCB != -1 && leewayCB > 0f && getMoney() > leewayCB )
-    	{
-    		toSelf("AM: You have too many " + CampaignMain.cm.getCurrencyName("money", false) + " to go active!" );
-    		canActivate = false;
-    	}
-
-    	if( restockRP != -1 && leewayRP > 0f && getReward() > leewayRP )
-    	{
-    		toSelf("AM: You have too many " + CampaignMain.cm.getCurrencyName("rp", false) + " to go active!" );
-    		canActivate = false;
-    	}
-
-    	if( restockFLU != -1 && leewayFLU > 0f && getInfluence() > leewayFLU )
-    	{
-    		toSelf("AM: You have too much " + CampaignMain.cm.getCurrencyName("flu", false) + " to go active!" );
-    		canActivate = false;
-    	}
-
-    	if( restockMT != -1 && leewayMT > 0f && getRemainingMekTokens() > leewayMT )
-    	{
-    		toSelf("AM: You must use up more of your free meks to go active!" );
-    		canActivate = false;
-    	}
-
-    	if ( requireUnitsAtOrOverLimit && isPhaseRestockMC() && isAtOrOverUnitLimits() == false )
-    	{
-    		toSelf("AM: You must reach or exceed the limit for each unit type/weight before restarting your mini campaign!");
-    		canActivate = false;
-    	}
-    	else if ( requireUnitsAtLimit && isPhaseRestockMC() && isAtUnitLimits() == false )
-    	{
-    		toSelf("AM: You must reach the limit for each unit type/weight before restarting your mini campaign!");
-    		canActivate = false;
-    	}
-
-    	if( canActivate ) // this occurs any time the user goes active.
-    	{
-    		//this should only occur the first time going active after injection
-    		if(isPhaseRestockMC())
-    		{
-    			removeInjectedCurrencyMC(restockCB, restockRP, restockFLU, restockMT);
-
-    			if ( percentBVLimit != -1 )
-    			{
-    				setBVTracker(getHangarBVforMC());// set new hangar BV for tracking
-    				CampaignData.mwlog.modLog(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
-    			}
-    		}
-
-    		reportStatusMC();
+			if ( percentBVLimit != -1 )
+			{
+				setBVTracker(getHangarBVforMC());// set new hangar BV for tracking
+				CampaignData.mwlog.modLog(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
+			}
+			
     		setPhaseActiveMC();
     		setSave();
-    	}
+        }
 
-    	return canActivate;
+    	reportStatusMC();
+    	return true;
     }
 
     //@salient will be used here and in a command.
@@ -2108,22 +2114,22 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     //@salient
     private void removeInjectedCurrencyMC(int restockCB, int restockRP, int restockFLU, int restockMT)
     {
-    	if(hasMoney() && restockCB != 1)
+    	if(hasMoney() && restockCB != -1)
     	{
     		addMoney(-getMoney());
     	}
 
-    	if(hasRP() && restockRP != 1)
+    	if(hasRP() && restockRP != -1)
     	{
     		addReward(-getReward());
     	}
 
-    	if(hasFlu() && restockFLU != 1)
+    	if(hasFlu() && restockFLU != -1)
     	{
     		addInfluence(-getInfluence());
     	}
 
-    	if(hasMT() && restockMT != 1)
+    	if(hasMT() && restockMT != -1)
     	{
     		addMekToken(-getMekToken()); // clear
     		addMekToken(getMekTokenLimit());//have to go to limit to clear to 0, counts up
@@ -2155,16 +2161,13 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
     private void loadDiscordInfo(String data)
     {
-    	if(CampaignMain.cm.getBooleanConfig("Enable_BotPlayerInfo"))
-    	{
-    		StringTokenizer st = new StringTokenizer(data, "&");
-    		if(st.hasMoreTokens())
-    		{
-    			discordID = TokenReader.readString(st);
-    		}
-    		else
-    			CampaignData.mwlog.debugLog("loadDiscordInfo failed! no token available!");   		
-    	}
+		StringTokenizer st = new StringTokenizer(data, "&");
+		if(st.hasMoreTokens())
+		{
+			discordID = TokenReader.readString(st);
+		}
+		else
+			CampaignData.mwlog.debugLog("loadDiscordInfo failed! no token available!");   		
     }
 
 
@@ -3612,7 +3615,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             if (ST.hasMoreTokens()) {
             	//@salient... i sure hope this doesnt break anything
             	String discordData = TokenReader.readString(ST);
-            	if (CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
+            	if (CampaignMain.cm.getBooleanConfig("Enable_BotPlayerInfo")) {
             		loadDiscordInfo(discordData);
             	} 	
             }

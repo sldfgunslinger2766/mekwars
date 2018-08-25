@@ -11,6 +11,8 @@
 
 package admin.dialog.serverConfigDialogs;
 
+import java.awt.BorderLayout;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -46,9 +48,10 @@ public class MiniCampaignPanel extends JPanel
 					+ " their ability to purchase, or even use, their units. Each personal cycle has a trigger that initiates<br>"
 					+ " a currency injection. This signals the end of the players personal campaign cycle. They can then<br>"
 					+ " purchase new forces, once they go active all 'injected' currency is striped until next cycle.<br>"
-					+ " NOTE: Not compatible with christmas unit code/features<br>";
+					+ " NOTE: Locking Units !Not! compatible with Christmas unit code/features<br>";
 
 			JPanel panel0 = new JPanel();
+			JPanel panel1 = new JPanel();
 			JPanel panel4 = new JPanel();
 			JPanel panel4a = new JPanel();
 			JPanel panel4b = new JPanel();
@@ -79,7 +82,6 @@ public class MiniCampaignPanel extends JPanel
 			panel4a.add(baseCheckBox);
 			
 			panel4b.setBorder(BorderFactory.createTitledBorder("Restock Triggers (what causes the mini campaign to end)"));
-			//panel4b.add(new JLabel("Restock Triggers -> ", SwingConstants.TRAILING));
 			
 			baseTextField = new JTextField(5);
 			panel4b.add(new JLabel("% Hangar BV", SwingConstants.TRAILING));
@@ -100,7 +102,6 @@ public class MiniCampaignPanel extends JPanel
 			panel4b.add(baseTextField);
 			
 			panel4c.setBorder(BorderFactory.createTitledBorder("Currency Injection (provided during restock)"));
-			//panel4c.add(new JLabel("Currency Injection -> ", SwingConstants.TRAILING));
 			
 			baseTextField = new JTextField(5);
 			panel4c.add(new JLabel(cbName, SwingConstants.TRAILING));
@@ -126,9 +127,7 @@ public class MiniCampaignPanel extends JPanel
 			baseTextField.setName("RestockMT_Injection");
 			panel4c.add(baseTextField);
 			
-			//panel4d.add(new JLabel("Required Currency Usage % -> ", SwingConstants.TRAILING));
 			panel4d.setBorder(BorderFactory.createTitledBorder("Required Currency Usage % (to start next MC cycle)"));
-
 			
 			baseTextField = new JTextField(5);
 			panel4d.add(new JLabel(cbName, SwingConstants.TRAILING));
@@ -154,7 +153,6 @@ public class MiniCampaignPanel extends JPanel
 			baseTextField.setName("RestockMT_LeewayPercentage");
 			panel4d.add(baseTextField);
 			
-			//panel4f.add(new JLabel("Misc -> ", SwingConstants.TRAILING));
 			panel4e.setBorder(BorderFactory.createTitledBorder("Rewards (added at start of restock phase)"));
 			panel4e.setLayout(new SpringLayout());
 			
@@ -207,10 +205,8 @@ public class MiniCampaignPanel extends JPanel
 			
 			SpringLayoutHelper.setupSpringGrid(panel4e, 8);
 			
-			//panel4f.add(new JLabel("Misc -> ", SwingConstants.TRAILING));
 			panel4f.setBorder(BorderFactory.createTitledBorder("Miscellaneous"));
 			panel4f.setLayout(new SpringLayout());
-
 			
 			baseCheckBox = new JCheckBox("Enforce Unit Limit");
 			baseCheckBox.setToolTipText("<HTML>For a very controled MC cycle, player must buy back up to unit limit for all defined type/weight limits.</HTML>");
@@ -272,6 +268,7 @@ public class MiniCampaignPanel extends JPanel
 			
 			SpringLayoutHelper.setupSpringGrid(panel5b, 3);
 			
+			
 								
 			panel4.add(panel4a);
 			panel4.add(panel4b);
@@ -283,10 +280,13 @@ public class MiniCampaignPanel extends JPanel
 			panel5.add(panel5a);
 			panel5.add(panel5b);
 			//panel5.add(panel5c);
+			panel1.add(panel4);
+			panel1.add(panel5);
 
 			add(panel0);
-			add(panel4);
-			add(panel5);
+			add(panel1);
+			//add(panel4);
+			//add(panel5);
 
 	}
 }
