@@ -53,11 +53,12 @@ public class UnitsPanel extends JPanel {
 		String quirksToolTip = "<html> Allows mekwars to 'see' quirks, also checks to make sure that the quirk file in use<br>" 
 				+ "by the server is the same as the client/host. This option requires the following files to exist <br>"
 				+ "on client AND server:<br>data/unitQuirksSchema.xsl <br>data/canonUnitQuirks.xml <br>"
-				+ "data/mmconf/unitQuirksOverride.xml<br>"
+				+ "mmconf/unitQuirksOverride.xml<br>"
 				+ "Note that the override list is checked first, as such while you 'can' edit the canon list<br>"
-				+ "you should use the override xml file to add or remove quirks you do no want<br>"
+				+ "you should use the override xml file to add or remove quirks.<br>"
 				+ "See the xml files themselves for more information.<br>"
 				+ "Note that the Host must have stratOps quirks enabled as well for quirks to work<br>"
+				+ "Note that even if this option is disabled, a host can still enable megamek's quirks<br>"
 				+ "</html>" ;
 		
 		// Left Panel Setup - unit costs

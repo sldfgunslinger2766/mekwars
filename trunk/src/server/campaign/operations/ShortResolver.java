@@ -297,7 +297,7 @@ public class ShortResolver {
         // break units in living/salvagable/dead, etc.
         possibleSalvageFromReport(reportTokenizer, so);
 
-        //@salient - this is only active if using locked units w/ one fight only option
+        //@salient - if "LockUnits_ForOneFightOnly", unlocks last match's army before locking this army
         unlockAllPlayerUnits();
         
         /*
@@ -309,10 +309,13 @@ public class ShortResolver {
 
         handleOperationImpact(o, so);
         
-        //removeLockedUnitsFromAllPlayersArmiesMC(); //@salient 
+        //removeLockedUnitsFromAllPlayersArmiesMC(); //@salient - for some reason didn't work...
         
-
-        checkAllPlayersForRestockMC(); //@salient - first part of new mini campaign system
+        /*
+         * @salient - first part of new mini campaign system,
+         * checks if "Enable_MiniCampaign" before executing code
+         */
+        checkAllPlayersForRestockMC(); 
 
     }// end resolveShortAttack
 
@@ -802,7 +805,11 @@ public class ShortResolver {
         
         // removeLockedUnitsFromAllPlayersArmiesMC(); //@salient
 
-        checkAllPlayersForRestockMC(); //@salient - first part of new mini campaign system
+        /*
+         * @salient - first part of new mini campaign system,
+         * checks if "Enable_MiniCampaign" before executing code
+         */
+        checkAllPlayersForRestockMC();
 
 		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "check for promotions and then save again?");
         if (winner != null) {
@@ -1725,6 +1732,14 @@ public class ShortResolver {
                     ost.addScrappableUnit(currU.getId(), costToRepair);
                     scrapThreads.put(oldOwnerName, ost);
                 }
+                
+                // @salient - unit locking, 'usually' used with mini campaigns
+                //		if you recover your own salvage, it should return locked like other units.
+            	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
+            	{
+            	    currU.setLocked(true);
+            	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	}
 
                 // winner recovered own unit. send update.
                 CampaignMain.cm.toUser("PL|UU|" + currU.getId() + "|" + currU.toString(true), oldOwnerName, false);
@@ -1821,6 +1836,14 @@ public class ShortResolver {
                     ost.addScrappableUnit(currU.getId(), costToRepair);
                     scrapThreads.put(oldOwnerName, ost);
                 }
+                
+                // @salient - unit locking, 'usually' used with mini campaigns
+                //		if you recover your own salvage, it should return locked like other units.
+            	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
+            	{
+            	    currU.setLocked(true);
+            	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	}
 
                 // winner recovered own unit. send update.
                 CampaignMain.cm.toUser("PL|UU|" + currU.getId() + "|" + currU.toString(true), oldOwnerName, false);
@@ -1917,6 +1940,14 @@ public class ShortResolver {
                     ost.addScrappableUnit(currU.getId(), costToRepair);
                     scrapThreads.put(oldOwnerName, ost);
                 }
+                
+                // @salient - unit locking, 'usually' used with mini campaigns
+                //		if you recover your own salvage, it should return locked like other units.
+            	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
+            	{
+            	    currU.setLocked(true);
+            	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	}
 
                 // winner recovered own unit. send update.
                 CampaignMain.cm.toUser("PL|UU|" + currU.getId() + "|" + currU.toString(true), oldOwnerName, false);
@@ -2010,6 +2041,13 @@ public class ShortResolver {
             if (newOwner == null) {
                 toOriginalOwner = " You recovered your " + currU.getModelName() + ". ";
                 toOthers = oldOwner.getColoredName() + " recovered his " + currU.getModelName() + ". ";
+                //@salient - unit locking, 'usually' used with mini campaigns
+                //		if you recover your own salvage, it should return locked like other units.
+            	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
+            	{
+            	    currU.setLocked(true);
+            	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	}
             } else {
                 toOriginalOwner = " " + newOwner.getColoredName() + " recovered your " + currU.getModelName() + ". ";
                 toNewOwner = " You recovered " + oldOwner.getColoredName() + "'s " + currU.getModelName() + ". ";
@@ -3528,7 +3566,7 @@ public class ShortResolver {
                         pilots.put(originalID, mw);// key to host unit
                     }
 
-                    // check for builings left this is tacked onto the end of
+                    // check for buildings left this is tacked onto the end of
                     // the results string.
                     else if (currentUnit.startsWith("BL*")) {
                         buildingsLeft = Integer.parseInt(currentUnit.substring(3));
@@ -3537,8 +3575,8 @@ public class ShortResolver {
                         OperationEntity oEntity = new OperationEntity(currentUnit);
                         SUnit unit = CampaignMain.cm.getPlayer(oEntity.getOwnerName()).getUnit(oEntity.getID());
 
-                        // if the player doesnt own the unit, its probably
-                        // autoartillery. continue to next loop.
+                        // if the player doesn't own the unit, its probably
+                        // auto artillery. continue to next loop.
                         if ((unit == null)) {
                             if (o.getBooleanValue("SupportUnitsAreSalvageable") && !oEntity.isLiving() && oEntity.isSalvagable()) {
                                 unit = new SUnit(oEntity.getID(), "Salvaged Support Unit", oEntity.getUnitFileName());
@@ -4779,10 +4817,15 @@ public class ShortResolver {
 	 */
 	private void checkAllPlayersForRestockMC()
 	{
-    	for(SPlayer player : allPlayers.values())
-    	{
-    		player.checkHangarRestockMC();
-    	}
+		if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign")
+		|| CampaignMain.cm.getBooleanConfig("LockUnits"))
+		{
+			for(SPlayer player : allPlayers.values())
+			{
+				//handles both MC or using Locked Units without MC.
+				player.checkHangarRestockMC();
+			}			
+		}
 	}
 	
 //	/**  
@@ -4802,11 +4845,13 @@ public class ShortResolver {
 	 * Likely to be used when using locked units without mini campaigns
 	 */
 	private void unlockAllPlayerUnits()
-	{
-    	for(SPlayer player : allPlayers.values())
+	{     
+    	if(CampaignMain.cm.getBooleanConfig("LockUnits_ForOneFightOnly"))
     	{
-    		if(player.getMyHouse().getBooleanConfig("LockUnits_ForOneFightOnly"))
-    			player.unlockAllUnitsMC();
+	    	for(SPlayer player : allPlayers.values())
+	    	{
+	    		player.unlockAllUnitsMC();
+	    	}
     	}
 	}
 
