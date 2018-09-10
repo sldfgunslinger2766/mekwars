@@ -574,7 +574,7 @@ public class MechInfo extends JPanel {
         	CampaignData.mwlog.errLog(ex);   	
         	try 
         	{
-        	    File pathToFile = new File("./data/images/activatebutton.png");
+        	    File pathToFile = new File("./data/images/ImageMissing.png");
         	    unit = ImageIO.read(pathToFile);
         	    unit = unit.getScaledInstance(84, 72, Image.SCALE_DEFAULT);
         	    CampaignData.mwlog.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
