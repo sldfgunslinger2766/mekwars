@@ -78,11 +78,11 @@ public class PathsPanel extends JPanel {
 
         
         
-        baseTextField = new JTextField();
-        pathsSubPanel.add(new JLabel("Discord Webhook Address", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("Address for the webhook to which game results and such should be sent.");
-        baseTextField.setName("DiscordWebHookAddress");
-        pathsSubPanel.add(baseTextField);
+//        baseTextField = new JTextField();
+//        pathsSubPanel.add(new JLabel("Discord Webhook Address", SwingConstants.TRAILING));
+//        baseTextField.setToolTipText("Address for the webhook to which game results and such should be sent.");
+//        baseTextField.setName("DiscordWebHookAddress");
+//        pathsSubPanel.add(baseTextField);
 
         // do the spring layout.
         SpringLayoutHelper.setupSpringGrid(pathsSubPanel, 2);
@@ -98,10 +98,10 @@ public class PathsPanel extends JPanel {
         BaseCheckBox.setName("HTMLOUTPUT");
         pathsBox.add(BaseCheckBox);
                 
-        BaseCheckBox = new JCheckBox("Enable Discord Integration");
-        BaseCheckBox.setName("DiscordEnable");
-        BaseCheckBox.setToolTipText("Enable rankings and game output to be sent to a Discord channel");
-        pathsBox.add(BaseCheckBox);
+//        BaseCheckBox = new JCheckBox("Enable Discord Integration");
+//        BaseCheckBox.setName("DiscordEnable");
+//        BaseCheckBox.setToolTipText("Enable rankings and game output to be sent to a Discord channel");
+//        pathsBox.add(BaseCheckBox);
         
         this.add(pathsBox);
 	}

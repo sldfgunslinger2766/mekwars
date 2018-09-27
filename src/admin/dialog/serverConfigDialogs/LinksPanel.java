@@ -40,8 +40,9 @@ public class LinksPanel extends JPanel {
 				+ " in a new area on the very bottom right of the client window. You can then set the icon and<br>"
 				+ " destination of these buttons which open the users default browser to view the content.<br>"
 				+ " An example would be, a button for server homepage, one for discord, and another for<br>"
-				+ " facebook. Icon Images should be placed in '/data/images/misc/' before client distribution<br><br>"
-				+ " The Rules panel is a new client tab that you can use to display a simple HTML page</HTML>";
+				+ " facebook. Icon Images should be placed in '/data/images/misc/' before client distribution<br>"
+				+ " The Rules panel is a new client tab that you can use to display a simple HTML file that<br>"
+				+ " should also be included with the client</HTML>";
 		
 		JPanel panel0 = new JPanel();
 		JPanel panel1 = new JPanel();
@@ -54,9 +55,9 @@ public class LinksPanel extends JPanel {
 		JPanel panel4 = new JPanel();
 		JPanel panel4a = new JPanel();
 		JPanel panel4b = new JPanel();
-		JPanel panel5 = new JPanel();
-		JPanel panel5a = new JPanel();
-		JPanel panel5b = new JPanel();
+		//JPanel panel5 = new JPanel();
+		//JPanel panel5a = new JPanel();
+		//JPanel panel5b = new JPanel();
 
 		panel0.add(new JLabel(description));
 
@@ -166,38 +167,17 @@ public class LinksPanel extends JPanel {
 		panel4.add(panel4a);
 		panel4.add(panel4b);
 		
-		panel5.setLayout(new VerticalLayout(5, VerticalLayout.CENTER, VerticalLayout.TOP));
-		panel5.setBorder(BorderFactory.createTitledBorder("Bot Panel"));
-		
-		baseCheckBox = new JCheckBox("Enable Bot Data Capture");
-		baseCheckBox.setToolTipText("<HTML>This allows the saving of player data to a JSON file for the discord bot to read from</HTML>");
-		baseCheckBox.setName("Enable_BotPlayerInfo");
-		panel5a.add(baseCheckBox);
 
 		
-		baseCheckBox = new JCheckBox("Enable Bot Chat Capture");
-		baseCheckBox.setToolTipText("<HTML>Logs all chat to a file which the discord bot can read from</HTML>");
-		baseCheckBox.setName("Enable_Bot_Chat");
-		panel5a.add(baseCheckBox);
-
-
-		baseLabel = new JLabel("Chat Buffer Location:");
-		baseLabel.setHorizontalAlignment(JLabel.RIGHT);
-		baseTextField = new JTextField(30);
-		baseTextField.setToolTipText("<HTML>Location of file to use with bot, the code 'should' generate this file if it does not exit </HTML>");
-		baseTextField.setName("Bot_Buffer_Location");
-		panel5b.add(baseLabel);
-		panel5b.add(baseTextField);
-		
-		panel5.add(panel5a);
-		panel5.add(panel5b);
+		//panel5.add(panel5a);
+		//panel5.add(panel5b);
 		
 		add(panel0);
 		add(panel1);
 		add(panel2);
 		add(panel3);
 		add(panel4);
-		add(panel5);
+		//add(panel5);
 
 	}
 

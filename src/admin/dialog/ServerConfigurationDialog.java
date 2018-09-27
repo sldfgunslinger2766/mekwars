@@ -52,6 +52,7 @@ import admin.dialog.serverConfigDialogs.CombatPanel;
 import admin.dialog.serverConfigDialogs.DefectionPanel;
 import admin.dialog.serverConfigDialogs.DirectSellPanel;
 import admin.dialog.serverConfigDialogs.DisconnectionPanel;
+import admin.dialog.serverConfigDialogs.DiscordAndDjangoPanel;
 import admin.dialog.serverConfigDialogs.FactionPanel;
 import admin.dialog.serverConfigDialogs.FactoryPurchasePanel;
 import admin.dialog.serverConfigDialogs.InfluencePanel;
@@ -163,6 +164,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         BattleValuePanel battleValuePanel = new BattleValuePanel();// mekwars BV adjustments
         SinglePlayerFactionPanel singlePlayerFactionPanel = new SinglePlayerFactionPanel(); // Single Player Faction Configs
         DisconnectionPanel disconnectionPanel = new DisconnectionPanel();
+        DiscordAndDjangoPanel discordAndDjangoPanel = new DiscordAndDjangoPanel(); //@salient
         PilotsPanel pilotsPanel = new PilotsPanel(mwclient);// allows SO's set up pilot options and personal pilot queue options
         NoPlayPanel noPlayPanel = new NoPlayPanel(mwclient);
         AdvancedRepairPanel advancedRepairPanel = new AdvancedRepairPanel();// Advanced Repair
@@ -198,6 +200,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Defection", null, defectionPanel, "Defection configuration");
         ConfigPane.addTab("Direct Sales", null, directSellPanel, "Units - the lifeblood of the game");
         ConfigPane.addTab("Disconnection", null, disconnectionPanel, "Disconnection autoresolution settings");
+        ConfigPane.addTab("Discord & Django", null, discordAndDjangoPanel, "Discord & Django"); //@salient
         ConfigPane.addTab("Faction", null, factionPanel, "House Stuff");
         ConfigPane.addTab("Factory Options", null, productionPanel, "Factories That Can Do");
         ConfigPane.addTab("Factory Purchase", null, factoryPurchasePanel, "Factories For Sale");

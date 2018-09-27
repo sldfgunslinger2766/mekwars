@@ -1398,6 +1398,8 @@ public class DefaultServerOptions {
         defaults.setProperty("Enable_Bot_Chat", "false");
         defaults.setProperty("Enable_BotPlayerInfo", "false");
         defaults.setProperty("Bot_Buffer_Location", "./data/allchatforbot.txt");
+        //---django options---
+        defaults.setProperty("Django_CaptureBattleAsJson", "false");
         //---Subfaction Options---
         defaults.setProperty("Enforce_Subfaction_Factory_Access", "false");
         defaults.setProperty("Self_Promote_Subfaction", "false");

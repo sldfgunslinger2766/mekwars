@@ -21,27 +21,27 @@ public class SPlayerToJSON
     public static void writeToFile(SPlayer player)
     {
     	startJson();
-    	stringJson("name",player.getName());
-    	stringJson("fluffText",player.getFluffText());
     	stringJson("myLogo",player.getMyLogo());
-    	intJson("money",player.getMoney());
+    	stringJson("name",player.getName());
+    	stringJson("discordID",player.getDiscordID());
+    	stringJson("house",player.getMyHouse().getName());
+    	stringJson("fluffText",player.getFluffText());
+    	stringJson("subFaction",player.getSubFaction().getName());
+    	doubleJson("rating",player.getRating());
     	intJson("experience",player.getExperience());
+    	intJson("money",player.getMoney());
     	intJson("influence",player.getInfluence());
     	intJson("rewardPoints",player.getReward());
-    	doubleJson("rating",player.getRating());
-    	stringJson("subFaction",player.getSubFaction().getName());
-    	stringJson("house",player.getMyHouse().getName());
-    	stringJson("discordID",player.getDiscordID());
     	endJson();
     	   	
 		File pathCheck = new File("data/discord/players");
 	
-		//if the path doesnt exist, create it
+		//if the path doesn't exist, create it
 		if (pathCheck.exists() == false)
 		{
 			if(pathCheck.mkdirs() == false)
 			{
-				CampaignData.mwlog.errLog("error in toJSONforBot() in SPlayer.java, failed to create directories");
+				CampaignData.mwlog.errLog("error in SPlayerToJSON, failed to create directories");
 				return;
 			}			
 		}
