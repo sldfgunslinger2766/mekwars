@@ -50,7 +50,7 @@ import server.campaign.mercenaries.ContractInfo;
 import server.campaign.mercenaries.MercHouse;
 import server.campaign.pilot.SPilot;
 import server.campaign.util.ELORanking;
-
+import server.util.BattleToJSON;
 import common.CampaignData;
 import common.House;
 import common.Unit;
@@ -1514,6 +1514,13 @@ public class ShortResolver {
         {
         	destroyedUnits.putAll(salvagableUnits);
         	salvagableUnits.clear();
+        }
+        
+        //@Salient likely spot for BattleToJSON
+        if(CampaignMain.cm.getBooleanConfig("Django_CaptureBattleAsJson"))
+        {
+        	BattleToJSON.writeToFile(shortOp, livingUnits, destroyedUnits, drawGame);
+        	CampaignData.mwlog.debugLog("Battle " + shortOp.getLongID() + " written to file as JSON");
         }
 
         /*

@@ -266,6 +266,7 @@ public class MiniCampaignPanel extends JPanel
 			baseCheckBox.setName("LockUnits_ForOneFightOnly");
 			panel5b.add(baseCheckBox);
 			
+			
 			SpringLayoutHelper.setupSpringGrid(panel5b, 3);
 			
 			
