@@ -287,7 +287,7 @@ public class ChristmasHandler {
 			// I suspect that Christmas Units will mess up a defection from Solaris
 			return true;
 		}
-		if(gifts.containsKey(userName.toLowerCase())) {
+		if(gifts != null && gifts.containsKey(userName.toLowerCase())) {
 			return gifts.get(userName.toLowerCase());
 		}
 		return false;
