@@ -24,7 +24,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
-import java.util.StringTokenizer;
 //import java.util.StringTokenizer;
 import java.util.TreeSet;
 //import java.util.Vector;
@@ -42,8 +41,6 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import client.MWClient;
-//import client.campaign.CUnit;
-import client.campaign.CUnit;
 import common.House;
 import common.Planet;
 //import common.Unit;

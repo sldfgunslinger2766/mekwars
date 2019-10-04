@@ -16,18 +16,14 @@
 
 package server.campaign.pilot.skills;
 
-import java.util.Iterator;
-
+import common.MegaMekPilotOption;
+import common.Unit;
+import common.campaign.pilot.Pilot;
 import megamek.common.Entity;
 import megamek.common.Mech;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.pilot.SPilot;
-
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.CampaignData;
 /**
  * @author Helge Richter
  */

@@ -24,13 +24,13 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import common.House;
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.commands.Command;
-import common.CampaignData;
-import common.House;
 
 public class SingASongCommand implements Command {
 	
@@ -138,7 +138,7 @@ public class SingASongCommand implements Command {
 			try {
 				dis.close();
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 		}
 		
@@ -169,7 +169,7 @@ public class SingASongCommand implements Command {
 			try {
 				dis.close();
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 		}
 		

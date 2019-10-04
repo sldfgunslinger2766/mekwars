@@ -16,7 +16,7 @@
 
 package server.campaign;
 
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * @author urgru A barebones timing thread which calls slices in CampaignMain.
@@ -48,7 +48,7 @@ public class SliceThread extends Thread {
         try {
             this.wait(time);
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
     }// end ExtendedWait(time)
 
@@ -84,7 +84,7 @@ public class SliceThread extends Thread {
                         }
                     }
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                     myCampaign.doSendToAllOnlinePlayers("Slice skipped. Errors occured", true);
                 }
                 sleepTime = (int)(Duration - (System.currentTimeMillis() - startTime));
@@ -92,7 +92,7 @@ public class SliceThread extends Thread {
                 
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
     }
 }

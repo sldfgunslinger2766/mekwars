@@ -22,16 +22,16 @@ import java.util.Vector;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import common.CampaignData;
+import common.Unit;
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import server.campaign.BuildTable;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.pilot.SPilot;
-
-import common.CampaignData;
-import common.Unit;
-import common.util.UnitUtils;
 
 
 /**
@@ -91,7 +91,7 @@ public class Market2 {
 			sellingPlayer = CampaignMain.cm.getPlayer(sellername);
 		
 		if (unit.getModelName().startsWith("Error") || unit.getModelName().startsWith("OMG")) {
-			CampaignData.mwlog.errLog("OMG unit trying to be sold on the BM " + unit.getProducer());
+			MWLogger.errLog("OMG unit trying to be sold on the BM " + unit.getProducer());
 			return;
 		}
 		
@@ -99,7 +99,7 @@ public class Market2 {
 				|| UnitUtils.hasArmorDamage(unit.getEntity())
 				|| UnitUtils.hasCriticalDamage(unit.getEntity()))
 				&& !CampaignMain.cm.getBooleanConfig("AllowDonatingOfDamagedUnits")) {
-			CampaignData.mwlog.errLog("Damaged unit trying to be sold on the BM " + unit.getProducer());
+			MWLogger.errLog("Damaged unit trying to be sold on the BM " + unit.getProducer());
 			
 			if (sellingPlayer != null)
 				CampaignMain.cm.toUser("You cannot sell damaged units on the Black Market!",sellername, true);
@@ -433,7 +433,7 @@ public class Market2 {
 					SUnit unitForSale = sellingActor.getUnit(currList.getListedUnitID());
 					
 					if (unitForSale == null) {
-						CampaignData.mwlog.errLog("Unable to get unit for sale "+ currList.getListedModelName() + " seller " + currList.getSellerName());
+						MWLogger.errLog("Unable to get unit for sale "+ currList.getListedModelName() + " seller " + currList.getSellerName());
 						listingsToRemove.add(currAuctionID);
 						continue;
 					}
@@ -550,7 +550,7 @@ public class Market2 {
 						// send the unit to its new owner, and log the transition
 						sellingActor.removeUnit(unitForSale, false);//BM units already removed from the SHouse display
 						buyingActor.addUnit(unitForSale, true, true);
-						CampaignData.mwlog.bmLog(winningBid.getBidderName()+ " bought a " + currList.getListedModelName()+ " from " + currList.getSellerName() + " for "+ winningBidAmt);
+						MWLogger.bmLog(winningBid.getBidderName()+ " bought a " + currList.getListedModelName()+ " from " + currList.getSellerName() + " for "+ winningBidAmt);
 					
 						/*
 						 * Add to listings to remove. The seller will be non-null, but the unit
@@ -564,8 +564,8 @@ public class Market2 {
 				}// end if(auction is over)
 				
 			} catch (Exception ex) {
-				CampaignData.mwlog.errLog("Error during Market Tick for unit " + currList.getListedModelName());
-				CampaignData.mwlog.errLog(ex);
+				MWLogger.errLog("Error during Market Tick for unit " + currList.getListedModelName());
+				MWLogger.errLog(ex);
 			}
 		}// end for(all auctions)
 
@@ -665,12 +665,12 @@ public class Market2 {
 		} else if (roll < assaultEnd) {
 			return 3;
 		} else {
-			CampaignData.mwlog.errLog("Error in getSkewedWeightClass().");
-			CampaignData.mwlog.errLog("lightEnd: " + lightEnd);
-			CampaignData.mwlog.errLog("mediumEnd: " + mediumEnd);
-			CampaignData.mwlog.errLog("heavyEnd: " + heavyEnd);
-			CampaignData.mwlog.errLog("assaultEnd: " + assaultEnd);
-			CampaignData.mwlog.errLog("Roll: " + roll);
+			MWLogger.errLog("Error in getSkewedWeightClass().");
+			MWLogger.errLog("lightEnd: " + lightEnd);
+			MWLogger.errLog("mediumEnd: " + mediumEnd);
+			MWLogger.errLog("heavyEnd: " + heavyEnd);
+			MWLogger.errLog("assaultEnd: " + assaultEnd);
+			MWLogger.errLog("Roll: " + roll);
 			return 0;
 		}
 	}

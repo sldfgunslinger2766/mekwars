@@ -60,10 +60,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import common.CampaignData;
 import common.VerticalLayout;
 import common.campaign.operations.DefaultOperation;
 import common.flags.FlagSet;
+import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 
 public class OperationsDialog extends JFrame implements ActionListener, KeyListener, MouseListener {
@@ -143,7 +143,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
             System.setOut(ps);
             System.setErr(ps);
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
         JMenuBar menuBar = new JMenuBar();
@@ -4125,7 +4125,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         } catch (Exception ex) {
         	System.err.println(ex.getMessage());
             System.err.println("Unable to save file");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
     }
@@ -4173,12 +4173,12 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
             }
         } catch (Exception ex) {
             System.err.println("Error loading file " + filePathName);
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         } finally {
         	try {
 				dis.close();
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
         }
 
@@ -4529,7 +4529,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
             fis.close();
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Unable to read " + opFile);
+            MWLogger.errLog("Unable to read " + opFile);
             return;
         }
 

@@ -27,11 +27,10 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import megamek.common.PlanetaryConditions;
-
 import common.util.BinReader;
 import common.util.BinWriter;
 import common.util.Position;
+import megamek.common.PlanetaryConditions;
 
 /**
  * @author Helge Richter

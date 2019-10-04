@@ -10,11 +10,12 @@ import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
 
+import common.CampaignData;
+import common.House;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
-import common.CampaignData;
-import common.House;
 
 /**
  * A wrapper for a Quartz scheduler.  This class handles all the ancillary stuff
@@ -94,7 +95,7 @@ public class MWScheduler implements ScheduleHandler {
 		} else if (scheduleType == ScheduleHandler.TYPE_CHRISTMAS_END) {
 			
 		} else {
-			CampaignData.mwlog.errLog("Unknown ScheduleType in changeFrequency: " + scheduleType);
+			MWLogger.errLog("Unknown ScheduleType in changeFrequency: " + scheduleType);
 			CampaignMain.cm.doSendModMail("SERVER", "Unknown ScheduleType in changeFrequency: " + scheduleType);
 		}
 	}
@@ -108,8 +109,8 @@ public class MWScheduler implements ScheduleHandler {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
 			scheduler.start();
 		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
-			CampaignData.mwlog.errLog("Unable to start scheduler!");
+			MWLogger.errLog(e);
+			MWLogger.errLog("Unable to start scheduler!");
 		}
 	}
 	
@@ -123,7 +124,7 @@ public class MWScheduler implements ScheduleHandler {
 			scheduler.shutdown();
 		} catch (SchedulerException e) {
 			CampaignMain.cm.doSendModMail("SERVER", e.getStackTrace().toString());
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 	}
 
@@ -136,7 +137,7 @@ public class MWScheduler implements ScheduleHandler {
 	@Override
 	public void scheduleChristmas(Date startDate, Date endDate) {
 		// TODO Auto-generated method stub
-		CampaignData.mwlog.infoLog("Scheduling Christmas");
+		MWLogger.infoLog("Scheduling Christmas");
 	}
 
 	/**
@@ -152,7 +153,7 @@ public class MWScheduler implements ScheduleHandler {
 		try {
 			scheduler.scheduleJob(job, trigger);
 		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 	}
 
@@ -166,7 +167,7 @@ public class MWScheduler implements ScheduleHandler {
 		try {
 			scheduler.unscheduleJob(key);
 		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 	}
 
@@ -191,7 +192,7 @@ public class MWScheduler implements ScheduleHandler {
 		try {
 			scheduler.rescheduleJob(oldKey, newTrigger);
 		} catch (SchedulerException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 	}
 	

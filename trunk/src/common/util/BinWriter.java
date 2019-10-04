@@ -20,7 +20,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import common.CampaignData;
+import org.mekwars.libpk.converters.HTML;
 
 
 /**
@@ -46,7 +46,7 @@ public class BinWriter {
             this.out = new PrintWriter(new TeePrinter(out,new FileWriter(debugFilename)));
             System.setProperty("line.seperator",ls);
         } catch (IOException e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
             this.out = new PrintWriter(out);
         }
         debug = true;

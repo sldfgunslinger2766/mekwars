@@ -25,11 +25,11 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-import megamek.common.TechConstants;
+import org.mekwars.libpk.converters.HTML;
 
 import common.util.BinReader;
 import common.util.BinWriter;
-import common.util.HTML;
+import megamek.common.TechConstants;
 
 /**
  * @author Helge Richter

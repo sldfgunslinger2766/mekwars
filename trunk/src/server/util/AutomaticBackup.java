@@ -33,9 +33,8 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
-
-import common.CampaignData;
 
 public class AutomaticBackup extends Thread{
 
@@ -67,7 +66,7 @@ public class AutomaticBackup extends Thread{
         if (lastBackup > time - backupHours )
             return;
         
-        CampaignData.mwlog.mainLog("Archiving Started at "+time);
+        MWLogger.mainLog("Archiving Started at "+time);
         CampaignMain.cm.setArchiving(true);
         
         SimpleDateFormat sDF = new SimpleDateFormat(dateTimeFormat);
@@ -92,8 +91,8 @@ public class AutomaticBackup extends Thread{
         	zipFile.close();
     	}
     	catch(Exception ex){
-        	CampaignData.mwlog.errLog("Unable to create factions zip file");
-        	CampaignData.mwlog.errLog(ex);
+        	MWLogger.errLog("Unable to create factions zip file");
+        	MWLogger.errLog(ex);
     	}
 
     	try{
@@ -103,8 +102,8 @@ public class AutomaticBackup extends Thread{
         	zipFile.close();
     	}
     	catch(Exception ex){
-        	CampaignData.mwlog.errLog("Unable to create planets zip file");
-        	CampaignData.mwlog.errLog(ex);
+        	MWLogger.errLog("Unable to create planets zip file");
+        	MWLogger.errLog(ex);
     	}
         try{
 	        out = new FileOutputStream(playerZipFileName);
@@ -113,8 +112,8 @@ public class AutomaticBackup extends Thread{
 	        zipFile.close();
         }
         catch(Exception ex){
-            CampaignData.mwlog.errLog("Unable to create player zip file");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Unable to create player zip file");
+            MWLogger.errLog(ex);
         }
 
         try{
@@ -124,13 +123,13 @@ public class AutomaticBackup extends Thread{
             zipFile.close();
         }
         catch(Exception ex){
-            CampaignData.mwlog.errLog("Unable to create data zip file");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Unable to create data zip file");
+            MWLogger.errLog(ex);
         }
 		CampaignMain.cm.getConfig().setProperty("LastAutomatedBackup",Long.toString(time));
 		CampaignMain.dso.createConfig();
         CampaignMain.cm.setArchiving(false);
-        CampaignData.mwlog.mainLog("Archiving Ended.");
+        MWLogger.mainLog("Archiving Ended.");
     }
     
     /**
@@ -158,11 +157,11 @@ public class AutomaticBackup extends Thread{
                     in.close();
                 }
                 catch ( FileNotFoundException fnfe ){
-                    CampaignData.mwlog.errLog("Unable to backup faction file: "+files[i].getName());
+                    MWLogger.errLog("Unable to backup faction file: "+files[i].getName());
                 }
                 catch (Exception ex){
-                    CampaignData.mwlog.errLog("Unable to backup faction files");
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog("Unable to backup faction files");
+                    MWLogger.errLog(ex);
                 }
             }
         
@@ -187,8 +186,8 @@ public class AutomaticBackup extends Thread{
             }
         }
         catch (Exception ex){
-            CampaignData.mwlog.errLog("Unable to backup planet files");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Unable to backup planet files");
+            MWLogger.errLog(ex);
         }
         
     }
@@ -212,8 +211,8 @@ public class AutomaticBackup extends Thread{
 	        }
         }
         catch (Exception ex){
-            CampaignData.mwlog.errLog("Unable to backup player files");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Unable to backup player files");
+            MWLogger.errLog(ex);
         }
         
     }
@@ -249,8 +248,8 @@ public class AutomaticBackup extends Thread{
             }
         }
         catch (Exception ex){
-            CampaignData.mwlog.errLog("Unable to backup server data files: "+path);
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Unable to backup server data files: "+path);
+            MWLogger.errLog(ex);
         }
         
     }

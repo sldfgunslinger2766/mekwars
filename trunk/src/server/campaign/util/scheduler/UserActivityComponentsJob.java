@@ -31,12 +31,11 @@ import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
+import common.campaign.operations.Operation;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.operations.ShortOperation;
-
-import common.campaign.operations.Operation;
 
 
 /**

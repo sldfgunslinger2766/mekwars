@@ -19,15 +19,14 @@ package server.campaign.commands.admin;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+import common.House;
+import common.Planet;
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlanet;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
-import common.House;
-import common.Planet;
 
 public class AdminReturnPlanetsToOriginalOwnersCommand implements Command {
 	
@@ -70,7 +69,7 @@ public class AdminReturnPlanetsToOriginalOwnersCommand implements Command {
 			
 			//cast to planet
 			SPlanet p = (SPlanet)currP;
-			CampaignData.mwlog.mainLog("Returning planet " + p.getName() + " to original owner");
+			MWLogger.mainLog("Returning planet " + p.getName() + " to original owner");
 			int totalCP	= p.getConquestPoints();
 			//get original owner
 			SHouse origOwner = CampaignMain.cm.getHouseFromPartialString(p.getOriginalOwner(), Username);
@@ -87,7 +86,7 @@ public class AdminReturnPlanetsToOriginalOwnersCommand implements Command {
 			p.updated();
 	}
 		
-		//server.CampaignData.mwlog.modLog(Username + " restored all plants to their original owners.");
+		//server.MWLogger.modLog(Username + " restored all plants to their original owners.");
 		CampaignMain.cm.toUser("You restored all plants to their original owners.",Username,true);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " restored all plants to their original owners.");
 		

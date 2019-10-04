@@ -31,13 +31,12 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.Vector;
 
-import server.campaign.pilot.SPilot;
-import server.campaign.util.SerializedMessage;
-
-import common.CampaignData;
 import common.Unit;
 import common.UnitFactory;
+import common.util.MWLogger;
 import common.util.TokenReader;
+import server.campaign.pilot.SPilot;
+import server.campaign.util.SerializedMessage;
 
 
 public class SUnitFactory extends UnitFactory implements Serializable {
@@ -196,9 +195,9 @@ public class SUnitFactory extends UnitFactory implements Serializable {
             buildtableName += Unit.getTypeClassDesc(type_id);
 
 		if(this.getPlanet().getOwner() != null)
-			CampaignData.mwlog.infoLog("New unit for " + this.getPlanet().getOwner().getName() + " on " + this.getPlanet().getName() + ": " + Filename + "(Table: " + buildtableName + ")");
+			MWLogger.infoLog("New unit for " + this.getPlanet().getOwner().getName() + " on " + this.getPlanet().getName() + ": " + Filename + "(Table: " + buildtableName + ")");
 		else 
-			CampaignData.mwlog.infoLog("New unit for " + this.getFounder() + " on " + this.getPlanet().getName() + ": " + Filename + "(Table: " + buildtableName + ")");
+			MWLogger.infoLog("New unit for " + this.getFounder() + " on " + this.getPlanet().getName() + ": " + Filename + "(Table: " + buildtableName + ")");
 		
         if (Filename.toLowerCase().trim().endsWith(".mul")) {
             units.addAll(SUnit.createMULUnits(Filename, producer));
@@ -217,7 +216,7 @@ public class SUnitFactory extends UnitFactory implements Serializable {
      * updates players' clients with accurate refresh times.
      */
     public String addRefresh(int i, boolean sendHSUpdate) {
-    	CampaignData.mwlog.debugLog("Starting refresh on " + getName() + ", adding " + i);
+    	MWLogger.debugLog("Starting refresh on " + getName() + ", adding " + i);
         int startRefresh = getTicksUntilRefresh();
 
         setTicksUntilRefresh(getTicksUntilRefresh() + i);

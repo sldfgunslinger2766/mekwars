@@ -21,13 +21,12 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.Planet;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlanet;
 //import server.campaign.operations.ShortOperation;
 import server.campaign.util.PlanetNameComparator;
-
-import common.Planet;
 
 //BarukKahzad 20151129 with much copy and paste from HouseCommand.java
 public class FindContestedPlanetsCommand implements Command {

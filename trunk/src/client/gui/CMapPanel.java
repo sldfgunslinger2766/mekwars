@@ -29,8 +29,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import client.MWClient;
-
 import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * Class used to display Stellar InnerStellarMap in GUI
@@ -142,7 +142,7 @@ public class CMapPanel extends JPanel {
         	try {
             	map.activate(client.getData().getPlanet(map.conf.planetID));
             } catch (Exception ex) {
-            	CampaignData.mwlog.errLog(ex);
+            	MWLogger.errLog(ex);
             }
         }
         

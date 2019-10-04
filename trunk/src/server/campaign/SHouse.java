@@ -38,6 +38,19 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.mekwars.libpk.logging.PKLogManager;
+
+import common.BMEquipment;
+import common.CampaignData;
+import common.Planet;
+import common.SubFaction;
+import common.Unit;
+import common.util.ComponentToCritsConverter;
+import common.util.MWLogger;
+import common.util.StringUtils;
+import common.util.TokenReader;
+import common.util.UnitComponents;
+import common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.TechConstants;
 import server.campaign.commands.Command;
@@ -48,17 +61,6 @@ import server.campaign.mercenaries.ContractInfo;
 import server.campaign.mercenaries.MercHouse;
 import server.campaign.pilot.SPilot;
 import server.campaign.util.SerializedMessage;
-
-import common.BMEquipment;
-import common.CampaignData;
-import common.Planet;
-import common.SubFaction;
-import common.Unit;
-import common.util.ComponentToCritsConverter;
-import common.util.StringUtils;
-import common.util.TokenReader;
-import common.util.UnitComponents;
-import common.util.UnitUtils;
 
 /**
  * A class holding a server-side representation of a House
@@ -332,7 +334,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             setName(TokenReader.readString(ST));
 
             // start the chat logging.
-            CampaignData.mwlog.createFactionLogger(getName());
+            PKLogManager.getInstance().addLog(getName());
 
             setMoney(TokenReader.readInt(ST));
             setHouseColor(TokenReader.readString(ST));
@@ -680,7 +682,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             // Stuff for MercHouse.. Has to be here until someone tells me how
             // to move it :) - McWiz
             if (isMercHouse()) {
-                CampaignData.mwlog.mainLog("Merc House");
+                MWLogger.mainLog("Merc House");
                 int contractamount = 0;
 
                 contractamount = TokenReader.readInt(ST);
@@ -694,7 +696,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             }
             
             // if (CampaignMain.cm.isDebugEnabled())
-            CampaignData.mwlog.mainLog("House loaded: " + getName());
+            MWLogger.mainLog("House loaded: " + getName());
 
             /*
              * this.getPilotQueues().setBaseGunnery(this.getBaseGunner());
@@ -706,8 +708,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
             return s;
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Error while loading faction: " + getName() + " Going forward anyway ...");
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Error while loading faction: " + getName() + " Going forward anyway ...");
             return s;
         }
     }
@@ -772,7 +774,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         setHouseColor(HouseColor);
         setName(name);
 
-        CampaignData.mwlog.createFactionLogger(getName());
+        PKLogManager.getInstance().addLog(getName());
         // Vehicles = new Vector();
 
         for (int j = 0; j < 5; j++) // Type
@@ -947,7 +949,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
         double result = activityPP;
 
-//        CampaignData.mwlog.debugLog("Getting all fighting players");
+//        MWLogger.debugLog("Getting all fighting players");
 //        // now loop through all of the fighting players
 //        for (SPlayer currP : getFightingPlayers().values()) {
 //
@@ -955,24 +957,24 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 //             * Get the player's short op. He's fighing, so there should always
 //             * be one, but check for a null just in case.
 //             */
-//            CampaignData.mwlog.debugLog("checking short operation for " + currP.getName());
+//            MWLogger.debugLog("checking short operation for " + currP.getName());
 //            ShortOperation so = CampaignMain.cm.getOpsManager().getShortOpForPlayer(currP);
 //            if (so == null) {
 //                continue;
 //            }
 //
-//            CampaignData.mwlog.debugLog("Getting data for op " + so.getName() + " for player " + currP.getName());
+//            MWLogger.debugLog("Getting data for op " + so.getName() + " for player " + currP.getName());
 //            Operation o = CampaignMain.cm.getOpsManager().getOperation(so.getName());
 //            double value = o.getDoubleValue("CountGameForProduction");
 //            if (value < 0) {
 //                value = 0;
 //            }
 //
-//            CampaignData.mwlog.debugLog("adding value.");
+//            MWLogger.debugLog("adding value.");
 //            // add the players weight to the total faction multiplier
 //            result += value;
 //
-//            CampaignData.mwlog.debugLog("Showing output");
+//            MWLogger.debugLog("Showing output");
 //            // if enabled, show the player his personal worth
 ////            if (value > 0 && showOutput) {
 ////                String toReturn = "AM:You counted towards production this tick";
@@ -983,7 +985,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 ////            }
 //        }// end for(fighting players)
 
-        CampaignData.mwlog.debugLog("returning with results.");
+        MWLogger.debugLog("returning with results.");
         // pass back the aggregate value.
         return result;
     }
@@ -1000,13 +1002,13 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
          * Unfortunately, it doesn't lend itself to very good logging. I'll see
          * what I can do.
          */
-        CampaignData.mwlog.debugLog("Inside SHouse.Tick for: " + getName());
+        MWLogger.debugLog("Inside SHouse.Tick for: " + getName());
         String result = "-------> <b>Tick! [" + tickid + "]</b><br>";
         StringBuilder hsUpdates = new StringBuilder();
 
         double tickworth = 0;
 
-        CampaignData.mwlog.debugLog("Getting number of players who count for production");
+        MWLogger.debugLog("Getting number of players who count for production");
 
         // non-real ticks occur the first time a server starts, when free
         // minticks are given away
@@ -1019,9 +1021,9 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         }
         
         
-        CampaignData.mwlog.debugLog("     -> " + tickworth);
+        MWLogger.debugLog("     -> " + tickworth);
 
-        CampaignData.mwlog.debugLog("Calculating refresh points");
+        MWLogger.debugLog("Calculating refresh points");
         
         // Refresh factories
         calcActivityPP(tickworth);   
@@ -1042,7 +1044,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         StringBuilder scrapExcuses = new StringBuilder();
         StringBuilder marketAdditions = new StringBuilder();
 
-        CampaignData.mwlog.debugLog("Checking for Unit Overflow");
+        MWLogger.debugLog("Checking for Unit Overflow");
         /*
          * Loop though every type and weight class, looking for overflow. If
          * there are more units than allowed in the hangar, dispose of random
@@ -1129,7 +1131,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             produceCrits();
         }
 
-        CampaignData.mwlog.debugLog("Doing Component Overflow");
+        MWLogger.debugLog("Doing Component Overflow");
         /*
          * Loop through all types/weightclasses as above, but look for component
          * overflow instead of hangar overage. Here we either scrap the
@@ -1174,7 +1176,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                     else {
                         Vector<SUnit> newUnits = m.getMechProduced(type_id, getNewPilot(type_id));
                         for (SUnit newUnit : newUnits) {
-                            CampaignData.mwlog.debugLog("AP Unit " + newUnit.getModelName());
+                            MWLogger.debugLog("AP Unit " + newUnit.getModelName());
                             hsUpdates.append(this.addUnit(newUnit, false));
                             hsUpdates.append(addPP(weight, type_id, -(getPPCost(weight, type_id)), false));
                             /*
@@ -1214,7 +1216,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         // now, assemble the strings
         result += mechsProduced.toString() + marketAdditions.toString() + industrialAccidents.toString() + scrapExcuses.toString();
 
-        CampaignData.mwlog.debugLog("show Production Count");
+        MWLogger.debugLog("show Production Count");
         if ((getShowProductionCountNext() - 1) <= 0) {
             setShowProductionCountNext((Integer.parseInt(this.getConfig("ShowComponentGainEvery"))));
 
@@ -1274,7 +1276,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                 result += myFormatter.format(AeroComponents / (Double.parseDouble(this.getConfig("AssaultAeroPP")))) + " Assault aero<br>";
             }
 
-            CampaignData.mwlog.debugLog("SetComponentsProduced");
+            MWLogger.debugLog("SetComponentsProduced");
             // and return the result to CampaignMain in order to have it sent to
             // the players
             setComponentsProduced(Unit.MEK, 0);
@@ -1287,13 +1289,13 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             addShowProductionCountNext(-1);
         }
         
-        CampaignData.mwlog.debugLog("Send House Updates: ");
-        CampaignData.mwlog.debugLog("     -> " + hsUpdates.toString());
+        MWLogger.debugLog("Send House Updates: ");
+        MWLogger.debugLog("     -> " + hsUpdates.toString());
         // send house updates, if not empty
         if (hsUpdates.length() > 0) {
             CampaignMain.cm.doSendToAllOnlinePlayers(this, "HS|" + hsUpdates.toString(), false);
         }
-        CampaignData.mwlog.debugLog("returning from tick: " + getName());
+        MWLogger.debugLog("returning from tick: " + getName());
         return result;
     }
 
@@ -1361,7 +1363,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
         } catch (Exception e) {// ./data/scrapmessages/ is 21 chars. strip path
             // leader and just name file w/ problems.
-            CampaignData.mwlog.errLog("A problem occured with your " + filepath.substring(21, filepath.length()) + " file!");
+            MWLogger.errLog("A problem occured with your " + filepath.substring(21, filepath.length()) + " file!");
             return "A " + unit.getModelName() + " was kidnapped by aliens from outer space";
         }
     }
@@ -1542,7 +1544,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
      */
     public void addActivityPP(Double armyWeight) {
     	activityPP += armyWeight;
-    	CampaignData.mwlog.debugLog("Adding " + armyWeight + " in production. " + getName() + " total now " + activityPP);
+    	MWLogger.debugLog("Adding " + armyWeight + " in production. " + getName() + " total now " + activityPP);
     }
     
     public void resetActivityPP() {
@@ -1566,7 +1568,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             // has territory on
             SPlanet p = e.next();
             if (equals(p.getOwner())) {
-            	CampaignData.mwlog.debugLog("Calling tick on " + p.getName() + " to add " + refreshToAdd + " refresh");
+            	MWLogger.debugLog("Calling tick on " + p.getName() + " to add " + refreshToAdd + " refresh");
                 hsUpdates.append(p.tick(refreshToAdd));// call the planetary
                 // tick
             }
@@ -1583,19 +1585,19 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         for (int i = 0; i < 4; i++) {// loop through each weight class,
             // adding PP
             if (useMekPP) {
-                CampaignData.mwlog.debugLog("Updating House Mek Parts: " + i);
+                MWLogger.debugLog("Updating House Mek Parts: " + i);
                 hsUpdates.append(addPP(i, Unit.MEK, componentsToAdd, true));
                 addComponentsProduced(Unit.MEK, componentsToAdd);
             }
 
             if (useVehiclePP) {
-                CampaignData.mwlog.debugLog("Updating House Vehicle Parts: " + i);
+                MWLogger.debugLog("Updating House Vehicle Parts: " + i);
                 hsUpdates.append(addPP(i, Unit.VEHICLE, componentsToAdd, true));
                 addComponentsProduced(Unit.VEHICLE, componentsToAdd);
             }
 
             if (useInfantryPP) {
-                CampaignData.mwlog.debugLog("Updating House Infantry: " + i);
+                MWLogger.debugLog("Updating House Infantry: " + i);
                 if (!Boolean.parseBoolean(this.getConfig("UseOnlyLightInfantry")) || i == Unit.LIGHT) {
                 	hsUpdates.append(addPP(i, Unit.INFANTRY, componentsToAdd, true));
                 }
@@ -1603,19 +1605,19 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             }
 
             if (useProtoMekPP) {
-                CampaignData.mwlog.debugLog("Updating House ProtoMek: " + i);
+                MWLogger.debugLog("Updating House ProtoMek: " + i);
                 hsUpdates.append(addPP(i, Unit.PROTOMEK, componentsToAdd, true));
                 addComponentsProduced(Unit.PROTOMEK, componentsToAdd);
             }
 
             if (useBattleArmorPP) {
-                CampaignData.mwlog.debugLog("Updating House BA: " + i);
+                MWLogger.debugLog("Updating House BA: " + i);
                 hsUpdates.append(addPP(i, Unit.BATTLEARMOR, componentsToAdd, true));
                 addComponentsProduced(Unit.BATTLEARMOR, componentsToAdd);
             }
 
             if (useAeroPP) {
-                CampaignData.mwlog.debugLog("Updating House Aero: " + i);
+                MWLogger.debugLog("Updating House Aero: " + i);
                 hsUpdates.append(addPP(i, Unit.AERO, componentsToAdd, false));
                 addComponentsProduced(Unit.AERO, componentsToAdd);
             }
@@ -1654,9 +1656,9 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             Vector<Integer> v = getComponents().get(type_id);
             v.setElementAt(new Integer(v.elementAt(weight).intValue() + val), weight);
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Error in addPP()");
-            CampaignData.mwlog.errLog("weight: " + weight + " type: " + type_id + " value: " + val);
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Error in addPP()");
+            MWLogger.errLog("weight: " + weight + " type: " + type_id + " value: " + val);
             Vector<Integer> v = new Vector<Integer>(4, 1);
             for (int i = 0; i < 4; i++) {
                 // Weight
@@ -1695,8 +1697,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         try {
             s = this.getHangar(type_id).elementAt(weightclass);
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Empty Vector in getEntity");
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Empty Vector in getEntity");
             return null;
         }
 
@@ -1916,9 +1918,9 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             dis.close();
             fis.close();
         } catch (FileNotFoundException fnfe) {
-            CampaignData.mwlog.mainLog("FNFE!!!!");
+            MWLogger.mainLog("FNFE!!!!");
         } catch (IOException ioe) {
-            CampaignData.mwlog.mainLog("IOE!!!");
+            MWLogger.mainLog("IOE!!!");
         }
     }
 
@@ -1959,8 +1961,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             }
         } else {
             // Error. We should never get here.
-            CampaignData.mwlog.mainLog("Error in House.removeUnitProduction(): trying to remove a unit that is not produced.");
-            CampaignData.mwlog.mainLog("  --> House: " + getName() + ", Unit: " + fileName);
+            MWLogger.mainLog("Error in House.removeUnitProduction(): trying to remove a unit that is not produced.");
+            MWLogger.mainLog("  --> House: " + getName() + ", Unit: " + fileName);
         }
         if (toReturn.length() == 0) {
             return;
@@ -2096,7 +2098,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         CampaignMain.cm.toUser("PL|SSN|" + p.getSubFactionName(), realName, false);
 
         Date d = new Date(System.currentTimeMillis());
-        CampaignData.mwlog.mainLog(d + ":" + "User Logged into House: " + realName);
+        MWLogger.mainLog(d + ":" + "User Logged into House: " + realName);
 
         // Send the current servers MegaMek game Options
         CampaignMain.cm.toUser("GO|" + CampaignMain.cm.getMegaMekOptionsToString(), realName, false);
@@ -2247,7 +2249,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         CampaignMain.cm.forceSavePlayer(p);
         // add info to logs
         Date d = new Date(System.currentTimeMillis());
-        CampaignData.mwlog.mainLog(d + ":" + "User Logged out: " + realName);
+        MWLogger.mainLog(d + ":" + "User Logged out: " + realName);
         CampaignMain.cm.toUser("CS|" + SPlayer.STATUS_LOGGEDOUT, realName, false);
     }
 
@@ -2650,8 +2652,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         try {
             s = this.getHangar(type).elementAt(weight);
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Empty Vector in getHighestUnitCost");
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Empty Vector in getHighestUnitCost");
             return Float.MAX_VALUE;
         }
         if (s == null) {
@@ -2738,9 +2740,9 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             config.store(ps, "Faction Config");
             ps.close();
         } catch (FileNotFoundException fe) {
-            CampaignData.mwlog.errLog(fileName + " not found");
+            MWLogger.errLog(fileName + " not found");
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
     }
@@ -2760,7 +2762,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             config.load(new FileInputStream(configFile));
             populateUnitLimits();
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
         populateUnitLimits();
         populateBMLimits();
@@ -2810,11 +2812,11 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
      */
     public int getUnitLimit(int unitType, int unitWeightClass) {
         if (unitType < 0 || unitType > Unit.AERO) {
-            CampaignData.mwlog.errLog("Request for invalid unitType in SHouse.getUnitLimit: " + unitType);
+            MWLogger.errLog("Request for invalid unitType in SHouse.getUnitLimit: " + unitType);
             return -1;
         }
         if (unitWeightClass < 0 || unitWeightClass > Unit.ASSAULT) {
-            CampaignData.mwlog.errLog("Request for invalid unitWeightClass in SHouse.getUnitLimit: " + unitWeightClass);
+            MWLogger.errLog("Request for invalid unitWeightClass in SHouse.getUnitLimit: " + unitWeightClass);
             return -1;
         }
         return unitLimits[unitType][unitWeightClass];
@@ -2924,7 +2926,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         setHouseColor(CampaignMain.cm.getConfig("DisputedPlanetColor"));
         setHousePlayerColors(CampaignMain.cm.getConfig("DisputedPlanetColor"));
 
-        CampaignData.mwlog.createFactionLogger(getName());
+        PKLogManager.getInstance().addLog(getName());
         // Vehicles = new Vector();
 
         for (int j = 0; j < 5; j++) // Type

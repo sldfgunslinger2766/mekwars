@@ -20,14 +20,13 @@
  */
 package server.campaign.pilot.skills;
 
+import common.MegaMekPilotOption;
+import common.Unit;
+import common.campaign.pilot.Pilot;
 import megamek.common.Entity;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.pilot.SPilot;
-
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.Pilot;
 
 /**
  * Maneuvering like a quad.
@@ -79,7 +78,7 @@ public class ManeuveringAceSkill extends SPilotSkill {
             total *= baseBVMod;
             return (int) total;
         } catch (Exception ex) {
-            // CampaignData.mwlog.errLog(ex);
+            // MWLogger.errLog(ex);
             return 0;
         }
     }
@@ -96,7 +95,7 @@ public class ManeuveringAceSkill extends SPilotSkill {
             total *= baseBVMod;
             return (int) total;
         } catch (Exception ex) {
-            // CampaignData.mwlog.errLog(ex);
+            // MWLogger.errLog(ex);
             return 0;
         }
     }

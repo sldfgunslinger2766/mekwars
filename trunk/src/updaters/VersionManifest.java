@@ -16,8 +16,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.JFileChooser;
 
-import common.CampaignData;
-
+import common.util.MWLogger;
 import updaters.utils.IOUtil;
 
 public class VersionManifest {
@@ -285,7 +284,7 @@ public class VersionManifest {
         	try {
 				manifestList.close();
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
         }
     }

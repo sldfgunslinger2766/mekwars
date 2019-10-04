@@ -27,6 +27,11 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.House;
+import common.Unit;
+import common.util.MWLogger;
+import common.util.StringUtils;
+import common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.Mech;
 import server.campaign.BuildTable;
@@ -36,12 +41,6 @@ import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.SUnitFactory;
 import server.campaign.pilot.SPilot;
-
-import common.CampaignData;
-import common.House;
-import common.Unit;
-import common.util.StringUtils;
-import common.util.UnitUtils;
 
 /*
  * Jun 10/04 - Dave Poole
@@ -118,7 +117,7 @@ public class RepodCommand implements Command {
                 }
             }
 
-            // CampaignData.mwlog.errLog("repod target "+target+" Global: "+global);
+            // MWLogger.errLog("repod target "+target+" Global: "+global);
 
             // return if the unit which is targetted is not an omni
             if (!m.isOmni()) {
@@ -152,7 +151,7 @@ public class RepodCommand implements Command {
                     SHouse faction = (SHouse) Houses.next();
 
                     fileName = BuildTable.getFileName(faction.getName(), Unit.getWeightClassDesc(m.getWeightclass()), timeZone, m.getType());
-                    // CampaignData.mwlog.errLog("File: "+fileName);
+                    // MWLogger.errLog("File: "+fileName);
 
                     if (!tables.contains(fileName)) {
                         tables.add(fileName);
@@ -167,9 +166,9 @@ public class RepodCommand implements Command {
             } else if (!Boolean.parseBoolean(h.getConfig("RepodUsesFactory"))) {
                 String fileName = "";
                 String timeZone = h.getConfig("NoFactoryRepodFolder");
-                // CampaignData.mwlog.errLog("TimeZone: "+timeZone);
+                // MWLogger.errLog("TimeZone: "+timeZone);
                 fileName = BuildTable.getFileName(h.getName(), Unit.getWeightClassDesc(m.getWeightclass()), timeZone, m.getType());
-                // CampaignData.mwlog.errLog("File: "+fileName);
+                // MWLogger.errLog("File: "+fileName);
 
                 if (!tables.contains(fileName)) {
                     tables.add(fileName);
@@ -223,7 +222,7 @@ public class RepodCommand implements Command {
             // variants.add(mEnt.getModel());
             int i = tables.size();
 
-            // CampaignData.mwlog.errLog("table size is "+i);
+            // MWLogger.errLog("table size is "+i);
             if (i < 1) {
                 CampaignMain.cm.toUser("AM:Repod Failed: No acceptable factory currently available", Username, true);
                 return;
@@ -277,7 +276,7 @@ public class RepodCommand implements Command {
                                             continue;
                                         }
 
-                                        // CampaignData.mwlog.errLog("FileName: "+Filename+" Model: "+model);
+                                        // MWLogger.errLog("FileName: "+Filename+" Model: "+model);
                                         if (!variants.contains(Filename)) {
                                             variants.add(Filename);
                                             String repodMoneyCfg = "RepodCost" + Unit.getWeightClassDesc(cm.getWeightclass());
@@ -310,18 +309,18 @@ public class RepodCommand implements Command {
                                 // chassis.equals(targetChassis)
                             }// end if (Filename.startsWith(targetChassis))
                         } else {
-                            CampaignData.mwlog.mainLog("File " + prodFile + " has a problem with line:" + l);
+                            MWLogger.mainLog("File " + prodFile + " has a problem with line:" + l);
                         }
                     }// end dis.ready()
                     dis.close();
                     fis.close();
                 } catch (FileNotFoundException ex) {
-                    CampaignData.mwlog.mainLog("File " + prodFile + " was not Found");
+                    MWLogger.mainLog("File " + prodFile + " was not Found");
                 } catch (IOException ex) {
-                    CampaignData.mwlog.mainLog("File " + prodFile + " had an I/O error");
+                    MWLogger.mainLog("File " + prodFile + " had an I/O error");
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
-                    CampaignData.mwlog.mainLog("File " + prodFile + " has a problem");
+                    MWLogger.errLog(ex);
+                    MWLogger.mainLog("File " + prodFile + " has a problem");
                 }
 
                 finally {
@@ -362,7 +361,7 @@ public class RepodCommand implements Command {
 
     private void createOmni(SUnit m, String Filename, int unitid, SPlayer p, Vector<SUnitFactory> possible, boolean random) {
 
-        // CampaignData.mwlog.errLog("Filename "+Filename);
+        // MWLogger.errLog("Filename "+Filename);
         SHouse h = p.getHouseFightingFor();
         String Username = p.getName();
 

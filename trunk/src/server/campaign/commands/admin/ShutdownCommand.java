@@ -18,13 +18,12 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
 import server.campaign.util.scheduler.MWScheduler;
 import server.util.MWPasswd;
-
-import common.CampaignData;
 
 
 /**
@@ -57,14 +56,14 @@ public class ShutdownCommand implements Command {
         CampaignMain.cm.saveBannedAmmo();
         CampaignMain.cm.getDefaultPlayerFlags().save();
         CampaignMain.cm.toUser("AM:You halted the server. Have a nice day.", Username,true);
-        CampaignData.mwlog.infoLog(Username + " halted the server. Have a nice day!");
+        MWLogger.infoLog(Username + " halted the server. Have a nice day!");
         CampaignMain.cm.addToNewsFeed("Server halted!", "Server News", "");
         CampaignMain.cm.postToDiscord("Server halted!");
         try {
             MWPasswd.save();
         } catch(Exception ex) {
-            CampaignData.mwlog.errLog("Unable to save passwords before shutdown!");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Unable to save passwords before shutdown!");
+            MWLogger.errLog(ex);
         }
         
         System.exit(0);

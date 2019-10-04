@@ -18,12 +18,11 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import common.Unit;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.commands.Command;
-
-import common.Unit;
 
 // AdminGrantComponents#Faction#Type#WeightClass#Components
 public class AdminGrantComponentsCommand implements Command {
@@ -80,7 +79,7 @@ public class AdminGrantComponentsCommand implements Command {
 		
 		h.addPP(unitWeight,unitType,comps,true);
 		CampaignMain.cm.toUser("You granted " + comps + " Comps to " + h.getName(),Username,true);
-		//server.CampaignData.mwlog.modLog(Username + " granted " + comps+ " Comps to " + h.getName());
+		//server.MWLogger.modLog(Username + " granted " + comps+ " Comps to " + h.getName());
 		CampaignMain.cm.doSendModMail("NOTE",Username + " granted " + comps+ " Comps to " + h.getName());
 		
 	}

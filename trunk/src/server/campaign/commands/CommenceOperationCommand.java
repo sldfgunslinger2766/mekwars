@@ -17,12 +17,12 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.CampaignData;
+import common.campaign.operations.Operation;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.operations.ShortOperation;
-
-import common.CampaignData;
-import common.campaign.operations.Operation;
 
 /**
  * This command is used for multi player opertionas. the attacker
@@ -114,7 +114,7 @@ public class CommenceOperationCommand implements Command {
 		so.changeStatus(ShortOperation.STATUS_INPROGRESS);
 		
 		//tell the defender that he has succesfully joined the attack.
-		CampaignData.mwlog.gameLog("Operation Commenced: " + so.getShortID() + "/" + ap.getName());
+		MWLogger.gameLog("Operation Commenced: " + so.getShortID() + "/" + ap.getName());
 		CampaignMain.cm.toUser("AM:Operation Commenced!",Username,true);
 		
 	}//end process

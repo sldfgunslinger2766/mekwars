@@ -22,15 +22,14 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import client.MWClient;
+import client.campaign.CUnit;
+import common.campaign.pilot.skills.PilotSkill;
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Mech;
 import megamek.common.Mounted;
-import client.MWClient;
-import client.campaign.CUnit;
-
-import common.CampaignData;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.UnitUtils;
 
 public class SalvageManagmentThread extends Thread{
     
@@ -60,8 +59,8 @@ public class SalvageManagmentThread extends Thread{
                 processWorkOrders();
             }catch(Exception ex){
                 client.systemMessage("Error proccessing Salvage Management queue. Alert an SO and check your ./logs/error.0 for the error");
-                CampaignData.mwlog.errLog("Error in Salvage Management Queue");
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog("Error in Salvage Management Queue");
+                MWLogger.errLog(ex);
             }
         }
     }
@@ -184,7 +183,7 @@ public class SalvageManagmentThread extends Thread{
                     boolean armor = ( slot >= UnitUtils.LOC_FRONT_ARMOR);
                     
                     if ( unit == null ){
-                        CampaignData.mwlog.errLog("Unable to find unit to salvage. removing salvage job");
+                        MWLogger.errLog("Unable to find unit to salvage. removing salvage job");
                         client.systemMessage("Unable to find unit to salvage. removing salvage job");
                         workQueue.remove();
                         continue;

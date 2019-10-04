@@ -14,6 +14,8 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.Unit;
+import common.campaign.pilot.skills.PilotSkill;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
@@ -22,9 +24,6 @@ import server.campaign.pilot.SPilotSkills;
 import server.campaign.pilot.skills.AstechSkill;
 import server.campaign.pilot.skills.EdgeSkill;
 import server.campaign.pilot.skills.SPilotSkill;
-
-import common.Unit;
-import common.campaign.pilot.skills.PilotSkill;
 
 public class DemotePilotCommand implements Command {
 

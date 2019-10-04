@@ -40,7 +40,6 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import client.MWClient;
-
 import common.House;
 import common.util.SpringLayoutHelper;
 //util imports

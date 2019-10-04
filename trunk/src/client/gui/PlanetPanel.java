@@ -25,7 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import client.MWClient;
-
 import common.House;
 import common.Planet;
 import common.util.StringUtils;

@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import common.CampaignData;
+import common.util.MWLogger;
 import server.campaign.SPlayer;
 
 
@@ -41,7 +41,7 @@ public class SPlayerToJSON
 		{
 			if(pathCheck.mkdirs() == false)
 			{
-				CampaignData.mwlog.errLog("error in SPlayerToJSON, failed to create directories");
+				MWLogger.errLog("error in SPlayerToJSON, failed to create directories");
 				return;
 			}			
 		}
@@ -52,12 +52,12 @@ public class SPlayerToJSON
 			         StandardOpenOption.CREATE,
 			         StandardOpenOption.TRUNCATE_EXISTING);
 						
-			CampaignData.mwlog.debugLog("SPlayer to json filewrite completed successfully");
+			MWLogger.debugLog("SPlayer to json filewrite completed successfully");
 		} 
 		catch (IOException e) 
 		{
-			CampaignData.mwlog.debugLog(e);
-			CampaignData.mwlog.errLog(e);
+			MWLogger.debugLog(e);
+			MWLogger.errLog(e);
 		}
 		
 		jsonString = ""; //clear for next use

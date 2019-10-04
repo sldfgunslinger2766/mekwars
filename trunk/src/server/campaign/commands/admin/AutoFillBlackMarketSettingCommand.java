@@ -24,6 +24,8 @@ package server.campaign.commands.admin;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
+import common.Equipment;
+import common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
@@ -33,9 +35,6 @@ import megamek.common.TechConstants;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-
-import common.Equipment;
-import common.util.UnitUtils;
 
 public class AutoFillBlackMarketSettingCommand implements Command {
 

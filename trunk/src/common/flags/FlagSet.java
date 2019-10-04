@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * 
@@ -79,7 +79,7 @@ public class FlagSet {
 		if (flag != -1) {
 			flags.set(flag, value);
 		} else {
-			CampaignData.mwlog.errLog("Unknown Flag checked: " + name);
+			MWLogger.errLog("Unknown Flag checked: " + name);
 		}
 	}
 	
@@ -93,7 +93,7 @@ public class FlagSet {
 		if (flag != -1) {
 			return flags.get(flag);
 		} else {
-			CampaignData.mwlog.errLog("Unknown Flag checked: " + name);
+			MWLogger.errLog("Unknown Flag checked: " + name);
 			return false;
 		}
 	}
@@ -170,7 +170,7 @@ public class FlagSet {
 		setFlagName(id, name);
 		setFlag(name, value);
 		
-		//CampaignData.mwlog.debugLog("Setting flag " + name + "(id: " + id + ") to value " + value);
+		//MWLogger.debugLog("Setting flag " + name + "(id: " + id + ") to value " + value);
 	}
 	
 	/**
@@ -218,8 +218,8 @@ public class FlagSet {
 			try{
 				file.createNewFile();
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
-				CampaignData.mwlog.errLog("Unable to create pFlags.dat");
+				MWLogger.errLog(e);
+				MWLogger.errLog("Unable to create pFlags.dat");
 				return;
 			}
 		}
@@ -230,8 +230,8 @@ public class FlagSet {
 			out.close();
 			fstream.close();
 		} catch (IOException e) {
-			CampaignData.mwlog.errLog(e);
-			CampaignData.mwlog.errLog("Error saving pFlags.dat");
+			MWLogger.errLog(e);
+			MWLogger.errLog("Error saving pFlags.dat");
 		}
 		
 	}
@@ -253,11 +253,11 @@ public class FlagSet {
 					loadDefaults(s);
 				}
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
-				CampaignData.mwlog.errLog("Error reading pFlags.dat");
+				MWLogger.errLog(e);
+				MWLogger.errLog("Error reading pFlags.dat");
 			}
 		} catch (FileNotFoundException e) {
-			CampaignData.mwlog.errLog("No pFlags.dat. Returning");
+			MWLogger.errLog("No pFlags.dat. Returning");
 			return;
 		}
 	}

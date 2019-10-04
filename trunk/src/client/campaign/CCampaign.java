@@ -24,10 +24,9 @@ import java.util.TreeMap;
 import client.MWClient;
 import client.gui.CCommPanel;
 import client.gui.dialog.ArmyViewerDialog;
-
 import common.BMEquipment;
-import common.CampaignData;
 import common.util.ComponentToCritsConverter;
+import common.util.MWLogger;
 import common.util.TokenReader;
 
 /**
@@ -50,7 +49,7 @@ public class CCampaign {
 		if (f.exists() && !f.isDirectory()) {f.delete();}
 		if (!f.exists()) {
 			try {f.mkdirs();}
-			catch (Exception e) {CampaignData.mwlog.errLog(e);}
+			catch (Exception e) {MWLogger.errLog(e);}
 		}
 	}
 
@@ -232,7 +231,7 @@ public class CCampaign {
 	        }
 	        mwclient.setWaiting(false);
 	    }catch(Exception ex) {
-	        CampaignData.mwlog.errLog(ex);
+	        MWLogger.errLog(ex);
 	    }
 	}
 }

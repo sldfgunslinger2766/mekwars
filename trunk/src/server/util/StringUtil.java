@@ -17,9 +17,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
-
-import common.CampaignData;
 
 public class StringUtil {
 	
@@ -102,14 +101,14 @@ public class StringUtil {
 			fstream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			CampaignData.mwlog.errLog("No HTMLSanitizer.cfg found.");
+			MWLogger.errLog("No HTMLSanitizer.cfg found.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         
 		for(String tag : allowedTags) {
-			CampaignData.mwlog.errLog("Adding to whitelist: " + tag);
+			MWLogger.errLog("Adding to whitelist: " + tag);
 			whitelist.addTags(tag);
 		}
 		
@@ -120,7 +119,7 @@ public class StringUtil {
 				whitelist.addAttributes(att, attribute);
 			}
 		}
-CampaignData.mwlog.errLog(whitelist.toString());
+MWLogger.errLog(whitelist.toString());
 		Cleaner c = new Cleaner(whitelist);
 		HTMLCleaner = c;
 	}

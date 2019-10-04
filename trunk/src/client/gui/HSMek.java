@@ -19,6 +19,11 @@ package client.gui;
 
 import java.util.StringTokenizer;
 
+import client.MWClient;
+import client.campaign.CUnit;
+import common.Unit;
+import common.campaign.pilot.Pilot;
+import common.util.TokenReader;
 import megamek.common.BattleArmor;
 import megamek.common.CrewType;
 import megamek.common.Entity;
@@ -26,12 +31,6 @@ import megamek.common.Infantry;
 import megamek.common.Mech;
 import megamek.common.Protomech;
 import megamek.common.QuadMech;
-import client.MWClient;
-import client.campaign.CUnit;
-
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.util.TokenReader;
 
 public class HSMek {
 

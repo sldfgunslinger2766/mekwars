@@ -1,5 +1,14 @@
 VERSION HISTORY:
 ----------------
++ Started separating out truly independent code into libpk.jar to imrpove 
+  OOP adherence
+  ***********************************
+  * NOTE TO OPERATORS               *
+  *                                 *
+  * Make sure to add libpk to your  *
+  * client and server lib folders   *
+  ***********************************
++ Updated MM to version 0.47.1-MW20190904-635fdd3
 + Moved tracker configuration from serverdata.dat to campaignconfg.date
   **********************************************************************
   * NOTE TO OPERATORS                                                  *

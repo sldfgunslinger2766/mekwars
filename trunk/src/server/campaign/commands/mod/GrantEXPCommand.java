@@ -46,7 +46,7 @@ public class GrantEXPCommand implements Command {
 			p.addExperience(amount, true);
 			CampaignMain.cm.toUser("AM:You've been granted " + amount + " EXP from " + Username,p.getName(),true);
 			CampaignMain.cm.toUser("AM:You granted " + amount + " EXP to " + p.getName(),Username,true);
-			//server.CampaignData.mwlog.modLog(Username + " granted " + amount + " EXP to " + p.getName());
+			//server.MWLogger.modLog(Username + " granted " + amount + " EXP to " + p.getName());
 			CampaignMain.cm.doSendModMail("NOTE",Username + " granted " + amount + " EXP to " + p.getName());
 		}
 	}

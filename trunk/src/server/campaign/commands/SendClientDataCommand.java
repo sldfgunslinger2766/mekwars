@@ -15,7 +15,7 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.CampaignData;
+import common.util.MWLogger;
 
 public class SendClientDataCommand implements Command {
 	
@@ -50,8 +50,8 @@ public class SendClientDataCommand implements Command {
 				}
 				count++;
 			}
-			CampaignData.mwlog.ipLog(userData.toString());
-			CampaignData.mwlog.ipLog(verifyData.toString());
+			MWLogger.ipLog(userData.toString());
+			MWLogger.ipLog(verifyData.toString());
 		}catch (Exception ex){
 			//do nothing
 		}

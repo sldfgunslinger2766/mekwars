@@ -39,10 +39,10 @@ package common.campaign.operations;
 import java.util.Properties;
 import java.util.TreeMap;
 
-import common.CampaignData;
 import common.MWXMLWriter;
 import common.MWXmlSerializable;
 import common.util.MMNetXStream;
+import common.util.MWLogger;
 
 public class Operation implements MWXmlSerializable {
 	
@@ -122,11 +122,11 @@ public class Operation implements MWXmlSerializable {
 		
 		//catastrophic failue. sysexit.
 		if (toReturn == null && log) {
-			CampaignData.mwlog.errLog("Failed getting value \"" + valToGet + "\" from " + this.getName() + " and DefaultOp. Returning null.");
+			MWLogger.errLog("Failed getting value \"" + valToGet + "\" from " + this.getName() + " and DefaultOp. Returning null.");
 			try{
 				throw new Exception();
 			}catch(Exception ex){
-				CampaignData.mwlog.errLog(ex);
+				MWLogger.errLog(ex);
 			}
 		}
 			

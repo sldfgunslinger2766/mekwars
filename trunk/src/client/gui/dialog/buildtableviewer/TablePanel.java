@@ -33,9 +33,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import client.MWClient;
-import common.CampaignData;
 import common.House;
 import common.Unit;
+import common.util.MWLogger;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
 import megamek.common.MechFileParser;
@@ -191,7 +191,7 @@ public class TablePanel extends JPanel implements ActionListener {
                 unitdisplay.displayEntity(entity);
 				
 			} catch (EntityLoadingException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 		}
 	}

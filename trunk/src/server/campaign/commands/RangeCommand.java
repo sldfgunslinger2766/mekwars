@@ -19,12 +19,11 @@ package server.campaign.commands;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import common.Planet;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlanet;
 import server.campaign.SPlayer;
-
-import common.Planet;
 
 
 public class RangeCommand implements Command {

@@ -28,6 +28,7 @@ import java.util.Date;
 import common.CampaignData;
 import common.util.BinWriter;
 //import common.util.BinReader;
+import common.util.MWLogger;
 
 
 
@@ -63,7 +64,7 @@ public class CommandTaskThread extends Thread {
             // timestamp is in this format
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
-            CampaignData.mwlog.infoLog("DataProvider call accepted from "+client.getInetAddress());
+            MWLogger.infoLog("DataProvider call accepted from "+client.getInetAddress());
             BinWriter out = null;
             BufferedReader in = null;
             String cmdStr = "";
@@ -79,8 +80,8 @@ public class CommandTaskThread extends Thread {
                     	//System.err.println("timeStr: "+timeStr);
                     }catch (Exception e) {
                         in.close();
-                    	CampaignData.mwlog.errLog("Error getting data provider command or timestamp from client.");
-                    	CampaignData.mwlog.errLog(e);
+                    	MWLogger.errLog("Error getting data provider command or timestamp from client.");
+                    	MWLogger.errLog(e);
                     	return;
                     }//end command name try/catch
                     
@@ -90,8 +91,8 @@ public class CommandTaskThread extends Thread {
                         	out = new BinWriter(new PrintWriter(client.getOutputStream()));
                         } catch (Exception e) {
                             in.close();
-                        	CampaignData.mwlog.errLog("Error in data provider while creating output stream.");
-                        	CampaignData.mwlog.errLog(e);
+                        	MWLogger.errLog("Error in data provider while creating output stream.");
+                        	MWLogger.errLog(e);
                         	return;
                         } 
                     }//end output stream if
@@ -105,8 +106,8 @@ public class CommandTaskThread extends Thread {
                     } catch (Exception e) {
                         in.close();
                         out.close();
-                    	CampaignData.mwlog.errLog("Error creating dataprovider command: " + cmdStr);
-                    	CampaignData.mwlog.errLog(e);
+                    	MWLogger.errLog("Error creating dataprovider command: " + cmdStr);
+                    	MWLogger.errLog(e);
                     	return;
                     }//end command class try/catch
                    
@@ -119,14 +120,14 @@ public class CommandTaskThread extends Thread {
                     } catch (Exception e) {
                         in.close();
                         out.close();
-                    	CampaignData.mwlog.errLog("Error executing dataprovider command: " + cmdStr);
-                    	CampaignData.mwlog.errLog(e);
+                    	MWLogger.errLog("Error executing dataprovider command: " + cmdStr);
+                    	MWLogger.errLog(e);
                     	return;
                     }//end execute try/catch
                     out.flush();
                 }//end While            
                 try {
-                    CampaignData.mwlog.infoLog("Closing DataProvider call from "+client.getInetAddress());
+                    MWLogger.infoLog("Closing DataProvider call from "+client.getInetAddress());
                     in.close();
                     if(out != null)
                     	out.close();
@@ -137,7 +138,7 @@ public class CommandTaskThread extends Thread {
                     client = null;
                     return;
                 }catch (Exception e) {
-                	CampaignData.mwlog.errLog(e);
+                	MWLogger.errLog(e);
                 	return;
                 }//end client.close() try
             }catch (SocketException se ){
@@ -149,12 +150,12 @@ public class CommandTaskThread extends Thread {
                     if(out != null)
                     	out.close();
                     client.close();
-                    CampaignData.mwlog.infoLog("TimeOut DataProvider call from "+client.getInetAddress());
+                    MWLogger.infoLog("TimeOut DataProvider call from "+client.getInetAddress());
                 }catch(Exception ex){}
                 client = null;
                 return;
             }catch (Exception ex){
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
                 return;
             }//end first try
             

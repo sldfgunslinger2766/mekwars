@@ -19,14 +19,13 @@ package server.campaign.commands.admin;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
+import common.Unit;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.PilotQueues;
 import server.campaign.SHouse;
 import server.campaign.commands.Command;
 import server.campaign.pilot.SPilot;
-
-import common.Unit;
 
 public class AdminHousePilotsCommand implements Command {
 	
@@ -79,7 +78,7 @@ public class AdminHousePilotsCommand implements Command {
 		h.updated();
 		//send to caller and notify mod channel
 		CampaignMain.cm.toUser(toReturn.toString(),Username,true);
-		//server.CampaignData.mwlog.modLog(Username + " checked House " + h.getName() + " Pilots");
+		//server.MWLogger.modLog(Username + " checked House " + h.getName() + " Pilots");
 		CampaignMain.cm.doSendModMail("NOTE",Username + " checked House "+ h.getName() + " Pilots");
 		
 		

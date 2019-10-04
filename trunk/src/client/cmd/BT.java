@@ -26,8 +26,7 @@ import java.util.StringTokenizer;
 
 import client.MWClient;
 import client.gui.CCommPanel;
-
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * @author Spork
@@ -61,7 +60,7 @@ public class BT extends Command {
 			while(folderT.hasMoreTokens()) {
 				//Token 1 is the folder
 				String dName = folderT.nextToken();
-				CampaignData.mwlog.infoLog(dName);
+				MWLogger.infoLog(dName);
 				// Token 2 is the names of the lists
 				if(folderT.hasMoreTokens()) {
 					StringTokenizer listT = new StringTokenizer(folderT.nextToken(), "*");
@@ -90,7 +89,7 @@ public class BT extends Command {
             while(folderT.hasMoreTokens()) {
                 //Token 1 is the folder
                 String dName = folderT.nextToken();
-                CampaignData.mwlog.infoLog(dName);
+                MWLogger.infoLog(dName);
                 // Token 2 is the names of the lists
                 if(folderT.hasMoreTokens()) {
                     StringTokenizer listT = new StringTokenizer(folderT.nextToken(), "*");
@@ -141,11 +140,11 @@ public class BT extends Command {
 					out.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					CampaignData.mwlog.errLog(e);
+					MWLogger.errLog(e);
 				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 		} else if ( cmd.equalsIgnoreCase("VS") ) {
 		    mwclient.setWaiting(false);

@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import client.gui.SplashWindow;
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  *
@@ -85,7 +85,7 @@ public class CConnector implements IConnectionListener
     	if ( message.indexOf("CH%7c%2fc+sendclientdata%23") < 0
     	        && message.indexOf("CH%7c%2fc+sendtomisc%23") < 0
     	        && message.indexOf("/pong") < 0) {
-            CampaignData.mwlog.infoLog("SENT: " + message);
+            MWLogger.infoLog("SENT: " + message);
         }
       _connectionHandler.queueMessage(message);
     }
@@ -108,24 +108,24 @@ public class CConnector implements IConnectionListener
 
       try {
         if (_connected) {
-            CampaignData.mwlog.errLog("already connected...");
+            MWLogger.errLog("already connected...");
             return;
         }
 
         if (_host.equals("") || _port == -1)
         {
-            CampaignData.mwlog.errLog("no host or port set...");
+            MWLogger.errLog("no host or port set...");
             return;
         }
 
         IOException ioexception = null;
 
-        CampaignData.mwlog.errLog("Opening socket connection to " + _host + ":" + _port);
+        MWLogger.errLog("Opening socket connection to " + _host + ":" + _port);
         Socket s = null;
         try {
           s = new Socket(_host, _port);
-          CampaignData.mwlog.errLog("CConnector: connected to " + _host + ":" + _port);
-          //CampaignData.mwlog.errLog("setting NO_DELAY = true");
+          MWLogger.errLog("CConnector: connected to " + _host + ":" + _port);
+          //MWLogger.errLog("setting NO_DELAY = true");
           s.setTcpNoDelay(true);
           _connectionHandler = new ConnectionHandlerLocal(s);
           _connectionHandler.setListener(this);
@@ -134,7 +134,7 @@ public class CConnector implements IConnectionListener
           return;
         }
         catch (IOException e) {ioexception = e;}
-        CampaignData.mwlog.errLog("giving up");
+        MWLogger.errLog("giving up");
         if (ioexception != null) {throw ioexception;}
       }
       catch (IOException e) {
@@ -143,7 +143,7 @@ public class CConnector implements IConnectionListener
             splash.setStatus(splash.STATUS_CONNECTFAILED);
         }
 
-        CampaignData.mwlog.errLog(e);
+        MWLogger.errLog(e);
         /*Object[] options = {"Exit"};
         int selectedValue = JOptionPane.showOptionDialog(null,"Could not connect to " + _host + ":" + _port,"Connection error!",JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,null,options,options[0]);
         if (selectedValue == 0)

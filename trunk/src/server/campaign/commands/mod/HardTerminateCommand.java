@@ -70,7 +70,7 @@ public class HardTerminateCommand implements Command {
 		CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_TERMCOMMAND, tp, true);
 		
 		CampaignMain.cm.toUser("AM:You hard-terminated Attack #" + opID + ".",Username,true);
-		//server.CampaignData.mwlog.modLog(Username + " hard-terminated Attack #" + opID + ".");
+		//server.MWLogger.modLog(Username + " hard-terminated Attack #" + opID + ".");
 		CampaignMain.cm.doSendModMail("NOTE",Username + " hard-terminated Attack #" + opID + ".");
 	
 	}//end process()

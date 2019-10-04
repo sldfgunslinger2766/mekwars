@@ -19,13 +19,12 @@ package server.campaign.market2;
 import java.util.Iterator;
 import java.util.TreeMap;
 
+import common.Unit;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-
-import common.CampaignData;
-import common.Unit;
 
 /**
  * Vickrey auction is a modified highest sealed bid auction. Winner
@@ -132,7 +131,7 @@ public final class VickreyAuction implements IAuction {
 					// OK, we've got a unit to work with
 					baysNeeded = SUnit.getHangarSpaceRequired(u, sellingFaction);
 				} else {
-					CampaignData.mwlog.errLog("Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
+					MWLogger.errLog("Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
 					CampaignMain.cm.doSendModMail("NOTE", "Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
 					baysNeeded = 0;
 				}

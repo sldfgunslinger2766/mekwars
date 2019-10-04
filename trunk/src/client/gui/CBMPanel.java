@@ -37,16 +37,15 @@ import javax.swing.SpringLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
-import megamek.common.Entity;
 import client.MWClient;
 import client.campaign.CBMUnit;
 import client.campaign.CCampaign;
 import client.campaign.CPlayer;
 import client.gui.dialog.SellUnitDialog;
-
-import common.CampaignData;
+import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
+import megamek.client.ui.swing.unitDisplay.UnitDisplay;
+import megamek.common.Entity;
 
 /**
  * Black Market Panel
@@ -436,7 +435,7 @@ public class CBMPanel extends JPanel {
                     mwclient.doParseDataInput(toUser);
                     return;
                 }catch (Exception ex){
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }
         }

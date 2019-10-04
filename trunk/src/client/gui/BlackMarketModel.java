@@ -37,7 +37,6 @@ import javax.swing.table.TableColumn;
 import client.MWClient;
 import client.campaign.CBMUnit;
 import client.campaign.CCampaign;
-
 import common.Unit;
 
 /**

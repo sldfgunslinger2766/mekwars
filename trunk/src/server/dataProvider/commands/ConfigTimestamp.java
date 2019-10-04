@@ -22,14 +22,14 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import server.dataProvider.ServerCommand;
-
 import common.CampaignData;
 import common.util.BinWriter;
 //import java.io.BufferedReader;
 //import java.io.FileInputStream;
 //import java.io.InputStreamReader;
 //import server.campaign.CampaignMain;
+import common.util.MWLogger;
+import server.dataProvider.ServerCommand;
 
 /**
  * Retrieve the MD5 of the current campaignconfig file.
@@ -52,12 +52,12 @@ public class ConfigTimestamp implements ServerCommand {
 				
 				serverConfigTimestamp = tempTime.substring(11);//remove "#Timestamp="
 			} catch (Exception e) {
-				CampaignData.mwlog.infoLog("Error reading first line from campaignconfig.txt");       
+				MWLogger.infoLog("Error reading first line from campaignconfig.txt");       
 			}
     	} 
         
         else
-        	CampaignData.mwlog.infoLog("campaignconfig.txt didn't exist. returning ficticious timestamp to requesting client.");       
+        	MWLogger.infoLog("campaignconfig.txt didn't exist. returning ficticious timestamp to requesting client.");       
         
         out.println(serverConfigTimestamp, "ConfigTimestamp");
     }

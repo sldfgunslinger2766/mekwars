@@ -20,7 +20,6 @@ import java.util.StringTokenizer;
 
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
-import server.campaign.commands.Command;
 
 /**
  * @author Salient for miniCampaigns, will report to user status of their campaign

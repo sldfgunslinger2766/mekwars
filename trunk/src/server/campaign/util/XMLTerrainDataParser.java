@@ -21,10 +21,6 @@
  */
 package server.campaign.util;
 
-import gd.xml.ParseException;
-import gd.xml.XMLParser;
-import gd.xml.XMLResponder;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,11 +28,13 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-
-import common.CampaignData;
 import common.PlanetEnvironment;
 import common.Terrain;
+import common.util.MWLogger;
+import gd.xml.ParseException;
+import gd.xml.XMLParser;
+import gd.xml.XMLResponder;
+import server.campaign.CampaignMain;
 
 /**
  * @author Helge Richter
@@ -173,7 +171,7 @@ public class XMLTerrainDataParser implements XMLResponder {
             XMLParser xp = new XMLParser();
             xp.parseXML(this);
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
     }
 
@@ -183,7 +181,7 @@ public class XMLTerrainDataParser implements XMLResponder {
             System.out.print("  pubID = " + pubID);
         if (sysID != null)
             System.out.print("  sysID = " + sysID);
-        CampaignData.mwlog.mainLog("");
+        MWLogger.mainLog("");
     }
 
     public void recordEntityDeclaration(String name, String value, String pubID, String sysID, String notation) throws ParseException {
@@ -196,12 +194,12 @@ public class XMLTerrainDataParser implements XMLResponder {
             System.out.print("  sysID = " + sysID);
         if (notation != null)
             System.out.print("  notation = " + notation);
-        CampaignData.mwlog.mainLog("");
+        MWLogger.mainLog("");
     }
 
     public void recordElementDeclaration(String name, String content) throws ParseException {
         System.out.print(prefix + "!ELEMENT: " + name);
-        CampaignData.mwlog.mainLog("  content = " + content);
+        MWLogger.mainLog("  content = " + content);
     }
 
     public void recordAttlistDeclaration(String element, String attr, boolean notation, String type, String defmod, String def) throws ParseException {
@@ -209,7 +207,7 @@ public class XMLTerrainDataParser implements XMLResponder {
         System.out.print("  attr = " + attr);
         System.out.print("  type = " + ((notation) ? "NOTATIONS " : "") + type);
         System.out.print("  def. modifier = " + defmod);
-        CampaignData.mwlog.mainLog((def == null) ? "" : "  def = " + notation);
+        MWLogger.mainLog((def == null) ? "" : "  def = " + notation);
     }
 
     public void recordDoctypeDeclaration(String name, String pubID, String sysID) throws ParseException {
@@ -218,7 +216,7 @@ public class XMLTerrainDataParser implements XMLResponder {
             System.out.print("  pubID = " + pubID);
         if (sysID != null)
             System.out.print("  sysID = " + sysID);
-        CampaignData.mwlog.mainLog("");
+        MWLogger.mainLog("");
         prefix = "";
     }
 
@@ -228,18 +226,18 @@ public class XMLTerrainDataParser implements XMLResponder {
     }
 
     public void recordDocEnd() {
-        CampaignData.mwlog.mainLog("");
-        CampaignData.mwlog.mainLog("Parsing finished without error");
+        MWLogger.mainLog("");
+        MWLogger.mainLog("Parsing finished without error");
     }
 
     @SuppressWarnings("rawtypes")
 	public void recordElementStart(String name, Hashtable attr) throws ParseException {
-        // CampaignData.mwlog.mainLog(prefix+"Element: "+name);
+        // MWLogger.mainLog(prefix+"Element: "+name);
         lastElement = name;
     }
 
     public void recordElementEnd(String tagName) throws ParseException {
-        CampaignData.mwlog.mainLog("ENVIRONMENT READ");
+        MWLogger.mainLog("ENVIRONMENT READ");
         if (tagName.equals("ENVIRONMENT")) {
             PlanetEnvironment PE = new PlanetEnvironment();
 
@@ -466,18 +464,18 @@ public class XMLTerrainDataParser implements XMLResponder {
     }
 
     public void recordPI(String name, String pValue) {
-        CampaignData.mwlog.mainLog(prefix + "*" + name + " PI: " + pValue);
+        MWLogger.mainLog(prefix + "*" + name + " PI: " + pValue);
     }
 
     public void recordCharData(String charData) {
-        // CampaignData.mwlog.mainLog(prefix+charData);
+        // MWLogger.mainLog(prefix+charData);
         if (!charData.equalsIgnoreCase("")) {
-            // do nothing; //CampaignData.mwlog.mainLog(lastElement + " --> " + charData);
+            // do nothing; //MWLogger.mainLog(lastElement + " --> " + charData);
         } else
             lastElement = "";
         if (lastElement.equalsIgnoreCase("NAME")) {
             name = charData;
-            CampaignData.mwlog.mainLog(name);
+            MWLogger.mainLog(name);
         } else if (lastElement.equalsIgnoreCase("CRATERPROB"))
             CraterProb = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("CRATERMINNUM"))
@@ -660,7 +658,7 @@ public class XMLTerrainDataParser implements XMLResponder {
     }
 
     public void recordComment(String comment) {
-        CampaignData.mwlog.mainLog(prefix + "*Comment: " + comment);
+        MWLogger.mainLog(prefix + "*Comment: " + comment);
     }
 
     /* INPUT METHODS */

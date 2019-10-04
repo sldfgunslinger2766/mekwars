@@ -17,7 +17,6 @@ package dedicatedhost.cmd;
 import java.util.StringTokenizer;
 
 import common.campaign.Buildings;
-
 import dedicatedhost.MWDedHost;
 
 /**

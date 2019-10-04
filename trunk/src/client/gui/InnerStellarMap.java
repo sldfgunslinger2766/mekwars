@@ -59,16 +59,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
 import client.MWClient;
 import client.campaign.CArmy;
 import client.gui.dialog.PlanetSearchDialog;
-
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import common.CampaignData;
 import common.House;
 import common.Influences;
 import common.Planet;
 import common.util.MMNetXStream;
+import common.util.MWLogger;
 import common.util.Position;
 import common.util.StringUtils;
 
@@ -389,7 +389,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
 
                     File loadJar = new File("./MekWarsAdmin.jar");
                     if (!loadJar.exists()) {
-                        CampaignData.mwlog.errLog("AdminMapPopupMenu creation skipped. No MekWarsAdmin.jar present.");
+                        MWLogger.errLog("AdminMapPopupMenu creation skipped. No MekWarsAdmin.jar present.");
                     } else {
                         loader = new URLClassLoader(new URL[] { loadJar.toURI().toURL() });
                         Class<?> c = loader.loadClass("admin.AdminMapPopupMenu");
@@ -398,8 +398,8 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                         popup.add((JMenu) o);
                     }
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog("AdminMapPopupMenu creation FAILED!");
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog("AdminMapPopupMenu creation FAILED!");
+                    MWLogger.errLog(ex);
                 }
             }
 
@@ -475,9 +475,9 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             }
         } catch (Throwable e) {
             if (!(e instanceof FileNotFoundException)) {
-                CampaignData.mwlog.errLog((Exception) e);
+                MWLogger.errLog((Exception) e);
             }
-            CampaignData.mwlog.infoLog("could not read map config file. Will use defaults");
+            MWLogger.infoLog("could not read map config file. Will use defaults");
             conf = new InnerStellarMapConfig();
         }
 
@@ -485,9 +485,9 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             parseOverlayFile();
         } catch (Throwable e) {
             if (!(e instanceof FileNotFoundException)) {
-                CampaignData.mwlog.errLog((Exception) e);
+                MWLogger.errLog((Exception) e);
             }
-            CampaignData.mwlog.infoLog("could not read map overlay file.");
+            MWLogger.infoLog("could not read map overlay file.");
         }
 
         for (int i = 0; i < displayStr.length; ++i) {
@@ -685,7 +685,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                 g.drawImage(ic.getImage(), map2scrX(x), map2scrY(y), width, height, ic.getImageObserver());
 
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
         }
@@ -716,15 +716,15 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                 try {
                     c = StringUtils.html2Color(houseColor);
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
-                    CampaignData.mwlog.errLog("Bad House for planet: " + p.getName());
+                    MWLogger.errLog(ex);
+                    MWLogger.errLog("Bad House for planet: " + p.getName());
                 }
             } else {
                 try {
                     c = adjustColor(StringUtils.html2Color(houseColor));
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
-                    CampaignData.mwlog.errLog("Bad House for planet: " + p.getName());
+                    MWLogger.errLog(ex);
+                    MWLogger.errLog("Bad House for planet: " + p.getName());
                 }
             }
 
@@ -855,7 +855,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             }// end if(should display)
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
     }
@@ -1118,7 +1118,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
         try {
             new MMNetXStream().toXML(conf, new FileWriter(mwclient.getCacheDir() + "/mapconf.xml"));
         } catch (IOException e1) {
-            CampaignData.mwlog.errLog(e1);
+            MWLogger.errLog(e1);
         }
     }
 
@@ -1138,7 +1138,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                     mp.repaint();
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog("Error with Planet: " + mwclient.getData().getPlanet(id).getName());
+                MWLogger.errLog("Error with Planet: " + mwclient.getData().getPlanet(id).getName());
             }
         }
     }

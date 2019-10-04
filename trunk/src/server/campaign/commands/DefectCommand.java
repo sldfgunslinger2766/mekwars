@@ -23,6 +23,10 @@ import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
+import common.Planet;
+import common.UnitFactory;
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import megamek.common.TechConstants;
 import server.campaign.BuildTable;
 import server.campaign.CampaignMain;
@@ -34,11 +38,6 @@ import server.campaign.SUnit;
 import server.campaign.SUnitFactory;
 import server.campaign.util.HouseRankingHelpContainer;
 import server.util.MWPasswd;
-
-import common.CampaignData;
-import common.Planet;
-import common.UnitFactory;
-import common.util.UnitUtils;
 
 public class DefectCommand implements Command {
 
@@ -689,7 +688,7 @@ public class DefectCommand implements Command {
         }
 
         if (planetList.size() < 1) {
-            CampaignData.mwlog.errLog("Error Unable to find planet for new faction " + house.getName());
+            MWLogger.errLog("Error Unable to find planet for new faction " + house.getName());
             CampaignMain.cm.doSendModMail("NOTE", "Error Unable to find planet for new faction " + house.getName());
         }
 
@@ -756,7 +755,7 @@ public class DefectCommand implements Command {
                     ps.close();
                     out.close();
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }
         }

@@ -54,7 +54,7 @@ public class ModeratorMailCommand implements Command {
 			return;
 		
 		CampaignMain.cm.doSendModMail(Username, toSend);
-		//CampaignData.mwlog.modLog("[MM] " + Username + ": " + toSend);
+		//MWLogger.modLog("[MM] " + Username + ": " + toSend);
 		
 	}
 }

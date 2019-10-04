@@ -31,7 +31,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import client.MWClient;
-
 import common.util.StringUtils;
 
 public final class RegisterNameDialog implements ActionListener {

@@ -19,16 +19,15 @@ package server.campaign.commands.admin;
 //import java.util.Hashtable;
 import java.util.StringTokenizer;
 
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.SPlanet;
-import server.campaign.commands.Command;
-
 import common.AdvancedTerrain;
 import common.Continent;
 //import common.Terrain;
 import common.PlanetEnvironments;
 //import common.PlanetEnvironment;
+import server.MWChatServer.auth.IAuthenticator;
+import server.campaign.CampaignMain;
+import server.campaign.SPlanet;
+import server.campaign.commands.Command;
 
 public class SetAdvancedPlanetTerrainCommand implements Command {
 	
@@ -74,7 +73,7 @@ public class SetAdvancedPlanetTerrainCommand implements Command {
 		planet.updated();
 		
 		CampaignMain.cm.toUser("Advanced Terrain set for terrain: "+CampaignMain.cm.getData().getTerrain(id).getName() + "(" + AT.getName()+") on planet "+planet.getName(),Username,true);
-		//server.CampaignData.mwlog.modLog(Username + " set Advanced Terrain for terrain: "+aTerrain.getDisplayName()+" on planet "+planet.getName());
+		//server.MWLogger.modLog(Username + " set Advanced Terrain for terrain: "+aTerrain.getDisplayName()+" on planet "+planet.getName());
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has set Advanced Terrain for terrain: "+CampaignMain.cm.getData().getTerrain(id).getName() + "(" + AT.getName()+") on planet "+planet.getName());
 		
 	}

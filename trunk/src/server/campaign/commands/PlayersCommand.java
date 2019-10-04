@@ -19,11 +19,10 @@ package server.campaign.commands;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import common.House;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
-
-import common.House;
 
 public class PlayersCommand implements Command {
 	

@@ -51,6 +51,13 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
+import client.MWClient;
+import client.campaign.CUnit;
+import common.House;
+import common.campaign.pilot.Pilot;
+import common.campaign.pilot.skills.PilotSkill;
+import common.util.MWLogger;
+import common.util.SpringLayoutHelper;
 import megamek.client.Client;
 import megamek.common.Aero;
 import megamek.common.AmmoType;
@@ -65,13 +72,6 @@ import megamek.common.Protomech;
 import megamek.common.Tank;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
-import client.MWClient;
-import client.campaign.CUnit;
-import common.CampaignData;
-import common.House;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.SpringLayoutHelper;
 
 /**
  * A dialog that a player can use to customize his mech before battle.
@@ -307,7 +307,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
         panMunitions.setLayout(new SpringLayout());
         MunitionChoicePanel mcp = null;// replaced repeatedly w/i while loop
         int year = Integer.parseInt(mwclient.getserverConfigs("CampaignYear"));
-        CampaignData.mwlog.errLog("Year: " + year);
+        MWLogger.errLog("Year: " + year);
         // int row = 0;
         int location = -1;// also repeatedly replaced
 
@@ -354,33 +354,33 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 
                 //boolean bTechMatch = TechConstants.isLegal(entity.getTechLevel(), atCheck.getTechLevel(year), true);// (entity.getTechLevel()
                 
-//                CampaignData.mwlog.debugLog("Checking " + atCheck.getInternalName());
-//                CampaignData.mwlog.debugLog("BtechMatch: " + bTechMatch);
-//                CampaignData.mwlog.debugLog("Year: " + year);
-//                CampaignData.mwlog.debugLog("Legal Level: " + legalLevel);
-//                CampaignData.mwlog.debugLog("Ammo Tech Level: " + atCheck.getTechLevel(year));
-//                CampaignData.mwlog.debugLog("Game Tech Level: " + mmClient.getGame().getOptions().stringOption("techlevel"));
+//                MWLogger.debugLog("Checking " + atCheck.getInternalName());
+//                MWLogger.debugLog("BtechMatch: " + bTechMatch);
+//                MWLogger.debugLog("Year: " + year);
+//                MWLogger.debugLog("Legal Level: " + legalLevel);
+//                MWLogger.debugLog("Ammo Tech Level: " + atCheck.getTechLevel(year));
+//                MWLogger.debugLog("Game Tech Level: " + mmClient.getGame().getOptions().stringOption("techlevel"));
                
                 // ==
                 // atCheck.getTechLevel());
                 String munition = Long.toString(atCheck.getMunitionType());
                 House faction = mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse());
 
-                // CampaignData.mwlog.errLog("Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
+                // MWLogger.errLog("Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
                 // check banned ammo
                 if (mwclient.getData().getServerBannedAmmo().containsKey(munition) || faction.getBannedAmmo().containsKey(munition) || ((mwclient.getAmmoCost(atCheck.getInternalName()) < 0) && !usingCrits)) {
                 	//if(mwclient.getData().getServerBannedAmmo().containsKey(munition))
-                		//CampaignData.mwlog.debugLog("Banned at the server level");
+                		//MWLogger.debugLog("Banned at the server level");
                 	//if(faction.getBannedAmmo().containsKey(munition))
-                		//CampaignData.mwlog.debugLog("Banned at the Faction level");
-                	//CampaignData.mwlog.debugLog("Ammo cost: " + mwclient.getAmmoCost(atCheck.getInternalName()));
+                		//MWLogger.debugLog("Banned at the Faction level");
+                	//MWLogger.debugLog("Ammo cost: " + mwclient.getAmmoCost(atCheck.getInternalName()));
                 	continue;
                 }
 
                 if (usingCrits && (mwclient.getPlayer().getPartsCache().getPartsCritCount(atCheck.getInternalName()) < 1) && !ammoAlreadyLoaded(atCheck) && (// !mwclient.getPlayer().getAutoReorder()
                         // &&
                         mwclient.getBlackMarketEquipmentList().get(atCheck.getInternalName()) == null)) {
-                	//CampaignData.mwlog.debugLog("Player out of ammo.");
+                	//MWLogger.debugLog("Player out of ammo.");
                 	continue;
                 }
 
@@ -390,16 +390,16 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 // need to show up in this display.
                 if (!bTechMatch && ((entity.getTechLevel() == TechConstants.T_IS_ADVANCED) || (entity.getTechLevel() == TechConstants.T_IS_EXPERIMENTAL)) && (atCheck.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)) {
                 	bTechMatch = true;
-                	//CampaignData.mwlog.debugLog("bTechMatch now true, because all L2 units can use L1 ammo");
+                	//MWLogger.debugLog("bTechMatch now true, because all L2 units can use L1 ammo");
                 }
 
                 // if is_eq_limits is unchecked allow L1 units to use L2
                 // munitions
-//                CampaignData.mwlog.debugLog("Entity Tech Level: " + entity.getTechLevel());
-//                CampaignData.mwlog.debugLog("Ammo tech level: " + atCheck.getTechLevel(year));
+//                MWLogger.debugLog("Entity Tech Level: " + entity.getTechLevel());
+//                MWLogger.debugLog("Ammo tech level: " + atCheck.getTechLevel(year));
 //                if (!entity.isClan() && entity.getTechLevel() == TechConstants.T_INTRO_BOXSET && (atCheck.getTechLevel(year) == TechConstants.T_IS_TW_NON_BOX || atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED)) {
 //                	bTechMatch = true;
-//                	CampaignData.mwlog.debugLog("bTechMatch is true, because I said so");
+//                	MWLogger.debugLog("bTechMatch is true, because I said so");
 //                }
 
                 // Possibly allow level 3 ammos, possibly not.
@@ -425,23 +425,23 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 }
 
                 if (!mmClient.getGame().getOptions().booleanOption("minefields") && AmmoType.canDeliverMinefield(atCheck)) {
-                	CampaignData.mwlog.debugLog("Minefields disabled");
+                	MWLogger.debugLog("Minefields disabled");
                 	continue;
                 }
-                // CampaignData.mwlog.errLog("4.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
+                // MWLogger.errLog("4.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
 
                 // Only Protos can use Proto-specific ammo
                 if (atCheck.hasFlag(AmmoType.F_PROTOMECH) && !(entity instanceof Protomech)) {
                     continue;
                 }
-                // CampaignData.mwlog.errLog("5.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
+                // MWLogger.errLog("5.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
 
                 // When dealing with machine guns, Protos can only
                 // use proto-specific machine gun ammo
                 if ((entity instanceof Protomech) && atCheck.hasFlag(AmmoType.F_MG) && !atCheck.hasFlag(AmmoType.F_PROTOMECH)) {
                     continue;
                 }
-                // CampaignData.mwlog.errLog("6.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
+                // MWLogger.errLog("6.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
 
                 // Restrict Aero to ATM
                 if ((entity instanceof Aero) && !(atCheck.getAmmoType() == AmmoType.T_ATM)) {
@@ -449,7 +449,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 }
 
                 // All other ammo types need to match on rack size and tech.
-                //CampaignData.mwlog.debugLog("bTechMatch at end: " + bTechMatch);
+                //MWLogger.debugLog("bTechMatch at end: " + bTechMatch);
                 
                 if (bTechMatch) {
                     vTypes.addElement(atCheck);
@@ -610,8 +610,8 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 try {
                     ammoCost = mwclient.getAmmoCost(at.getInternalName());
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog("error finding cost for: " + at.getName());
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog("error finding cost for: " + at.getName());
+                    MWLogger.errLog(ex);
                 }
                 if (m.getLocation() == Entity.LOC_NONE) {
                     if (usingCrits) {
@@ -637,7 +637,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                         cost = (int) Math.ceil(ammoCost * refillShots);
                     }
 
-                    // CampaignData.mwlog.errLog("Cost: "+cost+" string: "+mwclient.moneyOrFluMessage(true,true,cost));
+                    // MWLogger.errLog("Cost: "+cost+" string: "+mwclient.moneyOrFluMessage(true,true,cost));
                     if (usingCrits) {
                         m_choice.addItem(at.getName() + " (" + shotsLeft + "/" + refillShots + "/" + mwclient.getPlayer().getPartsCache().getPartsCritCount(at.getInternalName()) + ")");
                     } else {
@@ -917,7 +917,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
 
             // Targeting
             int newTargetSystem = unit.getTargetSystem().getTypeByName(targetSelection.getSelectedItem().toString());
-            CampaignData.mwlog.errLog("Targeting Selected: " + newTargetSystem);
+            MWLogger.errLog("Targeting Selected: " + newTargetSystem);
             if (newTargetSystem != unit.getTargetSystem().getCurrentType()) {
             	// Change in targeting - send server notification
             	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setTargetSystem#" + unit.getId() + "#" + newTargetSystem);

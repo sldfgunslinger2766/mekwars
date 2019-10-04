@@ -23,11 +23,10 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
 
 
 public class AdminSaveCommandLevelsCommand implements Command {
@@ -69,8 +68,8 @@ public class AdminSaveCommandLevelsCommand implements Command {
 			}	
 		}
 		catch (Exception ex){
-		    CampaignData.mwlog.errLog(ex);
-		    CampaignData.mwlog.errLog("Unable to save command levels");
+		    MWLogger.errLog(ex);
+		    MWLogger.errLog("Unable to save command levels");
 		} finally {
 			p.close();
 		}

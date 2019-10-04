@@ -17,16 +17,16 @@ package server.campaign.commands;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import common.CampaignData;
+import common.Unit;
+import common.campaign.operations.Operation;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlanet;
 import server.campaign.SPlayer;
 import server.campaign.operations.OperationManager;
 import server.campaign.operations.ShortOperation;
-
-import common.CampaignData;
-import common.Unit;
-import common.campaign.operations.Operation;
 
 /**
  * DefendCommand is analagous to the Task system's
@@ -226,7 +226,7 @@ public class AcceptAttackFromReserveCommand implements Command {
 			toSend += ".";
 		
 		//tell the defender that he has succesfully joined the attack.
-		CampaignData.mwlog.gameLog("AcceptAttackFromReserve: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
+		MWLogger.gameLog("AcceptAttackFromReserve: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
 		CampaignMain.cm.toUser(toSend,Username,true);
 		
 	}//end process

@@ -18,13 +18,12 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.Unit;
+import common.util.StringUtils;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-
-import common.Unit;
-import common.util.StringUtils;
 
 public class DirectSellUnitCommand implements Command {
 

@@ -1,5 +1,6 @@
 package common.util.unitdamage;
 
+import common.util.MWLogger;
 import megamek.common.Aero;
 import megamek.common.BattleArmor;
 import megamek.common.Entity;
@@ -7,8 +8,6 @@ import megamek.common.Infantry;
 import megamek.common.Mech;
 import megamek.common.Protomech;
 import megamek.common.Tank;
-
-import common.CampaignData;
 
 public final class UnitDamageHandlerFactory {
 	public static AbstractUnitDamageHandler getHandler(Entity e) {
@@ -36,7 +35,7 @@ public final class UnitDamageHandlerFactory {
 			return new InfantryDamageHandler();
 		}
 		
-		CampaignData.mwlog.errLog("Unknown Unit Type in UnitDamageHandlerFactory.getHandler(): " + e.getModel());
+		MWLogger.errLog("Unknown Unit Type in UnitDamageHandlerFactory.getHandler(): " + e.getModel());
 		
 		return new GenericDamageHandler();
 	}

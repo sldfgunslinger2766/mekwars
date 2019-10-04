@@ -24,7 +24,6 @@ import javax.swing.JPanel;
 import client.CUser;
 import client.MWClient;
 import client.gui.CCommPanel;
-
 import common.util.StringUtils;
 
 /**

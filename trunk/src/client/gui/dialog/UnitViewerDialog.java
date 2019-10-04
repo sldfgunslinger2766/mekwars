@@ -73,6 +73,12 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import client.MWClient;
+import client.gui.CMainFrame;
+import client.gui.MechInfo;
+import common.util.MWLogger;
+import common.util.SpringLayoutHelper;
+import common.util.UnitUtils;
 import megamek.client.ui.swing.UnitFailureDialog;
 import megamek.client.ui.swing.UnitLoadingDialog;
 import megamek.common.Entity;
@@ -89,13 +95,6 @@ import megamek.common.TechConstants;
 import megamek.common.UnitType;
 import megamek.common.WeaponType;
 import megamek.common.loaders.EntityLoadingException;
-import client.MWClient;
-import client.gui.CMainFrame;
-import client.gui.MechInfo;
-
-import common.CampaignData;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
 
 /*
  * Allows a user to sort through a list of MechSummaries and select one
@@ -471,7 +470,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
                 }
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             System.err.println("mechs size: " + mechs.length);
         }
         mechsCurrent = new MechSummary[vMechs.size()];
@@ -549,8 +548,8 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
             m_cWeapons2.setSelectedIndex(0);
             m_cEquipment.setSelectedIndex(0);
         } catch (IllegalArgumentException ex) {
-            CampaignData.mwlog.errLog("Error in Unit Viewer. Could not set slider indices to 0");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error in Unit Viewer. Could not set slider indices to 0");
+            MWLogger.errLog(ex);
         }
         m_cWeapons1.invalidate();
         m_cWeapons2.invalidate();
@@ -644,7 +643,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
 
                     dispose();
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                     // MMClient.mwClientLog.clientErrLog("Problem with
                     // actionPerformed in RepodDialog");
                 }
@@ -696,7 +695,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
 
                     dispose();
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                     // MMClient.mwClientLog.clientErrLog("Problem with
                     // actionPerformed in RepodDialog");
                 }
@@ -932,7 +931,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
             previewMech(entity);
         } catch (EntityLoadingException ex) {
             System.out.println("Unable to load mech: " + ms.getSourceFile() + ": " + ms.getEntryName() + ": " + ex.getMessage());
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             clearMechPreview();
             return;
         }

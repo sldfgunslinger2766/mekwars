@@ -15,10 +15,9 @@
  */
 package server.campaign.operations.validation;
 
-import server.campaign.SArmy;
-
-import common.CampaignData;
 import common.campaign.operations.Operation;
+import common.util.MWLogger;
+import server.campaign.SArmy;
 
 /**
  * @author 	Spork
@@ -38,8 +37,8 @@ public class PercentBVSpreadValidator extends BVSpreadValidator implements
 		maximum += spreadPercent;
 		
 		if(getDebug()) {
-			CampaignData.mwlog.debugLog("Base = " + base + ", spreadPercent = " + spreadPercent + ", maximum = " + maximum);
-			CampaignData.mwlog.debugLog("Army BV = " + a.getBV() + ", percent = " + percent);
+			MWLogger.debugLog("Base = " + base + ", spreadPercent = " + spreadPercent + ", maximum = " + maximum);
+			MWLogger.debugLog("Army BV = " + a.getBV() + ", percent = " + percent);
 		}
 
 		

@@ -61,7 +61,7 @@ public class SetPlanetConquerCommand implements Command {
 		p.updated();
 
 		CampaignMain.cm.toUser("You set " + p.getName() + "'s conquer status to " + conquer,Username,true);
-		//server.CampaignData.mwlog.modLog(Username + " has changed the infaction conquer for " + p.getName()+" to "+conquer);
+		//server.MWLogger.modLog(Username + " has changed the infaction conquer for " + p.getName()+" to "+conquer);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has changed the conquer status for " + p.getName()+" to "+conquer);
 
 	}

@@ -30,7 +30,7 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import common.CampaignData;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
@@ -115,7 +115,7 @@ public class ChristmasHandler {
 			startDate = sdf.parse(CampaignMain.cm.getConfig("Christmas_StartDate"));
 			endDate = sdf.parse(CampaignMain.cm.getConfig("Christmas_EndDate"));
 			} catch (ParseException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 		Date today = new Date();
 		if(today.after(startDate) && today.before(endDate)) {
@@ -236,7 +236,7 @@ public class ChristmasHandler {
 			
 			end = sdf.parse(CampaignMain.cm.getConfig("Christmas_EndDate"));
 		} catch (ParseException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 		schedule(start, end);
 	}
@@ -363,7 +363,7 @@ public class ChristmasHandler {
 				gifts.put(scanner.nextLine().toLowerCase(), true);
 			}
 		} catch (FileNotFoundException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		} finally {
 			if (scanner != null) {
 				scanner.close();
@@ -386,13 +386,13 @@ public class ChristmasHandler {
 				writer.write(s.toLowerCase() + "\n");
 			}
 		} catch (IOException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		} finally {
 			if (writer != null) {
 				try {
 					writer.close();
 				} catch (IOException e) {
-					CampaignData.mwlog.errLog(e);
+					MWLogger.errLog(e);
 				}
 			}
 		}

@@ -19,14 +19,13 @@
  */
 package server.campaign.pilot.skills;
 
+import common.Unit;
+import common.campaign.pilot.Pilot;
+import common.campaign.pilot.skills.PilotSkill;
 //import common.Unit;
 import megamek.common.Entity;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
-
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
 
 /**
  * Reduces the bay-consume of the unit.

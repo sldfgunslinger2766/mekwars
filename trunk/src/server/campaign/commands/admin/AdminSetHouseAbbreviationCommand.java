@@ -68,7 +68,7 @@ public class AdminSetHouseAbbreviationCommand implements Command {
 		faction.updated();
 		
 		CampaignMain.cm.doSendModMail("NOTE",Username + " changed the faction abbreviation for " + HouseName);
-		//server.CampaignData.mwlog.modLog(Username + " changed the faction playerlist color for " + HouseName);
+		//server.MWLogger.modLog(Username + " changed the faction playerlist color for " + HouseName);
 		
 		CampaignMain.cm.toUser(HouseName +" abbreviation changed.",Username,true);
 		

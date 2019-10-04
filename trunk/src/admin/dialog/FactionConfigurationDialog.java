@@ -47,10 +47,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
 import client.MWClient;
-
-import common.CampaignData;
 import common.Unit;
 import common.VerticalLayout;
+import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 
 public final class FactionConfigurationDialog implements ActionListener {
@@ -4298,7 +4297,7 @@ public final class FactionConfigurationDialog implements ActionListener {
 
                 key = checkBox.getName();
                 if ( key == null ){
-                    CampaignData.mwlog.errLog("Null Checkbox: "+checkBox.getToolTipText());
+                    MWLogger.errLog("Null Checkbox: "+checkBox.getToolTipText());
                     continue;
                 }
                 checkBox.setSelected(Boolean.parseBoolean(mwclient.getserverConfigs(key)));
@@ -4308,7 +4307,7 @@ public final class FactionConfigurationDialog implements ActionListener {
 
                 key = radioButton.getName();
                 if ( key == null ){
-                    CampaignData.mwlog.errLog("Null RadioButton: "+radioButton.getToolTipText());
+                    MWLogger.errLog("Null RadioButton: "+radioButton.getToolTipText());
                     continue;
                 }
                 radioButton.setSelected(Boolean.parseBoolean(mwclient.getserverConfigs(key)));

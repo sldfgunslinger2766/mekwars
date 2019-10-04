@@ -39,14 +39,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.Auth;
 import server.MWChatServer.auth.IAuthenticator;
 import server.MWChatServer.auth.IRoomAuthenticator;
 import server.MWChatServer.auth.NullRoomAuthenticator;
 import server.MWChatServer.auth.PasswdAuthenticator;
 import server.MWChatServer.commands.ICommands;
-
-import common.CampaignData;
 
 public class MWChatServer implements ICommands {
 
@@ -161,7 +160,7 @@ public class MWChatServer implements ICommands {
         try {
             return _users.get(clientKey(target));
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             return null;
         }
     }
@@ -203,7 +202,7 @@ public class MWChatServer implements ICommands {
         validateUserId(userId);
         Auth auth = _authenticator.authenticate(client, password);
         int access = auth.getAccess();
-        CampaignData.mwlog.infoLog(client.getUserId() + " signon from "
+        MWLogger.infoLog(client.getUserId() + " signon from "
                 + client.getHost() + ".  Access = " + access
                 + (client.getTunneling() ? " (tunneling)" : ""));
 
@@ -213,12 +212,12 @@ public class MWChatServer implements ICommands {
 
         client.setUserId(auth.getUserId());
         synchronized (_users) {
-            CampaignData.mwlog.infoLog("signOn: " + client.getUserId());
+            MWLogger.infoLog("signOn: " + client.getUserId());
             // if signed on locally, let new take precedence
             MWChatClient oldC = _users.get(clientKey(client));
             if (oldC != null) {
                 oldC.killed(client.getUserId(),"Terminated by signing on elsewhere");
-                CampaignData.mwlog.errLog("Terminated by signing on elsewhere");
+                MWLogger.errLog("Terminated by signing on elsewhere");
                 signOff(oldC);
             }
 
@@ -228,8 +227,8 @@ public class MWChatServer implements ICommands {
             try {
                 this.joinRoom(client, "Main Chat", "");
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog("Unable to join room");
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog("Unable to join room");
+                MWLogger.errLog(ex);
             }
         }
         
@@ -251,7 +250,7 @@ public class MWChatServer implements ICommands {
                 try {
                     _users.remove(clientKey(client));
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }
 
@@ -272,7 +271,7 @@ public class MWChatServer implements ICommands {
                 	RoomServer room = _rooms.get(key);
                     room.part(client, true);
                     if (room.isEmpty()) {
-                        CampaignData.mwlog.infoLog("Removing empty room: "+ key);
+                        MWLogger.infoLog("Removing empty room: "+ key);
                         _rooms.remove(key);
                     }
                 }
@@ -301,7 +300,7 @@ public class MWChatServer implements ICommands {
                 killedKey = MWChatClient.getKey(victimId);
             }
         } else {
-            CampaignData.mwlog.infoLog(victim + " kicked off by " + killer._userId);
+            MWLogger.infoLog(victim + " kicked off by " + killer._userId);
             killedKey = c.getKey();
             c.killed(killer.getUserId(), message);
             signOff(c);
@@ -327,7 +326,7 @@ public class MWChatServer implements ICommands {
                 killedKey = MWChatClient.getKey(victimId);
             }
         } else {
-            CampaignData.mwlog.infoLog(victim + " kicked off by server.");
+            MWLogger.infoLog(victim + " kicked off by server.");
             killedKey = c.getKey();
             signOff(c);
         }
@@ -354,12 +353,12 @@ public class MWChatServer implements ICommands {
                             int c = roomName.charAt(i);
                             // don't include space or DEL
                             if (c <= 32 && c >= 128) {
-                                CampaignData.mwlog.infoLog(client.getUserId() + " room creation rejected: " + roomName);
+                                MWLogger.infoLog(client.getUserId() + " room creation rejected: " + roomName);
                                 throw new Exception(ICommands.INVALID_CHARACTER);
                             }
                         }
                     }
-                    CampaignData.mwlog.infoLog(client.getUserId()
+                    MWLogger.infoLog(client.getUserId()
                             + " created new room: " + roomName);
                     room = createRoomServer(roomName, password);
                     _rooms.put(roomKey(room), room);
@@ -411,7 +410,7 @@ public class MWChatServer implements ICommands {
         try {
             return client.toLowerCase();
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             return null;
         }
     }
@@ -424,7 +423,7 @@ public class MWChatServer implements ICommands {
         PingThread pingKeepAlive = new PingThread(this);
         pingKeepAlive.start();
 
-        CampaignData.mwlog.infoLog("Accepting socket connections on port " + _port);
+        MWLogger.infoLog("Accepting socket connections on port " + _port);
         while (true) {
             try {
                 Socket s = _serverSocket.accept();
@@ -435,18 +434,18 @@ public class MWChatServer implements ICommands {
                 // MWChatClient client =
                 createMWChatClient(s);
             } catch (IOException e) {
-                CampaignData.mwlog.errLog(e);
+                MWLogger.errLog(e);
                 try {
                     Thread.sleep(1000);
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
                 try {
                     Thread.sleep(1000);
                 } catch (Exception exs) {
-                    CampaignData.mwlog.errLog(exs);
+                    MWLogger.errLog(exs);
                 }
             }
         }
@@ -465,7 +464,7 @@ public class MWChatServer implements ICommands {
     }
 
     public boolean userExists(String username) {
-        //CampaignData.mwlog.infoLog("userExists: " + username);
+        //MWLogger.infoLog("userExists: " + username);
         return _users.containsKey(username.toLowerCase());
     }
 
@@ -484,7 +483,7 @@ public class MWChatServer implements ICommands {
          */
         try {
             synchronized (_users) {
-                CampaignData.mwlog.infoLog("sendServerPing: " + server);
+                MWLogger.infoLog("sendServerPing: " + server);
                 Iterator<MWChatClient> clients = _users.values().iterator();
                 while (clients.hasNext()) {
                     MWChatClient client = clients.next();
@@ -492,8 +491,8 @@ public class MWChatServer implements ICommands {
                 }
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Error while sending server ping!");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error while sending server ping!");
+            MWLogger.errLog(ex);
         }
     }
 
@@ -518,7 +517,7 @@ public class MWChatServer implements ICommands {
             }
             
             for (MWChatClient client : clientToRemove) {
-                CampaignData.mwlog.infoLog("RemovalThread sign off: " + client.getUserId());
+                MWLogger.infoLog("RemovalThread sign off: " + client.getUserId());
                 this.signOff(client);
             }
             
@@ -540,7 +539,7 @@ public class MWChatServer implements ICommands {
 
         public PingThread(MWChatServer server) {
             super("PingThread");
-            CampaignData.mwlog.infoLog("Starting PingThread");
+            MWLogger.infoLog("Starting PingThread");
             this.server = server;
         }
 
@@ -559,8 +558,8 @@ public class MWChatServer implements ICommands {
 
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog("Error while trying to sleep PingThread");
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog("Error while trying to sleep PingThread");
+                MWLogger.errLog(ex);
             }
 
         }

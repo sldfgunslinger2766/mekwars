@@ -23,13 +23,12 @@ import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import common.Unit;
+import common.util.MWLogger;
 import megamek.common.Entity;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
-
-import common.CampaignData;
-import common.Unit;
 
 /**
  * @version 2016.10.26
@@ -145,10 +144,10 @@ public class UnitCosts {
             in.close();
 
         } catch (FileNotFoundException fnf) {
-            CampaignData.mwlog.errLog("Unable to load Meks.zip for UnitCosts.loadUnitCosts");
+            MWLogger.errLog("Unable to load Meks.zip for UnitCosts.loadUnitCosts");
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Error with Meks.zip file " + entityName);
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error with Meks.zip file " + entityName);
+            MWLogger.errLog(ex);
         }
 
         try {
@@ -178,10 +177,10 @@ public class UnitCosts {
             in.close();
 
         } catch (FileNotFoundException fnf) {
-            CampaignData.mwlog.errLog("Unable to load Vehicles.zip for UnitCosts.loadUnitCosts");
+            MWLogger.errLog("Unable to load Vehicles.zip for UnitCosts.loadUnitCosts");
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Error with Vehicles.zip file " + entityName);
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error with Vehicles.zip file " + entityName);
+            MWLogger.errLog(ex);
         }
 
         try {
@@ -210,10 +209,10 @@ public class UnitCosts {
             in.close();
 
         } catch (FileNotFoundException fnf) {
-            CampaignData.mwlog.errLog("Unable to load Infantry.zip for UnitCosts.loadUnitCosts");
+            MWLogger.errLog("Unable to load Infantry.zip for UnitCosts.loadUnitCosts");
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Error with Infantry.zip file " + entityName);
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error with Infantry.zip file " + entityName);
+            MWLogger.errLog(ex);
         }
     }
 

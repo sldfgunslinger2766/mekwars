@@ -20,12 +20,11 @@
 package server.campaign.pilot.skills;
 
 
+import common.Unit;
+import common.campaign.pilot.Pilot;
 import megamek.common.Entity;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
-
-import common.Unit;
-import common.campaign.pilot.Pilot;
 
 /**
  *  Pilots with the Quick Study skill gain a 5% bonus to all

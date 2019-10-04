@@ -20,26 +20,23 @@ package client.campaign;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.StringJoiner;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import megamek.common.CriticalSlot;
-import megamek.common.OffBoardDirection;
 import client.MWClient;
 import client.util.CArmyComparator;
 import client.util.CUnitComparator;
-
-import common.CampaignData;
 import common.House;
 import common.Player;
 import common.SubFaction;
 import common.Unit;
+import common.util.MWLogger;
 import common.util.TokenReader;
 import common.util.UnitComponents;
 import common.util.UnitUtils;
+import megamek.common.CriticalSlot;
+import megamek.common.OffBoardDirection;
 
 /**
  * Class for Player object used by Client
@@ -231,7 +228,7 @@ public class CPlayer extends Player {
 
         //flags.loadDefaults(mwclient.getPlayer().getDefaultPlayerFlags().export());
         //flags.loadPersonal(TokenReader.readString(ST));
-        CampaignData.mwlog.infoLog("My Player Flags: " + flags.export());
+        MWLogger.infoLog("My Player Flags: " + flags.export());
         // traps run. sort the HQ. this isn't duplicative, b/c
         // direct lods (PS instead of PL) don't trigger sorts.
         sortHangar();
@@ -249,7 +246,7 @@ public class CPlayer extends Player {
                 sortHangar();// sort it!
             }
         } catch (Exception e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
             return;
         }
     }
@@ -263,7 +260,7 @@ public class CPlayer extends Player {
             currUnit.setData(TokenReader.readString(st));
             sortHangar();// properties have changes. sort. YARR!
         } catch (Exception e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
             return;
         }
     }
@@ -280,7 +277,7 @@ public class CPlayer extends Player {
 
             sortHangar();// properties have changes. sort. YARR!
         } catch (Exception e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
             return;
         }
     }
@@ -646,7 +643,7 @@ public class CPlayer extends Player {
 //        		}
 //        	}
 //        }
-//        CampaignData.mwlog.debugLog(quirksList.toString());
+//        MWLogger.debugLog(quirksList.toString());
 //        return quirksList.toString();
 //    }
 
@@ -925,7 +922,7 @@ public class CPlayer extends Player {
             if (getArmy(army) != null) {
                 getArmy(army).setBV(TokenReader.readInt(ST));
             } else {
-                CampaignData.mwlog.errLog("Bad Army id: " + army);
+                MWLogger.errLog("Bad Army id: " + army);
             }
         }
     }

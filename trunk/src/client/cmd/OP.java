@@ -31,11 +31,10 @@ import java.util.Vector;
 
 import client.MWClient;
 import client.gui.dialog.opviewer.OperationViewerDialog;
-
-import common.CampaignData;
 import common.campaign.operations.DefaultOperation;
 import common.campaign.operations.Operation;
 import common.util.MMNetXStream;
+import common.util.MWLogger;
 
 /**
  * 
@@ -240,7 +239,7 @@ public class OP extends Command {
 			}			
 			break;
 		default:
-			CampaignData.mwlog.errLog("Default case reached in OP command");
+			MWLogger.errLog("Default case reached in OP command");
 			break;
 		}
 

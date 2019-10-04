@@ -17,6 +17,7 @@ import common.campaign.clientutils.protocol.CConnector;
 import common.campaign.clientutils.protocol.IClient;
 import common.campaign.clientutils.protocol.TransportCodec;
 import common.campaign.clientutils.protocol.commands.IProtCommand;
+import common.util.MWLogger;
 import megamek.common.Building;
 import megamek.common.IGame;
 import megamek.common.IGame.Phase;
@@ -169,8 +170,8 @@ public abstract class GameHost implements GameListener, IGameHost {
 
         }// end try
         catch (Exception ex) {
-            CampaignData.mwlog.errLog("Error reporting game!");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error reporting game!");
+            MWLogger.errLog(ex);
         }
     }
 
@@ -230,7 +231,7 @@ public abstract class GameHost implements GameListener, IGameHost {
 
 	public void gameVictory(GameVictoryEvent e) {
         sendGameReport();
-        CampaignData.mwlog.infoLog("GAME END");	
+        MWLogger.infoLog("GAME END");	
 	}
     
     protected abstract void sendGameReport();
@@ -275,15 +276,14 @@ public abstract class GameHost implements GameListener, IGameHost {
                     && savedFile.isFile()
                     && (lastTime < (System.currentTimeMillis() - daysInSeconds))) {
                 try {
-                    CampaignData.mwlog.infoLog("Purging File: "
+                    MWLogger.infoLog("Purging File: "
                             + savedFile.getName() + " Time: " + lastTime
                             + " purge Time: "
                             + (System.currentTimeMillis() - daysInSeconds));
                     savedFile.delete();
                 } catch (Exception ex) {
-                    CampaignData.mwlog
-                            .errLog("Error trying to delete these files!");
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog("Error trying to delete these files!");
+                    MWLogger.errLog(ex);
                 }
             }
         }
@@ -366,7 +366,7 @@ public abstract class GameHost implements GameListener, IGameHost {
         try {
             Connector.send(IClient.PROTOCOL_PREFIX + "comm" + "\t" + TransportCodec.encode(s));
         } catch (Exception e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
         }
     }
 }

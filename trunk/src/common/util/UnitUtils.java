@@ -18,6 +18,11 @@ package common.util;
 
 import java.util.Iterator;
 
+import common.CampaignData;
+import common.MegaMekPilotOption;
+import common.Unit;
+import common.campaign.pilot.skills.PilotSkill;
+import common.util.unitdamage.UnitDamageHandlerFactory;
 import megamek.common.AmmoType;
 import megamek.common.BipedMech;
 import megamek.common.Crew;
@@ -35,12 +40,6 @@ import megamek.common.MiscType;
 import megamek.common.Mounted;
 import megamek.common.Tank;
 import megamek.common.TechConstants;
-
-import common.CampaignData;
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.unitdamage.UnitDamageHandlerFactory;
 
 public class UnitUtils {
 
@@ -986,8 +985,8 @@ public class UnitUtils {
             }
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Error in UnitUtils.isNonRepairableCrit");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error in UnitUtils.isNonRepairableCrit");
+            MWLogger.errLog(ex);
             return false;
         }
         return false;
@@ -1130,13 +1129,13 @@ public class UnitUtils {
 
         } else {
             CriticalSlot cs = unit.getCritical(location, slot);
-            // CampaignData.mwlog.errLog("Location: "+location+" slot:"+slot);
+            // MWLogger.errLog("Location: "+location+" slot:"+slot);
 
             if (cs == null) {
                 return roll;
             }
 
-            // CampaignData.mwlog.errLog("Crit: "+cs.getIndex()+"/"+cs.getType());
+            // MWLogger.errLog("Crit: "+cs.getIndex()+"/"+cs.getType());
             /*
              * if ( !cs.isDamaged() && !cs.isBreached()) { return roll; }
              */
@@ -1188,7 +1187,7 @@ public class UnitUtils {
             }// end CS type if
             else {
 
-                // CampaignData.mwlog.errLog("CS is Type System!");
+                // MWLogger.errLog("CS is Type System!");
                 // System.err.flush();
 
                 if (UnitUtils.isEngineCrit(cs)) {
@@ -1214,7 +1213,7 @@ public class UnitUtils {
                             roll++;
                         }
                     } else if (cs.getIndex() == Mech.SYSTEM_GYRO) {
-                        // CampaignData.mwlog.errLog("Gyro!");
+                        // MWLogger.errLog("Gyro!");
                         // System.err.flush();
                         if (cs.isMissing()) {
                             roll++;
@@ -1928,7 +1927,7 @@ public class UnitUtils {
                     return true;
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
                 continue;
             }
         }
@@ -2560,8 +2559,7 @@ public class UnitUtils {
             try {
                 UnitEntity = UnitUtils.createOMG();// new
             } catch (Exception exepe) {
-                CampaignData.mwlog
-                        .errLog("Error unit failed to load. Exiting.");
+                MWLogger.errLog("Error unit failed to load. Exiting.");
                 return null;
             }
         }

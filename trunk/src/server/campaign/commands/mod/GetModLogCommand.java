@@ -23,10 +23,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-import common.CampaignData;
 
 public class GetModLogCommand implements Command {
 	
@@ -56,12 +56,12 @@ public class GetModLogCommand implements Command {
 			CampaignMain.cm.toUser("SM|" + total,Username,false);
 			CampaignMain.cm.doSendModMail("NOTE",Username + " read the modlog.");
 		} catch (Exception ex) {
-		    CampaignData.mwlog.errLog(ex);
+		    MWLogger.errLog(ex);
 		} finally {
 			try {
 				dis.close();
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 		}
 		

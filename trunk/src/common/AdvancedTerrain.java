@@ -20,11 +20,10 @@ package common;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import megamek.common.PlanetaryConditions;
-
 import common.util.BinReader;
 import common.util.BinWriter;
 import common.util.TokenReader;
+import megamek.common.PlanetaryConditions;
 
 /**
  * Advanced Environment for planets.

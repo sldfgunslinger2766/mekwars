@@ -42,10 +42,9 @@ import client.campaign.CArmy;
 import client.gui.dialog.ArmyViewerDialog;
 import client.gui.dialog.PlanetNameDialog;
 import client.gui.dialog.PlayerNameDialog;
-
-import common.CampaignData;
 import common.House;
 import common.Planet;
+import common.util.MWLogger;
 
 /**
  * Create an "Attack" menu. Used in Map, CMainFramge, etc. to generate
@@ -222,7 +221,7 @@ public class AttackMenu extends JMenu implements ActionListener {
                     
                     //Check for allowed planet flags. the planet most have these flags.
                     if ( allowPlanetFlags.length() > 0 ){
-                        //CampaignData.mwlog.errLog(currOpName+" AllowPlanetFlags: "+allowPlanetFlags);
+                        //MWLogger.errLog(currOpName+" AllowPlanetFlags: "+allowPlanetFlags);
                         boolean allowOp = true;
                         StringTokenizer st = new StringTokenizer(allowPlanetFlags,"^");
                         while ( st.hasMoreTokens() ){
@@ -231,7 +230,7 @@ public class AttackMenu extends JMenu implements ActionListener {
                             if ( key.trim().length() < 1 )
                                 continue;
                             if ( !tp.getPlanetFlags().containsKey(key) ){
-                                CampaignData.mwlog.errLog(tp.getName()+" does not have flag: "+key);
+                                MWLogger.errLog(tp.getName()+" does not have flag: "+key);
                                 allowOp = false;
                                 break;
                             }
@@ -247,7 +246,7 @@ public class AttackMenu extends JMenu implements ActionListener {
                     //Check for disallowed planet flags. If the planet has one of these flags
                     // The planet will not be allowed.
                     if ( disallowPlanetFlags.length() > 0){
-                        //CampaignData.mwlog.errLog(currOpName+" DisallowPlanetFlags: "+disallowPlanetFlags);
+                        //MWLogger.errLog(currOpName+" DisallowPlanetFlags: "+disallowPlanetFlags);
                         
                         boolean allowOp = true;
                         StringTokenizer st = new StringTokenizer(disallowPlanetFlags,"^");
@@ -258,7 +257,7 @@ public class AttackMenu extends JMenu implements ActionListener {
                                 continue;
                             if ( tp.getPlanetFlags().containsKey(key)){
                                 allowOp = false;
-                                CampaignData.mwlog.errLog(tp.getName()+" has flag: "+key);
+                                MWLogger.errLog(tp.getName()+" has flag: "+key);
                                 break;
                             }
                         }
@@ -297,12 +296,12 @@ public class AttackMenu extends JMenu implements ActionListener {
 					mwclient.updateOpData(false);
 					
 					if (!allOps.containsKey(currName)) {
-						CampaignData.mwlog.errLog("Error in updateMenuItems(): no _" + currName + "_ in allOps.");
+						MWLogger.errLog("Error in updateMenuItems(): no _" + currName + "_ in allOps.");
 						
 						StringBuilder allOpsList = new StringBuilder("allOps contains: ");
 						for(String currO : allOps.keySet())
 							allOpsList.append(currO + " ");
-						CampaignData.mwlog.errLog(allOpsList.toString());
+						MWLogger.errLog(allOpsList.toString());
 						
 						//don't want to stop building because of one bad apple - continue to next element.
 		                continue;
@@ -353,12 +352,12 @@ public class AttackMenu extends JMenu implements ActionListener {
     			for (String currName : clickArmy.getLegalOperations()) {
     				
     				if (!allOps.containsKey(currName)) {
-    					CampaignData.mwlog.errLog("Error in updateMenuItems(): no _" + currName + "_ in allOps.");
+    					MWLogger.errLog("Error in updateMenuItems(): no _" + currName + "_ in allOps.");
     					
     					String allOpsList = "allOps contains: ";
     					for(String currO : allOps.keySet())
     						allOpsList += currO + " ";
-    					CampaignData.mwlog.errLog(allOpsList);
+    					MWLogger.errLog(allOpsList);
     					
     	                //don't stop building the list just because of one bad apple...
     	                continue;

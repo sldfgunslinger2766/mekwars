@@ -29,7 +29,6 @@ import client.MWClient;
 import client.gui.CMapPanel;
 import client.gui.InnerStellarMap;
 import client.gui.dialog.PlanetNameDialog;
-
 import common.CampaignData;
 import common.Planet;
 

@@ -29,10 +29,9 @@ package server.MWChatServer;
 
 import java.net.Socket;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.MWChatServer.commands.ICommands;
-
-import common.CampaignData;
 
 /**
  * This is the representation of a Client, on the server side. All the
@@ -147,8 +146,8 @@ public class MWChatClient implements IConnectionListener, ICommands {
            try{
             throw new NullPointerException();
            }catch (Exception ex){
-               CampaignData.mwlog.errLog("Null user in setUserId report the following error to Torren");
-               CampaignData.mwlog.errLog(ex);
+               MWLogger.errLog("Null user in setUserId report the following error to Torren");
+               MWLogger.errLog(ex);
            }
         }
 		// it's possible for this to be called multiple times
@@ -188,7 +187,7 @@ public class MWChatClient implements IConnectionListener, ICommands {
 	 */
 	public void incomingMessage(String msg) {
 		// deal with message
-		// CampaignData.mwlog.infoLog("incoming mesage: "+msg);
+		// MWLogger.infoLog("incoming mesage: "+msg);
 		CommandProcessorRemote.process(msg, this);
 	}
 

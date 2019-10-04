@@ -2,12 +2,11 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import common.Unit;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.commands.Command;
-
-import common.Unit;
 
 /**
  * @author Torren (Jason Tighe)

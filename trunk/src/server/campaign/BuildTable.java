@@ -30,8 +30,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-import common.CampaignData;
 import common.Unit;
+import common.util.MWLogger;
 
 
 /**
@@ -133,7 +133,7 @@ public class BuildTable {
 		String result = "./data/buildtables/"+dir+"/" + faction + "_" + weightclass + addon + ".txt";
 		if (!new File(result).exists()){
 			if ( !result.trim().toLowerCase().endsWith(".txt") )
-				CampaignData.mwlog.errLog("Unable to find build table file "+result+" using ./data/buildtables/"+dir+"/Common_" + weightclass + addon + ".txt");
+				MWLogger.errLog("Unable to find build table file "+result+" using ./data/buildtables/"+dir+"/Common_" + weightclass + addon + ".txt");
 			result = "./data/buildtables/"+dir+"/Common_" + weightclass + addon + ".txt";
 		}
 		return result;
@@ -231,7 +231,7 @@ public class BuildTable {
 			}
 			result.trimToSize();
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 		return result;
 	}
@@ -254,7 +254,7 @@ public class BuildTable {
 			fos.close();
 		}
 		catch(Exception ex){
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 
 	}
@@ -299,7 +299,7 @@ public class BuildTable {
             fis.close();
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
         return unitHolder;
 	}

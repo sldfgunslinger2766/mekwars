@@ -18,12 +18,11 @@ package server.campaign.market2;
 
 import java.util.TreeMap;
 
+import common.Unit;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-
-import common.CampaignData;
-import common.Unit;
 
 /**
  * MarketListing keeps track of all infomation related to a
@@ -148,7 +147,7 @@ public final class MarketListing {
     			bidsReceived.remove(lowerName);
     		}
         } catch(Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 	}
 	

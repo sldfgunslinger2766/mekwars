@@ -18,13 +18,12 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import common.campaign.pilot.Pilot;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.commands.Command;
-
-import common.campaign.pilot.Pilot;
 
 /**
  * @author Helge Richter
@@ -78,7 +77,7 @@ public class AdminScrapCommand implements Command {
 		//tell the player you're going to scrap the unit ...
 		CampaignMain.cm.toUser("AM:"+targetName + "'s " + m.getModelName() + " was scrapped.", Username, true);
 		CampaignMain.cm.toUser("AM:"+Username + " scrapped your " + m.getModelName() + " (ID#" + m.getId() + ")", targetName, true);
-		//server.CampaignData.mwlog.modLog(Username + " scrapped a "+ m.getModelName() + " belonging to " + targetName);	
+		//server.MWLogger.modLog(Username + " scrapped a "+ m.getModelName() + " belonging to " + targetName);	
 		CampaignMain.cm.doSendModMail("NOTE",Username + " scrapped a "+ m.getModelName() + " belonging to " + targetName);
 		
 		//then do it

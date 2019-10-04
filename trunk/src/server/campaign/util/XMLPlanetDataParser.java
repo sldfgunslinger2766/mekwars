@@ -16,10 +16,6 @@
 
 package server.campaign.util;
 
-import gd.xml.ParseException;
-import gd.xml.XMLParser;
-import gd.xml.XMLResponder;
-
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,17 +27,19 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SUnitFactory;
-
 import common.AdvancedTerrain;
-import common.CampaignData;
 import common.Continent;
 import common.Influences;
 import common.PlanetEnvironments;
 import common.UnitFactory;
+import common.util.MWLogger;
+import gd.xml.ParseException;
+import gd.xml.XMLParser;
+import gd.xml.XMLResponder;
+import server.campaign.CampaignMain;
+import server.campaign.SHouse;
+import server.campaign.SPlanet;
+import server.campaign.SUnitFactory;
 
 public class XMLPlanetDataParser implements XMLResponder {
     String lastElement = "";
@@ -123,7 +121,7 @@ public class XMLPlanetDataParser implements XMLResponder {
             XMLParser xp = new XMLParser();
             xp.parseXML(this);
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
     }
 
@@ -138,7 +136,7 @@ public class XMLPlanetDataParser implements XMLResponder {
         if (sysID != null) {
             System.out.print("  sysID = " + sysID);
         }
-        CampaignData.mwlog.mainLog("");
+        MWLogger.mainLog("");
     }
 
     public void recordEntityDeclaration(String name, String value, String pubID, String sysID, String notation) throws ParseException {
@@ -155,12 +153,12 @@ public class XMLPlanetDataParser implements XMLResponder {
         if (notation != null) {
             System.out.print("  notation = " + notation);
         }
-        CampaignData.mwlog.mainLog("");
+        MWLogger.mainLog("");
     }
 
     public void recordElementDeclaration(String name, String content) throws ParseException {
         System.out.print(prefix + "!ELEMENT: " + name);
-        CampaignData.mwlog.mainLog("  content = " + content);
+        MWLogger.mainLog("  content = " + content);
     }
 
     public void recordAttlistDeclaration(String element, String attr, boolean notation, String type, String defmod, String def) throws ParseException {
@@ -168,7 +166,7 @@ public class XMLPlanetDataParser implements XMLResponder {
         System.out.print("  attr = " + attr);
         System.out.print("  type = " + ((notation) ? "NOTATIONS " : "") + type);
         System.out.print("  def. modifier = " + defmod);
-        CampaignData.mwlog.mainLog((def == null) ? "" : "  def = " + notation);
+        MWLogger.mainLog((def == null) ? "" : "  def = " + notation);
     }
 
     public void recordDoctypeDeclaration(String name, String pubID, String sysID) throws ParseException {
@@ -179,7 +177,7 @@ public class XMLPlanetDataParser implements XMLResponder {
         if (sysID != null) {
             System.out.print("  sysID = " + sysID);
         }
-        CampaignData.mwlog.mainLog("");
+        MWLogger.mainLog("");
         prefix = "";
     }
 
@@ -189,12 +187,12 @@ public class XMLPlanetDataParser implements XMLResponder {
     }
 
     public void recordDocEnd() {
-        CampaignData.mwlog.mainLog("");
-        CampaignData.mwlog.mainLog("Planet Parsing finished without error");
+        MWLogger.mainLog("");
+        MWLogger.mainLog("Planet Parsing finished without error");
     }
 
     public void recordElementStart(String name, Hashtable attr) throws ParseException {
-        // CampaignData.mwlog.mainLog(prefix+"Element: "+name);
+        // MWLogger.mainLog(prefix+"Element: "+name);
         lastElement = name;
         if (name.equalsIgnoreCase("WAREHOUSE")) {
             inWarehouse = true;
@@ -208,14 +206,14 @@ public class XMLPlanetDataParser implements XMLResponder {
          * System.out.print(prefix); String conj = ""; while
          * (e.hasMoreElements()) { Object k = e.nextElement();
          * System.out.print(conj+k+" = "+attr.get(k)); conj = ", "; }
-         * CampaignData.mwlog.mainLog(""); } prefix = prefix+" ";
+         * MWLogger.mainLog(""); } prefix = prefix+" ";
          */
     }
 
     public void recordElementEnd(String name) throws ParseException {
 
         if (name.equalsIgnoreCase("TIMEZONE")) {
-            CampaignData.mwlog.errLog("planets.xml contains TIMEZONE field. No longer necessary!");
+            MWLogger.errLog("planets.xml contains TIMEZONE field. No longer necessary!");
         }
 
         if (name.equalsIgnoreCase("UNITFACTORY")) {
@@ -240,7 +238,7 @@ public class XMLPlanetDataParser implements XMLResponder {
         }
         if (name.equalsIgnoreCase("CONTINENT")) {
           //TODO remove this later MDR
-        	CampaignData.mwlog.mainLog("continent to try and add is: "+ terrainProb +"% " +terrainName + "[" + CampaignMain.cm.getData().getTerrainByName(terrainName).getId() + "]"
+        	MWLogger.mainLog("continent to try and add is: "+ terrainProb +"% " +terrainName + "[" + CampaignMain.cm.getData().getTerrainByName(terrainName).getId() + "]"
         			+ "(" + advTerrainName +"[" + CampaignMain.cm.getData().getAdvancedTerrainByName(advTerrainName).getId() + "])");
         	
             Continent cont = new Continent(terrainProb, CampaignMain.cm.getData().getTerrainByName(terrainName),CampaignMain.cm.getData().getAdvancedTerrainByName(advTerrainName));
@@ -258,7 +256,7 @@ public class XMLPlanetDataParser implements XMLResponder {
         }
 
         if (name.equalsIgnoreCase("PLANET")) {
-            CampaignData.mwlog.mainLog("PLANET READ");
+            MWLogger.mainLog("PLANET READ");
             SPlanet p;
             p = new SPlanet(counter++, Name, null, Income, CompProduction, Double.parseDouble(XCood), Double.parseDouble(YCood));
             for (int i = 0; i < unitFactories.size(); i++) {
@@ -269,7 +267,7 @@ public class XMLPlanetDataParser implements XMLResponder {
             p.setEnvironments(PlanEnv);
             p.setDescription(Description);
             p.setBaysProvided(Warehousesize);
-            CampaignData.mwlog.mainLog("Influence: " + Influence);
+            MWLogger.mainLog("Influence: " + Influence);
             // This has to be called last since the Bays provided are added to
             // the faction then for instance
             p.setInfluence(new Influences(Influence));
@@ -340,20 +338,20 @@ public class XMLPlanetDataParser implements XMLResponder {
     }
 
     public void recordPI(String name, String pValue) {
-        CampaignData.mwlog.mainLog(prefix + "*" + name + " PI: " + pValue);
+        MWLogger.mainLog(prefix + "*" + name + " PI: " + pValue);
     }
 
     public void recordCharData(String charData) {
-        CampaignData.mwlog.mainLog(prefix + charData);
+        MWLogger.mainLog(prefix + charData);
         if (!charData.equalsIgnoreCase("")) {
-            CampaignData.mwlog.mainLog(lastElement + " --> " + charData);
+            MWLogger.mainLog(lastElement + " --> " + charData);
         } else {
             lastElement = "";
         }
 
         if (lastElement.equalsIgnoreCase("NAME")) {
             Name = charData;
-            CampaignData.mwlog.mainLog(Name);
+            MWLogger.mainLog(Name);
         } else if (lastElement.equalsIgnoreCase("INCOME")) {
             Income = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("XCOOD")) {
@@ -371,9 +369,9 @@ public class XMLPlanetDataParser implements XMLResponder {
             SHouse h = CampaignMain.cm.getHouseFromPartialString(lastInfFaction, null);
             if (h != null) {
                 Influence.put(new Integer(h.getId()), new Integer(charData));
-                CampaignData.mwlog.mainLog("Parsed: " + h.toString() + " - " + charData);
+                MWLogger.mainLog("Parsed: " + h.toString() + " - " + charData);
             } else {
-                CampaignData.mwlog.mainLog("ERROR READING FACTION: " + lastInfFaction);
+                MWLogger.mainLog("ERROR READING FACTION: " + lastInfFaction);
             }
         }
 
@@ -476,7 +474,7 @@ public class XMLPlanetDataParser implements XMLResponder {
     }
 
     public void recordComment(String comment) {
-        CampaignData.mwlog.mainLog(prefix + "*Comment: " + comment);
+        MWLogger.mainLog(prefix + "*Comment: " + comment);
     }
 
     /* INPUT METHODS */

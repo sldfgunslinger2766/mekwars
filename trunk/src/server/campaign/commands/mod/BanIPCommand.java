@@ -144,7 +144,7 @@ public class BanIPCommand implements Command {
 			CampaignMain.cm.getServer().getBanIps().put(ip, until);
 
 		CampaignMain.cm.getServer().bansUpdate();
-		//CampaignData.mwlog.modLog(Username + " banned " + toKill + " " +timeName+".");
+		//MWLogger.modLog(Username + " banned " + toKill + " " +timeName+".");
 		CampaignMain.cm.getServer().sendChat(Username + " banned " + toKill + " " +timeName+".");
 	}
 	

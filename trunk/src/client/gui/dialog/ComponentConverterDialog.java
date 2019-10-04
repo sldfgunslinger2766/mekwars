@@ -38,13 +38,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
-import megamek.common.TechConstants;
 import client.MWClient;
-
 import common.BMEquipment;
 import common.House;
 import common.Unit;
 import common.util.ComponentToCritsConverter;
+import megamek.common.TechConstants;
 
 public final class ComponentConverterDialog implements ActionListener {
 

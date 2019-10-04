@@ -36,9 +36,8 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import client.MWClient;
 import client.campaign.CPlayer;
-
-import common.CampaignData;
 import common.campaign.clientutils.IClientConfig;
+import common.util.MWLogger;
 import common.util.UnitUtils;
 
 /**
@@ -204,7 +203,7 @@ public class CPlayerPanel extends JScrollPane {
                     new StringReader(mwclient.getPlayer().getLogo()), lblLogo.getDocument(),0);
                 lblLogo.setCaretPosition(lblLogo.getDocument().getLength());
             }catch(Exception ex){
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
             //lblLogo.setIcon(mwclient.getPlayer().getLogo());
         }//lblLogo.setIcon(mwclient.getConfig().getImage("LOGO"));}
@@ -262,7 +261,7 @@ public class CPlayerPanel extends JScrollPane {
                 try {
                     wait(1000);
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }//unendting while
         }//end run

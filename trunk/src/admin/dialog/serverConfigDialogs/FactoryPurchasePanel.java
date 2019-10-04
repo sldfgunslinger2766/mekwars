@@ -19,7 +19,6 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import client.MWClient;
-
 import common.Unit;
 import common.util.SpringLayoutHelper;
 

@@ -20,14 +20,14 @@ import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import common.CampaignData;
+import common.Unit;
+import common.util.MWLogger;
 import megamek.common.IEntityRemovalConditions;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-
-import common.CampaignData;
-import common.Unit;
 
 public class OperationReporter {
 
@@ -61,14 +61,14 @@ public class OperationReporter {
 					wNames.append(winners.get(name).getName());
 				} catch (Exception e) {
 					if (wNames==null) {
-						CampaignData.mwlog.testLog("wNames is null");
+						MWLogger.testLog("wNames is null");
 					} else if (winners == null) {
-						CampaignData.mwlog.testLog("winners is null");
+						MWLogger.testLog("winners is null");
 					} else {
-						CampaignData.mwlog.testLog("Winners must have returned a null object");
-						CampaignData.mwlog.testLog("looking for: " + name);
-						CampaignData.mwlog.testLog("size: " + winners.size());
-						CampaignData.mwlog.testLog("conents: " + winners.keySet().toString());
+						MWLogger.testLog("Winners must have returned a null object");
+						MWLogger.testLog("looking for: " + name);
+						MWLogger.testLog("size: " + winners.size());
+						MWLogger.testLog("conents: " + winners.keySet().toString());
 					}
 				}
 			}
@@ -121,14 +121,14 @@ public class OperationReporter {
 	public void commit() {
 		opData.setEndTime(System.currentTimeMillis());
 				
-		CampaignData.mwlog.resultsLog("Operation Finished: ");
-		CampaignData.mwlog.resultsLog("  OpType: " + opData.getOpType());
-		CampaignData.mwlog.resultsLog("  Planet: " + opData.getPlanet() + ", Terrain: " + opData.getTerrain() + ", Theme: " + opData.getTheme());
-		CampaignData.mwlog.resultsLog("  Attacker(s): " + opData.getAttackers() + " (" + opData.getAttackerSize() + " units)  --  Defender(s): " + opData.getDefenders() + " (" + opData.getDefenderSize() + " units)");
-		CampaignData.mwlog.resultsLog("  BVs: Attacker: " + opData.getAttackerStartBV() + " / " + opData.getAttackerEndBV() + "  --  Defender: " + opData.getDefenderStartBV() + " / " + opData.getDefenderEndBV());
-		CampaignData.mwlog.resultsLog("  Attacker Won: " + Boolean.toString(opData.attackerIsWinner()));
-		CampaignData.mwlog.resultsLog("  Winner(s): " + opData.getWinners() + "  --  Loser(s): " + opData.getLosers());
-		CampaignData.mwlog.resultsLog("  Game Length: " + opData.getHumanReadableGameLength());
+		MWLogger.resultsLog("Operation Finished: ");
+		MWLogger.resultsLog("  OpType: " + opData.getOpType());
+		MWLogger.resultsLog("  Planet: " + opData.getPlanet() + ", Terrain: " + opData.getTerrain() + ", Theme: " + opData.getTheme());
+		MWLogger.resultsLog("  Attacker(s): " + opData.getAttackers() + " (" + opData.getAttackerSize() + " units)  --  Defender(s): " + opData.getDefenders() + " (" + opData.getDefenderSize() + " units)");
+		MWLogger.resultsLog("  BVs: Attacker: " + opData.getAttackerStartBV() + " / " + opData.getAttackerEndBV() + "  --  Defender: " + opData.getDefenderStartBV() + " / " + opData.getDefenderEndBV());
+		MWLogger.resultsLog("  Attacker Won: " + Boolean.toString(opData.attackerIsWinner()));
+		MWLogger.resultsLog("  Winner(s): " + opData.getWinners() + "  --  Loser(s): " + opData.getLosers());
+		MWLogger.resultsLog("  Game Length: " + opData.getHumanReadableGameLength());
 	}
 	
 	public void closeOperation(boolean draw, boolean attackerWon) {

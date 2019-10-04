@@ -34,9 +34,8 @@ import java.io.InputStreamReader;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
+import common.util.MWLogger;
 import server.MWChatServer.commands.ICommands;
-
-import common.CampaignData;
 
 /**
  * Constantly reads from the BufferedReader.
@@ -57,7 +56,7 @@ public class ReaderThread extends Thread {
         try {
 			_in = new BufferedReader(new InputStreamReader(in, "UTF8"));
         } catch (Exception e) {
-        	CampaignData.mwlog.errLog(e);
+        	MWLogger.errLog(e);
         }
     }
     
@@ -78,8 +77,8 @@ public class ReaderThread extends Thread {
             }
     		catch (SocketException se) {
                 pleaseStop();
-                //CampaignData.mwlog.errLog(_connectionHandler._client._userId+" Disconnected. Socket exception.");
-                //CampaignData.mwlog.errLog(se);
+                //MWLogger.errLog(_connectionHandler._client._userId+" Disconnected. Socket exception.");
+                //MWLogger.errLog(se);
     		}//Socket Read timed out keep going.
             catch ( SocketTimeoutException ste ){
             }
@@ -87,7 +86,7 @@ public class ReaderThread extends Thread {
     			// including but not limited to IOException
     			// -- in particular if the message handler croaks we want to know how/why
                 pleaseStop();//potential fix for MMNET crashing issue? @urgru 4.08.06
-                CampaignData.mwlog.errLog(ex); 
+                MWLogger.errLog(ex); 
             }
         }
     }

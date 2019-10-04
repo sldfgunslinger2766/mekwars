@@ -19,11 +19,10 @@ package server.campaign.commands.admin;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
 
 
 public class RemoveTraitCommand implements Command {
@@ -56,7 +55,7 @@ public class RemoveTraitCommand implements Command {
 			traitName = command.nextToken();
 			confirmString = command.nextToken();
 		}catch (Exception ex){
-		    CampaignData.mwlog.errLog(ex);
+		    MWLogger.errLog(ex);
 		}		
 
 		if ( !confirmString.equals("CONFIRM") )

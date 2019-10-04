@@ -2,11 +2,10 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import common.flags.PlayerFlags;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-
-import common.flags.PlayerFlags;
 
 
 public class AdminUpdateDefaultPlayerFlagsCommand implements Command {

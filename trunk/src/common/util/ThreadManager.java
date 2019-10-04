@@ -24,8 +24,6 @@ package common.util;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import common.CampaignData;
-
 public class ThreadManager{
 	
 	private static ThreadManager instance = new ThreadManager();
@@ -44,7 +42,7 @@ public class ThreadManager{
 		try{
 			executor.execute(runnable);
 		}catch(Exception ex ){
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 	}
 	

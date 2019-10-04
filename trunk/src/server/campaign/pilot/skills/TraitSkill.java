@@ -17,12 +17,11 @@ package server.campaign.pilot.skills;
 
 import java.util.Vector;
 
+import common.Unit;
+import common.campaign.pilot.Pilot;
 import megamek.common.Entity;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
-
-import common.Unit;
-import common.campaign.pilot.Pilot;
 
 /**
  * Pilot traits for use with moding the gaining of other traits
@@ -67,12 +66,12 @@ public class TraitSkill extends SPilotSkill {
         String Trait = "none";
         String faction = p.getCurrentFaction();
 
-        // CampaignData.mwlog.errLog("Trait Skill Faction: "+faction);
+        // MWLogger.errLog("Trait Skill Faction: "+faction);
         Vector<String> traitNames = CampaignMain.cm.getFactionTraits(faction);
 
         size = traitNames.size();
 
-        // CampaignData.mwlog.errLog("Trait Skill size: "+size);
+        // MWLogger.errLog("Trait Skill size: "+size);
 
         if (size < 1) {
             return;

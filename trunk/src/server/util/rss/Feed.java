@@ -21,7 +21,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import common.CampaignData;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 
 /**
@@ -88,7 +88,7 @@ public class Feed {
         } catch (FileNotFoundException efnf) {
             // ignore
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Problems writing the news feed");
+            MWLogger.errLog("Problems writing the news feed");
         }
 
         

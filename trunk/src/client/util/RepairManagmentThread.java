@@ -27,15 +27,14 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import client.MWClient;
+import client.campaign.CUnit;
+import common.campaign.pilot.skills.PilotSkill;
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Mech;
 import megamek.common.Mounted;
-import client.MWClient;
-import client.campaign.CUnit;
-
-import common.CampaignData;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.UnitUtils;
 
 public class RepairManagmentThread extends Thread{
     
@@ -65,8 +64,8 @@ public class RepairManagmentThread extends Thread{
                 processWorkOrders();
             }catch(Exception ex){
                 client.systemMessage("Error proccessing Repair Management queue. Alert an SO and check your ./logs/error.0 for the error");
-                CampaignData.mwlog.errLog("Error in Repair Management Queue");
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog("Error in Repair Management Queue");
+                MWLogger.errLog(ex);
             }
         }
     }
@@ -191,7 +190,7 @@ public class RepairManagmentThread extends Thread{
                     boolean armor = ( slot >= UnitUtils.LOC_FRONT_ARMOR);
                     
                     if ( unit == null ){
-                        CampaignData.mwlog.errLog("Unable to find unit to repair. removing repair job");
+                        MWLogger.errLog("Unable to find unit to repair. removing repair job");
                         client.systemMessage("Unable to find unit to repair. removing repair job");
                         workQueue.remove();
                         continue;

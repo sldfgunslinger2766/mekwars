@@ -24,13 +24,12 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.Vector;
 
+import common.UnitFactory;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SPlanet;
 import server.campaign.SUnitFactory;
 import server.campaign.commands.Command;
-
-import common.UnitFactory;
 
 
 /**

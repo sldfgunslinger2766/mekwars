@@ -35,13 +35,12 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import megamek.common.Infantry;
 import client.MWClient;
 import client.campaign.CUnit;
 import client.gui.WholeNumberField;
-
 import common.Unit;
 import common.util.SpringLayoutHelper;
+import megamek.common.Infantry;
 
 /*
  * 

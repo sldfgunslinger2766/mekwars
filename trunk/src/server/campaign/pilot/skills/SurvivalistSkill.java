@@ -15,12 +15,11 @@
  */
 package server.campaign.pilot.skills;
 
+import common.Unit;
+import common.campaign.pilot.Pilot;
 import megamek.common.Entity;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
-
-import common.Unit;
-import common.campaign.pilot.Pilot;
 
 /**
  * If a pilot has this skill they will have a +20% of returning home if ejected and left on the field.

@@ -9,9 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import common.util.MWLogger;
 import server.campaign.SPlayer;
-
-import common.CampaignData;
 
 public class WhoToHTML {
 	private HashMap<String,DataEntry> players = null;
@@ -50,8 +49,8 @@ public class WhoToHTML {
 			fw.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			CampaignData.mwlog.errLog("IOException in WhoToHTML");
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog("IOException in WhoToHTML");
+			MWLogger.errLog(e);
 		} 
 		
 		return;

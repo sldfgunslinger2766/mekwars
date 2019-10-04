@@ -34,6 +34,16 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import common.CampaignData;
+import common.House;
+import common.Unit;
+import common.UnitFactory;
+import common.campaign.operations.Operation;
+import common.campaign.pilot.skills.PilotSkill;
+import common.util.MWLogger;
+import common.util.StringUtils;
+import common.util.ThreadManager;
+import common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.IEntityRemovalConditions;
 import megamek.common.Infantry;
@@ -51,15 +61,6 @@ import server.campaign.mercenaries.MercHouse;
 import server.campaign.pilot.SPilot;
 import server.campaign.util.ELORanking;
 import server.util.BattleToJSON;
-import common.CampaignData;
-import common.House;
-import common.Unit;
-import common.UnitFactory;
-import common.campaign.operations.Operation;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.StringUtils;
-import common.util.ThreadManager;
-import common.util.UnitUtils;
 
 public class ShortResolver {
 
@@ -278,7 +279,7 @@ public class ShortResolver {
             // set to reporting status
             so.changeStatus(ShortOperation.STATUS_REPORTING);
             CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_REPORTINGERROR, null);
-            CampaignData.mwlog.errLog("Error while trying to Resolve game: " + so.getShortID() + " Result sent by Game: " + report);
+            MWLogger.errLog("Error while trying to Resolve game: " + so.getShortID() + " Result sent by Game: " + report);
             return;
         }
 
@@ -442,7 +443,7 @@ public class ShortResolver {
 
             // stick the result into the human readable result log, per
             // RFE1479311.
-            CampaignData.mwlog.resultsLog(toSend);
+            MWLogger.resultsLog(toSend);
 
             // deal with scrapThread for player, if he has one.
             if (scrapThreads.containsKey(currName)) {
@@ -568,7 +569,7 @@ public class ShortResolver {
 
         // return if there is no winner. terminate the game.
         if (so.getWinners().size() == 0) {
-            CampaignData.mwlog.errLog("Autoreporting error: Game had no winner." + so.getShortID() + " Result sent by Game: ");
+            MWLogger.errLog("Autoreporting error: Game had no winner." + so.getShortID() + " Result sent by Game: ");
             CampaignMain.cm.toUser("Autoreporting error: Game had no winner.", loserName, true);
             CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_REPORTINGERROR, null);
 			return;
@@ -576,7 +577,7 @@ public class ShortResolver {
 
         // return if there is no loser. terminate the game.
         if (so.getLosers().size() == 0) {
-            CampaignData.mwlog.errLog("Autoreporting error: Game had no loser." + so.getShortID() + " Result sent by Game: ");
+            MWLogger.errLog("Autoreporting error: Game had no loser." + so.getShortID() + " Result sent by Game: ");
             CampaignMain.cm.toUser("Autoreporting error: Game had no loser.", winnerName, true);
             CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_REPORTINGERROR, null);
             return;
@@ -606,7 +607,7 @@ public class ShortResolver {
         }
 
         if ((winnerA == null) || (winnerA.getPlayerName().trim().length() == 0)) {
-            CampaignData.mwlog.errLog("Autoreporting error ["+ so.getShortID() + "]:" + " Winner(" + winnerName + ") army  null or had empty owner name.");
+            MWLogger.errLog("Autoreporting error ["+ so.getShortID() + "]:" + " Winner(" + winnerName + ") army  null or had empty owner name.");
 			CampaignMain.cm.toUser("Autoreporting error: Winner army null or had empty owner name.", winnerName, true);
 			CampaignMain.cm.toUser("Autoreporting error: Winner army null or had empty owner name.", loserName, true);
             CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_REPORTINGERROR, null);
@@ -614,7 +615,7 @@ public class ShortResolver {
         }
 
         if ((loserA == null) || (loserA.getPlayerName().trim().length() == 0)) {
-            CampaignData.mwlog.errLog("Autoreporting error ["+ so.getShortID() + "]:" + "Loser(" + loserName + ") army  null or had empty owner name.");
+            MWLogger.errLog("Autoreporting error ["+ so.getShortID() + "]:" + "Loser(" + loserName + ") army  null or had empty owner name.");
 			CampaignMain.cm.toUser("Autoreporting error: Loser army null or had empty owner name.", loserName, true);
 			CampaignMain.cm.toUser("Autoreporting error: Loser army null or had empty owner name.", winnerName, true);
             CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_REPORTINGERROR, null);
@@ -632,7 +633,7 @@ public class ShortResolver {
             }
         }
 
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "break " + loserName + "'s units in living/salvagable/dead, etc.");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "break " + loserName + "'s units in living/salvagable/dead, etc.");
         possibleSalvageFromInProgressInfo(so, loser);
 
         unlockAllPlayerUnits(); //@salient - this is only active if using locked units w/ one fight only option
@@ -642,7 +643,7 @@ public class ShortResolver {
          * string. NOTE: This is where meta-impacts are applied. See method for
          * more detailed comments on assignment of conquest %, thefts, etc.
          */
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "assemble the winner and loser strings, and the final status info string");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "assemble the winner and loser strings, and the final status info string");
         assembleDescriptionStrings(o, so);
 
         /*
@@ -650,20 +651,20 @@ public class ShortResolver {
          * determine cost of player's salvage. save these costs so they may be
          * used to adjust players' paystrings.
          */
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "put together the salvage strings, and move units around");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "put together the salvage strings, and move units around");
         assembleSalvageStrings(o, so);
 
         /*
          * Put together the payment strings, and pay the players. Adjust the
          * actual game pay by the salvage costs.
          */
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Put together the payment strings, and pay the players");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Put together the payment strings, and pay the players");
         assemblePaymentStrings(o, so, loser);
 
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Process Captured units");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Process Captured units");
         processCapturedUnits(so);
 
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Process repods");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Process repods");
         repodUnits(so, o);
         /*
          * Check to see if this resolves a long operation.
@@ -676,7 +677,7 @@ public class ShortResolver {
          * server.
          */
 
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Unlock all participating armies");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Unlock all participating armies");
         for (SArmy currA : allArmies.values()) {
             currA.setLocked(false);
             CampaignMain.cm.toUser("PL|SAL|" + currA.getID() + "#" + false, currA.getPlayerName(), false);
@@ -687,7 +688,7 @@ public class ShortResolver {
          * inform him of any immunity he may have received.
          */
 
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Send messages to the winner, remove them from fighting status");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Send messages to the winner, remove them from fighting status");
         // send message
         String winName = "";
         if (winner != null) {
@@ -698,7 +699,7 @@ public class ShortResolver {
         CampaignMain.cm.toUser(toSend, winName, true);
 
         // stick the result into the human readable result log, per RFE1479311.
-        CampaignData.mwlog.resultsLog(toSend);
+        MWLogger.resultsLog(toSend);
 
         // update operations and set unbusy. we know the loser isn't
         // online, so we only need to send to the winner.
@@ -711,7 +712,7 @@ public class ShortResolver {
         }
 
         // start scrap thread
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "start scrap thread");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "start scrap thread");
         if (scrapThreads.containsKey(winName)) {
             Integer maxScrapPay = unitCosts.get(winName);
             if ((maxScrapPay == null) || (maxScrapPay < 0)) {
@@ -732,7 +733,7 @@ public class ShortResolver {
         }
 
         // set immunity && make unbusy
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "set immunity && make unbusy");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "set immunity && make unbusy");
         CampaignMain.cm.getIThread().addImmunePlayer(winner);
         if (so.isFromReserve() && (winner != null)) {
             winner.setFighting(false, true);// return AFR players to reserve
@@ -746,21 +747,21 @@ public class ShortResolver {
          * to avoid games, so they can scrap units without cost and reset in
          * SOL.
          */
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "send winner to reserve");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "send winner to reserve");
         if (!so.isFromReserve() && CampaignMain.cm.getBooleanConfig("ForcedDeactivation") && (winner != null)) {
             winner.setActive(false);
             CampaignMain.cm.toUser("You've left the front lines to repair and refit, and are now in reserve.", winner.getName());
         }
 
         // send the status update to all players
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "send status update");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "send status update");
         CampaignMain.cm.sendPlayerStatusUpdate(winner, true);
 
         /*
          * Send the message to the loser/disconnector. The player is offline, so
          * their status and immunity time are not concerns at the moment.
          */
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "send loser updates");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "send loser updates");
         String loseName = "";
         if (loser != null) {
             loseName = loser.getName().toLowerCase();
@@ -769,7 +770,7 @@ public class ShortResolver {
         // longStrings.get(loseName);
         CampaignMain.cm.toUser(toSend, loseName, true);
 
-        CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "save players");
+        MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "save players");
 
         if (winner != null) {
             winner.setSave();
@@ -778,21 +779,21 @@ public class ShortResolver {
             loser.setSave();
         }
         // stick the result into the human readable result log, per RFE1479311.
-		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "stick the result into the human readable result log");
+		MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "stick the result into the human readable result log");
 
-        CampaignData.mwlog.resultsLog(toSend);
+        MWLogger.resultsLog(toSend);
 
         /*
          * Set the finished strings for the ShortOperation.
          */
-		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Set the finished strings for the ShortOperation");
+		MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Set the finished strings for the ShortOperation");
         so.setCompleteFinishedInfo(completeFinishedInfoString);
         so.setIncompleteFinishedInfo(incompleteFinishedInfoString);
 
         /*
          * Set the game to finished staus and bump the game counter.
          */
-		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Set the game to finished staus and bump the game counter");
+		MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "Set the game to finished staus and bump the game counter");
         so.changeStatus(ShortOperation.STATUS_FINISHED);
         CampaignMain.cm.addGamesCompleted(1);
 
@@ -811,7 +812,7 @@ public class ShortResolver {
          */
         checkAllPlayersForRestockMC();
 
-		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "check for promotions and then save again?");
+		MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "check for promotions and then save again?");
         if (winner != null) {
             winner.checkForPromotion();
             winner.checkForDemotion();
@@ -822,7 +823,7 @@ public class ShortResolver {
             loser.checkForDemotion();
             loser.setSave();
         }
-		CampaignData.mwlog.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "All Done!");
+		MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "All Done!");
 
 
     }
@@ -1197,11 +1198,11 @@ public class ShortResolver {
             // reduced.
             double minBVDifference = o.getDoubleValue("MinBVDifferenceForFullPay");
             /*
-             * CampaignData.mwlog.debugLog("Loser BV: Current: "+currentBV+" Starting BV: "
+             * MWLogger.debugLog("Loser BV: Current: "+currentBV+" Starting BV: "
              * +loserBV+" minBVDiff: "+minBVDifference);
-             * CampaignData.mwlog.debugLog("Total BV Lost: "+(1.0 - ((double)
+             * MWLogger.debugLog("Total BV Lost: "+(1.0 - ((double)
              * currentBV / (double) loserBV)));
-             * CampaignData.mwlog.debugLog("Money Earned: "+earnedMoney);
+             * MWLogger.debugLog("Money Earned: "+earnedMoney);
              */
             if ((minBVDifference > 0) && ((1.0 - ((double) currentBV / (double) loserBV)) < minBVDifference) && (disconnector == null) && so.getLosers().containsKey(currName)) {
                 int minBVvPenaltyMod = o.getIntValue("BVFailurePaymentModifier");
@@ -1210,7 +1211,7 @@ public class ShortResolver {
                 // earnedXP = (earnedXP * minBVvPenaltyMod)/100;
                 // earnedRP = (earnedRP * minBVvPenaltyMod)/100;
             }
-            // CampaignData.mwlog.debugLog("Money Earned: "+earnedMoney);
+            // MWLogger.debugLog("Money Earned: "+earnedMoney);
 
             /*
              * Determine how much to play the players technicians (or, if using
@@ -1520,7 +1521,7 @@ public class ShortResolver {
         if(CampaignMain.cm.getBooleanConfig("Django_CaptureBattleAsJson"))
         {
         	BattleToJSON.writeToFile(shortOp, livingUnits, destroyedUnits, drawGame);
-        	CampaignData.mwlog.debugLog("Battle " + shortOp.getLongID() + " written to file as JSON");
+        	MWLogger.debugLog("Battle " + shortOp.getLongID() + " written to file as JSON");
         }
 
         /*
@@ -1540,7 +1541,7 @@ public class ShortResolver {
              * resolution.
              */
             if (owner == null) {
-                CampaignData.mwlog.errLog("Null _owner_ while processing post-game salvage for " + " Attack #" + so.getShortID() + ". Needed to find Player: " + ownerName + " Unit #" + currEntity.getID() + "/Type: " + currEntity.getType());
+                MWLogger.errLog("Null _owner_ while processing post-game salvage for " + " Attack #" + so.getShortID() + ". Needed to find Player: " + ownerName + " Unit #" + currEntity.getID() + "/Type: " + currEntity.getType());
                 continue;
             }
 
@@ -1550,7 +1551,7 @@ public class ShortResolver {
         	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
         	{
         	    currU.setLocked(true);
-        	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+        	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
         	}
 
             // Attacker was able to flee the unit so that means they get to keep
@@ -1566,8 +1567,8 @@ public class ShortResolver {
                     UnitUtils.applyBattleDamage(currU.getEntity(), currEntity.getUnitDamage(), false);
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog("Unable to apply damage to unit " + currU.getModelName());
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog("Unable to apply damage to unit " + currU.getModelName());
+                MWLogger.errLog(ex);
             }
 
             // If damaged is transfered from Game to campaign then save it the
@@ -1636,7 +1637,7 @@ public class ShortResolver {
         	&& CampaignMain.cm.getBooleanConfig("LockSalvagedUnits"))
         	{
         	    currU.setLocked(true);
-        	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+        	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
         	}
 
             // apply battle damage if there is any to be applied.
@@ -1645,8 +1646,8 @@ public class ShortResolver {
                     UnitUtils.applyBattleDamage(currU.getEntity(), currEntity.getUnitDamage(), false);
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog("Unable to apply damage to unit " + currU.getModelName());
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog("Unable to apply damage to unit " + currU.getModelName());
+                MWLogger.errLog(ex);
             }
 
             /*
@@ -1745,7 +1746,7 @@ public class ShortResolver {
             	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
             	{
             	    currU.setLocked(true);
-            	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
             	}
 
                 // winner recovered own unit. send update.
@@ -1849,7 +1850,7 @@ public class ShortResolver {
             	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
             	{
             	    currU.setLocked(true);
-            	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
             	}
 
                 // winner recovered own unit. send update.
@@ -1953,7 +1954,7 @@ public class ShortResolver {
             	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
             	{
             	    currU.setLocked(true);
-            	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
             	}
 
                 // winner recovered own unit. send update.
@@ -2053,7 +2054,7 @@ public class ShortResolver {
             	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
             	{
             	    currU.setLocked(true);
-            	    //CampaignData.mwlog.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
             	}
             } else {
                 toOriginalOwner = " " + newOwner.getColoredName() + " recovered your " + currU.getModelName() + ". ";
@@ -2449,7 +2450,7 @@ public class ShortResolver {
                      */
                     return;
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }// end if(polluted)
 
@@ -2574,7 +2575,7 @@ public class ShortResolver {
                 newsFeedBody += " on " + so.getTargetWorld().getName() + " (" + so.getName() + ").";
                 newsFeedTitle += " on " + so.getTargetWorld().getName();
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
             /*
@@ -2894,11 +2895,11 @@ public class ShortResolver {
                                 	maxBVToAward = (int)(((double)totalAttackerBV * (double)bvAwardPercent) / 100D);
                                 	maxTotalBVToAward = (int)(((double)totalAttackerBV * (double)bvMaxAwardPercent) / 100D);
 
-                                	CampaignData.mwlog.debugLog("bvAwardPercent -> " + bvAwardPercent);
-                                	CampaignData.mwlog.debugLog("bvMaxAwardPercent -> " + bvMaxAwardPercent);
-                                	CampaignData.mwlog.debugLog("totalAttackerBV -> " + totalAttackerBV);
-                                	CampaignData.mwlog.debugLog("maxBVToAward -> " + maxBVToAward);
-                                	CampaignData.mwlog.debugLog("maxTotalBVToAward -> " + maxTotalBVToAward);
+                                	MWLogger.debugLog("bvAwardPercent -> " + bvAwardPercent);
+                                	MWLogger.debugLog("bvMaxAwardPercent -> " + bvMaxAwardPercent);
+                                	MWLogger.debugLog("totalAttackerBV -> " + totalAttackerBV);
+                                	MWLogger.debugLog("maxBVToAward -> " + maxBVToAward);
+                                	MWLogger.debugLog("maxTotalBVToAward -> " + maxTotalBVToAward);
                                 }
 
                             	StringBuilder sendToPlayerString = new StringBuilder();
@@ -3280,7 +3281,7 @@ public class ShortResolver {
                         }// end while(factories remain)
                         so.checkMercContracts(aWinner, ContractInfo.CONTRACT_COMPONENTS, ppDestroyed);
                     } catch (Exception ex) {
-                        CampaignData.mwlog.errLog(ex);
+                        MWLogger.errLog(ex);
                     }
 
                 }// end if(attackerWon)
@@ -3456,7 +3457,7 @@ public class ShortResolver {
                             }// end if ppToGenerate > 0
                         }// end if(defender has factories on world)
                     } catch (Exception ex) {
-                        CampaignData.mwlog.errLog(ex);
+                        MWLogger.errLog(ex);
                     }
 
                 }// end elseif(defenderWon)
@@ -3513,11 +3514,11 @@ public class ShortResolver {
                 }
 
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
     }// end this.assembleMetaStrings()
 
@@ -3554,7 +3555,7 @@ public class ShortResolver {
                     String currentUnit = reportTokenizer.nextToken();
                     // We're getting errors in this module.  Let's find out why
                     errorUnit = currentUnit;
-                    //CampaignData.mwlog.errLog("Testing unit: " + currentUnit);
+                    //MWLogger.errLog("Testing unit: " + currentUnit);
 
                     // MechWarrior
                     if (currentUnit.startsWith("MW*")) {
@@ -3669,7 +3670,7 @@ public class ShortResolver {
             } catch (Exception ex) {
             	CampaignMain.cm.doSendErrLog("Error processing unit: ");
             	CampaignMain.cm.doSendErrLog(errorUnit);
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
             /*
@@ -3724,11 +3725,11 @@ public class ShortResolver {
                     }// end if
                 }// end while(More To Check)
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
     }// end possibleSalvageFromReport
@@ -3767,7 +3768,7 @@ public class ShortResolver {
                     }
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
             /*
@@ -3786,7 +3787,7 @@ public class ShortResolver {
                     }// end for(all units in currArmy)
                 }// end for(all armies)
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
             /*
@@ -3807,7 +3808,7 @@ public class ShortResolver {
                     }
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
             /*
@@ -3859,11 +3860,11 @@ public class ShortResolver {
 
                 }// end if(no units to shift)
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
     }// end possibleSalvageFromInProgressInfo
@@ -3913,7 +3914,7 @@ public class ShortResolver {
                 toReturn += " " + newPilotDescription(unit);
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             return toReturn;
         }
 
@@ -3941,7 +3942,7 @@ public class ShortResolver {
                 owner.getHouseFightingFor().addDispossessedPilot(unit, false);
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
     }
 
@@ -4298,7 +4299,7 @@ public class ShortResolver {
             // captured, but did not defect
             toReturn[2] = ((SPilot) currUnit.getPilot()).getPilotCaptureAndRemovedMessage(currUnit);
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             return toReturn;
         }
 
@@ -4361,7 +4362,7 @@ public class ShortResolver {
             }
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             return Math.round(repairCost);
         }
 
@@ -4476,7 +4477,7 @@ public class ShortResolver {
 
             return null;
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             return null;
         }
 
@@ -4513,7 +4514,7 @@ public class ShortResolver {
 
             return null;
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             return null;
         }
 
@@ -4540,7 +4541,7 @@ public class ShortResolver {
             result += "]";
             return result;
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             return result;
         }
 
@@ -4579,7 +4580,7 @@ public class ShortResolver {
             }
             return false;
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             return false;
         }
 
@@ -4802,17 +4803,17 @@ public class ShortResolver {
     	double aMult = Math.min(1.0, ( (double) (base + attackerExp))/ (double) maximum);
     	double dMult = Math.min(1.0, ( (double) (base + defenderExp))/ (double) maximum);
 //
-//    	CampaignData.mwlog.debugLog("maybeModifyLandByExperience:");
-//    	CampaignData.mwlog.debugLog(" --> base: " + base);
-//    	CampaignData.mwlog.debugLog(" --> maximum: " + maximum);
-//    	CampaignData.mwlog.debugLog(" --> attackerExp: " + attackerExp);
-//    	CampaignData.mwlog.debugLog(" --> aMult: " + aMult);
-//    	CampaignData.mwlog.debugLog(" --> defenderExp: " + defenderExp);
-//    	CampaignData.mwlog.debugLog(" --> dMult: " + dMult);
-//    	CampaignData.mwlog.debugLog(" --> Initial Land: " + land);
+//    	MWLogger.debugLog("maybeModifyLandByExperience:");
+//    	MWLogger.debugLog(" --> base: " + base);
+//    	MWLogger.debugLog(" --> maximum: " + maximum);
+//    	MWLogger.debugLog(" --> attackerExp: " + attackerExp);
+//    	MWLogger.debugLog(" --> aMult: " + aMult);
+//    	MWLogger.debugLog(" --> defenderExp: " + defenderExp);
+//    	MWLogger.debugLog(" --> dMult: " + dMult);
+//    	MWLogger.debugLog(" --> Initial Land: " + land);
 
     	land *= (aMult * dMult);
-    	CampaignData.mwlog.debugLog(" --> Final Land: " + land);
+    	MWLogger.debugLog(" --> Final Land: " + land);
 
     	return land;
     }
@@ -4918,7 +4919,7 @@ public class ShortResolver {
                         SHouse faction = (SHouse) house;
 
                         buildFile = BuildTable.getFileName(faction.getName(), Unit.getWeightClassDesc(unit.getWeightclass()), timeZone, unit.getType());
-                        // CampaignData.mwlog.errLog("File: "+fileName);
+                        // MWLogger.errLog("File: "+fileName);
 
                         if (!tables.contains(buildFile)) {
                             tables.add(buildFile);
@@ -4930,9 +4931,9 @@ public class ShortResolver {
                         }
 
                         timeZone = currp.getMyHouse().getConfig("NoFactoryRepodFolder");
-                        // CampaignData.mwlog.errLog("TimeZone: "+timeZone);
+                        // MWLogger.errLog("TimeZone: "+timeZone);
                         buildFile = BuildTable.getFileName(faction.getName(), Unit.getWeightClassDesc(unit.getWeightclass()), timeZone, unit.getType());
-                        // CampaignData.mwlog.errLog("File: "+fileName);
+                        // MWLogger.errLog("File: "+fileName);
 
                         if (!tables.contains(buildFile)) {
                             tables.add(buildFile);
@@ -4993,12 +4994,12 @@ public class ShortResolver {
                             dis.close();
                             fis.close();
                         } catch (FileNotFoundException ex) {
-                            CampaignData.mwlog.mainLog("File " + buildTable + " was not Found");
+                            MWLogger.mainLog("File " + buildTable + " was not Found");
                         } catch (IOException ex) {
-                            CampaignData.mwlog.mainLog("File " + buildTable + " had an I/O error");
+                            MWLogger.mainLog("File " + buildTable + " had an I/O error");
                         } catch (Exception ex) {
-                            CampaignData.mwlog.errLog(ex);
-                            CampaignData.mwlog.mainLog("File " + buildTable + " has a problem");
+                            MWLogger.errLog(ex);
+                            MWLogger.mainLog("File " + buildTable + " has a problem");
                         }
 
                         finally {
@@ -5034,7 +5035,7 @@ public class ShortResolver {
                     }
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
         }

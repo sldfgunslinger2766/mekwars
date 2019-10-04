@@ -78,7 +78,7 @@ public class AdminTransferCommand implements Command {
       CampaignMain.cm.toUser("AM:You transfered " + sendingPlayer + "'s " + m.getModelName() + " to " + receiver.getName(),Username,true);
       CampaignMain.cm.toUser("AM:"+Username + " forced " + sendingPlayer + " to send you a " + m.getModelName() + ".",receivingPlayer,true);
       CampaignMain.cm.toUser("AM:"+Username + " forced you to send your " + m.getModelName() + " to " + receivingPlayer + ".",sendingPlayer,true);
-      //server.CampaignData.mwlog.modLog(Username + " transfers a " + m.getModelName() + "from " + sendingPlayer + " to " + receivingPlayer);
+      //server.MWLogger.modLog(Username + " transfers a " + m.getModelName() + "from " + sendingPlayer + " to " + receivingPlayer);
       CampaignMain.cm.doSendModMail("NOTE",Username + " transfers a " + m.getModelName() + " from " + sendingPlayer + " to " + receivingPlayer);
     
       //then do it ...

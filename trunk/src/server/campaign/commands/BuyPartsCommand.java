@@ -20,12 +20,11 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.BMEquipment;
+import common.util.UnitUtils;
 import megamek.common.EquipmentType;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
-
-import common.BMEquipment;
-import common.util.UnitUtils;
 
 public class BuyPartsCommand implements Command {
 	

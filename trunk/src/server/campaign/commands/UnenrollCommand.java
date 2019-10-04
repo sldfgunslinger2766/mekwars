@@ -21,13 +21,12 @@ import java.net.InetAddress;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
+import common.UnitFactory;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlanet;
 import server.campaign.SPlayer;
-
-import common.CampaignData;
-import common.UnitFactory;
 
 
 public class UnenrollCommand implements Command {
@@ -114,8 +113,8 @@ public class UnenrollCommand implements Command {
 
 		//tell the mods and add to iplog.0
 		InetAddress ip = CampaignMain.cm.getServer().getIP(Username);
-		//CampaignData.mwlog.modLog(Username + " unenrolled from the campaign (IP: " + ip + ").");
-		CampaignData.mwlog.ipLog("UNENROLL: " + Username + " IP: " + ip);
+		//MWLogger.modLog(Username + " unenrolled from the campaign (IP: " + ip + ").");
+		MWLogger.ipLog("UNENROLL: " + Username + " IP: " + ip);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " unenrolled from the campaign (IP: " + ip + ").");
 	}//end process
 	

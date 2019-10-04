@@ -38,6 +38,12 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.Vector;
 
+import org.mekwars.libpk.logging.PKLogManager;
+
+import common.MMGame;
+import common.comm.Command;
+import common.comm.ServerCommand;
+import common.util.MWLogger;
 import server.MWChatServer.MWChatClient;
 import server.MWChatServer.MWChatServer;
 import server.MWChatServer.auth.IAuthenticator;
@@ -47,15 +53,10 @@ import server.campaign.SPlayer;
 import server.util.IpCountry;
 import server.util.TrackerThread;
 
-import common.CampaignData;
-import common.MMGame;
-import common.comm.Command;
-import common.comm.ServerCommand;
-
 public class MWServ {
 
 	// Static logging engine, and static version info.
-    public static final String SERVER_VERSION = "0.7.0.1";
+    public static final String SERVER_VERSION = "0.7.0.2";
 
 
     private ServerWrapper myCommunicator;
@@ -77,6 +78,8 @@ public class MWServ {
 	private Vector<String> ignoreList = new Vector<String>(1, 1);
 	private Vector<String> factionLeaderIgnoreList = new Vector<String>(1, 1);
     private TrackerThread trackerThread;
+    
+    private static MWLogger logger;
     
 	// private boolean debug = true;
 
@@ -108,34 +111,34 @@ public class MWServ {
 
 		String logFileName = "./logs/logFile.txt";
 		String errorFileName = "./logs/errorFile.txt";
-		CampaignData.mwlog.createServerLoggers();
-		CampaignData.mwlog.setServer(true);
+		logger = MWLogger.getInstance();
+		createLoggers();
 
 		try {
-			// CampaignData.mwlog.mainLog("Redirecting output to " +
+			// MWLogger.mainLog("Redirecting output to " +
 			// logFileName);
 			PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(logFileName), 64));
 			System.setOut(ps);
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
-			CampaignData.mwlog.errLog("Unable to redirect standard output to " + logFileName);
+			MWLogger.errLog(ex);
+			MWLogger.errLog("Unable to redirect standard output to " + logFileName);
 		}
 
 		try {
-			// CampaignData.mwlog.mainLog("Redirecting output to " +
+			// MWLogger.mainLog("Redirecting output to " +
 			// logFileName);
 			PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(errorFileName), 64));
 			System.setErr(ps);
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
-			CampaignData.mwlog.errLog("Unable to redirect standard error to " + errorFileName);
+			MWLogger.errLog(ex);
+			MWLogger.errLog("Unable to redirect standard error to " + errorFileName);
 		}
 
-		CampaignData.mwlog.log("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
+		MWLogger.mainLog("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
 		/*** Required to kick off the Server ***/
-		CampaignData.mwlog.log("Loading configuration...");
+		MWLogger.mainLog("Loading configuration...");
 		loadConfig();
-		CampaignData.mwlog.log("Configuration loaded.");
+		MWLogger.mainLog("Configuration loaded.");
 		/*
 		 * for (int i = 0; i < argv.length; i++) { if (argv[0].equals("debug"))
 		 * debug = false; }
@@ -144,31 +147,31 @@ public class MWServ {
 			ipToCountry = new IpCountry("./data/iplist.txt", "./data/countrynames.txt");
 		}
 
-		CampaignData.mwlog.log("Loading mail file...");
+		MWLogger.mainLog("Loading mail file...");
 		mails = checkAndCreateConfig("./data/mails.txt");
-		CampaignData.mwlog.log("Mail file loaded.");
-		CampaignData.mwlog.log("Creating new campaign environment...");
+		MWLogger.mainLog("Mail file loaded.");
+		MWLogger.mainLog("Creating new campaign environment...");
 		campaign = new server.campaign.CampaignMain(this);
-		CampaignData.mwlog.log("Environment created.");
+		MWLogger.mainLog("Environment created.");
 
 		// Touch log files
-		CampaignData.mwlog.log("Initializing log subsystem. Touching log files.");
-		CampaignData.mwlog.mainLog("Main channel log touched.");
-		CampaignData.mwlog.gameLog("Game log touched.");
-		CampaignData.mwlog.cmdLog("Command log touched.");
-		CampaignData.mwlog.pmLog("Private messages (PM) log touched.");
-		CampaignData.mwlog.bmLog("Black Market (BM) log touched.");
-		CampaignData.mwlog.infoLog("Server info log touched.");
-		CampaignData.mwlog.warnLog("Server warnings log touched.");
-		CampaignData.mwlog.errLog("Server errors log touched.");
-		CampaignData.mwlog.modLog("Moderators log touched.");
-		CampaignData.mwlog.tickLog("Tick report log touched.");
+		MWLogger.mainLog("Initializing log subsystem. Touching log files.");
+		MWLogger.mainLog("Main channel log touched.");
+		MWLogger.gameLog("Game log touched.");
+		MWLogger.cmdLog("Command log touched.");
+		MWLogger.pmLog("Private messages (PM) log touched.");
+		MWLogger.bmLog("Black Market (BM) log touched.");
+		MWLogger.infoLog("Server info log touched.");
+		MWLogger.warnLog("Server warnings log touched.");
+		MWLogger.errLog("Server errors log touched.");
+		MWLogger.modLog("Moderators log touched.");
+		MWLogger.tickLog("Tick report log touched.");
 
 		// start the TrackerThread if using tracker
 		this.startTracker();
 		
 		//start server
-		CampaignData.mwlog.log("Entering main loop cycle. Starting the server...");
+		MWLogger.mainLog("Entering main loop cycle. Starting the server...");
 		startServer(argv);
 	}
 
@@ -178,7 +181,7 @@ public class MWServ {
 			if(this.trackerThread != null) {
 				this.trackerThread.interrupt();
 			}
-			CampaignData.mwlog.infoLog("Attempting to create TrackerThread in MWServ.");
+			MWLogger.infoLog("Attempting to create TrackerThread in MWServ.");
 			TrackerThread trackT = new TrackerThread(this);
 			trackT.start();
 			this.trackerThread = trackT;
@@ -198,8 +201,8 @@ public class MWServ {
 			try {
 				config.store(new FileOutputStream("./data/serverconfig.txt"), "Server config File");
 			} catch (Exception e1) {
-				CampaignData.mwlog.errLog("config file could not be read or written, defaults will be used.");
-				CampaignData.mwlog.errLog(e1);
+				MWLogger.errLog("config file could not be read or written, defaults will be used.");
+				MWLogger.errLog(e1);
 			}
 		}
 
@@ -208,17 +211,35 @@ public class MWServ {
 		loadISPs();
 	}
 
+	private void createLoggers() {
+        PKLogManager logger = PKLogManager.getInstance();
+        logger.addLog("infolog");
+        logger.addLog(PKLogManager.ERRORLOG);
+        logger.addLog("debuglog");
+        logger.addLog("mainlog");
+        logger.addLog("gamelog");
+        logger.addLog("resultslog");
+        logger.addLog("cmdlog");
+        logger.addLog("pmlog");
+        logger.addLog("bmlog");
+        logger.addLog("warnlog");
+        logger.addLog("modlog");
+        logger.addLog("ticklog");
+        logger.addLog("iplog");
+        logger.addLog("testlog");
+	}
+	
 	// this will just loop and take in info...
 	public void startServer(String[] args) {
 		if (args == null) {
-			CampaignData.mwlog.infoLog("Server started without parameters");
+			MWLogger.infoLog("Server started without parameters");
 		}
 		try {
 			myCommunicator = ServerWrapper.createServer(this);
 			myCommunicator.start();
 		} catch (Exception e) {
-			CampaignData.mwlog.errLog("== PROBLEM STARTING SERVER WRAPPER ==");
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog("== PROBLEM STARTING SERVER WRAPPER ==");
+			MWLogger.errLog(e);
 		}
 	}
 
@@ -232,8 +253,8 @@ public class MWServ {
 			fis.close();
 		} catch (Exception ex) {
 			try {
-				CampaignData.mwlog.infoLog("Creating new File");
-				CampaignData.mwlog.mainLog("Creating new File");
+				MWLogger.infoLog("Creating new File");
+				MWLogger.mainLog("Creating new File");
 				if (filename.equals("./data/mails.txt")) {
 					FileOutputStream out = new FileOutputStream(filename);
 					PrintStream p = new PrintStream(out);
@@ -242,8 +263,8 @@ public class MWServ {
 					out.close();
 				}
 			} catch (Exception e) {
-				CampaignData.mwlog.errLog(e);
-				CampaignData.mwlog.mainLog("No file named " + filename + " was found and cannot create one!");
+				MWLogger.errLog(e);
+				MWLogger.mainLog("No file named " + filename + " was found and cannot create one!");
 				System.exit(1);
 			}
 		}
@@ -261,7 +282,7 @@ public class MWServ {
 		MWChatClient client = myCommunicator.getClient(name);
 
 		
-		CampaignData.mwlog.ipLog("Connection from " + getIP(name) + " (" + name + ")");
+		MWLogger.ipLog("Connection from " + getIP(name) + " (" + name + ")");
 		// Double account check
 		// Don't worry about deds or nobodies.
 		if (!originalName.startsWith("[Dedicated]") && !originalName.startsWith("Nobody")) {
@@ -281,12 +302,12 @@ public class MWServ {
 					}
 					if ((a != null) && (b != null)) {
 						if (a.getGroupAllowance() != 0 && a.getGroupAllowance() != b.getGroupAllowance()) {
-							// CampaignData.mwlog.modLog("Double Accounting: " +
+							// MWLogger.modLog("Double Accounting: " +
 							// nametmp + " and " + logname + " IP: " + hisip);
 							getCampaign().doSendModMail("NOTE:", "Double Accounting: " + nametmp + " Group: " + a.getGroupAllowance() + " and " + logname + " Group: " + b.getGroupAllowance() + " IP: " + hisip);
 						}
 					} else {
-						// CampaignData.mwlog.modLog("Double Accounting: " +
+						// MWLogger.modLog("Double Accounting: " +
 						// nametmp + " and " + logname + " IP: " + hisip);
 						getCampaign().doSendModMail("NOTE:", "Double Accounting: " + nametmp + " and " + logname + " IP: " + hisip);
 					}
@@ -368,7 +389,7 @@ public class MWServ {
 			invis = getCampaign().getPlayer(name).isInvisible();
 		}
 		MWClientInfo newUser = new MWClientInfo(originalName, getIP(name), System.currentTimeMillis(), status, invis);
-		CampaignData.mwlog.infoLog(originalName + " logged in from " + getIP(name).toString() + " at " + new Date(System.currentTimeMillis()).toString());
+		MWLogger.infoLog(originalName + " logged in from " + getIP(name).toString() + " at " + new Date(System.currentTimeMillis()).toString());
 
 		// Double IP Check
 		if (!originalName.startsWith("[Dedicated]")) {
@@ -528,7 +549,7 @@ public class MWServ {
 		} else { 
 			sendRemoveUserToAll(name, true);
 		}
-		CampaignData.mwlog.infoLog("Client " + name + "logged out.");
+		MWLogger.infoLog("Client " + name + "logged out.");
 		users.remove(name.toLowerCase());
 
 		// remove his host, if he has a game open
@@ -672,15 +693,15 @@ public class MWServ {
 				}
 			} else if (task.equals("CR")) {
 				String result = st.nextToken();
-				CampaignData.mwlog.gameLog("Starting report process by " + name);
-				CampaignData.mwlog.gameLog(name + " reported: " + lineIn);
+				MWLogger.gameLog("Starting report process by " + name);
+				MWLogger.gameLog(name + " reported: " + lineIn);
 				getCampaign().doProcessAutomaticReport(result, name);
 			} else if (task.equals("IPU")) {// InProgressUpdate
 				String result = st.nextToken();
 				getCampaign().addInProgressUpdate(result, name);
 			} else {
 				clientSend("CH|Unknown command. Please make sure your client is up to date.", name);
-				CampaignData.mwlog.warnLog("Got a strange command, " + task + ", from " + name);
+				MWLogger.warnLog("Got a strange command, " + task + ", from " + name);
 			}
 		} catch (Exception ex) {
 			// The GB doesn't arrive at the server because of the client
@@ -689,15 +710,15 @@ public class MWServ {
 				// Most propably an out of date client. Send him the request to
 				// update
 				clientSend("CH|Your Client sent a false packet or caused a server error. You probably entered an illegal server command.", name);
-				CampaignData.mwlog.errLog("False packet/illegal command (from " + name + "):");
-				CampaignData.mwlog.errLog(ex);
+				MWLogger.errLog("False packet/illegal command (from " + name + "):");
+				MWLogger.errLog(ex);
 			}
 		}
 	}
 
 	public void statusMessage() {
-		CampaignData.mwlog.mainLog("Open Games: " + games.size());
-		CampaignData.mwlog.infoLog("Open Games: " + games.size());
+		MWLogger.mainLog("Open Games: " + games.size());
+		MWLogger.infoLog("Open Games: " + games.size());
 	}
 
 	private void doCloseGame(MMGame game) {
@@ -726,7 +747,7 @@ public class MWServ {
 					String player = dis.readLine();
 					if (player.equalsIgnoreCase(name)) {
 						String provderName = newFile.getName().substring(0, newFile.getName().lastIndexOf(".prv"));
-						CampaignData.mwlog.errLog("Provider: " + provderName);
+						MWLogger.errLog("Provider: " + provderName);
 						ISPlog.put(provderName, time);
 						in.close();
 						dis.close();
@@ -745,16 +766,16 @@ public class MWServ {
 
 	public void sendRemoveUserToAll(String name, boolean userGone, String ip) {
 		if (userGone && ip != null) {
-			CampaignData.mwlog.infoLog(name + " left the room (IP:" + ip + ").");
+			MWLogger.infoLog(name + " left the room (IP:" + ip + ").");
 		} else if (userGone) {
-			CampaignData.mwlog.infoLog(name + " left the room");
+			MWLogger.infoLog(name + " left the room");
 		}
 		myCommunicator.broadcastComm("UG|" + getUser(name) + (userGone ? "|GONE" : ""));
 	}
 	
 	public void sendRemoveUserToAll(String name, boolean userGone) {
 		if (userGone) {
-			CampaignData.mwlog.infoLog(name + " left the room.");
+			MWLogger.infoLog(name + " left the room.");
 		}
 		myCommunicator.broadcastComm("UG|" + getUser(name) + (userGone ? "|GONE" : ""));
 	}
@@ -765,7 +786,7 @@ public class MWServ {
 
 	public void sendChat(String s) {
 		myCommunicator.broadcastComm("CH|" + s);
-		CampaignData.mwlog.mainLog(s);
+		MWLogger.mainLog(s);
 	}
 
 	// Check for new Mail
@@ -832,8 +853,8 @@ public class MWServ {
 			dis.close();
 			fis.close();
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog("Problems reading mail file:");
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog("Problems reading mail file:");
+			MWLogger.errLog(ex);
 		}
 		return result;
 	}
@@ -850,8 +871,8 @@ public class MWServ {
 			p.close();
 			out.close();
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog("Problems writing mail file:");
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog("Problems writing mail file:");
+			MWLogger.errLog(ex);
 		}
 	}
 
@@ -886,7 +907,7 @@ public class MWServ {
 	}
 
 	public void doStoreMail(String s, String name) {
-		// CampaignData.mwlog.mainLog("Debug: " + s);
+		// MWLogger.mainLog("Debug: " + s);
 		StringTokenizer st = new StringTokenizer(s, ",");
 		String target = "";
 		String text = "";
@@ -911,12 +932,12 @@ public class MWServ {
 
 				if (campaign.getPlayer(name) != null) {
 					if (campaign.getPlayer(target) != null) {
-						CampaignData.mwlog.pmLog(name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + "[" + campaign.getPlayer(target).getMyHouse().getAbbreviation() + "]: " + mailtext);
+						MWLogger.pmLog(name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + "[" + campaign.getPlayer(target).getMyHouse().getAbbreviation() + "]: " + mailtext);
 					} else {
-						CampaignData.mwlog.pmLog(name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + ": " + mailtext);
+						MWLogger.pmLog(name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + ": " + mailtext);
 					}
 				} else {
-					CampaignData.mwlog.pmLog(name + " -> " + target + ": " + mailtext);
+					MWLogger.pmLog(name + " -> " + target + ": " + mailtext);
 				}
 
 			}
@@ -984,7 +1005,7 @@ public class MWServ {
 				doStoreMailToHashtable(null, username, txt);
 			}
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 	}
 
@@ -1027,8 +1048,8 @@ public class MWServ {
 			p.close();
 			out.close();
 		} catch (Exception e) {
-			CampaignData.mwlog.errLog("Problem updating ban files:");
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog("Problem updating ban files:");
+			MWLogger.errLog(e);
 		}
 	}
 
@@ -1074,24 +1095,24 @@ public class MWServ {
 				InetAddress ia = InetAddress.getByName(ip);
 				if (ia != null) {
 					banips.put(ia, time);
-					CampaignData.mwlog.infoLog("Added " + line + " to the list of banned IPs");
-					CampaignData.mwlog.mainLog("Added " + line + " to the list of banned IP's");
+					MWLogger.infoLog("Added " + line + " to the list of banned IPs");
+					MWLogger.mainLog("Added " + line + " to the list of banned IP's");
 				} else {
-					CampaignData.mwlog.warnLog("Importing IP bans; offending line: " + line);
+					MWLogger.warnLog("Importing IP bans; offending line: " + line);
 				}
 			}
 			dis.close();
 			fis.close();
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog("Problems with loading IP banlist:");
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog("Problems with loading IP banlist:");
+			MWLogger.errLog(ex);
 		}
 	}
 
 	public void loadBanPlayers() {
 		// Loading the banned players file.
 		try {
-			CampaignData.mwlog.infoLog("Loading Ban Players");
+			MWLogger.infoLog("Loading Ban Players");
 			File banFile = new File("./data/accountbans.txt");
 
 			// make the file, if its missing
@@ -1108,23 +1129,23 @@ public class MWServ {
 				String howLong = st.nextToken().trim();
 				if ((toBan != null) && (howLong != null)) {
 					banaccounts.put(toBan.toLowerCase(), howLong);
-					CampaignData.mwlog.infoLog("Added " + toBan + " to the banlist (for " + howLong + ")");
-					CampaignData.mwlog.mainLog("Added " + toBan + " to the banlist (for " + howLong + ")");
+					MWLogger.infoLog("Added " + toBan + " to the banlist (for " + howLong + ")");
+					MWLogger.mainLog("Added " + toBan + " to the banlist (for " + howLong + ")");
 				} else {
-					CampaignData.mwlog.warnLog("Initial bans warning: " + toBan + " / " + howLong);
+					MWLogger.warnLog("Initial bans warning: " + toBan + " / " + howLong);
 				}
 			}
 			dis.close();
 			fis.close();
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog("Problems reading ban file at startup!");
+			MWLogger.errLog("Problems reading ban file at startup!");
 		}
 	}
 
 	public void loadISPs() {
 		// Loading the ISP file.
 		try {
-			CampaignData.mwlog.infoLog("Loading ISPs");
+			MWLogger.infoLog("Loading ISPs");
 			File ispFile = new File("./data/isps.txt");
 
 			// make the file, if its missing
@@ -1141,14 +1162,14 @@ public class MWServ {
 				Long address = Long.parseLong(st.nextToken().trim());
 				if ((isp != null) && (address != null)) {
 					ISPlog.put(isp.toLowerCase(), address);
-					CampaignData.mwlog.infoLog("Added " + isp + " to the ISP List");
-					CampaignData.mwlog.mainLog("Added " + isp + " to the ISP List");
+					MWLogger.infoLog("Added " + isp + " to the ISP List");
+					MWLogger.mainLog("Added " + isp + " to the ISP List");
 				}
 			}
 			dis.close();
 			fis.close();
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog("Problems reading ISP file at startup!");
+			MWLogger.errLog("Problems reading ISP file at startup!");
 		}
 	}
 

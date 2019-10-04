@@ -21,12 +21,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-import common.CampaignData;
-
+import client.MWClient;
+import common.util.MWLogger;
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
 import megamek.common.options.Option;
-import client.MWClient;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
@@ -76,7 +75,7 @@ public class GO extends Command {
                             optionsHash.put(gameOption.getName(),gameOption);
                     	}
                     }catch (Exception ex2){
-                    		CampaignData.mwlog.infoLog("Uknown format: " + option + " :: " + value);
+                    		MWLogger.infoLog("Uknown format: " + option + " :: " + value);
                         }
                 }
             }

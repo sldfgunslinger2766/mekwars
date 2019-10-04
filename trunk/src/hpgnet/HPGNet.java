@@ -37,8 +37,6 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import tracker.MWTracker;
-
 
 /**
  * Starts a server which listens for information

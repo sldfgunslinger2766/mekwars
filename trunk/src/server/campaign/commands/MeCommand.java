@@ -23,6 +23,7 @@ package server.campaign.commands;
 //import java.nio.file.Paths;
 //import java.nio.file.StandardOpenOption;
 import java.util.StringTokenizer;
+
 //
 //import common.CampaignData;
 import server.MWClientInfo;
@@ -130,13 +131,13 @@ public class MeCommand implements Command {
 //		} 
 //		catch (UnsupportedEncodingException e) 
 //		{
-//			CampaignData.mwlog.errLog(e);
+//			MWLogger.errLog(e);
 //			CampaignMain.cm.toUser(e.toString(),Username,true);
 //
 //		} 
 //		catch (IOException e) 
 //		{
-//			CampaignData.mwlog.errLog(e);
+//			MWLogger.errLog(e);
 //			CampaignMain.cm.toUser(e.toString(),Username,true);
 //
 //		}

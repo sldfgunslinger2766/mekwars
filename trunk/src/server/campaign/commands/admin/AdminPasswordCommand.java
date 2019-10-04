@@ -18,13 +18,12 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.commands.Command;
 import server.util.MWPasswd;
-
-import common.CampaignData;
 
 public class AdminPasswordCommand implements Command {
 
@@ -77,7 +76,7 @@ public class AdminPasswordCommand implements Command {
             try {
                 MWPasswd.save();
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
             CampaignMain.cm.toUser("Password for " + target + " removed!", Username, true);
             CampaignMain.cm.doSendModMail("NOTE", Username + " has removed " + target + "'s password");
@@ -108,7 +107,7 @@ public class AdminPasswordCommand implements Command {
                 }
 
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
             CampaignMain.cm.toUser("Level for " + target + " set to " + level + "!", Username, true);

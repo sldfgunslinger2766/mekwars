@@ -201,7 +201,7 @@ public class ExclusionList{
 	 */
 	public void adminExcludeFromString(String buffer, String delimiter){
 		
-		//CampaignData.mwlog.mainLog("** adminExcludeFROMStringCalled");
+		//MWLogger.mainLog("** adminExcludeFROMStringCalled");
 		
 		StringTokenizer ST = new StringTokenizer(buffer,delimiter);
 		while (ST.hasMoreElements()) {
@@ -215,7 +215,7 @@ public class ExclusionList{
 	
 	public void playerExcludeFromString(String buffer, String delimiter) {
 		
-		//CampaignData.mwlog.mainLog("** playerExcludeFROMStringCalled");
+		//MWLogger.mainLog("** playerExcludeFROMStringCalled");
 		
 		StringTokenizer ST = new StringTokenizer(buffer,delimiter);
 		while (ST.hasMoreElements()) {
@@ -237,7 +237,7 @@ public class ExclusionList{
 	
 	public String adminExcludeToString(String token) {
 		
-		//CampaignData.mwlog.mainLog("** adminExcludeToStringCalled");
+		//MWLogger.mainLog("** adminExcludeToStringCalled");
 		
 		StringBuilder result = new StringBuilder();
 		
@@ -256,7 +256,7 @@ public class ExclusionList{
 	
 	public String playerExcludeToString(String token) {
 		
-		//CampaignData.mwlog.mainLog("** playerExcludeToStringCalled");
+		//MWLogger.mainLog("** playerExcludeToStringCalled");
 		
 		StringBuilder result = new StringBuilder();
 		

@@ -21,14 +21,13 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.Planet;
 import megamek.common.TechConstants;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlanet;
 import server.campaign.operations.ShortOperation;
 import server.campaign.util.PlanetNameComparator;
-
-import common.Planet;
 
 public class HouseCommand implements Command {
 	

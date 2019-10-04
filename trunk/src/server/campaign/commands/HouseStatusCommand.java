@@ -20,9 +20,7 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import common.House;
-
 import megamek.common.TechConstants;
-
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 

@@ -62,7 +62,7 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLEditorKit;
 
 import client.MWClient;
-import common.CampaignData;
+import common.util.MWLogger;
 import common.util.StringUtils;
 
 /**
@@ -806,7 +806,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
             }
             ((HTMLEditorKit) editorpane.getEditorKit()).read(new StringReader(s), editorpane.getDocument(), editorpane.getDocument().getLength());
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
         if (oldSize > MAXBUFFER) { // used to bo only when scrolling
             try {
@@ -1014,7 +1014,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
             ps.close();
             fos.close();
         } catch (Exception e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
         }
     }
 
@@ -1301,7 +1301,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
                         JEditorPane pane = getEditorPane(index);
                         pane.selectAll();
                     } catch (Exception ex) {
-                        CampaignData.mwlog.errLog(ex);
+                        MWLogger.errLog(ex);
                     }
                 }
             });
@@ -1325,7 +1325,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
                         newText += chatField.getText(chatField.getSelectionEnd(), chatField.getText().length() - chatField.getSelectionEnd());
                         chatField.setText(newText);
                     } catch (Exception ex) {
-                        CampaignData.mwlog.errLog(ex);
+                        MWLogger.errLog(ex);
                     }
                 }
             });
@@ -1354,7 +1354,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
                         clipping = (String) data.getTransferData(DataFlavor.stringFlavor);
                     } catch (Exception ex) {
                         clipping = data.toString();
-                        CampaignData.mwlog.errLog(ex);
+                        MWLogger.errLog(ex);
                     }
                     chatField.setText(chatField.getText() + clipping);
                 }
@@ -1370,7 +1370,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
                         newText += chatField.getText(chatField.getSelectionEnd(), chatField.getText().length() - chatField.getSelectionEnd());
                         chatField.setText(newText);
                     } catch (Exception ex) {
-                        CampaignData.mwlog.errLog(ex);
+                        MWLogger.errLog(ex);
                     }
                 }
             });
@@ -1385,7 +1385,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
                     try {
                         chatField.selectAll();
                     } catch (Exception ex) {
-                        CampaignData.mwlog.errLog(ex);
+                        MWLogger.errLog(ex);
                     }
                 }
             });

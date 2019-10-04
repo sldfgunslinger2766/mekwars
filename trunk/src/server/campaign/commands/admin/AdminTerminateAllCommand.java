@@ -62,7 +62,7 @@ public class AdminTerminateAllCommand implements Command {
 			CampaignMain.cm.getOpsManager().terminateOperation(currO, OperationManager.TERM_TERMCOMMAND, tp);
 		}
 
-		//CampaignData.mwlog.modLog(Username + " terminated all unfinished games.");
+		//MWLogger.modLog(Username + " terminated all unfinished games.");
 		CampaignMain.cm.doSendToAllOnlinePlayers(Username + " terminated all unfinished games.", true);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " terminated all unfinished games.");
 		

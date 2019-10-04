@@ -36,6 +36,17 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import common.AdvancedTerrain;
+import common.CampaignData;
+import common.Continent;
+import common.PlanetEnvironment;
+import common.Unit;
+import common.UnitFactory;
+import common.campaign.Buildings;
+import common.campaign.operations.Operation;
+import common.util.MWLogger;
+import common.util.StringUtils;
+import common.util.UnitUtils;
 import megamek.common.PlanetaryConditions;
 import server.campaign.AutoArmy;
 import server.campaign.CampaignMain;
@@ -52,17 +63,6 @@ import server.campaign.operations.resolvers.NewShortResolver;
 import server.campaign.operations.resolvers.ShortOpPlayers;
 import server.campaign.pilot.SPilot;
 import server.util.StringUtil;
-
-import common.AdvancedTerrain;
-import common.CampaignData;
-import common.Continent;
-import common.PlanetEnvironment;
-import common.Unit;
-import common.UnitFactory;
-import common.campaign.Buildings;
-import common.campaign.operations.Operation;
-import common.util.StringUtils;
-import common.util.UnitUtils;
 
 // IMPORTS
 
@@ -243,7 +243,7 @@ public class ShortOperation implements Comparable<Object> {
         for (SArmy currA : possibleDefenders) {
             toLog += currA.getName() + "/" + currA.getID() + " ";
         }
-        CampaignData.mwlog.gameLog(toLog);
+        MWLogger.gameLog(toLog);
 
         Operation o = CampaignMain.cm.getOpsManager().getOperation(opName);
 
@@ -295,7 +295,7 @@ public class ShortOperation implements Comparable<Object> {
                 int maxPlayersPerTeam = o.getIntValue("TeamSize");
                 int maxPlayers = Math.max(2, Math.min(8, maxTeams)) * maxPlayersPerTeam;
 
-                // CampaignData.mwlog.errLog("Max Teams: "+maxTeams+" Players
+                // MWLogger.errLog("Max Teams: "+maxTeams+" Players
                 // Per
                 // Team: "+maxPlayersPerTeam+" Max Players: "+maxPlayers+"
                 // Current Players: "+this.getAllPlayerNames().size());
@@ -383,7 +383,7 @@ public class ShortOperation implements Comparable<Object> {
             int maxPlayers = Math.max(2, Math.min(8, maxTeams)) * maxPlayersPerTeam;
 
             isTeamOp = true;
-            // CampaignData.mwlog.errLog("Max Teams: "+maxTeams+" Players Per
+            // MWLogger.errLog("Max Teams: "+maxTeams+" Players Per
             // Team:
             // "+maxPlayersPerTeam+" Max Players: "+maxPlayers+" Current
             // Players: "+this.getAllPlayerNames().size());
@@ -1505,7 +1505,7 @@ public class ShortOperation implements Comparable<Object> {
                     toStore.append(")");
                 }
             }
-            CampaignData.mwlog.resultsLog(toStore.toString());
+            MWLogger.resultsLog(toStore.toString());
 
             /*
              * send a Finished Game entry to faction mates. same as when
@@ -1765,9 +1765,9 @@ public class ShortOperation implements Comparable<Object> {
 
         if (isTeamOp) {
             CampaignMain.cm.toUser("PL|STN|" + p.getTeamNumber(), lowerName, false);
-            CampaignData.mwlog.debugLog(p.getName() + " Team: " + p.getTeamNumber());
+            MWLogger.debugLog(p.getName() + " Team: " + p.getTeamNumber());
             CampaignMain.cm.toUser("GMEP|" + teamEdge[p.getTeamNumber() - 1], lowerName, false);
-            CampaignData.mwlog.debugLog("Sent team edge to " + p.getName());
+            MWLogger.debugLog("Sent team edge to " + p.getName());
         }
         // send starting edge and autoarmy
         else if (defenders.containsKey(lowerName)) {
@@ -1870,7 +1870,7 @@ public class ShortOperation implements Comparable<Object> {
     public void addInProgressUpdate(String s) {
 
         StringTokenizer tokenizer = new StringTokenizer(s, "*");
-        CampaignData.mwlog.debugLog("IPU Sent: " + s);
+        MWLogger.debugLog("IPU Sent: " + s);
 
         // see if we're dealing with a pilot or unit
         if (s.startsWith("MW*")) {
@@ -1937,7 +1937,7 @@ public class ShortOperation implements Comparable<Object> {
                 chickenThreads.put(playername, newThread);
 
                 // add creation to log
-                CampaignData.mwlog.gameLog("Created chicken thread for " + shortID + "/" + currPlayer.getName() + "(" + opName + ")");
+                MWLogger.gameLog("Created chicken thread for " + shortID + "/" + currPlayer.getName() + "(" + opName + ")");
             }
         }// end while(poss defenders remain)
 
@@ -1946,7 +1946,7 @@ public class ShortOperation implements Comparable<Object> {
          * those players who have multiple armies able to defend, start the
          * threads.
          */
-        CampaignData.mwlog.gameLog("Starting all chicken threads for #" + shortID + " (" + opName + ")");
+        MWLogger.gameLog("Starting all chicken threads for #" + shortID + " (" + opName + ")");
         for (OpsChickenThread ct : chickenThreads.values()) {
             ct.start();
         }
@@ -2235,7 +2235,7 @@ public class ShortOperation implements Comparable<Object> {
                     resultString += defendArm.getInaccurateDescription();
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
         }
 
@@ -2254,7 +2254,7 @@ public class ShortOperation implements Comparable<Object> {
                     }
 
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }
 
@@ -2451,8 +2451,8 @@ public class ShortOperation implements Comparable<Object> {
                     defendString += nameString + " players ";
                 }
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog("Unable to find defenders for operation: " + opName);
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog("Unable to find defenders for operation: " + opName);
+                MWLogger.errLog(ex);
             }
         }
 
@@ -2879,13 +2879,13 @@ public class ShortOperation implements Comparable<Object> {
 
                 // skip if the operation doesn't allow capturing of this unit type
                 if (!currFacility.canBeRaided(type, o)) {
-                	CampaignData.mwlog.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
+                	MWLogger.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
                 	continue;
                 }
 
                 // skip if the operation doesn't allow capturing of this unit type
                 if (!currFacility.canBeRaided(type, o)) {
-                	CampaignData.mwlog.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
+                	MWLogger.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
                 	continue;
                 }
 
@@ -2893,7 +2893,7 @@ public class ShortOperation implements Comparable<Object> {
             	int ppAvailable = losingHouse.getPP(currFacility.getWeightclass(), type);
             	int ppNeed = currFacility.getPPCost(currFacility.getWeightclass(), type);
             	if (ppNeed > ppAvailable) {
-            		CampaignData.mwlog.debugLog("Not enough PP to capture a unit.  Needed: " + ppNeed + ", available: " + ppAvailable);
+            		MWLogger.debugLog("Not enough PP to capture a unit.  Needed: " + ppNeed + ", available: " + ppAvailable);
             		continue;
             	}
 
@@ -2919,10 +2919,10 @@ public class ShortOperation implements Comparable<Object> {
                     	SUnit unit = captured.get(i);
 
                     	if (unit.isOMGUnit()) {
-                    		CampaignData.mwlog.debugLog("Removing an OMG-UR-FD from captured units for operation '" + o.getName() + "'.");
+                    		MWLogger.debugLog("Removing an OMG-UR-FD from captured units for operation '" + o.getName() + "'.");
                     		captured.remove(i);
                     	} else if (!unit.canBeCapturedInOperation(o)) {
-                    		CampaignData.mwlog.debugLog("Removing an '" + unit.getModelName() + "' from captured units for operation '" + o.getName() + "'.");
+                    		MWLogger.debugLog("Removing an '" + unit.getModelName() + "' from captured units for operation '" + o.getName() + "'.");
                     		captured.remove(i);
                     	}
                     }

@@ -19,12 +19,11 @@ package server.campaign.commands.admin;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.DefaultServerOptions;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
 
 
 /**
@@ -103,7 +102,7 @@ public class ForceUpdateCommand implements Command {
 	            		CampaignMain.cm.getServer().doStoreMail(toKick+",update", Username);
 	                	Thread.sleep(120);
 	                }catch (Exception ex){
-	                    CampaignData.mwlog.errLog(ex);
+	                    MWLogger.errLog(ex);
 	                }
             	}
             }//end for

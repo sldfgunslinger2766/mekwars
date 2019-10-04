@@ -22,7 +22,6 @@ import javax.swing.JOptionPane;
 
 import client.MWClient;
 import client.gui.CMainFrame;
-
 import common.CampaignData;
 import common.Equipment;
 import common.House;
@@ -30,6 +29,7 @@ import common.Influences;
 import common.Planet;
 import common.util.BinReader;
 import common.util.BinWriter;
+import common.util.MWLogger;
 
 /**
  * Calls to the data retrieving server and gets data for planets and factions
@@ -104,7 +104,7 @@ public class DataFetchClient {
                 localConfigTimestamp = tempTime.substring(11);// remove
                 // "#Timestamp="
             } catch (Exception e) {
-                CampaignData.mwlog.errLog("Problems reading timestamp from local configuration.");
+                MWLogger.errLog("Problems reading timestamp from local configuration.");
             }
 
             // now get the Server MD5
@@ -113,10 +113,10 @@ public class DataFetchClient {
                 BinReader in = openConnection("ConfigTimestamp");
                 serverConfigTimestamp = in.readLine("ConfigTimestamp");
             } catch (Exception e) {
-                CampaignData.mwlog.errLog("Problems connecting to server to get config timestamp.");
+                MWLogger.errLog("Problems connecting to server to get config timestamp.");
             }
 
-            CampaignData.mwlog.errLog("Local Config: " + localConfigTimestamp + " Server Config: " + serverConfigTimestamp);
+            MWLogger.errLog("Local Config: " + localConfigTimestamp + " Server Config: " + serverConfigTimestamp);
             if (localConfigTimestamp.equals(serverConfigTimestamp)) {
                 timestampMatch = true;
                 try {
@@ -166,7 +166,7 @@ public class DataFetchClient {
                         mwclient.getserverConfigs().load(configFile);
                         configFile.close();
                     } catch (Exception ex) {
-                        CampaignData.mwlog.errLog(ex);
+                        MWLogger.errLog(ex);
                     }
                 }// end catch for read-in
             }
@@ -216,13 +216,13 @@ public class DataFetchClient {
                     mwclient.getBlackMarketEquipmentList().put(bme.getEquipmentInternalName(), bme);
                 }
             } catch (Exception e) {
-                CampaignData.mwlog.errLog(e);
+                MWLogger.errLog(e);
             }// end catch for read-in
         }
 
         // failed to open connection. try to load local defaults.
         catch (Exception exe) {
-            CampaignData.mwlog.errLog(exe);
+            MWLogger.errLog(exe);
         }// end catch(Connection Failure)
     }
 
@@ -249,12 +249,12 @@ public class DataFetchClient {
                 BinReader binreader = openConnection("BannedAmmoTimeStamp");
                 String serverTimeStamp = binreader.readLine("BannedAmmoTimeStamp");
 
-                CampaignData.mwlog.errLog("Local Ban: " + localListTimestamp + " Server Ban: " + serverTimeStamp);
+                MWLogger.errLog("Local Ban: " + localListTimestamp + " Server Ban: " + serverTimeStamp);
                 if (localListTimestamp.equals(serverTimeStamp)) {
                     timestampMatch = true;
                 }
             } catch (Exception e) {
-                CampaignData.mwlog.errLog("Problems reading timestamp from local banammo.dat.");
+                MWLogger.errLog("Problems reading timestamp from local banammo.dat.");
             }
 
         }
@@ -283,7 +283,7 @@ public class DataFetchClient {
                 dis.close();
                 fis.close();
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
         }
 
@@ -313,12 +313,12 @@ public class DataFetchClient {
                 BinReader binreader = openConnection("BanTargetingTimeStamp");
                 String serverTimeStamp = binreader.readLine("BanTargetingTimeStamp");
 
-                CampaignData.mwlog.errLog("Local BanT: " + localListTimestamp + " Server BanT: " + serverTimeStamp);
+                MWLogger.errLog("Local BanT: " + localListTimestamp + " Server BanT: " + serverTimeStamp);
                 if (localListTimestamp.equals(serverTimeStamp)) {
                     timestampMatch = true;
                 }
             } catch (Exception e) {
-                CampaignData.mwlog.errLog("Problems reading timestamp from local bantargeting.dat.");
+                MWLogger.errLog("Problems reading timestamp from local bantargeting.dat.");
             }
 
         }
@@ -364,7 +364,7 @@ public class DataFetchClient {
 
         serverVersion = serverVersion.substring(0, serverVersion.lastIndexOf("."));
 
-        CampaignData.mwlog.errLog("Client Version: " + clientVersion + " Server Version: " + serverVersion);
+        MWLogger.errLog("Client Version: " + clientVersion + " Server Version: " + serverVersion);
         mustUpdate = !serverVersion.equalsIgnoreCase(clientVersion);
 
         // If the versions dont match then the client has to update anyways
@@ -373,7 +373,7 @@ public class DataFetchClient {
             String forceUpdateKey = binreader.readLine("ForceUpdateKey");
             String clientUpdateKey = mwclient.getConfigParam("UPDATEKEY");
 
-            CampaignData.mwlog.errLog("Server Key: " + forceUpdateKey);
+            MWLogger.errLog("Server Key: " + forceUpdateKey);
             // the server update key starts out blank. So the update only works
             // after a key is set server side.
             if (forceUpdateKey.trim().length() > 1) {
@@ -392,9 +392,9 @@ public class DataFetchClient {
                         Runtime runtime = Runtime.getRuntime();
                         String[] call = { "java", "-jar", "./MekWarsAutoUpdate.jar", "PLAYER" };
                         runtime.exec(call);
-                        CampaignData.mwlog.errLog("Starting Update!");
+                        MWLogger.errLog("Starting Update!");
                     } catch (Exception ex) {
-                        CampaignData.mwlog.errLog(ex);
+                        MWLogger.errLog(ex);
                     }
                 }
 
@@ -406,7 +406,7 @@ public class DataFetchClient {
                     String[] call = { "java", "-jar", "MekWarsAutoUpdate.jar", "DEDICATED" };
                     runtime.exec(call);
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
 
             }
@@ -445,13 +445,13 @@ public class DataFetchClient {
                 localListTimestamp = tempTime.substring(11);// remove
                 // "#Timestamp="
             } catch (Exception e) {
-                CampaignData.mwlog.errLog("Problems reading timestamp from local OpList.");
+                MWLogger.errLog("Problems reading timestamp from local OpList.");
             }
 
             // now get the server list's timestamp ...
             BinReader in = openConnection("OpListTimestamp");
             String serverListTimestamp = in.readLine("OpListTimestamp");
-            CampaignData.mwlog.errLog("Local OpList: " + localListTimestamp + " Server OpList: " + serverListTimestamp);
+            MWLogger.errLog("Local OpList: " + localListTimestamp + " Server OpList: " + serverListTimestamp);
             if (localListTimestamp.equals(serverListTimestamp)) {
                 timestampMatch = true;
             }
@@ -491,7 +491,7 @@ public class DataFetchClient {
 
                 }
             } catch (Exception exe) {
-                CampaignData.mwlog.errLog(exe);
+                MWLogger.errLog(exe);
             }
         }// end if(!md5Match)
     }// end getOpListMD5
@@ -531,7 +531,7 @@ public class DataFetchClient {
                 // in.close();
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
     }
@@ -572,7 +572,7 @@ public class DataFetchClient {
             BinReader in = openConnection("PDiff", 60000);
             data = Data;
             if (data == null) {
-                CampaignData.mwlog.errLog("data is null getPlanetsUpdate");
+                MWLogger.errLog("data is null getPlanetsUpdate");
                 return false;
             }
             try {
@@ -601,26 +601,26 @@ public class DataFetchClient {
                 }
 
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }// Bin empty
 
             /*
              * changesSinceLastRefresh = new HashMap();
              * data.decodeMutablePlanets(in, changesSinceLastRefresh); String
              * serverMD5 = in.readLine("md5");
-             * CampaignData.mwlog.infoLog("read MD5 checksum: "+serverMD5);
+             * MWLogger.infoLog("read MD5 checksum: "+serverMD5);
              * MD5OutputStream md5 = new MD5OutputStream(); BinWriter md5Writer
              * = new BinWriter(new PrintWriter(md5)); data.binOut(md5Writer);
              * md5Writer.close();
-             * CampaignData.mwlog.infoLog("own checksum: "+md5.getHashString());
+             * MWLogger.infoLog("own checksum: "+md5.getHashString());
              * if (!serverMD5.equals(md5.getHashString())) { md5.close(); return
              * false; } //else md5.close(); //in.close();
              */
         } catch (IOException e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
             return false;
         } catch (RuntimeException e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
             return false;
         }
         // this.data = data;
@@ -642,10 +642,10 @@ public class DataFetchClient {
             Data.importAccessLevels(in);
             // in.close();
         } catch (IOException e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
             return false;
         } catch (RuntimeException e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
             return false;
         }
         return true;
@@ -662,10 +662,10 @@ public class DataFetchClient {
      */
     private BinReader openConnection(String cmd, int timeout) throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        CampaignData.mwlog.infoLog("Command: " + cmd);
+        MWLogger.infoLog("Command: " + cmd);
         if (dataSocket == null || dataSocket.isClosed() || dataSocket.isInputShutdown() || dataSocket.isOutputShutdown()) {
             closeDataConnection();
-            CampaignData.mwlog.infoLog("Trying to connect to " + hostAddr + " at port " + dataPort);
+            MWLogger.infoLog("Trying to connect to " + hostAddr + " at port " + dataPort);
             dataSocket = new Socket(hostAddr, dataPort);
             dataSocket.setKeepAlive(true);
         } else {// clean out any old data first.
@@ -677,7 +677,7 @@ public class DataFetchClient {
         if (lastTimestamp == null) {
             out.println("", "lasttimestamp");
         } else {
-            CampaignData.mwlog.infoLog("writing timestamp " + sdf.format(lastTimestamp));
+            MWLogger.infoLog("writing timestamp " + sdf.format(lastTimestamp));
             out.println(sdf.format(lastTimestamp), "lasttimestamp");
         }
         out.flush();
@@ -687,11 +687,11 @@ public class DataFetchClient {
             // lastTimestamp =
             sdf.parse(in.readLine("lasttimestamp"));
         } catch (ParseException e) {
-            CampaignData.mwlog.errLog(e);
-            CampaignData.mwlog.infoLog("Timestamp could not be parsed.. left unchanged.");
+            MWLogger.errLog(e);
+            MWLogger.infoLog("Timestamp could not be parsed.. left unchanged.");
         } catch (SocketException se) {
-            CampaignData.mwlog.errLog("Socket Exception Error: DataFetchClient");
-            CampaignData.mwlog.errLog(se);
+            MWLogger.errLog("Socket Exception Error: DataFetchClient");
+            MWLogger.errLog(se);
             closeDataConnection();
             return openConnection(cmd, timeout);
         } catch (NullPointerException NPE) {
@@ -724,7 +724,7 @@ public class DataFetchClient {
                 fw.write(Long.toString(lastTimestamp.getTime()));
                 fw.close();
             } catch (IOException e) {
-                CampaignData.mwlog.errLog(e);
+                MWLogger.errLog(e);
             }
         }
         try {
@@ -732,8 +732,8 @@ public class DataFetchClient {
             data.binOut(binOut);
             binOut.close();
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Error saving data.");
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Error saving data.");
         }
     }
 
@@ -757,13 +757,13 @@ public class DataFetchClient {
             if (dataSocket == null) {
                 return;
             }
-            CampaignData.mwlog.infoLog("Closing Socket.");
+            MWLogger.infoLog("Closing Socket.");
             dataSocket.shutdownInput();
             dataSocket.shutdownOutput();
             dataSocket.close();
             dataSocket = null;
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             dataSocket = null;
         }
 

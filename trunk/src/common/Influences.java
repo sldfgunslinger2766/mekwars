@@ -31,6 +31,7 @@ import java.util.TreeSet;
 
 import common.util.BinReader;
 import common.util.BinWriter;
+import common.util.MWLogger;
 
 /**
  * Represents the influences of different Houses of a planet. This may be used
@@ -146,8 +147,8 @@ public class Influences implements MutableSerializable {
 
             return faction.getId();
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Error in Influenes.getOwner()");
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Error in Influenes.getOwner()");
             return null;
         }
 

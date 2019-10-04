@@ -42,12 +42,11 @@ import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
 import client.MWClient;
-
-import common.CampaignData;
 import common.VerticalLayout;
 import common.campaign.operations.DefaultOperation;
 import common.campaign.operations.Operation;
 import common.util.MMNetXStream;
+import common.util.MWLogger;
 
 public class OperationViewerDialog extends JDialog implements Runnable {
 	/**
@@ -165,7 +164,7 @@ public class OperationViewerDialog extends JDialog implements Runnable {
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					CampaignData.mwlog.errLog(e);
+					MWLogger.errLog(e);
 				}
 				o = new Operation(fileEntry.getName().replace(".xml", ""), new DefaultOperation(), p);
 				ops.put(o.getName(), new OpViewerOpPane(getOpHTML(o)));
@@ -294,11 +293,11 @@ public class OperationViewerDialog extends JDialog implements Runnable {
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			} 
 			
 		}

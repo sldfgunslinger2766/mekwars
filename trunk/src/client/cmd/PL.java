@@ -23,9 +23,8 @@ import client.MWClient;
 import client.campaign.CPlayer;
 import client.campaign.CUnit;
 import client.gui.dialog.AdvancedRepairDialog;
-
-import common.CampaignData;
 import common.campaign.pilot.Pilot;
+import common.util.MWLogger;
 import common.util.TokenReader;
 import common.util.UnitUtils;
 
@@ -222,10 +221,10 @@ public class PL extends Command {
                     }
                 }
             }
-            CampaignData.mwlog.infoLog(player.getMyHouse().getSupportedUnits().toString());
+            MWLogger.infoLog(player.getMyHouse().getSupportedUnits().toString());
         } else if (cmd.equals("CSU")) {
             // clear supported units
-            CampaignData.mwlog.infoLog("Clearing Supported Units");
+            MWLogger.infoLog("Clearing Supported Units");
             player.getMyHouse().supportedUnits.clear();
             player.getMyHouse().setNonFactionUnitsCostMore(Boolean.parseBoolean(mwclient.getserverConfigs("UseNonFactionUnitsIncreasedTechs")));
         } else if (cmd.equals("SMA")) {
@@ -266,7 +265,7 @@ public class PL extends Command {
         } else if (cmd.equals("STS")) {
         	int unitID = TokenReader.readInt(st);
         	int targetType = TokenReader.readInt(st);
-        	//CampaignData.mwlog.errLog("Setting Targeting for Unit " + unitID + " to " + targetType);
+        	//MWLogger.errLog("Setting Targeting for Unit " + unitID + " to " + targetType);
         	player.getUnit(unitID).setTargetSystem(targetType);
         	mwclient.doParseDataInput("CH|AM: Targeting for unit " + unitID + " set to " + player.getUnit(unitID).getTargetSystemTypeDesc());
         } else {

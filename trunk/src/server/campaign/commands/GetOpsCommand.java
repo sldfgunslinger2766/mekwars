@@ -28,10 +28,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import server.campaign.CampaignMain;
-
-import common.CampaignData;
 import common.campaign.operations.Operation;
+import common.util.MWLogger;
+import server.campaign.CampaignMain;
 
 public class GetOpsCommand implements Command {
 
@@ -127,7 +126,7 @@ public class GetOpsCommand implements Command {
 	                }
 	            } catch (FileNotFoundException e) {
 	                // TODO Auto-generated catch block
-	                CampaignData.mwlog.errLog(e);
+	                MWLogger.errLog(e);
 	            }
 				CampaignMain.cm.toUser("OP|md5|" + toReturn.toString(), Username, false);
 				

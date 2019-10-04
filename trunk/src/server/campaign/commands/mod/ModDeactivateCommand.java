@@ -62,7 +62,7 @@ public class ModDeactivateCommand implements Command {
 		targetPlayer.setActive(false);
 		CampaignMain.cm.toUser(Username + " forced you to return to reserve duty.",targetPlayerString,true);
 		CampaignMain.cm.toUser("You forced " + targetPlayerString + " into reserve status.",Username,true);
-		//server.CampaignData.mwlog.modLog(Username + " force-deactivated " + targetPlayerString + ".");
+		//server.MWLogger.modLog(Username + " force-deactivated " + targetPlayerString + ".");
 		CampaignMain.cm.doSendModMail("NOTE",Username + " force-deactivated " + targetPlayerString + ".'");
 		CampaignMain.cm.sendPlayerStatusUpdate(targetPlayer,!new Boolean(CampaignMain.cm.getConfig("HideActiveStatus")).booleanValue());	
 		

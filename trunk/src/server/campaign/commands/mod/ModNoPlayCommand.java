@@ -124,7 +124,7 @@ public class ModNoPlayCommand implements Command {
 				lister.setSave();
 				
 				//also inform mod channels
-				//server.CampaignData.mwlog.modLog(Username + " added " + excludeName + " to " + listerName + "'s mod/admin no-play list.");
+				//server.MWLogger.modLog(Username + " added " + excludeName + " to " + listerName + "'s mod/admin no-play list.");
 				CampaignMain.cm.doSendModMail("NOTE",Username + " added " + excludeName + " to " + listerName + "'s mod/admin no-play list.");
 				
 			} catch (Exception e) {
@@ -149,7 +149,7 @@ public class ModNoPlayCommand implements Command {
 					CampaignMain.cm.toUser("PL|AEU|"+lister.getExclusionList().adminExcludeToString("$"),listerName,false);
 					
 					//also inform mod channels
-					//server.CampaignData.mwlog.modLog(Username + " removed " + excludeName + " from " + listerName + "'s Mod/Admin no-play list.");
+					//server.MWLogger.modLog(Username + " removed " + excludeName + " from " + listerName + "'s Mod/Admin no-play list.");
 					CampaignMain.cm.doSendModMail("NOTE",Username + " removed " + excludeName + " from " + listerName + "'s Mod/Admin no-play list.");
 				}
 				else {
@@ -159,7 +159,7 @@ public class ModNoPlayCommand implements Command {
 					CampaignMain.cm.toUser("PL|PEU|"+lister.getExclusionList().playerExcludeToString("$"),listerName,false);
 					
 					//also inform mod channels
-					//server.CampaignData.mwlog.modLog(Username + " removed " + excludeName + " from " + listerName + "'s standard no-play list.");
+					//server.MWLogger.modLog(Username + " removed " + excludeName + " from " + listerName + "'s standard no-play list.");
 					CampaignMain.cm.doSendModMail("NOTE",Username + " removed " + excludeName + " from " + listerName + "'s standard no-play list.");
 				}
 				lister.setSave();

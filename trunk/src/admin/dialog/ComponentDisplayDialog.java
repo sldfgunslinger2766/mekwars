@@ -36,18 +36,17 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 
+import client.MWClient;
+import common.Equipment;
+import common.util.MWLogger;
+import common.util.SpringLayoutHelper;
+import common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.EquipmentType;
 import megamek.common.Mech;
 import megamek.common.MiscType;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
-import client.MWClient;
-
-import common.CampaignData;
-import common.Equipment;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
 
 public final class ComponentDisplayDialog extends JDialog implements ActionListener {
 
@@ -89,7 +88,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
         // stored values.
         displayType = type;
 
-        CampaignData.mwlog.errLog("Year: " + mwclient.getserverConfigs("CampaignYear"));
+        MWLogger.errLog("Year: " + mwclient.getserverConfigs("CampaignYear"));
         int year = Integer.parseInt(mwclient.getserverConfigs("CampaignYear"));
 
         

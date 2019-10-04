@@ -22,11 +22,10 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-
-import common.CampaignData;
 
 /**
  * @author Torren (Jason Tighe)
@@ -68,7 +67,7 @@ public class StopRepairJobCommand implements Command {
             
             if ( CampaignMain.cm.getRTT().getState() == Thread.State.TERMINATED ){
                 CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed - the repair thread terminated. Staff was notified.",Username,false);
-                CampaignData.mwlog.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart the thread. If all else fails reboot!");
+                MWLogger.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart the thread. If all else fails reboot!");
                 return;
             }
 
@@ -77,8 +76,8 @@ public class StopRepairJobCommand implements Command {
             CampaignMain.cm.toUser("PL|UU|"+unitID+"|"+unit.toString(true),Username,false);
 
         }catch(Exception ex){
-            CampaignData.mwlog.errLog("AM:Unable to Process Repair Unit Command!");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("AM:Unable to Process Repair Unit Command!");
+            MWLogger.errLog(ex);
         }
         
 	}//end process()

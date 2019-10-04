@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.campaign.pilot.skills.PilotSkill;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.pilot.skills.AstechSkill;
 import server.campaign.pilot.skills.BufferedVDNI;
@@ -31,9 +33,6 @@ import server.campaign.pilot.skills.TacticalGeniusSkill;
 import server.campaign.pilot.skills.TraitSkill;
 import server.campaign.pilot.skills.VDNI;
 import server.campaign.pilot.skills.WeaponSpecialistSkill;
-
-import common.CampaignData;
-import common.campaign.pilot.skills.PilotSkill;
 
 public class SPilotSkills {
     private static Hashtable<Integer, SPilotSkill> pilotSkills = new Hashtable<Integer, SPilotSkill>();
@@ -122,7 +121,7 @@ public class SPilotSkills {
 	                }
 	                skillBuilder.trimToSize();
 	                /*
-	                 * //CampaignData.mwlog.errLog("Pilot: "+p.getName()+" Skill:
+	                 * //MWLogger.errLog("Pilot: "+p.getName()+" Skill:
 	                 * "+skill.getName()+" Rnd "+rnd+ " chance: "+chance); if ( rnd
 	                 * <= chance ) return skill; //else rnd -=
 	                 * skill.getChance(unitType,p);
@@ -131,7 +130,7 @@ public class SPilotSkills {
 
 	            return skillBuilder.elementAt(CampaignMain.cm.getRandomNumber(skillBuilder.size()));
 	        } catch (Exception ex) {
-	            CampaignData.mwlog.errLog("Problems during skill earning! Skill Table Size = " + skillBuilder.size() + " total = " + total);
+	            MWLogger.errLog("Problems during skill earning! Skill Table Size = " + skillBuilder.size() + " total = " + total);
 	            return null;
 	        }
 	    }

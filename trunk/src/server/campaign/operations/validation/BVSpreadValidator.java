@@ -15,10 +15,9 @@
  */
 package server.campaign.operations.validation;
 
-import server.campaign.SArmy;
-
-import common.CampaignData;
 import common.campaign.operations.Operation;
+import common.util.MWLogger;
+import server.campaign.SArmy;
 
 /**
  * @author 	Spork
@@ -158,7 +157,7 @@ public abstract class BVSpreadValidator implements ISpreadValidator {
 		s.append("\tMin/Max Actual BV:  " + minActualBV + "/" + maxActualBV + "\n");
 		s.append("\tSpread: " + getSpread() + "\n");
 		s.append("\tErrorLevel Returned: " + getError());
-		CampaignData.mwlog.debugLog(s.toString());		
+		MWLogger.debugLog(s.toString());		
 	}
 	
 	public boolean getDebug() {

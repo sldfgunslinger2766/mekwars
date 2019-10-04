@@ -40,19 +40,18 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import megamek.common.CriticalSlot;
-import megamek.common.Entity;
-import megamek.common.Mech;
-import megamek.common.Mounted;
-import megamek.common.WeaponType;
 import client.MWClient;
 import client.campaign.CUnit;
-
 import common.Unit;
 import common.campaign.pilot.Pilot;
 import common.campaign.pilot.skills.PilotSkill;
 import common.util.SpringLayoutHelper;
 import common.util.UnitUtils;
+import megamek.common.CriticalSlot;
+import megamek.common.Entity;
+import megamek.common.Mech;
+import megamek.common.Mounted;
+import megamek.common.WeaponType;
 
 public class BulkRepairDialog extends JFrame implements ActionListener, KeyListener, ChangeListener {
 

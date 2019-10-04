@@ -18,7 +18,7 @@ package server.campaign;
 
 import java.util.Properties;
 
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * @author Torren Oct 22, 2004 Loads the default settings for the server config If any configs are added please add them to this function as well as
@@ -1478,9 +1478,9 @@ public class DefaultServerOptions {
         try {
             CampaignMain.cm.saveConfigureFile(CampaignMain.cm.getConfig(), CampaignMain.cm.getServer().getConfigParam("CAMPAIGNCONFIG"));
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Unable to save config file.");
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog(ex.getMessage());
+            MWLogger.errLog("Unable to save config file.");
+            MWLogger.errLog(ex);
+            MWLogger.errLog(ex.getMessage());
         }
     }
 

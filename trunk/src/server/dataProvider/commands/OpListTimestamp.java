@@ -20,10 +20,10 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import server.dataProvider.ServerCommand;
-
 import common.CampaignData;
 import common.util.BinWriter;
+import common.util.MWLogger;
+import server.dataProvider.ServerCommand;
 
 /**
  * Command which calcaulates and returns the 
@@ -46,13 +46,13 @@ public class OpListTimestamp implements ServerCommand {
 				
 				oplistTimestamp = tempTime.substring(11);//remove "#Timestamp="
 			} catch (Exception e) {
-				CampaignData.mwlog.infoLog("Error reading first line from OpList.txt");       
+				MWLogger.infoLog("Error reading first line from OpList.txt");       
 			}
     	
     	}//end if(oplist exists)
     		
     	else
-    		CampaignData.mwlog.infoLog("OpList.txt didn't exist. Returning falsified timestamp to requesting client.");
+    		MWLogger.infoLog("OpList.txt didn't exist. Returning falsified timestamp to requesting client.");
        
         out.println(oplistTimestamp, "OpListTimestamp");
         out.flush();

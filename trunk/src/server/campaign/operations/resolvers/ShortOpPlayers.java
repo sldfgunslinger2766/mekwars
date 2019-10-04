@@ -3,9 +3,9 @@ package server.campaign.operations.resolvers;
 import java.util.HashMap;
 import java.util.Vector;
 
-import server.campaign.SPlayer;
-
 import common.CampaignData;
+import common.util.MWLogger;
+import server.campaign.SPlayer;
 
 public class ShortOpPlayers {
 	private HashMap<Integer, Team> teams;
@@ -29,10 +29,10 @@ public class ShortOpPlayers {
 	 */
 	public void reportTeams() {
 		for( int id : teams.keySet()) {
-			CampaignData.mwlog.testLog("SOP Reporting: TeamID " + id);
+			MWLogger.testLog("SOP Reporting: TeamID " + id);
 			Team t = getTeam(id);
 			for(SPlayer p : t.getPlayers()) {
-				CampaignData.mwlog.testLog("==> " + p.getName());
+				MWLogger.testLog("==> " + p.getName());
 			}
 		}
 	}

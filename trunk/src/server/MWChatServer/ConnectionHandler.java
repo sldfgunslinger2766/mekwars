@@ -33,7 +33,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import common.CampaignData;
+import common.util.MWLogger;
 import common.util.ThreadManager;
 
 /**
@@ -104,7 +104,7 @@ public class ConnectionHandler extends AbstractConnectionHandler {
             // scheduler.scheduleAtFixedRate(_writer, 0, 20,
             // TimeUnit.MILLISECONDS);
         } catch (OutOfMemoryError OOM) {
-            CampaignData.mwlog.errLog(OOM.getMessage());
+            MWLogger.errLog(OOM.getMessage());
             /*
              * OOM usually mean there are no remaining threads or sockets. This
              * is generally not a problem.
@@ -126,11 +126,11 @@ public class ConnectionHandler extends AbstractConnectionHandler {
                 System.gc();
                 shutdown(true);
             } catch (Exception e) {
-                CampaignData.mwlog.errLog(e);
+                MWLogger.errLog(e);
             }
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
     }// end init()
@@ -142,7 +142,7 @@ public class ConnectionHandler extends AbstractConnectionHandler {
     @Override
     public void queuePriorityMessage(String message) {
         synchronized (message) {
-            // CampaignData.mwlog.warnLog("queuePriorityMessage Client: "
+            // MWLogger.warnLog("queuePriorityMessage Client: "
             // + _client.getUserId() + "Size: " + message.length()
             // + " Host: " + _client.getHost());
             _out.print(message + "\n");
@@ -173,8 +173,8 @@ public class ConnectionHandler extends AbstractConnectionHandler {
             try {
                 _socket.close();
             } catch (IOException e) {
-                CampaignData.mwlog.errLog("connection shutdown due to error");
-                CampaignData.mwlog.errLog(e);
+                MWLogger.errLog("connection shutdown due to error");
+                MWLogger.errLog(e);
             }
 
             super.shutdown(notify);

@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import common.CampaignData;
+import common.util.MWLogger;
 
 public class ResultsFlags extends PlayerFlags {
 	private Map<Integer, Integer> flagsApplyTo;
@@ -51,7 +51,7 @@ public class ResultsFlags extends PlayerFlags {
 			appliesTo += ResultsFlags.APPLIESTO_DEFENDER;
 		}
 		flagsApplyTo.put(id, appliesTo);
-		//CampaignData.mwlog.debugLog("Setting flag " + name + "(id: " + id + ") to value " + value);
+		//MWLogger.debugLog("Setting flag " + name + "(id: " + id + ") to value " + value);
 	}
 	
 	/**
@@ -144,7 +144,7 @@ public class ResultsFlags extends PlayerFlags {
 		if (flag != -1) {
 			flags.set(flag, value);
 		} else {
-			CampaignData.mwlog.errLog("Unknown Flag checked: " + name);
+			MWLogger.errLog("Unknown Flag checked: " + name);
 		}
 	}
 	

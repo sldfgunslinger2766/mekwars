@@ -21,9 +21,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.UUID;
 
+import common.util.MWLogger;
 import server.MWServ;
 import server.campaign.CampaignMain;
-import common.CampaignData;
 
 /**
  * 
@@ -56,7 +56,7 @@ public class TrackerThread extends Thread {
 				serv.saveConfigs();
 			}
 		}		
-		CampaignData.mwlog.infoLog("Created TrackerThread");
+		MWLogger.infoLog("Created TrackerThread");
 	}
 	
 	//METHODS
@@ -64,7 +64,7 @@ public class TrackerThread extends Thread {
 	@Override
 	public synchronized void run() {
 		
-		CampaignData.mwlog.infoLog("TrackerThread running.");
+		MWLogger.infoLog("TrackerThread running.");
 		
 		//core info
 		String name = serv.getCampaign().getConfig("ServerName");
@@ -74,32 +74,32 @@ public class TrackerThread extends Thread {
 		//ip of tracker
 		//String trackerAddress = serv.getConfigParam("TRACKERADDRESS");
 		String trackerAddress = serv.getCampaign().getConfig("TrackerAddress");
-		CampaignData.mwlog.infoLog(name + " " + link + " " + desc + " " + trackerAddress);
+		MWLogger.infoLog(name + " " + link + " " + desc + " " + trackerAddress);
 		
 		/*
 		 * Immediately send core info to tracker.
 		 */
 		Socket sock = null;
 		try {
-			CampaignData.mwlog.infoLog("TrackerThread attempting to send ServerStart information.");
+			MWLogger.infoLog("TrackerThread attempting to send ServerStart information.");
 			sock = new Socket(trackerAddress, 13731);//fixed port
 			PrintWriter pw = new PrintWriter(sock.getOutputStream());
 			
 			pw.println("SS%" + name + "%" + link + "%" + MWServ.SERVER_VERSION + "%" + desc);
 			pw.flush();
 			pw.close();
-			CampaignData.mwlog.infoLog("TrackerThread sent server start information.");
+			MWLogger.infoLog("TrackerThread sent server start information.");
 		} catch (Exception e) {
-			CampaignData.mwlog.infoLog("TrackerThread could not contact tracker. Shutting down.");
-			CampaignData.mwlog.errLog("Could not contact tracker. Shutting down trackerthread.");
-			CampaignData.mwlog.errLog(e);
+			MWLogger.infoLog("TrackerThread could not contact tracker. Shutting down.");
+			MWLogger.errLog("Could not contact tracker. Shutting down trackerthread.");
+			MWLogger.errLog(e);
 			return;
 		} finally {
 			try {
 				if(sock != null)
 					sock.close();
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 		}
 		
@@ -144,23 +144,23 @@ public class TrackerThread extends Thread {
 				
 				//set up a socket to the tracker and send this record
 				try {
-					CampaignData.mwlog.infoLog("TrackerThread attempting to send PhoneHome information.");
+					MWLogger.infoLog("TrackerThread attempting to send PhoneHome information.");
 					sock = new Socket(trackerAddress, 13731);//fixed port
 					PrintWriter pw = new PrintWriter(sock.getOutputStream());
 					
 					pw.println(toSend);
 					pw.flush();
 					pw.close();
-					CampaignData.mwlog.infoLog("TrackerThread sent PH% information.");
+					MWLogger.infoLog("TrackerThread sent PH% information.");
 				} catch (Exception e) {
-					CampaignData.mwlog.infoLog("TrackerThread could not reach tracker for PH%.");
-					CampaignData.mwlog.errLog("Could not contact tracker.");
-					CampaignData.mwlog.errLog(e);
+					MWLogger.infoLog("TrackerThread could not reach tracker for PH%.");
+					MWLogger.errLog("Could not contact tracker.");
+					MWLogger.errLog(e);
 				}
 			}//end (forever)	
 		}
 		catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 	}
 }

@@ -24,11 +24,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
 
 public class AdminRequestBuildTableCommand implements Command {
 
@@ -140,7 +139,7 @@ public class AdminRequestBuildTableCommand implements Command {
                 }
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
-                CampaignData.mwlog.errLog(e);
+                MWLogger.errLog(e);
             }
             CampaignMain.cm.toUser("BT|BT|" + folder + "|" + table + toReturn.toString(), Username, false);
 

@@ -22,16 +22,15 @@ import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import common.House;
+import common.campaign.operations.Operation;
+import common.util.MWLogger;
+import common.util.StringUtils;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.operations.OperationManager;
-
-import common.CampaignData;
-import common.House;
-import common.campaign.operations.Operation;
-import common.util.StringUtils;
 
 /**
  * 
@@ -119,8 +118,8 @@ public class OpponentListHelper {
 						if (p1.equals(p2))
 							continue playersLoop;
 					} catch (Exception e) {
-						CampaignData.mwlog.errLog("Exception while checking players' IPs in OLH.");
-						CampaignData.mwlog.errLog(e);
+						MWLogger.errLog("Exception while checking players' IPs in OLH.");
+						MWLogger.errLog(e);
 					}
 				}
 

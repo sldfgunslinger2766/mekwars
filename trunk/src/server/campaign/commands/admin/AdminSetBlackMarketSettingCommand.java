@@ -23,12 +23,11 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import common.Equipment;
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
-import common.Equipment;
 
 public class AdminSetBlackMarketSettingCommand implements Command {
 	
@@ -77,7 +76,7 @@ public class AdminSetBlackMarketSettingCommand implements Command {
 			CampaignMain.cm.getBlackMarketEquipmentTable().put(key, bme);
 			
 		}catch (Exception ex){
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 		
 		//NOTE:

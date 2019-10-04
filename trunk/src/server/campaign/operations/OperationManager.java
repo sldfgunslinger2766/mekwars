@@ -42,16 +42,15 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import common.campaign.operations.ModifyingOperation;
+import common.campaign.operations.Operation;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SHouse;
 import server.campaign.SPlanet;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-
-import common.CampaignData;
-import common.campaign.operations.ModifyingOperation;
-import common.campaign.operations.Operation;
 
 
 public class OperationManager {
@@ -371,7 +370,7 @@ public class OperationManager {
 		
 		//nullcheck, just in case.
 		if (so == null) {
-			CampaignData.mwlog.errLog("Error: Tried to add a null ShortOperation to the Manager");
+			MWLogger.errLog("Error: Tried to add a null ShortOperation to the Manager");
 			return;
 		}
 		
@@ -429,7 +428,7 @@ public class OperationManager {
 	public void terminateOperation(ShortOperation so, int termCode, SPlayer terminator, boolean ignoreStatus) {
 		
 		if (so == null) {
-			CampaignData.mwlog.errLog("Attempted to terminate null ShortOperation");
+			MWLogger.errLog("Attempted to terminate null ShortOperation");
 			return;
 		}
 		
@@ -557,7 +556,7 @@ public class OperationManager {
                     for(SUnit unit : so.preCapturedUnits )
                         faction.addUnit(unit, true);
                 }catch(Exception ex){
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
                     
             }
@@ -574,7 +573,7 @@ public class OperationManager {
             try{
     			CampaignMain.cm.getPlayer(currN).lockArmy(-1);
             }catch(Exception ex){
-                CampaignData.mwlog.errLog(currN+" had a null army while terminating. Continuing to next player.");
+                MWLogger.errLog(currN+" had a null army while terminating. Continuing to next player.");
                 continue;
             }
 		}
@@ -1038,7 +1037,7 @@ public class OperationManager {
 			if (!modDir.exists())
 				modDir.mkdir();
 		} catch (Exception e) {
-			CampaignData.mwlog.errLog("Error while creating operations directories.");
+			MWLogger.errLog("Error while creating operations directories.");
 		}
 		
 		ops.clear();
@@ -1080,7 +1079,7 @@ public class OperationManager {
 				String currTarget = st.nextToken().trim();
 				Operation currOp = ops.get(currTarget);
 				if (currOp == null)
-					CampaignData.mwlog.errLog("Error assigning modop target. Mod: " + currMod.getName() + " Target: " + currTarget);
+					MWLogger.errLog("Error assigning modop target. Mod: " + currMod.getName() + " Target: " + currTarget);
 				else
 					currOp.addModifyingOperation(currMod);
 			}//end while(more targets)

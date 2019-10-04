@@ -22,7 +22,6 @@ import java.util.StringTokenizer;
 import client.CUser;
 import client.MWClient;
 import client.gui.CCommPanel;
-
 import common.util.StringUtils;
 
 /**
@@ -458,7 +457,7 @@ public class CH extends Command {
             boolean checkSysMessages = mwclient.getConfig().isParam("SOUNDSFROMSYSMESSAGES");
             if (!wasSystemMessage || checkSysMessages) {
 
-                // CampaignData.mwlog.errLog("uncoloredName: "+uncoloredName);
+                // MWLogger.errLog("uncoloredName: "+uncoloredName);
                 if (wasICMessage && !mwclient.getConfig().isParam("RPGVISIBLE") && !mwclient.getConfig().isParam("MAINCHANNELRPG")) {
                     // do nothing
                 }

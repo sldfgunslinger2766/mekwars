@@ -18,12 +18,11 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.Unit;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.pilot.SPilot;
-
-import common.Unit;
 
 public class TransferPilotCommand implements Command {
 

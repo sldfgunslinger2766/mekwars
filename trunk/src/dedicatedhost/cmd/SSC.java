@@ -16,9 +16,8 @@ package dedicatedhost.cmd;
 
 import java.util.StringTokenizer;
 
-import common.CampaignData;
+import common.util.MWLogger;
 import common.util.TokenReader;
-
 import dedicatedhost.MWDedHost;
 
 public class SSC extends Command {
@@ -40,7 +39,7 @@ public class SSC extends Command {
 	            mwclient.getServerConfigs().put(TokenReader.readString(st), TokenReader.readString(st));
 	        }
 	    }catch( Exception ex) {
-	        CampaignData.mwlog.errLog(ex);
+	        MWLogger.errLog(ex);
 	    }
 		//mwclient.setWaiting(false);
 	}//end execute

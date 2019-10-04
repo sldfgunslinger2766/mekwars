@@ -19,6 +19,7 @@ package server.campaign.commands.mod;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import common.util.StringUtils;
 import megamek.common.AmmoType;
 import megamek.common.Entity;
 import megamek.common.Mounted;
@@ -27,8 +28,6 @@ import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.commands.Command;
-
-import common.util.StringUtils;
 
 /**
  * @author Helge Richter

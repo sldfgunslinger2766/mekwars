@@ -25,12 +25,11 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
 
+import common.Equipment;
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
-import common.Equipment;
 
 public class AdminSaveBlackMarketConfigsCommand implements Command {
 	
@@ -71,9 +70,9 @@ public class AdminSaveBlackMarketConfigsCommand implements Command {
 			}
 			ps.close();
 		} catch (FileNotFoundException fe) {
-			CampaignData.mwlog.errLog("blackmarketsettings.dat not found");
+			MWLogger.errLog("blackmarketsettings.dat not found");
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}   
 
 		CampaignMain.cm.toUser("AM:Black Market Settings saved!",Username,true);

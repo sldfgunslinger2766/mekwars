@@ -59,7 +59,7 @@ public class AdminSetHouseFluFileCommand implements Command {
 		}
 		
 		faction.setHouseFluFile(fluString);
-		//server.CampaignData.mwlog.modLog(Username + " has changed the flu message file for " + HouseName);
+		//server.MWLogger.modLog(Username + " has changed the flu message file for " + HouseName);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has changed the flu message file for " + HouseName);
 		
 	}

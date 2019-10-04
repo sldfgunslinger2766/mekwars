@@ -25,7 +25,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
 import client.MWClient;
-
 import common.Unit;
 import common.VerticalLayout;
 

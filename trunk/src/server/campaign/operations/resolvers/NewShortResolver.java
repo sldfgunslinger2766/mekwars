@@ -1,9 +1,8 @@
 package server.campaign.operations.resolvers;
 
+import common.UnitFactory;
 import server.campaign.SPlanet;
 import server.campaign.operations.ShortOperation;
-
-import common.UnitFactory;
 
 public class NewShortResolver {
 	int gameID;

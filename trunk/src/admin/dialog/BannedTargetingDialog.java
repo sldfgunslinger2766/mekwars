@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import client.MWClient;
-
 import common.campaign.targetsystems.TargetSystem;
 import common.campaign.targetsystems.TargetTypeNotImplementedException;
 import common.campaign.targetsystems.TargetTypeOutOfBoundsException;

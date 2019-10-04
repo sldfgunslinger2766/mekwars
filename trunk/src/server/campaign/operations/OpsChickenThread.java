@@ -19,6 +19,12 @@ package server.campaign.operations;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import common.CampaignData;
+import common.Unit;
+import common.UnitFactory;
+import common.campaign.operations.Operation;
+import common.util.MWLogger;
+import common.util.StringUtils;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SHouse;
@@ -26,12 +32,6 @@ import server.campaign.SPlanet;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.SUnitFactory;
-
-import common.CampaignData;
-import common.Unit;
-import common.UnitFactory;
-import common.campaign.operations.Operation;
-import common.util.StringUtils;
 
 public class OpsChickenThread extends Thread {
 
@@ -79,7 +79,7 @@ public class OpsChickenThread extends Thread {
      * "stopped."
      */
     public synchronized void stopChicken() {
-        CampaignData.mwlog.gameLog("ChickenThread " + opID + "/" + pdefender.getName() + " turned off.");
+        MWLogger.gameLog("ChickenThread " + opID + "/" + pdefender.getName() + " turned off.");
         shouldContinue = false;
     }
 
@@ -209,7 +209,7 @@ public class OpsChickenThread extends Thread {
         // get the actual ShortOperation. Catch any nulls.
         ShortOperation parentOp = CampaignMain.cm.getOpsManager().getRunningOps().get(opID);
         if (parentOp == null) {
-            CampaignData.mwlog.errLog("Tried to do a leech with a null ShortOperation!");
+            MWLogger.errLog("Tried to do a leech with a null ShortOperation!");
             return;
         }
 
@@ -393,7 +393,7 @@ public class OpsChickenThread extends Thread {
             CampaignMain.cm.doSendToAllOnlinePlayers(defendH, "HS|" + loserHSUpdates.toString(), false);
 
         // and add the info to the log
-        CampaignData.mwlog.gameLog("Leech: " + this.opID + "/" + pdefender.getName() + "<br> Player saw: " + toPlayer + "<br> Main saw: " + toMain);
+        MWLogger.gameLog("Leech: " + this.opID + "/" + pdefender.getName() + "<br> Player saw: " + toPlayer + "<br> Main saw: " + toMain);
     }
 
     @Override
@@ -424,7 +424,7 @@ public class OpsChickenThread extends Thread {
             try {
                 this.wait(waittime * 1000);// time given in seconds
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
 
             // if the stop signal was sent while we were

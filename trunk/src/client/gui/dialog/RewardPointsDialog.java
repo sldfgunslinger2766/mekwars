@@ -40,7 +40,6 @@ import javax.swing.SwingConstants;
 
 import client.MWClient;
 import client.campaign.CUnit;
-
 import common.House;
 import common.Planet;
 import common.Unit;

@@ -48,7 +48,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * Allows URLs to be opened in the system browser on Windows and Unix.
@@ -317,7 +317,7 @@ public class Browser {
                          openURL.invoke(null, new Object[] {url});
                          //com.apple.mrj.MRJFileUtils.openURL(url);
                     } catch (Exception x){
-                         CampaignData.mwlog.errLog(x.getMessage());
+                         MWLogger.errLog(x.getMessage());
                          throw new IOException(labels.getString("failed"));
                     }
                 }
@@ -430,7 +430,7 @@ public class Browser {
                         }
                     } catch (IOException x){
                         // the command was not a valid command.
-                    	CampaignData.mwlog.errLog(labels.getString("warning") + " " + x.getMessage());
+                    	MWLogger.errLog(labels.getString("warning") + " " + x.getMessage());
                     }
                 }
                 if (!found){
@@ -692,7 +692,7 @@ public class Browser {
             } catch (InterruptedException x){
             }
         } catch (IOException e){
-        	CampaignData.mwlog.errLog(e.getMessage());
+        	MWLogger.errLog(e.getMessage());
         }
         System.exit(0);
     }

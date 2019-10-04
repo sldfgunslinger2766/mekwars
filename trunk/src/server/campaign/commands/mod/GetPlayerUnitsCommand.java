@@ -18,14 +18,13 @@ package server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
 
+import common.Unit;
 import megamek.common.Infantry;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.commands.Command;
-
-import common.Unit;
 
 public class GetPlayerUnitsCommand implements Command {
 	

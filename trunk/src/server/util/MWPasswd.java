@@ -14,12 +14,11 @@ package server.util;
 
 import java.io.IOException;
 
+import common.util.MWLogger;
 import server.MWChatServer.commands.ICommands;
 import server.MWChatServer.translator.jcrypt;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
-
-import common.CampaignData;
 
 /*
  * Modified 2/26/2003 by Jonathan Ellis
@@ -54,13 +53,13 @@ public class MWPasswd implements ICommands{
         SPlayer player = CampaignMain.cm.getPlayer(userId);
         
         if ( player == null ){
-        	//CampaignData.mwlog.errLog("Player is null");
+        	//MWLogger.errLog("Player is null");
         	return null;
         }
         
         if ( player.getPassword() == null ){
             //MWPasswd.reloadFile();
-        	//CampaignData.mwlog.errLog("password is null");
+        	//MWLogger.errLog("password is null");
             return null;
         }
         //else
@@ -83,14 +82,14 @@ public class MWPasswd implements ICommands{
        	r = getRecord(userId.toLowerCase());
 
         if (r == null) {
-        	//CampaignData.mwlog.errLog("r is null");
+        	//MWLogger.errLog("r is null");
             return null;
         }
         if (password == null) {
             password = "";
         }
         if (password.length() < 2) {
-            CampaignData.mwlog.infoLog("Access denied: " + userId);
+            MWLogger.infoLog("Access denied: " + userId);
             throw new Exception(userId);
         }
 
@@ -106,7 +105,7 @@ public class MWPasswd implements ICommands{
         }
         
         //else
-        CampaignData.mwlog.errLog("Access denied: " + userId);
+        MWLogger.errLog("Access denied: " + userId);
         throw new Exception(ACCESS_DENIED);
     }
 
@@ -151,7 +150,7 @@ public class MWPasswd implements ICommands{
         SPlayer player = CampaignMain.cm.getPlayer(userId);
         
         if ( player == null ){
-        	CampaignData.mwlog.errLog("writeRecord::Player is null");
+        	MWLogger.errLog("writeRecord::Player is null");
             return;
         }
         
@@ -208,15 +207,15 @@ public class MWPasswd implements ICommands{
 		catch (FileNotFoundException FNFE) {
 		}
 		catch(Exception ex){
-            CampaignData.mwlog.errLog("Error reading passwd file, line " + lineno);
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error reading passwd file, line " + lineno);
+            MWLogger.errLog(ex);
 		}
 		finally {
 			if (reader != null) {
 				try {
 					reader.close();
 				} catch (Exception e) {
-                    CampaignData.mwlog.errLog(e);
+                    MWLogger.errLog(e);
 				}
 			}
 		}
@@ -228,7 +227,7 @@ public class MWPasswd implements ICommands{
 			writeRecord(args[0], Integer.parseInt(args[1]), args[2]);
 		}
 		catch (IOException e) {
-			CampaignData.mwlog.errLog("An I/O error occurred: " + e.getMessage());
+			MWLogger.errLog("An I/O error occurred: " + e.getMessage());
 		}
 		catch (Exception e) {
 			showUsageAndExit();
@@ -236,8 +235,8 @@ public class MWPasswd implements ICommands{
 	}
 
 	private static final void showUsageAndExit() {
-		CampaignData.mwlog.errLog("Passwd Program.  Adds new line to the passwd file, encrypting the password.");
-		CampaignData.mwlog.errLog("usage: java com.lyrisoft.chat.server.remote.auth.Passwd " +
+		MWLogger.errLog("Passwd Program.  Adds new line to the passwd file, encrypting the password.");
+		MWLogger.errLog("usage: java com.lyrisoft.chat.server.remote.auth.Passwd " +
 						   "[user id] [access level] [password] [timeoflastuse]");
 		System.exit(1);
 	}

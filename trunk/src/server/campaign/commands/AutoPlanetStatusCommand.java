@@ -19,10 +19,9 @@ package server.campaign.commands;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import common.Planet;
 import server.campaign.CampaignMain;
 import server.campaign.SPlanet;
-
-import common.Planet;
 
 public class AutoPlanetStatusCommand implements Command {
 

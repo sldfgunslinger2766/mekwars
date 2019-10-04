@@ -28,7 +28,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import common.CampaignData;
+import common.util.MWLogger;
 
 public class WholeNumberField extends JTextField {
     /**
@@ -87,7 +87,7 @@ public class WholeNumberField extends JTextField {
                     result[j++] = source[i];
                 else {
                     toolkit.beep();
-                    CampaignData.mwlog.errLog("insertString: " + source[i]);
+                    MWLogger.errLog("insertString: " + source[i]);
                 }
             }
             super.insertString(offs, new String(result, 0, j), a);

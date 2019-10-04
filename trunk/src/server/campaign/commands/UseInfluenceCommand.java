@@ -20,6 +20,10 @@ package server.campaign.commands;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.Unit;
+import common.util.MWLogger;
+import common.util.StringUtils;
+import common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -32,11 +36,6 @@ import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.SUnitFactory;
 import server.campaign.pilot.SPilot;
-
-import common.CampaignData;
-import common.Unit;
-import common.util.StringUtils;
-import common.util.UnitUtils;
 
 /**
  *
@@ -268,8 +267,8 @@ public class UseInfluenceCommand implements Command {
 				player.addReward(-unitTotalRewardPointCost);
 			} catch (Exception ex){
 				CampaignMain.cm.toUser("AM:An error has occured while trying to create your requested unit. Please contact an admin. Faction: "+factionstring +" Type: "+unitType+" Class: "+unitWeight,Username,true);
-				CampaignData.mwlog.errLog(ex);
-				CampaignData.mwlog.errLog("Error creating unit in "+this.getClass().getName());
+				MWLogger.errLog(ex);
+				MWLogger.errLog("Error creating unit in "+this.getClass().getName());
 			}
             break;
 

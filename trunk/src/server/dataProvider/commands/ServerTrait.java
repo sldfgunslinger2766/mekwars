@@ -19,13 +19,12 @@ package server.dataProvider.commands;
 import java.util.Date;
 import java.util.Vector;
 
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.dataProvider.ServerCommand;
-
 import common.CampaignData;
 import common.House;
 import common.util.BinWriter;
+import server.campaign.CampaignMain;
+import server.campaign.SHouse;
+import server.dataProvider.ServerCommand;
 
 /**
  * Retrieve all planet information (if the data cache is lost at client side)

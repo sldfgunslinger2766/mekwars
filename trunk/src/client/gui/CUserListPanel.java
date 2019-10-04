@@ -43,7 +43,6 @@ import java.util.TreeSet;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -56,9 +55,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.ListCellRenderer;
-import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 
@@ -66,8 +63,8 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 import client.CUser;
 import client.MWClient;
-import common.CampaignData;
 import common.campaign.clientutils.IClientConfig;
+import common.util.MWLogger;
 import common.util.StringUtils;
 
 
@@ -364,7 +361,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 
 	public synchronized void refresh() {
 		try {((CUserListModel)UserList.getModel()).refreshModel();}
-		catch (Exception ex) {CampaignData.mwlog.errLog(ex);}
+		catch (Exception ex) {MWLogger.errLog(ex);}
 		CountLabel.setText("Player Count: " + UserList.getModel().getSize());
 	}
 
@@ -496,7 +493,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
                         try {
                             File loadJar = new File("./MekWarsAdmin.jar");
                             if (!loadJar.exists())
-                                CampaignData.mwlog.errLog("StaffUserlistPopupMenu creation skipped. No MekWarsAdmin.jar present.");
+                                MWLogger.errLog("StaffUserlistPopupMenu creation skipped. No MekWarsAdmin.jar present.");
                             else {
                                 loader = new URLClassLoader(new URL[] {loadJar.toURI().toURL()});
                                 Class<?> c = loader.loadClass("admin.StaffUserlistPopupMenu");
@@ -506,13 +503,13 @@ public class CUserListPanel extends JPanel implements ActionListener{
                                 popup.add((JMenu)o);
                             }
                         } catch (Exception ex) {
-                            CampaignData.mwlog.errLog("StaffUserlistPopupMenu creation FAILED!");
-                            CampaignData.mwlog.errLog(ex);
+                            MWLogger.errLog("StaffUserlistPopupMenu creation FAILED!");
+                            MWLogger.errLog(ex);
                         } finally {
                         	try {
 								loader.close();
 							} catch (IOException e1) {
-								CampaignData.mwlog.errLog(e1);
+								MWLogger.errLog(e1);
 							}
                         }
 
@@ -1257,16 +1254,16 @@ public class CUserListPanel extends JPanel implements ActionListener{
 
 						//logged out users are never bold
 						setFont(getFont().deriveFont(Font.PLAIN));
-						if (TextImage) {try {setIcon(LogoutImage);} catch (Exception ex) {CampaignData.mwlog.errLog(ex);}}
+						if (TextImage) {try {setIcon(LogoutImage);} catch (Exception ex) {MWLogger.errLog(ex);}}
 					}
 					else {
 						if (TextBold) {setFont(getFont().deriveFont(Font.BOLD));}
 						else {setFont(getFont().deriveFont(Font.PLAIN));}
 
 						if (TextImage) {
-							if (status == MWClient.STATUS_RESERVE) {try {setIcon(ReserveImage);} catch (Exception ex) {CampaignData.mwlog.errLog(ex);}}
-							if (status == MWClient.STATUS_ACTIVE) {try {setIcon(ActiveImage);} catch (Exception ex) {CampaignData.mwlog.errLog(ex);}}
-							if (status == MWClient.STATUS_FIGHTING) {try {setIcon(FightImage);} catch (Exception ex) {CampaignData.mwlog.errLog(ex);}}
+							if (status == MWClient.STATUS_RESERVE) {try {setIcon(ReserveImage);} catch (Exception ex) {MWLogger.errLog(ex);}}
+							if (status == MWClient.STATUS_ACTIVE) {try {setIcon(ActiveImage);} catch (Exception ex) {MWLogger.errLog(ex);}}
+							if (status == MWClient.STATUS_FIGHTING) {try {setIcon(FightImage);} catch (Exception ex) {MWLogger.errLog(ex);}}
 						} else {
 							setIcon(null);
 						}

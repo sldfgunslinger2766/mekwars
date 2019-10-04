@@ -10,13 +10,12 @@ import java.util.Date;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.util.ChristmasHandler;
-import common.CampaignData;
 
 /**
  * Starts the Christmas season
@@ -31,7 +30,7 @@ public class StartChristmasJob implements Job {
 	@Override
 	public void execute(JobExecutionContext context)
 		{
-		CampaignData.mwlog.debugLog("Starting Christmas");
+		MWLogger.debugLog("Starting Christmas");
 		ChristmasHandler.getInstance().startChristmas();
 	}
 	
@@ -50,7 +49,7 @@ public class StartChristmasJob implements Job {
 		try {
 			date = sdf.parse(startDateString);
 		} catch (ParseException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 		
 		boolean inThePast = false;

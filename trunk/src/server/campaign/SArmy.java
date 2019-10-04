@@ -20,6 +20,11 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import common.Army;
+import common.Unit;
+import common.campaign.operations.Operation;
+import common.util.MWLogger;
+import common.util.TokenReader;
 import megamek.common.Aero;
 import megamek.common.AmmoType;
 import megamek.common.BattleArmor;
@@ -31,12 +36,6 @@ import megamek.common.Mounted;
 import megamek.common.Protomech;
 import megamek.common.Tank;
 import megamek.common.VTOL;
-
-import common.Army;
-import common.CampaignData;
-import common.Unit;
-import common.campaign.operations.Operation;
-import common.util.TokenReader;
 
 /**
  * @author Helge Richter
@@ -181,15 +180,15 @@ public class SArmy extends Army {
                     hasHoming = true;
                 }
 
-                // CampaignData.mwlog.errLog(" Unit: "+u.getModelName()+" TAG:
+                // MWLogger.errLog(" Unit: "+u.getModelName()+" TAG:
                 // "+hasTAG+" Homing: "+hasHoming);
                 if (hasTAG && hasHoming) {
                     return true;
                 }
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Bad unit in army for TAGandHomingCombo. Returning false.");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Bad unit in army for TAGandHomingCombo. Returning false.");
+            MWLogger.errLog(ex);
             return false;
         }
         return false;
@@ -210,15 +209,15 @@ public class SArmy extends Army {
                     hasSemiGuided = true;
                 }
 
-                // CampaignData.mwlog.errLog(" Unit: "+u.getModelName()+" TAG:
+                // MWLogger.errLog(" Unit: "+u.getModelName()+" TAG:
                 // "+hasTAG+" SemiGuided: "+hasSemiGuided);
                 if (hasTAG && hasSemiGuided) {
                     return true;
                 }
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Bad unit in army for hasTAGAndSemiGuidedCombo. Returning false.");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Bad unit in army for hasTAGAndSemiGuidedCombo. Returning false.");
+            MWLogger.errLog(ex);
             return false;
         }
         return false;
@@ -661,8 +660,8 @@ public class SArmy extends Army {
             opponents.add(a);
             opponents.trimToSize();
         } catch (Exception e) {
-            CampaignData.mwlog.errLog("Error adding army to opponentList. Trace follows.");
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog("Error adding army to opponentList. Trace follows.");
+            MWLogger.errLog(e);
         }
     }// end addOpponent
 
@@ -671,8 +670,8 @@ public class SArmy extends Army {
             opponents.remove(a);
             opponents.trimToSize();
         } catch (Exception e) {
-            CampaignData.mwlog.errLog("Error removing army from opponentList. Trace follows.");
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog("Error removing army from opponentList. Trace follows.");
+            MWLogger.errLog(e);
         }
     }// end removeOpponent()
 

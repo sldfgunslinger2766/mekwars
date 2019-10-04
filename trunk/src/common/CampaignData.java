@@ -26,11 +26,11 @@ import java.util.Properties;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import megamek.common.AmmoType;
-
 import common.util.BinReader;
 import common.util.BinWriter;
 import common.util.MWLogger;
+import megamek.common.AmmoType;
+
 
 /**
  * TODO: It seems, that all operations done here are needed independly of the
@@ -53,7 +53,7 @@ import common.util.MWLogger;
 public class CampaignData implements TerrainProvider {
 
     public static CampaignData cd;
-    public static final MWLogger mwlog = new MWLogger();
+    //public static final PKLogManager mwlog = PKLogManager.getInstance();
 
     /**
      * All different Houses are stored here. key=Integer (id), value=House
@@ -111,8 +111,8 @@ public class CampaignData implements TerrainProvider {
             Integer planetID = planetid.get(name.toLowerCase());
             return getPlanet(planetID);
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Looking for planet: " + name);
-            // CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Looking for planet: " + name);
+            // MWLogger.errLog(ex);
             return null;
         }
     }
@@ -637,18 +637,18 @@ public class CampaignData implements TerrainProvider {
      *      try { House h = (House) Class.forName(type).newInstance();
      *      in.readObject(h, this, "faction"); factions.put(new
      *      Integer(h.getId()), h); } catch (InstantiationException e) {
-     *      CampaignData.mwlog.errLog(e); } catch (IllegalAccessException e) {
-     *      CampaignData.mwlog.errLog(e); } catch (ClassNotFoundException e) {
-     *      CampaignData.mwlog.errLog(e); } } in.endDataBlock("factions");
+     *      MWLogger.errLog(e); } catch (IllegalAccessException e) {
+     *      MWLogger.errLog(e); } catch (ClassNotFoundException e) {
+     *      MWLogger.errLog(e); } } in.endDataBlock("factions");
      * 
      *      in.startDataBlock("planets"); planets.clear(); size =
      *      in.readInt("planetsCount"); for (int i = 0; i < size; ++i) { String
      *      type = in.readString("planetsType"); try { Planet p = (Planet)
      *      Class.forName(type).newInstance(); in.readObject(p, this, "planet");
      *      planets.put(new Integer(p.getId()), p); } catch
-     *      (InstantiationException e) { CampaignData.mwlog.errLog(e); } catch
-     *      (IllegalAccessException e) { CampaignData.mwlog.errLog(e); } catch
-     *      (ClassNotFoundException e) { CampaignData.mwlog.errLog(e); } }
+     *      (InstantiationException e) { MWLogger.errLog(e); } catch
+     *      (IllegalAccessException e) { MWLogger.errLog(e); } catch
+     *      (ClassNotFoundException e) { MWLogger.errLog(e); } }
      *      in.endDataBlock("planets"); }
      */
     /**
@@ -853,7 +853,7 @@ public class CampaignData implements TerrainProvider {
 
         if (getCommandTable().get(command.toUpperCase()) != null) {
             level = getCommandTable().get(command.toUpperCase()).intValue();
-            // CampaignData.mwlog.errLog("Command: "+command+" level: "+level);
+            // MWLogger.errLog("Command: "+command+" level: "+level);
         }
 
         return level;

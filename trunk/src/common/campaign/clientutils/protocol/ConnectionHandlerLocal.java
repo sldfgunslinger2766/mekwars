@@ -36,7 +36,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Vector;
 
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * The keeper of the Socket on the client side.
@@ -104,15 +104,15 @@ public class ConnectionHandlerLocal implements IConnectionHandler {
         try {_socket.close();}
         catch (IOException e) 
         {
-          CampaignData.mwlog.errLog("Error closing socket.");
-          CampaignData.mwlog.errLog(e);
+          MWLogger.errLog("Error closing socket.");
+          MWLogger.errLog(e);
         }
         if (notify) {_listener.socketClosed();}
     }
 
     public static final void DEBUG(String s) {
         if (DEBUG) {
-            CampaignData.mwlog.errLog(s);
+            MWLogger.errLog(s);
         }
     }
 }
@@ -140,10 +140,10 @@ class WriterThread extends Thread {
                 // wait until there are more messages
                 wait(1000);
             }
-            CampaignData.mwlog.errLog("WriterThread: stopping gracefully.");
+            MWLogger.errLog("WriterThread: stopping gracefully.");
         }
         catch (InterruptedException e) {
-            CampaignData.mwlog.errLog("ConnectionHandlerLocal$WriterThread.run(): Interrupted!");
+            MWLogger.errLog("ConnectionHandlerLocal$WriterThread.run(): Interrupted!");
         }
     }
 

@@ -28,8 +28,7 @@ import java.io.UnsupportedEncodingException;
 //import java.nio.file.StandardOpenOption;
 import java.util.StringTokenizer;
 
-
-import common.CampaignData;
+import common.util.MWLogger;
 //import server.MWClientInfo;
 import server.campaign.CampaignMain;
 //import server.campaign.SPlayer;
@@ -98,13 +97,13 @@ public class ChatBotHelperCommand implements Command {
 		}
 		catch (UnsupportedEncodingException e)
 		{
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 			//CampaignMain.cm.toUser(e.toString(),Username,true);
 
 		}
 		catch (IOException e)
 		{
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 			//CampaignMain.cm.toUser(e.toString(),Username,true);
 
 		}

@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * Starts a server which listens for information
@@ -251,7 +251,7 @@ public final class MWTracker {
 				try {
 					server.close();
 				} catch (IOException e) {
-					CampaignData.mwlog.errLog(e);
+					MWLogger.errLog(e);
 				}
 			}
 			

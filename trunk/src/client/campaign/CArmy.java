@@ -27,7 +27,6 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 import client.MWClient;
-
 import common.Army;
 import common.Unit;
 import common.util.TokenReader;

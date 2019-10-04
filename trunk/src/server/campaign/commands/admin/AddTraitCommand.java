@@ -19,11 +19,10 @@ package server.campaign.commands.admin;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
 
 
 public class AddTraitCommand implements Command {
@@ -58,10 +57,10 @@ public class AddTraitCommand implements Command {
 			skillList = command.nextToken();
 			confirmString = command.nextToken();
 		}catch (Exception ex){
-		    CampaignData.mwlog.errLog(ex);
+		    MWLogger.errLog(ex);
 		}		
 
-		//CampaignData.mwlog.errLog("faction: "+faction+" Trait: "+traitName+" skills: "+skillList+" Confirm: "+confirmString);
+		//MWLogger.errLog("faction: "+faction+" Trait: "+traitName+" skills: "+skillList+" Confirm: "+confirmString);
 		
 		if ( !confirmString.equals("CONFIRM") )
 		    return;

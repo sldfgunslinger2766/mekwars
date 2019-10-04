@@ -2,9 +2,8 @@ package common.campaign.targetsystems;
 
 import java.util.Vector;
 
+import common.util.MWLogger;
 import megamek.common.Entity;
-
-import common.CampaignData;
 
 public class TargetSystem {
 
@@ -130,10 +129,10 @@ public class TargetSystem {
 			name = getTypeName(currentType);
 		} catch (TargetTypeOutOfBoundsException e) {
 			// TODO Auto-generated catch block
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		} catch (TargetTypeNotImplementedException e) {
 			// TODO Auto-generated catch block
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 		return name;
 	}
@@ -145,9 +144,9 @@ public class TargetSystem {
 			try {
 				names.add(getTypeName(i));
 			} catch (TargetTypeOutOfBoundsException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			} catch (TargetTypeNotImplementedException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 		}
 		String toReturn[] = new String[names.size()];
@@ -163,9 +162,9 @@ public class TargetSystem {
 					names.add(getTypeName(i));
 				}
 			} catch (TargetTypeOutOfBoundsException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			} catch (TargetTypeNotImplementedException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 		}
 		String toReturn[] = new String[names.size()];
