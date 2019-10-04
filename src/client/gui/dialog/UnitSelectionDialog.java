@@ -31,15 +31,14 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import megamek.common.Infantry;
 import client.MWClient;
 import client.campaign.CUnit;
-
 import common.Unit;
 import common.util.SpringLayoutHelper;
 //util imports
 //swing imports
 //mekwars imports
+import megamek.common.Infantry;
 
 /*
  * Dialog, based on HouseNameDialog, which allows players

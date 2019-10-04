@@ -20,8 +20,7 @@ package client.cmd;
 import java.util.StringTokenizer;
 
 import client.MWClient;
-
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * Updates the faction status screen
@@ -52,7 +51,7 @@ public class HS extends Command {
 			try{
 				this.issueSubCommand(cmdName, cmdData);
 			}catch(Exception ex){
-				CampaignData.mwlog.errLog(ex);
+				MWLogger.errLog(ex);
 			}
 			
 			if(cmdName.equals("CA"))
@@ -70,7 +69,7 @@ public class HS extends Command {
 	 */
 	private void issueSubCommand(String cmdName, String cmdData) {
 		
-		//CampaignData.mwlog.errLog("HS Subcommand: " + cmdName + " Data: " + cmdData);
+		//MWLogger.errLog("HS Subcommand: " + cmdName + " Data: " + cmdData);
 		
 		if (cmdName.equals("FN")) //set faction name, HS|FN 
 			mwclient.getMainFrame().getMainPanel().getHSPanel().setFactionName(cmdData);

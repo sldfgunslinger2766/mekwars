@@ -29,14 +29,13 @@ import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.Unit;
+import common.campaign.pilot.skills.PilotSkill;
+import common.util.MWLogger;
 import server.campaign.pilot.SPilot;
 import server.campaign.pilot.SPilotSkills;
 import server.campaign.pilot.skills.SPilotSkill;
 import server.campaign.pilot.skills.TraitSkill;
-
-import common.CampaignData;
-import common.Unit;
-import common.campaign.pilot.skills.PilotSkill;
 
 /**
  * @author Helge Richter
@@ -398,7 +397,7 @@ public class PilotQueues {
         	fis.close();
 
         } catch (Exception e) {
-        	CampaignData.mwlog.errLog("A problem occured while retreiving a name from the " + factionString + " Pilotnames File! Tried using Pilotnames.txt instead.");
+        	MWLogger.errLog("A problem occured while retreiving a name from the " + factionString + " Pilotnames File! Tried using Pilotnames.txt instead.");
         	result = SPilot.getRandomPilotName(CampaignMain.cm.getR());
         }finally{
         	

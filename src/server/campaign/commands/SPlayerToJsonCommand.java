@@ -5,7 +5,6 @@ import java.util.StringTokenizer;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.util.SPlayerToJSON;
-import server.campaign.commands.Command;
 
 public class SPlayerToJsonCommand implements Command 
 {

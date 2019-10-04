@@ -19,13 +19,12 @@ package server.campaign.commands;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.pilot.SPilot;
-
-import common.CampaignData;
 
 public class ExchangePilotInUnitCommand implements Command {
 	
@@ -108,7 +107,7 @@ public class ExchangePilotInUnitCommand implements Command {
 							return;
 						}
 					} catch(Exception ex){
-						CampaignData.mwlog.errLog(ex);
+						MWLogger.errLog(ex);
 						CampaignMain.cm.toUser("AM:Invalid Pilot try again!",Username,true);
 						return;
 					}

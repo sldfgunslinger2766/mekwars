@@ -37,7 +37,6 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import client.MWClient;
-
 import common.House;
 import common.util.SpringLayoutHelper;
 

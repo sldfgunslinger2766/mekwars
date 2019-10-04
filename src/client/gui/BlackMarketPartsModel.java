@@ -28,7 +28,6 @@ import javax.swing.table.TableColumn;
 
 import client.MWClient;
 import client.campaign.CCampaign;
-
 import common.BMEquipment;
 
 /**

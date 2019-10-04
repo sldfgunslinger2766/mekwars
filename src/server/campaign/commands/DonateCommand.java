@@ -23,17 +23,16 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.Unit;
+import common.util.MWLogger;
+import common.util.StringUtils;
+import common.util.UnitUtils;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.pilot.SPilot;
-
-import common.CampaignData;
-import common.Unit;
-import common.util.StringUtils;
-import common.util.UnitUtils;
 
 /**
  * @author Helge Richter
@@ -97,7 +96,7 @@ public class DonateCommand implements Command {
         if (m.getModelName().startsWith("Error") || m.getModelName().startsWith("OMG")){
             CampaignMain.cm.toUser("AM:You tried to donate an Error unit. The unit was auto-scrapped and the staff was alerted.",Username,true);
             CampaignMain.cm.doSendModMail("NOTE",Username + " tried to donate an OMG. Unit auto-scrapped. Data: " + m.getProducer());
-            CampaignData.mwlog.errLog(Username + " tried to donate an OMG. Unit auto-scrapped. Data: " + m.getProducer());
+            MWLogger.errLog(Username + " tried to donate an OMG. Unit auto-scrapped. Data: " + m.getProducer());
             p.removeUnit(unitid, true);
             return;
         }

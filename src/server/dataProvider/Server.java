@@ -22,6 +22,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import common.CampaignData;
+import common.util.MWLogger;
 
 
 /**
@@ -47,7 +48,7 @@ public class Server extends Thread {
 	 * @throws IOException
 	 */
 	public void run() {
-		CampaignData.mwlog.mainLog("DataProvider: startup...");
+		MWLogger.mainLog("DataProvider: startup...");
 		
 		//open and bind a socket and wait for incoming calls     
 		//If bindip is "-1", we want to bind to all available interfaces.
@@ -61,14 +62,14 @@ public class Server extends Thread {
 				server = new ServerSocket(dataPort,0,InetAddress.getByName(IpAddress));
 			
 		} catch (IOException e) {
-			CampaignData.mwlog.errLog("Shutting down because:");
-			CampaignData.mwlog.errLog(e);
-			CampaignData.mwlog.mainLog("DataProvider: Could not create server socket. Shutting down.");
-			CampaignData.mwlog.infoLog("DataProvider: Could not create server socket. Shutting down.");
+			MWLogger.errLog("Shutting down because:");
+			MWLogger.errLog(e);
+			MWLogger.mainLog("DataProvider: Could not create server socket. Shutting down.");
+			MWLogger.infoLog("DataProvider: Could not create server socket. Shutting down.");
 			return;
 		}
 		
-		CampaignData.mwlog.mainLog("DataProvider: server created at port "+dataPort+". Address "+IpAddress+". Waiting for calls...");
+		MWLogger.mainLog("DataProvider: server created at port "+dataPort+". Address "+IpAddress+". Waiting for calls...");
 		
 		//listen for new data requests until an error occurs, or forever.
 		while(true) {
@@ -80,8 +81,8 @@ public class Server extends Thread {
 			
 			} catch(OutOfMemoryError OOM) {
 				
-				CampaignData.mwlog.errLog("Out of Memory while opening dataprovider socket:");
-				CampaignData.mwlog.errLog(OOM.toString());
+				MWLogger.errLog("Out of Memory while opening dataprovider socket:");
+				MWLogger.errLog(OOM.toString());
 				
 				/*
                  * Ok so too many socket connections lets try a reset
@@ -96,17 +97,17 @@ public class Server extends Thread {
                     else
                         server = new ServerSocket(dataPort,0,InetAddress.getByName(IpAddress));
                 } catch(Exception ex){
-                    CampaignData.mwlog.errLog("Shutting down because:");
-                    CampaignData.mwlog.errLog(ex);
-                    CampaignData.mwlog.mainLog("DataProvider: Could not create server socket. Shutting down.");
-                    CampaignData.mwlog.infoLog("DataProvider: Could not create server socket. Shutting down.");
+                    MWLogger.errLog("Shutting down because:");
+                    MWLogger.errLog(ex);
+                    MWLogger.mainLog("DataProvider: Could not create server socket. Shutting down.");
+                    MWLogger.infoLog("DataProvider: Could not create server socket. Shutting down.");
                     return;
                 }
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog("Dataprovider IO Exception:");
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog("Dataprovider IO Exception:");
+				MWLogger.errLog(e);
 			} catch(Exception ex) {
-				CampaignData.mwlog.errLog(ex);
+				MWLogger.errLog(ex);
 			}
 		}
 		

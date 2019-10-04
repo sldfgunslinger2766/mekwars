@@ -111,6 +111,6 @@ public class BanListCommand implements Command {
 		CampaignMain.cm.toUser(result, Username);
 		CampaignMain.cm.doSendModMail("NOTE", Username
 				+ " checked the ban list.");
-		// CampaignData.mwlog.modLog(Username + " checked the ban list.");
+		// MWLogger.modLog(Username + " checked the ban list.");
 	}
 }

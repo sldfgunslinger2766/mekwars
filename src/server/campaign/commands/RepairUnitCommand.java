@@ -22,6 +22,8 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Mech;
@@ -31,9 +33,6 @@ import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.util.RepairTrackingThread;
-
-import common.CampaignData;
-import common.util.UnitUtils;
 
 /**
  * @author Torren (Jason Tighe)
@@ -129,7 +128,7 @@ public class RepairUnitCommand implements Command {
 			if ( techType != UnitUtils.TECH_REWARD_POINTS && CampaignMain.cm.getBooleanConfig("UsePartsRepair") ) {
 				String crit = UnitUtils.getCritName(entity, slot, location, armor);
 				int damagedCrits = UnitUtils.getNumberOfDamagedCrits(entity,slot,location,armor);
-				//CampaignData.mwlog.errLog(crit+" Crits: "+player.getUnitParts().getPartsCritCount(crit)+" Needed: "+damagedCrits);
+				//MWLogger.errLog(crit+" Crits: "+player.getUnitParts().getPartsCritCount(crit)+" Needed: "+damagedCrits);
 				if ( player.getPartsAmount(crit) < damagedCrits  ) {
 					
 					if ( player.getAutoReorder() ){
@@ -216,7 +215,7 @@ public class RepairUnitCommand implements Command {
 
             if ( CampaignMain.cm.getRTT().getState() == Thread.State.TERMINATED ){
                 CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed, and the repair thread terminated. Staff was notified.",Username,false);
-                CampaignData.mwlog.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
+                MWLogger.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
                 return;
             }
             if ( techType == UnitUtils.TECH_PILOT )
@@ -248,8 +247,8 @@ public class RepairUnitCommand implements Command {
             if ( sendDialogUpdate )
                 CampaignMain.cm.toUser("ARD|"+unitID,Username,false);
         }catch(Exception ex){
-            CampaignData.mwlog.errLog("Unable to Process Repair Unit Command!");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Unable to Process Repair Unit Command!");
+            MWLogger.errLog(ex);
         }
         
 	}//end process()

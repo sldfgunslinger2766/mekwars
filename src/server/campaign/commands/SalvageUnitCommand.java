@@ -22,6 +22,9 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.Unit;
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Mech;
@@ -31,10 +34,6 @@ import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.util.RepairTrackingThread;
-
-import common.CampaignData;
-import common.Unit;
-import common.util.UnitUtils;
 
 /**
  * @author Torren (Jason Tighe)
@@ -203,7 +202,7 @@ public class SalvageUnitCommand implements Command {
 
             if (CampaignMain.cm.getRTT().getState() == Thread.State.TERMINATED) {
                 CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed, and the repair thread terminated. Staff was notified.", Username, false);
-                CampaignData.mwlog.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
+                MWLogger.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
                 return;
             }
             if (techType == UnitUtils.TECH_PILOT) {
@@ -221,8 +220,8 @@ public class SalvageUnitCommand implements Command {
                 CampaignMain.cm.toUser("ARD|" + unitID + "|true", Username, false);
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Unable to Process Salvage Unit Command!");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Unable to Process Salvage Unit Command!");
+            MWLogger.errLog(ex);
         }
 
     }// end process()

@@ -23,6 +23,14 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import client.campaign.CArmy;
+import client.campaign.CUnit;
+import common.AdvancedTerrain;
+import common.PlanetEnvironment;
+import common.Unit;
+import common.campaign.Buildings;
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.client.CloseClientListener;
 import megamek.client.bot.BotClient;
@@ -46,15 +54,6 @@ import megamek.common.options.IBasicOption;
 import megamek.common.preference.IClientPreferences;
 import megamek.common.preference.PreferenceManager;
 import megamek.common.util.BuildingTemplate;
-import client.campaign.CArmy;
-import client.campaign.CUnit;
-
-import common.AdvancedTerrain;
-import common.CampaignData;
-import common.PlanetEnvironment;
-import common.Unit;
-import common.campaign.Buildings;
-import common.util.UnitUtils;
 
 public class ClientThread extends Thread implements CloseClientListener {
 
@@ -139,8 +138,8 @@ public class ClientThread extends Thread implements CloseClientListener {
 
         }// end try
         catch (Exception ex) {
-            CampaignData.mwlog.errLog("Error reporting game!");
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error reporting game!");
+            MWLogger.errLog(ex);
         }
 
         if (swingGui != null) {
@@ -176,7 +175,7 @@ public class ClientThread extends Thread implements CloseClientListener {
         } catch (Exception ex) {
             client = null;
             mwclient.showInfoWindow("Couldn't join this game!");
-            CampaignData.mwlog.infoLog(serverip + " " + serverport);
+            MWLogger.infoLog(serverip + " " + serverport);
             return;
         }
         // client.retrieveServerInfo();
@@ -419,8 +418,8 @@ public class ClientThread extends Thread implements CloseClientListener {
                         Thread.sleep(50);
                     }
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog("Bot Error!");
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog("Bot Error!");
+                    MWLogger.errLog(ex);
                 }
 //                bot.retrieveServerInfo();
                 Thread.sleep(125);
@@ -564,7 +563,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                         entity.setCrew(UnitUtils.createEntityPilot(autoUnit));
                     }
 
-                    // CampaignData.mwlog.errLog(entity.getModel()+"
+                    // MWLogger.errLog(entity.getModel()+"
                     // direction "+entity.getOffBoardDirection());
                     // add the unit to the game.
                     if (bot != null) {
@@ -618,7 +617,7 @@ public class ClientThread extends Thread implements CloseClientListener {
             }
 
         } catch (Exception e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
         }
         /*the swingGui object ref was initialized and is
         *active on the client thread, so release the ref to it- BarukKhazad!
@@ -675,25 +674,25 @@ public class ClientThread extends Thread implements CloseClientListener {
                 }
                 Thread.sleep(10);// give the queue time to refresh
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog("Error in linkMegaMekC3Units");
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog("Error in linkMegaMekC3Units");
+                MWLogger.errLog(ex);
             }
         }
 
         // catch for some funky stuff
         if ((c3Unit == null) || (c3Master == null)) {
-            CampaignData.mwlog.errLog("Null Units c3Unit: " + c3Unit + " C3Master: " + c3Master);
+            MWLogger.errLog("Null Units c3Unit: " + c3Unit + " C3Master: " + c3Master);
             return;
         }
 
         try {
             CUnit masterUnit = (CUnit) army.getUnit(masterid);
-            // CampaignData.mwlog.errLog("Master Unit:
+            // MWLogger.errLog("Master Unit:
             // "+masterUnit.getModelName());
-            // CampaignData.mwlog.errLog("Slave Unit:
+            // MWLogger.errLog("Slave Unit:
             // "+c3Unit.getModel());
             if (!masterUnit.hasC3SlavesLinkedTo(army) && masterUnit.hasBeenC3LinkedTo(army) && ((masterUnit.getC3Level() == Unit.C3_MASTER) || (masterUnit.getC3Level() == Unit.C3_MMASTER))) {
-                // CampaignData.mwlog.errLog("Unit:
+                // MWLogger.errLog("Unit:
                 // "+c3Master.getModel()+" id: "+c3Master.getExternalId());
                 if (c3Master.getC3MasterId() == Entity.NONE) {
                     c3Master.setShutDown(false);
@@ -702,24 +701,24 @@ public class ClientThread extends Thread implements CloseClientListener {
                 }
                 /*
                  * if ( c3Master.hasC3MM() )
-                 * CampaignData.mwlog.errLog("hasC3MM"); else
-                 * CampaignData.mwlog.errLog("!hasC3MM");
+                 * MWLogger.errLog("hasC3MM"); else
+                 * MWLogger.errLog("!hasC3MM");
                  */
             } else if (c3Master.getC3MasterId() != Entity.NONE) {
                 c3Master.setShutDown(false);
                 c3Master.setC3Master(Entity.NONE, false);
                 client.sendUpdateEntity(c3Master);
             }
-            // CampaignData.mwlog.errLog("c3Unit: "+c3Unit.getModel()+"
+            // MWLogger.errLog("c3Unit: "+c3Unit.getModel()+"
             // Master: "+c3Master.getModel());
             c3Unit.setShutDown(false);
             c3Unit.setC3Master(c3Master, false);
-            // CampaignData.mwlog.errLog("c3Master Set to
+            // MWLogger.errLog("c3Master Set to
             // "+c3Unit.getC3MasterId()+" "+c3Unit.getC3NetId());
             client.sendUpdateEntity(c3Unit);
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Error in setting up C3Network");
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Error in setting up C3Network");
         }
     }
 

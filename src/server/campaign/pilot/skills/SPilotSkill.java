@@ -15,11 +15,10 @@
  */
 package server.campaign.pilot.skills;
 
-import megamek.common.Entity;
-import server.campaign.pilot.SPilot;
-
 import common.campaign.pilot.Pilot;
 import common.campaign.pilot.skills.PilotSkill;
+import megamek.common.Entity;
+import server.campaign.pilot.SPilot;
 
 /**
  * Base class for all skill implementations. Overide this if you want to create

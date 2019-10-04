@@ -27,8 +27,8 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
-import common.CampaignData;
 import common.campaign.clientutils.IClientConfig;
+import common.util.MWLogger;
 
 /**
  * Class for Client's configuration.
@@ -63,11 +63,11 @@ public class DedConfig implements IClientConfig {
                 config.load(fis);
                 fis.close();
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
                 JOptionPane.showMessageDialog(null, "Unable to load Backup config file");
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             JOptionPane.showMessageDialog(null, "Unable to load main config file");
         }
 		//check for a serverdata.dat
@@ -81,7 +81,7 @@ public class DedConfig implements IClientConfig {
 		} catch (FileNotFoundException fnfe) {
 			//Exception simply means serverdata.dat is not present.
 		}catch ( Exception ex){
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 		
 		setParam("DEDICATED","TRUE");
@@ -294,8 +294,8 @@ public class DedConfig implements IClientConfig {
             fos.close();
             ps.close();
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Failed backingup config file");
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Failed backingup config file");
             return;
         }
         try {
@@ -305,8 +305,8 @@ public class DedConfig implements IClientConfig {
 			fos.close();
 			ps.close();
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
-			CampaignData.mwlog.errLog("Failed saving config file");
+			MWLogger.errLog(ex);
+			MWLogger.errLog("Failed saving config file");
 		}
 	}
 	

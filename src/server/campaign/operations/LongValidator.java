@@ -24,12 +24,11 @@ package server.campaign.operations;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import common.campaign.operations.Operation;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlanet;
 import server.campaign.SPlayer;
-
-import common.campaign.operations.Operation;
 //TODO: remove "unused" once longs are running
 public class LongValidator {
 	

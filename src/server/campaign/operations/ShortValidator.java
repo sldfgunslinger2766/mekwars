@@ -29,6 +29,12 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import common.House;
+import common.Planet;
+import common.Unit;
+import common.campaign.operations.Operation;
+import common.flags.PlayerFlags;
+import common.util.MWLogger;
 import megamek.common.BattleArmor;
 import megamek.common.Protomech;
 import server.campaign.CampaignMain;
@@ -42,13 +48,6 @@ import server.campaign.mercenaries.ContractInfo;
 import server.campaign.operations.validation.ISpreadValidator;
 import server.campaign.operations.validation.PercentBVSpreadValidator;
 import server.campaign.operations.validation.StandardBVSpreadValidator;
-
-import common.CampaignData;
-import common.House;
-import common.Planet;
-import common.Unit;
-import common.campaign.operations.Operation;
-import common.flags.PlayerFlags;
 
 public class ShortValidator {
 
@@ -685,12 +684,12 @@ public class ShortValidator {
                 if (defenderFails.size() == 0)// if player can defend, add
                     fullMatches.add(currArmy);
                 else if (o.getBooleanValue("DebugOp")) { // spamalama
-                    CampaignData.mwlog.errLog("Failed Defense reasons for Op: " + o.getName() + " Launched by player: " + ap.getName() + " with army: #" + aa.getID());
-                    CampaignData.mwlog.errLog("Defending Player: " + currPlayer.getName() + " Army id: #" + currArmy.getID());
+                    MWLogger.errLog("Failed Defense reasons for Op: " + o.getName() + " Launched by player: " + ap.getName() + " with army: #" + aa.getID());
+                    MWLogger.errLog("Defending Player: " + currPlayer.getName() + " Army id: #" + currArmy.getID());
 
                     Iterator<Integer> df = defenderFails.iterator();
                     while (df.hasNext()) {
-                        CampaignData.mwlog.errLog("Reason: " + this.decodeFailure((Integer) df.next()));
+                        MWLogger.errLog("Reason: " + this.decodeFailure((Integer) df.next()));
                     }
                 }
             }

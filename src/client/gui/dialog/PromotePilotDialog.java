@@ -32,7 +32,6 @@ import javax.swing.SwingConstants;
 
 import client.MWClient;
 import client.campaign.CUnit;
-
 import common.Unit;
 import common.campaign.pilot.Pilot;
 import common.campaign.pilot.skills.PilotSkill;

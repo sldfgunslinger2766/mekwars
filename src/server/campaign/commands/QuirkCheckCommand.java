@@ -3,10 +3,9 @@ package server.campaign.commands;
 import java.io.File;
 import java.util.StringTokenizer;
 
-import common.CampaignData;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
-import server.util.QuirkHandler;
 
 //@salient a command to make sure hosts are using same quirk files
 public class QuirkCheckCommand implements Command 
@@ -85,14 +84,14 @@ public class QuirkCheckCommand implements Command
 		if(clientCanonQuirkLength == 0L)
 		{
 			player.toSelf("AM: canon quirk file is missing!");
-			CampaignData.mwlog.modLog(username + " is missing canon quirk file on client!");
+			MWLogger.modLog(username + " is missing canon quirk file on client!");
 			return;
 		}
 		
 		if(clientCustomQuirkLength == 0L)
 		{
 			player.toSelf("AM: canon quirk file is missing!");
-			CampaignData.mwlog.modLog(username + " is missing canon quirk file on client!");
+			MWLogger.modLog(username + " is missing canon quirk file on client!");
 			return;
 		}
 				
@@ -104,7 +103,7 @@ public class QuirkCheckCommand implements Command
 		if( serverCanonQuirkLength != clientCanonQuirkLength || serverCustomQuirkLength != clientCustomQuirkLength )
 		{
 			CampaignMain.cm.doSendModMail(username, " is hosting with quirk files that do not match server!");
-			CampaignData.mwlog.errLog(username + " is hosting with quirk files that do not match server!");
+			MWLogger.errLog(username + " is hosting with quirk files that do not match server!");
 			CampaignMain.cm.doSendErrLog(username + " is hosting with quirk files that do not match server!");
 			player.toSelf("AM: Your files do not match the server, run autoupdate before hosting a match!");			
 		}

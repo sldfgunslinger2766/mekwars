@@ -18,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 
 import common.Unit;

@@ -19,6 +19,7 @@ package server.campaign.commands.admin;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
+import common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
@@ -28,8 +29,6 @@ import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.commands.Command;
-
-import common.util.UnitUtils;
 
 /**
  * @author Jason Tighe

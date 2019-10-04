@@ -55,8 +55,6 @@ import javax.swing.WindowConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import megamek.MegaMek;
-import megamek.client.ui.swing.UnitLoadingDialog;
 import client.CUser;
 import client.ClientThread;
 import client.MWClient;
@@ -77,11 +75,13 @@ import client.gui.dialog.SubFactionNameDialog;
 import client.gui.dialog.TraitDialog;
 import client.gui.dialog.UnitSelectionDialog;
 import client.gui.dialog.buildtableviewer.BuildTableViewer;
-import common.CampaignData;
 import common.House;
 import common.Unit;
 import common.campaign.pilot.Pilot;
+import common.util.MWLogger;
 import common.util.StringUtils;
+import megamek.MegaMek;
+import megamek.client.ui.swing.UnitLoadingDialog;
 
 public class CMainFrame extends JFrame {
     /**
@@ -275,7 +275,7 @@ public class CMainFrame extends JFrame {
             // factored out to reduce bloat
             createMenu();
         } catch (Exception e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
         }
         setJMenuBar(jMenuBar1);
         enableMenu();
@@ -396,7 +396,7 @@ public class CMainFrame extends JFrame {
 
             // dont print an entire trace if the jar is missing.
             if (!loadJar.exists()) {
-                CampaignData.mwlog.errLog("Player/Server menu creation skipped. No MekWarsAdmin.jar present.");
+                MWLogger.errLog("Player/Server menu creation skipped. No MekWarsAdmin.jar present.");
             } else {
                 // assume mod
                 try {
@@ -412,8 +412,8 @@ public class CMainFrame extends JFrame {
                      * if ( jMenuMod.getItemCount() < 1 ){ mod = false; }
                      */
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog("ModeratorMenu creation FAILED!");
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog("ModeratorMenu creation FAILED!");
+                    MWLogger.errLog(ex);
                 }
                 try {
                     URLClassLoader loader = new URLClassLoader(new URL[] { loadJar.toURI().toURL() });
@@ -425,8 +425,8 @@ public class CMainFrame extends JFrame {
                     jMenuBar1.add(jMenuAdmin);
                     loader.close();
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog("AdminMenu creation FAILED!");
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog("AdminMenu creation FAILED!");
+                    MWLogger.errLog(ex);
                 }
             }// end else(Admin.jar exists)
 
@@ -443,7 +443,7 @@ public class CMainFrame extends JFrame {
                             c.getDeclaredMethod("main", new Class[] { Object.class }).invoke(o, new Object[] { mwclient });
                             loader.close();
                         } catch (Exception ex) {
-                            CampaignData.mwlog.errLog(ex);
+                            MWLogger.errLog(ex);
                         }
                         // new
                         // OperationsEditor.dialog.OperationsDialog(mwclient);
@@ -1188,7 +1188,7 @@ public class CMainFrame extends JFrame {
                 try {
                     Browser.displayURL("http://sourceforge.net/tracker/?group_id=122002&atid=692058");
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }
         };
@@ -1197,7 +1197,7 @@ public class CMainFrame extends JFrame {
                 try {
                     Browser.displayURL("http://sourceforge.net/tracker/?group_id=47079&atid=448394");
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }
         };
@@ -1206,7 +1206,7 @@ public class CMainFrame extends JFrame {
                 try {
                     Browser.displayURL("http://sourceforge.net/tracker/?group_id=47079&atid=448397");
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }
         };
@@ -1215,7 +1215,7 @@ public class CMainFrame extends JFrame {
                 try {
                     Browser.displayURL("http://sourceforge.net/tracker/?group_id=122002&atid=692061");
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }
         };
@@ -3034,7 +3034,7 @@ public class CMainFrame extends JFrame {
         try {
             createMenu();
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
         enableMenu();
         this.repaint();
@@ -3045,7 +3045,7 @@ public class CMainFrame extends JFrame {
         // login call of UOE occures before the menu is
         // created. return to stop NPE's.
         if (jMenuAttackMenu == null) {
-            CampaignData.mwlog.errLog("Attack Menu is Null!");
+            MWLogger.errLog("Attack Menu is Null!");
             return;
         }
 
@@ -3083,25 +3083,25 @@ public class CMainFrame extends JFrame {
                 try {
                     setIconImage(mwclient.getConfig().getImage("RESERVE").getImage());
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             } else if (status == MWClient.STATUS_ACTIVE) {
                 try {
                     setIconImage(mwclient.getConfig().getImage("ACTIVE").getImage());
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             } else if (status == MWClient.STATUS_FIGHTING) {
                 try {
                     setIconImage(mwclient.getConfig().getImage("FIGHT").getImage());
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             } else if ((status == MWClient.STATUS_LOGGEDOUT) || (status == MWClient.STATUS_DISCONNECTED)) {
                 try {
                     setIconImage(mwclient.getConfig().getImage("LOGOUT").getImage());
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }
         }
@@ -3111,7 +3111,7 @@ public class CMainFrame extends JFrame {
             try {
                 setIconImage(mwclient.getConfig().getImage("TRAY").getImage());
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
         }
 
@@ -3202,7 +3202,7 @@ public class CMainFrame extends JFrame {
                 fis.close();
 
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog("Unable to read " + opFile);
+                MWLogger.errLog("Unable to read " + opFile);
                 return;
             }
             mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setoperation#short#" + opData.toString());
@@ -3238,7 +3238,7 @@ public class CMainFrame extends JFrame {
             fis.close();
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Unable to read " + opFile);
+            MWLogger.errLog("Unable to read " + opFile);
             return;
         }
 
@@ -3309,7 +3309,7 @@ public class CMainFrame extends JFrame {
             fis.close();
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Unable to read " + opFile);
+            MWLogger.errLog("Unable to read " + opFile);
             return;
         }
 

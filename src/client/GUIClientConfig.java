@@ -30,8 +30,8 @@ import java.util.TreeMap;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-import common.CampaignData;
 import common.campaign.clientutils.IClientConfig;
+import common.util.MWLogger;
 
 
 /**
@@ -74,11 +74,11 @@ public class GUIClientConfig implements IClientConfig {
                 config.load(fis);
                 fis.close();
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
                 JOptionPane.showMessageDialog(null, "Unable to load Backup config file");
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
             JOptionPane.showMessageDialog(null, "Unable to load main config file");
         }
 
@@ -93,7 +93,7 @@ public class GUIClientConfig implements IClientConfig {
         } catch (FileNotFoundException fnfe) {
             // Exception simply means serverdata.dat is not present.
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
         // if a -d arg was passed, set dedicated to true
@@ -552,7 +552,7 @@ public class GUIClientConfig implements IClientConfig {
         try {
             images.put(image, new ImageIcon(new ImageIcon(imagename).getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT)));
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
     }
 
@@ -675,8 +675,8 @@ public class GUIClientConfig implements IClientConfig {
             fos.close();
             ps.close();
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Failed backingup config file");
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Failed backingup config file");
             return;
         }
         try {
@@ -686,8 +686,8 @@ public class GUIClientConfig implements IClientConfig {
             fos.close();
             ps.close();
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Failed saving config file");
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Failed saving config file");
         }
     }
 

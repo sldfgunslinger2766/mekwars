@@ -21,19 +21,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.List;
-import java.util.Iterator;
 import java.util.stream.Collectors;
 
-import common.CampaignData;
 import common.House;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-import server.campaign.commands.Command;
 import server.campaign.pilot.SPilot;
 
 
@@ -324,7 +323,7 @@ public class FreeBuildCreateUnitCommand implements Command
 				
 		}
 		
-		CampaignData.mwlog.errLog("No case for this unit type in FreeBuildCreateUnit.java -> checkDupeLimits. Type is.. " + unit.getType());
+		MWLogger.errLog("No case for this unit type in FreeBuildCreateUnit.java -> checkDupeLimits. Type is.. " + unit.getType());
 		return false;
 	}
 	
@@ -369,8 +368,8 @@ public class FreeBuildCreateUnitCommand implements Command
 				{
 					CampaignMain.cm.toUser("AM:This is not a legal unit!",username,true);
 					//add some logging here, mod mail possible cheating attempt or BT error
-					CampaignData.mwlog.errLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
-					CampaignData.mwlog.modLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					MWLogger.errLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					MWLogger.modLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
 					return false;
 				}
 			}
@@ -380,8 +379,8 @@ public class FreeBuildCreateUnitCommand implements Command
 				{
 					CampaignMain.cm.toUser("AM:This is not a legal unit!",username,true);
 					//add some logging here, mod mail possible cheating attempt or BT error
-					CampaignData.mwlog.errLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
-					CampaignData.mwlog.modLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					MWLogger.errLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					MWLogger.modLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
 					return false;
 				}
 			}
@@ -391,15 +390,15 @@ public class FreeBuildCreateUnitCommand implements Command
 				{
 					CampaignMain.cm.toUser("AM:This is not a legal unit!",username,true);
 					//add some logging here, mod mail possible cheating attempt or BT error
-					CampaignData.mwlog.errLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
-					CampaignData.mwlog.modLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					MWLogger.errLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					MWLogger.modLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
 					return false;
 				}
 			}
 		}
 		catch (IOException e)
 		{
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 			return false;
 		}
 

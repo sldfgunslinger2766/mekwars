@@ -15,10 +15,9 @@
  */
 package server.campaign.operations.validation;
 
+import common.Unit;
 import server.campaign.SArmy;
 import server.campaign.SUnit;
-
-import common.Unit;
 
 /**
  * @author 	Spork

@@ -17,12 +17,10 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.SubFaction;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlayer;
-import server.campaign.commands.Command;
-
-import common.SubFaction;
 
 public class SelfPromoteCommand implements Command {
 

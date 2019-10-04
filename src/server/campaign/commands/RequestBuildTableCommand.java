@@ -25,9 +25,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
-
-import common.CampaignData;
 
 
 public class RequestBuildTableCommand implements Command {
@@ -129,7 +128,7 @@ public class RequestBuildTableCommand implements Command {
 				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 			CampaignMain.cm.toUser("BT|BT|" + folder + "|" + table + toReturn.toString(), Username, false);
 			

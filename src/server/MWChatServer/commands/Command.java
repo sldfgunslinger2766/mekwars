@@ -17,11 +17,10 @@
  */
 package server.MWChatServer.commands;
 
+import common.util.MWLogger;
 import server.ServerWrapper;
 import server.MWChatServer.MWChatClient;
 import server.MWChatServer.MWChatServer;
-
-import common.CampaignData;
 
 /**
  *
@@ -35,8 +34,8 @@ public class Command extends CommandBase implements ICommands {
     try {
 		((ServerWrapper)client.getServer()).processCommand(client.getUserId(), common.comm.TransportCodec.unescape(args[1]));
     } catch (Exception e) {
-      CampaignData.mwlog.errLog(e);
-      CampaignData.mwlog.errLog("Not supposed to happen");
+      MWLogger.errLog(e);
+      MWLogger.errLog("Not supposed to happen");
     }
     return false;
   }

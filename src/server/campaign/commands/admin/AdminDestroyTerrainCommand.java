@@ -18,12 +18,11 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SPlanet;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
 
 public class AdminDestroyTerrainCommand implements Command {
 	
@@ -54,11 +53,11 @@ public class AdminDestroyTerrainCommand implements Command {
 			p.getEnvironments().remove(terrain);
 			p.updated();
 	
-			//server.CampaignData.mwlog.modLog(Username + " removed terrain from " + p.getName() + "(#" + placeToDelete + ").");
+			//server.MWLogger.modLog(Username + " removed terrain from " + p.getName() + "(#" + placeToDelete + ").");
 			CampaignMain.cm.doSendModMail("NOTE",Username + " removed terrain from " + p.getName() + "(" + terrain + ").");
 		}
 		catch (Exception ex){
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 		
 	}

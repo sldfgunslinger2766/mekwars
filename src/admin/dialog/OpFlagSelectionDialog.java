@@ -41,7 +41,6 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import client.MWClient;
-
 import common.util.SpringLayoutHelper;
 //util imports
 //swing imports
@@ -149,7 +148,7 @@ public class OpFlagSelectionDialog extends JDialog implements ActionListener {
 							}
 							element++;
 						}
-                       // CampaignData.mwlog.errLog("7");
+                       // MWLogger.errLog("7");
 
 						//looped through without finding a starting match. set 0.
 						if (shouldContinue) {

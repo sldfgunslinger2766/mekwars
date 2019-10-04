@@ -81,7 +81,7 @@ public class AdminExchangePlanetOwnershipCommand implements Command {
 		//breaks passed
 		int newAmount = planet.doGainInfluence(winningHouse,losingHouse, amount, true);
 		
-		//server.CampaignData.mwlog.modLog(Username + " took " + newAmount + "% of "+ planet.getName() + " from " + losingHouse.getName() + " and gave it to " + winningHouse.getName() + ".");
+		//server.MWLogger.modLog(Username + " took " + newAmount + "% of "+ planet.getName() + " from " + losingHouse.getName() + " and gave it to " + winningHouse.getName() + ".");
 		CampaignMain.cm.toUser("You took " + newAmount + "% of "+ planet.getName() + " from " + losingHouse.getName() + " and gave it to " + winningHouse.getName() + ".",Username,true);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " took " + newAmount + "% of "+ planet.getName() + " from " + losingHouse.getName() + " and gave it to " + winningHouse.getName() + ".");
 	}

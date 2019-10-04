@@ -16,10 +16,6 @@
 
 package server.campaign.util;
 
-import gd.xml.ParseException;
-import gd.xml.XMLParser;
-import gd.xml.XMLResponder;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,11 +23,13 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import common.util.MWLogger;
+import gd.xml.ParseException;
+import gd.xml.XMLParser;
+import gd.xml.XMLResponder;
 import server.campaign.NewbieHouse;
 import server.campaign.SHouse;
 import server.campaign.mercenaries.MercHouse;
-
-import common.CampaignData;
 
 
 public class XMLFactionDataParser implements XMLResponder {
@@ -69,7 +67,7 @@ public class XMLFactionDataParser implements XMLResponder {
 			XMLParser xp = new XMLParser();
 			xp.parseXML(this);
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 	}
 	
@@ -78,7 +76,7 @@ public class XMLFactionDataParser implements XMLResponder {
 	 {
 	 String charData = (new String(characters,start,length)).trim();
 	 if (!charData.equalsIgnoreCase(""))
-	 CampaignData.mwlog.mainLog(lastElement + " --> " + charData);
+	 MWLogger.mainLog(lastElement + " --> " + charData);
 	 else
 	 lastElement = "";
 	 if (lastElement.equalsIgnoreCase("NAME"))
@@ -100,7 +98,7 @@ public class XMLFactionDataParser implements XMLResponder {
 		if (rawName.equalsIgnoreCase("FACTION"))
 		{
 			/*
-			 CampaignData.mwlog.mainLog("FACTION READ");
+			 MWLogger.mainLog("FACTION READ");
 			 SHouse h;
 			 if (this.isMercenary)
 			 h = new MercHouse(name,Color,BaseGunner,BasePilot,Abbreviation,myCampaign.getR(),myCampaign);
@@ -135,7 +133,7 @@ public class XMLFactionDataParser implements XMLResponder {
 		System.out.print(prefix+"!NOTATION: "+name);
 		if (pubID!=null) System.out.print("  pubID = "+pubID);
 		if (sysID!=null) System.out.print("  sysID = "+sysID);
-		CampaignData.mwlog.mainLog("");
+		MWLogger.mainLog("");
 	}
 	
 	public void recordEntityDeclaration(String name, String value, String pubID, String sysID, String notation) throws ParseException {
@@ -144,12 +142,12 @@ public class XMLFactionDataParser implements XMLResponder {
 		if (pubID!=null) System.out.print("  pubID = "+pubID);
 		if (sysID!=null) System.out.print("  sysID = "+sysID);
 		if (notation!=null) System.out.print("  notation = "+notation);
-		CampaignData.mwlog.mainLog("");
+		MWLogger.mainLog("");
 	}
 	
 	public void recordElementDeclaration(String name, String content) throws ParseException {
 		System.out.print(prefix+"!ELEMENT: "+name);
-		CampaignData.mwlog.mainLog("  content = "+content);
+		MWLogger.mainLog("  content = "+content);
 	}
 	
 	public void recordAttlistDeclaration(String element, String attr, boolean notation, String type, String defmod, String def) throws ParseException {
@@ -157,14 +155,14 @@ public class XMLFactionDataParser implements XMLResponder {
 		System.out.print("  attr = "+attr);
 		System.out.print("  type = " + ((notation) ? "NOTATIONS " : "") + type);
 		System.out.print("  def. modifier = "+defmod);
-		CampaignData.mwlog.mainLog( (def==null) ? "" : "  def = "+notation);
+		MWLogger.mainLog( (def==null) ? "" : "  def = "+notation);
 	}
 	
 	public void recordDoctypeDeclaration(String name, String pubID, String sysID) throws ParseException {
 		System.out.print(prefix+"!DOCTYPE: "+name);
 		if (pubID!=null) System.out.print("  pubID = "+pubID);
 		if (sysID!=null) System.out.print("  sysID = "+sysID);
-		CampaignData.mwlog.mainLog("");
+		MWLogger.mainLog("");
 		prefix = "";
 	}
 	
@@ -176,12 +174,12 @@ public class XMLFactionDataParser implements XMLResponder {
 	}
 	
 	public void recordDocEnd() {
-		CampaignData.mwlog.mainLog("");
-		CampaignData.mwlog.mainLog("Faction Parsing finished without error");
+		MWLogger.mainLog("");
+		MWLogger.mainLog("Faction Parsing finished without error");
 	}
 	
 	public void recordElementStart(String name, Hashtable attr) throws ParseException {
-		CampaignData.mwlog.mainLog(prefix+"Element: "+name);
+		MWLogger.mainLog(prefix+"Element: "+name);
 		lastElement = name;
 		/*        if (attr!=null) {
 		 Enumeration e = attr.keys();
@@ -192,7 +190,7 @@ public class XMLFactionDataParser implements XMLResponder {
 		 System.out.print(conj+k+" = "+attr.get(k));
 		 conj = ", ";
 		 }
-		 CampaignData.mwlog.mainLog("");
+		 MWLogger.mainLog("");
 		 }
 		 prefix = prefix+"  ";*/
 	}
@@ -200,7 +198,7 @@ public class XMLFactionDataParser implements XMLResponder {
 	public void recordElementEnd(String name) throws ParseException {
 		if (name.equalsIgnoreCase("FACTION"))
 		{
-			CampaignData.mwlog.mainLog("FACTION READ");
+			MWLogger.mainLog("FACTION READ");
 			SHouse h;
 			// search for an unused ID
 			idcounter++;
@@ -237,13 +235,13 @@ public class XMLFactionDataParser implements XMLResponder {
 	}
 	
 	public void recordPI(String name, String pValue) {
-		CampaignData.mwlog.mainLog(prefix+"*"+name+" PI: "+pValue);
+		MWLogger.mainLog(prefix+"*"+name+" PI: "+pValue);
 	}
 	
 	public void recordCharData(String charData) {
-		CampaignData.mwlog.mainLog(prefix+charData);
+		MWLogger.mainLog(prefix+charData);
 		if (!charData.equalsIgnoreCase(""))
-			CampaignData.mwlog.mainLog(lastElement + " --> " + charData);
+			MWLogger.mainLog(lastElement + " --> " + charData);
 		else
 			lastElement = "";
 		if (lastElement.equalsIgnoreCase("NAME"))
@@ -277,7 +275,7 @@ public class XMLFactionDataParser implements XMLResponder {
 	}
 	
 	public void recordComment(String comment) {
-		CampaignData.mwlog.mainLog(prefix+"*Comment: "+comment);
+		MWLogger.mainLog(prefix+"*Comment: "+comment);
 	}
 	
 	

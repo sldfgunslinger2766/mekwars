@@ -19,9 +19,8 @@ package server.campaign;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import common.util.MWLogger;
 import server.campaign.util.OpponentListHelper;
-
-import common.CampaignData;
 
 /**
  * @author urgru
@@ -50,7 +49,7 @@ public final class ImmunityThread extends Thread {//no extension
 		try {
 			this.wait(time);
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 	}
 	

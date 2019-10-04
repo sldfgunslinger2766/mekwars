@@ -32,10 +32,9 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.zip.Deflater;
 
+import common.util.MWLogger;
 import server.MWChatServer.commands.ICommands;
 import server.campaign.CampaignMain;
-
-import common.CampaignData;
 
 /**
  * Constantly reads from the BufferedReader. Notifies the MWChatServerLocal via
@@ -82,9 +81,9 @@ public class WriterThread extends Thread {
                         this.wait(20 - elapsed);
                     }
                 } catch (InterruptedException e) {
-                    CampaignData.mwlog.errLog(e);
+                    MWLogger.errLog(e);
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
             }
         }
@@ -138,20 +137,20 @@ public class WriterThread extends Thread {
             // then return.
             if (s.length() < 200) {
                 try {
-                    // CampaignData.mwlog.warnLog("Client: " +
+                    // MWLogger.warnLog("Client: " +
                     // _client.getUserId() + " /" + _client.getHost() +
                     // " Size: " + s.length() + " Message: " + s);
-                    CampaignData.mwlog.debugLog("Sending data to " + _host + ":Size:" + s.length());
+                    MWLogger.debugLog("Sending data to " + _host + ":Size:" + s.length());
                     _out.print(s);
                     _out.flush();
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog("Socket error; shutting down client at " + _host);
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog("Socket error; shutting down client at " + _host);
+                    MWLogger.errLog(ex);
                     pleaseStop();
                     try {
                         _socket.close();
                     } catch (Exception se) {
-                        CampaignData.mwlog.errLog(se);
+                        MWLogger.errLog(se);
                     }
                 }
                 return;
@@ -181,7 +180,7 @@ public class WriterThread extends Thread {
                                                       // nonzero since we called
                                                       // finish()
 
-            // CampaignData.mwlog.warnLog("Deflating Message for " +
+            // MWLogger.warnLog("Deflating Message for " +
             // _client.getUserId()+ "/" + _client.getHost() + " from " +
             // s.length() + " to " + n + " Message: " + s);
 
@@ -208,19 +207,19 @@ public class WriterThread extends Thread {
             /*
              * End of NFC prinln, resumption of deflateAndSend.
              */
-            CampaignData.mwlog.debugLog("Sending deflated data to " + _host + ":Size:" + s.length() + ":Deflated Size:" + Integer.toString(n));
+            MWLogger.debugLog("Sending deflated data to " + _host + ":Size:" + s.length() + ":Deflated Size:" + Integer.toString(n));
             _out.flush();
             _socket.getOutputStream().write(_deflatedBytes, 0, n);
             _socket.getOutputStream().flush();
 
         } catch (Exception e) {
-            CampaignData.mwlog.errLog("Socket error; shutting down client");
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog("Socket error; shutting down client");
+            MWLogger.errLog(e);
             pleaseStop();
             try {
                 _socket.close();
             } catch (Exception se) {
-                CampaignData.mwlog.errLog(se);
+                MWLogger.errLog(se);
             }
             // Commenting out for now. letting the socket get closed in the
             // readerthread code. --Torren

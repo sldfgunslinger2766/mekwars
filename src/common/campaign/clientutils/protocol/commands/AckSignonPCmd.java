@@ -2,8 +2,8 @@ package common.campaign.clientutils.protocol.commands;
 
 import java.util.StringTokenizer;
 
-import common.CampaignData;
 import common.campaign.clientutils.protocol.IClient;
+import common.util.MWLogger;
 
 /**
  * AckSignon command
@@ -28,13 +28,13 @@ public class AckSignonPCmd extends CProtCommand {
 			if (client.isDedicated()) {
 				
 				try {Thread.sleep(5000);}
-				catch (Exception ex) {CampaignData.mwlog.errLog(ex);}
+				catch (Exception ex) {MWLogger.errLog(ex);}
 				
 				try {
 					client.startHost(true,false,false);
 				} catch (Exception ex) {
-					CampaignData.mwlog.errLog("AckSignonPCmd: Error attempting to start host on signon.");
-					CampaignData.mwlog.errLog(ex);
+					MWLogger.errLog("AckSignonPCmd: Error attempting to start host on signon.");
+					MWLogger.errLog(ex);
 				}
 			}
 			
@@ -47,8 +47,8 @@ public class AckSignonPCmd extends CProtCommand {
 	// echo command in GUI
 	@Override
 	protected void echo(String input) {
-		CampaignData.mwlog.infoLog("Signon acknowledged");
-		CampaignData.mwlog.errLog("Signon acknowledged");
+		MWLogger.infoLog("Signon acknowledged");
+		MWLogger.errLog("Signon acknowledged");
 	}
 
 }

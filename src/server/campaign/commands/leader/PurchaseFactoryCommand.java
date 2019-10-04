@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.UnitFactory;
 import megamek.common.TechConstants;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.BuildTable;
@@ -29,8 +30,6 @@ import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.SUnitFactory;
 import server.campaign.commands.Command;
-
-import common.UnitFactory;
 
 public class PurchaseFactoryCommand implements Command {
 

@@ -1,11 +1,10 @@
 package server.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.StringJoiner;
 
-import common.CampaignData;
+import common.util.MWLogger;
 import megamek.common.QuirksHandler;
 import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
@@ -36,7 +35,7 @@ public class QuirkHandler
 			} 
 			catch (IOException e) 
 			{
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 		}
 		return handler;
@@ -47,7 +46,7 @@ public class QuirkHandler
 		if(CampaignMain.cm.getBooleanConfig("EnableQuirks"))
 		{
 			unit.getEntity().loadDefaultQuirks();
-			CampaignData.mwlog.debugLog(unit.getModelName() +" "+ unit.getId() +" Quirks: " + returnQuirkList(unit));			
+			MWLogger.debugLog(unit.getModelName() +" "+ unit.getId() +" Quirks: " + returnQuirkList(unit));			
 		}
 	}
 	
@@ -127,7 +126,7 @@ public class QuirkHandler
 		quirksList.add(returnHtmlQuirkList(unit));
 		quirksList.add(returnQuirkList(unit));
 		
-		CampaignData.mwlog.debugLog(unit.getVerboseModelName() + ": " +quirksList.toString());
+		MWLogger.debugLog(unit.getVerboseModelName() + ": " +quirksList.toString());
 		
 		return quirksList.toString(); // if a unit has no quirks, it will return a "!"
 		}

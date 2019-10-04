@@ -20,6 +20,12 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
 
+import common.Continent;
+import common.House;
+import common.Planet;
+import common.Unit;
+import common.UnitFactory;
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.BuildTable;
 import server.campaign.CampaignMain;
@@ -27,13 +33,6 @@ import server.campaign.SHouse;
 import server.campaign.SPlanet;
 import server.campaign.SUnitFactory;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
-import common.Continent;
-import common.House;
-import common.Planet;
-import common.Unit;
-import common.UnitFactory;
 
 public class AdminSavePlanetsToXMLCommand implements Command {
 	int accessLevel = IAuthenticator.ADMIN;
@@ -138,7 +137,7 @@ public class AdminSavePlanetsToXMLCommand implements Command {
             p.close();
             out.close();
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
         CampaignMain.cm.toUser("XML saved!", Username, true);
         CampaignMain.cm.doSendModMail("NOTE", Username + " has saved the universe to XML");

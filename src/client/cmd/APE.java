@@ -20,7 +20,6 @@ package client.cmd;
 import java.util.StringTokenizer;
 
 import client.MWClient;
-
 import common.AdvancedTerrain;
 
 /**

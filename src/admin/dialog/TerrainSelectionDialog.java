@@ -41,7 +41,6 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import client.MWClient;
-
 import common.Terrain;
 import common.util.SpringLayoutHelper;
 //util imports
@@ -143,7 +142,7 @@ public class TerrainSelectionDialog extends JDialog implements ActionListener {
 							}
 							element++;
 						}
-                       // CampaignData.mwlog.errLog("7");
+                       // MWLogger.errLog("7");
 
 						//looped through without finding a starting match. set 0.
 						if (shouldContinue) {

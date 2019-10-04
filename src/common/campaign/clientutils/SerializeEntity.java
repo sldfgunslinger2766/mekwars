@@ -18,6 +18,8 @@ package common.campaign.clientutils;
 
 import java.util.Enumeration;
 
+import common.Unit;
+import common.util.UnitUtils;
 import megamek.common.Aero;
 import megamek.common.BattleArmor;
 import megamek.common.BipedMech;
@@ -30,9 +32,6 @@ import megamek.common.MechWarrior;
 import megamek.common.Protomech;
 import megamek.common.QuadMech;
 import megamek.common.Tank;
-
-import common.Unit;
-import common.util.UnitUtils;
 
 public class SerializeEntity{
 	public static String serializeEntity (Entity e, boolean fullStatus, boolean forceDevastate, boolean useRepairs) {

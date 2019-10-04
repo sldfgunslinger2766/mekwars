@@ -18,12 +18,11 @@ package server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
 import server.MWChatServer.MWChatServer;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
 
 
 /**
@@ -68,12 +67,12 @@ public class KickCommand implements Command {
 		//Use this to kick ghost players from the clients.
 		CampaignMain.cm.getServer().sendRemoveUserToAll(toKick,false);
 		CampaignMain.cm.getServer().sendChat("AM:"+Username + " kicked " + toKick);
-		CampaignData.mwlog.modLog(Username + " kicked " + toKick);
+		MWLogger.modLog(Username + " kicked " + toKick);
 		
 		/*try {
 			Thread.sleep(100);//Why do we sleep here? Anyone?
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		} */       
 		
 		try {
@@ -84,7 +83,7 @@ public class KickCommand implements Command {
 				CampaignMain.cm.getServer().killClient(toKick,Username);
 			
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
        
 

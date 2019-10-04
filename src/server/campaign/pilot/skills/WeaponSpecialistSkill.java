@@ -23,17 +23,14 @@ package server.campaign.pilot.skills;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import megamek.common.Entity;
-import megamek.common.Mounted;
-import megamek.common.WeaponType;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.pilot.SPilot;
-
-import common.CampaignData;
 import common.MegaMekPilotOption;
 import common.Unit;
 import common.campaign.pilot.Pilot;
+import megamek.common.Entity;
+import megamek.common.Mounted;
+import server.campaign.CampaignMain;
+import server.campaign.SHouse;
+import server.campaign.pilot.SPilot;
 
 
 /**
@@ -99,7 +96,7 @@ public class WeaponSpecialistSkill extends SPilotSkill {
         		effectedWeaponBV += weapon.getType().getBV(unit);
             }
         }
-        //CampaignData.mwlog.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
+        //MWLogger.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
         //		" sumWeaponBV=" + sumWeaponBV);
         return (int) (unit.calculateBattleValue(false, true) *  (effectedWeaponBV /sumWeaponBV) * (bvSkillDelta - 1));
     }

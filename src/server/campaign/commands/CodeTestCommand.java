@@ -78,7 +78,7 @@ public class CodeTestCommand implements Command {
 //				}
 //				
 //			} catch (SchedulerException e) {
-//				CampaignData.mwlog.errLog(e);
+//				MWLogger.errLog(e);
 //			}
 			break;
 		}

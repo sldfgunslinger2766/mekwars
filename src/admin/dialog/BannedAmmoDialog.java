@@ -33,9 +33,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 
 import client.MWClient;
-
-import common.CampaignData;
 import common.House;
+import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 
 public final class BannedAmmoDialog implements ActionListener{
@@ -187,7 +186,7 @@ public final class BannedAmmoDialog implements ActionListener{
                     return true;
                 return false;
             }catch(Exception ex){
-                CampaignData.mwlog.errLog("Unable to find ammo "+ammo);
+                MWLogger.errLog("Unable to find ammo "+ammo);
                 return false;
             }
         }
@@ -197,7 +196,7 @@ public final class BannedAmmoDialog implements ActionListener{
                 return true;
             return false;
         }catch(Exception ex){
-            CampaignData.mwlog.errLog("Unable to find ammo "+ammo);
+            MWLogger.errLog("Unable to find ammo "+ammo);
             return false;
         }
 

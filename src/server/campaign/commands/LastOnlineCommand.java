@@ -20,11 +20,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import common.House;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SmallPlayer;
-
-import common.House;
 
 public class LastOnlineCommand implements Command {
 	

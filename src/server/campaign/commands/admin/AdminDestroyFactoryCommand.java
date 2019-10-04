@@ -18,13 +18,12 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import common.UnitFactory;
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SPlanet;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
-import common.UnitFactory;
 
 public class AdminDestroyFactoryCommand implements Command {
 	
@@ -75,11 +74,11 @@ public class AdminDestroyFactoryCommand implements Command {
 			
 
 			p.updated();
-			//server.CampaignData.mwlog.modLog(Username + "  removed " + factoryname + " from " + p.getName() + ".");
+			//server.MWLogger.modLog(Username + "  removed " + factoryname + " from " + p.getName() + ".");
 			CampaignMain.cm.toUser(factoryname + " removed from " + p.getName() + ".",Username,true);
 			CampaignMain.cm.doSendModMail("NOTE",Username + "  removed " + factoryname + " from " + p.getName() + ".");
 		} catch (Exception ex){
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}//end catch
 		
 	}

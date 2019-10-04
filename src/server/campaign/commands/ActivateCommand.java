@@ -16,6 +16,10 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.Unit;
+import common.campaign.operations.Operation;
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import megamek.common.Mech;
 import server.MWServ;
 import server.campaign.CampaignMain;
@@ -26,10 +30,6 @@ import server.campaign.operations.OperationManager;
 import server.campaign.util.scheduler.MWScheduler;
 import server.util.SPlayerToJSON;
 import server.util.StringUtil;
-import common.CampaignData;
-import common.Unit;
-import common.campaign.operations.Operation;
-import common.util.UnitUtils;
 
 public class ActivateCommand implements Command {
 
@@ -71,15 +71,15 @@ public class ActivateCommand implements Command {
         // Put it into a try block. One user was causing FormatExceptions
         try {
             if (!(MWServ.SERVER_VERSION).substring(0, server.MWServ.SERVER_VERSION.lastIndexOf(".")).equals(p.getPlayerClientVersion().substring(0, p.getPlayerClientVersion().lastIndexOf(".")))) {
-                // server.CampaignData.mwlog.modLog(Username + " failed to activate. Was using version " + p.getPlayerClientVersion()+" Server Version: "+
+                // server.MWLogger.modLog(Username + " failed to activate. Was using version " + p.getPlayerClientVersion()+" Server Version: "+
                 // MWServ.SERVER_VERSION);
                 CampaignMain.cm.doSendModMail("NOTE", Username + " failed to activate. Was using version " + p.getPlayerClientVersion() + " Server Version: " + MWServ.SERVER_VERSION);
                 CampaignMain.cm.toUser("AM:You may not go active with an incompatible client version! Please switch to version " + MWServ.SERVER_VERSION + "!", Username, true);
                 return;
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Error activating player. User reported client verson: " + p.getPlayerClientVersion() + " --- Stack Trace Follows.");
-            // CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error activating player. User reported client verson: " + p.getPlayerClientVersion() + " --- Stack Trace Follows.");
+            // MWLogger.errLog(ex);
             CampaignMain.cm.toUser("AM:Your clients version was not reported to the server. <a href=\"MEKWARS/c setclientversion#" + Username + "#" + MWServ.SERVER_VERSION + "\">Click here to update the server.</a> then try to activate again.", Username);
             return;
         }
@@ -539,7 +539,7 @@ class CheckAttackThread extends Thread {
             // ran once. kill the thread by returning.
             return;
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
     }// end run()
 }// end CheckAttackThread

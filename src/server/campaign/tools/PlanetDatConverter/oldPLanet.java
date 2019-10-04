@@ -476,11 +476,11 @@ public class oldPLanet implements Comparable<Object>, MutableSerializable {
         setHomeWorld(in.readBoolean("homeworld"));
         setOriginalOwner(in.readLine("originalowner"));
         size = in.readInt("AdvancedTerrain.size");
-        // CampaignData.mwlog.errLog("AdvancedTerrain.size");
+        // MWLogger.errLog("AdvancedTerrain.size");
         for (int i = 0; i < size; ++i) {
             AdvancedTerrain aTerrain = new AdvancedTerrain();
             int id = in.readInt("AdvancedTerrainId");
-            // CampaignData.mwlog.errLog("AdvancedTerrainId "+id);
+            // MWLogger.errLog("AdvancedTerrainId "+id);
             aTerrain.binIn(in);
             getAdvancedTerrain().put(new Integer(id), aTerrain);
         }

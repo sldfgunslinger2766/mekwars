@@ -36,7 +36,6 @@ import javax.swing.event.ListSelectionListener;
 
 import client.MWClient;
 import client.campaign.CCampaign;
-
 import common.BMEquipment;
 import common.util.SpringLayoutHelper;
 

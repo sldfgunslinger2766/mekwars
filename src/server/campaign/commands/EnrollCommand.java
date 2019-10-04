@@ -20,14 +20,13 @@ package server.campaign.commands;
 import java.net.InetAddress;
 import java.util.StringTokenizer;
 
+import common.House;
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.NewbieHouse;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
-
-import common.CampaignData;
-import common.House;
 
 public class EnrollCommand implements Command {
 
@@ -163,8 +162,8 @@ public class EnrollCommand implements Command {
 
 		//tell the mods and add to the IP log
 		InetAddress ip = CampaignMain.cm.getServer().getIP(Username);
-		//CampaignData.mwlog.modLog(Username + " enrolled in the campaign (IP: " + ip + ").");
-		CampaignData.mwlog.ipLog("ENROLL: " + Username + " IP: " + ip);
+		//MWLogger.modLog(Username + " enrolled in the campaign (IP: " + ip + ").");
+		MWLogger.ipLog("ENROLL: " + Username + " IP: " + ip);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " enrolled in the campaign (IP: " + ip + ").");
 
 	}//end process()

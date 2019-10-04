@@ -15,14 +15,13 @@
 
 package server.campaign.pilot.skills;
 
+import common.MegaMekPilotOption;
+import common.Unit;
+import common.campaign.pilot.Pilot;
 import megamek.common.Entity;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.pilot.SPilot;
-
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.Pilot;
 
 /**
  * VDNI

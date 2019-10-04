@@ -23,12 +23,11 @@ package server.campaign.commands;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
+import common.util.TokenReader;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
-
-import common.CampaignData;
-import common.util.TokenReader;
 
 /**
  * @author Torren (Jason Tighe) Send a factions config to the player. Optional
@@ -111,7 +110,7 @@ public class GetFactionConfigsCommand implements Command {
             CampaignMain.cm.toUser(result.toString(), Username, false);
         } catch (Exception ex) {
             CampaignMain.cm.toUser("PL|FC|DONE#DONE", Username, false);
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
     }
 }// end GetFactionConfigsCommand 

@@ -18,13 +18,12 @@ package server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import common.Continent;
+import common.util.MWLogger;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SPlanet;
 import server.campaign.commands.Command;
-
-import common.CampaignData;
-import common.Continent;
 
 
 public class AdminCreateTerrainCommand implements Command {
@@ -58,13 +57,13 @@ public class AdminCreateTerrainCommand implements Command {
 			p.getEnvironments().add(cont);
 			p.updated();
 			
-			//server.CampaignData.mwlog.modLog(Username + " added terrain to " + p.getName() + " (" + terraintype + ").");
+			//server.MWLogger.modLog(Username + " added terrain to " + p.getName() + " (" + terraintype + ").");
 			CampaignMain.cm.toUser("Terrain added to " + p.getName() + "(" + terraintype + "-" + advTerrainType + ").",Username,true);
 			CampaignMain.cm.doSendModMail("NOTE",Username + " added terrain to planet " + p.getName() + "(" + terraintype + "-" + advTerrainType + ").");
 		}
 		
 		catch (Exception ex){
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 	}
 }

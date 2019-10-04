@@ -20,14 +20,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import server.campaign.CampaignMain;
-import server.campaign.data.TimeUpdatePlanet;
-import server.dataProvider.ServerCommand;
-
 import common.CampaignData;
 import common.House;
 import common.Planet;
 import common.util.BinWriter;
+import server.campaign.CampaignMain;
+import server.campaign.data.TimeUpdatePlanet;
+import server.dataProvider.ServerCommand;
 
 /**
  * Request for data diff.

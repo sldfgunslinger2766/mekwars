@@ -22,8 +22,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import client.MWClient;
-
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
@@ -50,7 +49,7 @@ public class TL extends Command {
             out.write("\n");
             out.close();
         } catch (IOException e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
         }
 	}
 }

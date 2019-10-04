@@ -23,7 +23,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import client.MWClient;
-
 import common.VerticalLayout;
 import common.flags.PlayerFlags;
 

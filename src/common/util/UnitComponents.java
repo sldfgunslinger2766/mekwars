@@ -28,8 +28,6 @@ import megamek.common.EquipmentType;
 import megamek.common.Mounted;
 import megamek.common.TechConstants;
 
-import common.CampaignData;
-
 public class UnitComponents{
 
     Hashtable<String, Integer> components = new Hashtable<String, Integer>();
@@ -122,7 +120,7 @@ public class UnitComponents{
                 components.put(key, value);
             }
         }catch(Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
     }
@@ -135,7 +133,7 @@ public class UnitComponents{
                 components.put(st.nextToken(), Integer.parseInt(st.nextToken()));
             }
         }catch(Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
 
     }

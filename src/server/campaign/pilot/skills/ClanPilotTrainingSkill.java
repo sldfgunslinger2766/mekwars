@@ -16,10 +16,9 @@
 
 package server.campaign.pilot.skills;
 
-import megamek.common.Entity;
-
 import common.MegaMekPilotOption;
 import common.campaign.pilot.Pilot;
+import megamek.common.Entity;
 
 /**
  * @author Helge Richter

@@ -55,13 +55,6 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import megamek.client.ui.swing.MechTileset;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
-import megamek.common.Entity;
-import megamek.common.EntityMovementType;
-import megamek.common.Infantry;
-import megamek.common.Mech;
-import megamek.common.options.Quirks;
 import client.MWClient;
 import client.campaign.CArmy;
 import client.campaign.CBMUnit;
@@ -75,14 +68,18 @@ import client.gui.dialog.PromotePilotDialog;
 //@Salient
 import client.gui.dialog.SolFreeBuildDialog;
 //import client.gui.dialog.TableViewerDialog; //for testing/debug
-
 import common.Army;
-import common.CampaignData;
 import common.Unit;
 import common.campaign.pilot.Pilot;
+import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 import common.util.TokenReader;
 import common.util.UnitUtils;
+import megamek.client.ui.swing.MechTileset;
+import megamek.client.ui.swing.unitDisplay.UnitDisplay;
+import megamek.common.Entity;
+import megamek.common.Infantry;
+import megamek.common.Mech;
 
 /**
  * Headquarters Panel
@@ -3190,7 +3187,7 @@ public class CHQPanel extends JPanel {
                 try {
                     mt.loadFromFile("mechset.txt");
                 } catch (IOException ex) {
-                    CampaignData.mwlog.errLog("Unable to read data/images/units/mechset.txt");
+                    MWLogger.errLog("Unable to read data/images/units/mechset.txt");
                 }
             }
 

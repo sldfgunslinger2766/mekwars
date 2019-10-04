@@ -24,14 +24,13 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import common.House;
+import common.Unit;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SmallPlayer;
 import server.util.StringUtil;
-
-import common.CampaignData;
-import common.House;
-import common.Unit;
 
 
 public class Statistics {
@@ -137,8 +136,8 @@ public class Statistics {
 			        result.append("</tr>");
 			        rank++;
 		        }catch(Exception ex){
-		        	CampaignData.mwlog.errLog("Error while Referencing player: "+p.getName());
-		        	CampaignData.mwlog.errLog(ex);
+		        	MWLogger.errLog("Error while Referencing player: "+p.getName());
+		        	MWLogger.errLog(ex);
 		        }
 		    }
 		    result.append("</table>");
@@ -154,7 +153,7 @@ public class Statistics {
 	        out.close();
         	Statistics.doEXPRanking();
 	    } catch (Exception ex) {
-	    	CampaignData.mwlog.errLog(ex);
+	    	MWLogger.errLog(ex);
 	    }
 	}
 

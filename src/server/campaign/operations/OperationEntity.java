@@ -19,14 +19,13 @@ package server.campaign.operations;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.Unit;
+import common.util.MWLogger;
 import megamek.common.IEntityRemovalConditions;
 import megamek.common.Mech;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-
-import common.CampaignData;
-import common.Unit;
 
 
 public class OperationEntity {
@@ -153,8 +152,8 @@ public class OperationEntity {
     			this.setOffBoardRange(Integer.parseInt(ST.nextToken()));
         }
         catch(Exception ex){
-            CampaignData.mwlog.errLog("Error while parsing the following String: "+s);
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Error while parsing the following String: "+s);
+            MWLogger.errLog(ex);
         }
 	}//end OperationEntity()
 	

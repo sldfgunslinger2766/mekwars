@@ -19,11 +19,10 @@ package client.cmd;
 
 import java.util.StringTokenizer;
 
-import megamek.client.ui.swing.UnitLoadingDialog;
 import client.MWClient;
 import client.gui.dialog.RepodSelectorDialog;
-
-import common.CampaignData;
+import common.util.MWLogger;
+import megamek.client.ui.swing.UnitLoadingDialog;
 
 /**
  * @@author jtighe
@@ -64,8 +63,8 @@ public class RUD extends Command {
             }
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Unable to run Repod Dialog");
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Unable to run Repod Dialog");
         }
     }
 }

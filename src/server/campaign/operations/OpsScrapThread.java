@@ -18,12 +18,11 @@ package server.campaign.operations;
 
 import java.util.TreeMap;
 
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.util.StringUtil;
-
-import common.CampaignData;
 
 public class OpsScrapThread extends Thread {
 
@@ -65,7 +64,7 @@ public class OpsScrapThread extends Thread {
 		TreeMap<Integer, Integer> toReplace = new TreeMap<Integer, Integer>();
 		for (Integer currID : salvagedUnits.keySet()) {
 			int currScrapValue = salvagedUnits.get(currID).intValue();
-			// CampaignData.mwlog.errLog("currID: "+currID+" maxTotalPayment: "+maxTotalPayment+" currScrapValue: "+currScrapValue);
+			// MWLogger.errLog("currID: "+currID+" maxTotalPayment: "+maxTotalPayment+" currScrapValue: "+currScrapValue);
 			if (currScrapValue > maxTotalPayment) {
 				toReplace.put(currID, maxTotalPayment);
 			}
@@ -197,7 +196,7 @@ public class OpsScrapThread extends Thread {
 		try {
 			this.wait(waitTime);
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 
 		/*

@@ -19,6 +19,8 @@ package common;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
+
 public class SubFaction{
 	
 	private static Properties defaultSettings = new Properties();
@@ -64,7 +66,7 @@ public class SubFaction{
 			if ( SubFaction.getDefault().containsKey(key) )
 				return SubFaction.getDefault().getProperty(key);
 			
-			CampaignData.mwlog.errLog("Unable to find subfaction config: "+key);
+			MWLogger.errLog("Unable to find subfaction config: "+key);
 			return "-1";
 		}
 		

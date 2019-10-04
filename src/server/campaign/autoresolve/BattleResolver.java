@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import client.MWClient;
+import common.Unit;
+import common.campaign.operations.Operation;
 import megamek.common.Coords;
 import megamek.common.Entity;
 import megamek.common.Game;
@@ -23,10 +26,6 @@ import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.autoresolve.VirtualUnit.MovementMode;
 import server.campaign.operations.ShortOperation;
-import client.MWClient;
-
-import common.Unit;
-import common.campaign.operations.Operation;
 
 public class BattleResolver {
 	

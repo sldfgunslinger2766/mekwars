@@ -55,8 +55,8 @@ import admin.dialog.serverConfigDialogs.DisconnectionPanel;
 import admin.dialog.serverConfigDialogs.DiscordAndDjangoPanel;
 import admin.dialog.serverConfigDialogs.FactionPanel;
 import admin.dialog.serverConfigDialogs.FactoryPurchasePanel;
-import admin.dialog.serverConfigDialogs.InfluencePanel;
 import admin.dialog.serverConfigDialogs.FreebuildPanel;
+import admin.dialog.serverConfigDialogs.InfluencePanel;
 import admin.dialog.serverConfigDialogs.LinksPanel;
 import admin.dialog.serverConfigDialogs.LossCompensationPanel;
 import admin.dialog.serverConfigDialogs.MiniCampaignPanel;
@@ -82,7 +82,7 @@ import admin.dialog.serverConfigDialogs.UnitsCardPanel;
 import admin.dialog.serverConfigDialogs.UnitsPanel;
 import admin.dialog.serverConfigDialogs.VotingPanel;
 import client.MWClient;
-import common.CampaignData;
+import common.util.MWLogger;
 
 public final class ServerConfigurationDialog implements ActionListener {
 
@@ -314,7 +314,7 @@ public final class ServerConfigurationDialog implements ActionListener {
 
                 key = checkBox.getName();
                 if (key == null) {
-                    CampaignData.mwlog.errLog("Null Checkbox: " + checkBox.getToolTipText());
+                    MWLogger.errLog("Null Checkbox: " + checkBox.getToolTipText());
                     continue;
                 }
                 checkBox.setSelected(Boolean.parseBoolean(mwclient.getserverConfigs(key)));
@@ -324,7 +324,7 @@ public final class ServerConfigurationDialog implements ActionListener {
 
                 key = radioButton.getName();
                 if (key == null) {
-                    CampaignData.mwlog.errLog("Null RadioButton: " + radioButton.getToolTipText());
+                    MWLogger.errLog("Null RadioButton: " + radioButton.getToolTipText());
                     continue;
                 }
                 radioButton.setSelected(Boolean.parseBoolean(mwclient.getserverConfigs(key)));
@@ -334,7 +334,7 @@ public final class ServerConfigurationDialog implements ActionListener {
 
             	key = picker.getName();
             	if (key == null) {
-            		CampaignData.mwlog.errLog("Null JDatePickerImpl: " + picker.getToolTipText());
+            		MWLogger.errLog("Null JDatePickerImpl: " + picker.getToolTipText());
             		continue;
             	}
             	String s = mwclient.getserverConfigs(key);

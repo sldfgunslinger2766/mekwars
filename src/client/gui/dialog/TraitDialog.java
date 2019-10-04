@@ -43,9 +43,9 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import client.MWClient;
-import common.CampaignData;
 import common.House;
 import common.campaign.pilot.skills.PilotSkill;
+import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 
 public final class TraitDialog implements ActionListener, KeyListener{
@@ -390,13 +390,13 @@ public final class TraitDialog implements ActionListener, KeyListener{
 	        for ( int i =0; i < tempArray.length; i++)
 	            traitComboBox.addItem(tempArray[i]);
 	    }catch (Exception ex){
-	        CampaignData.mwlog.errLog("Unable to load faction "+faction);
-	        CampaignData.mwlog.errLog(ex);
+	        MWLogger.errLog("Unable to load faction "+faction);
+	        MWLogger.errLog(ex);
 	    } finally {
 	    	try {
 				dis.close();
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 	    }
 	    if ( traitComboBox.getItemCount() > 0 )
@@ -482,13 +482,13 @@ public final class TraitDialog implements ActionListener, KeyListener{
 	                
 	        }
 	    }catch (Exception ex){
-	        CampaignData.mwlog.errLog("populate Traits error");
-	        CampaignData.mwlog.errLog(ex);
+	        MWLogger.errLog("populate Traits error");
+	        MWLogger.errLog(ex);
         } finally {
         	try {
 				dis.close();
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
         }
 	}

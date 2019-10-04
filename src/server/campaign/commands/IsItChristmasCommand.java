@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
-import server.campaign.commands.Command;
 import server.campaign.util.ChristmasHandler;
 
 public class IsItChristmasCommand implements Command {

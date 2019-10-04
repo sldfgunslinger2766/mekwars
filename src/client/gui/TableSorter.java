@@ -29,9 +29,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
 import client.MWClient;
-
-import common.CampaignData;
-// Imports for picking up mouse events from the JTable.
+import common.util.MWLogger;
 
 public class TableSorter extends TableMap {
 
@@ -225,7 +223,7 @@ public class TableSorter extends TableMap {
 
     public void checkModel() {
         if (indexes.length != model.getRowCount()) {
-            CampaignData.mwlog.errLog("Sorter not informed of a change in model.");
+            MWLogger.errLog("Sorter not informed of a change in model.");
         }
     }
 

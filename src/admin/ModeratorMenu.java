@@ -24,13 +24,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import megamek.client.ui.swing.UnitLoadingDialog;
 import client.MWClient;
+import client.gui.dialog.NewUnitViewerDialog;
 import client.gui.dialog.PlanetNameDialog;
 import client.gui.dialog.PlayerNameDialog;
-import client.gui.dialog.NewUnitViewerDialog;
-
 import common.UnitFactory;
+import megamek.client.ui.swing.UnitLoadingDialog;
 
 public class ModeratorMenu extends JMenu {
 

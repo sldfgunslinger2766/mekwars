@@ -41,7 +41,7 @@ public class ModLogCommand implements Command {
 		
 		String toLog = command.nextToken();
 		
-		//server.CampaignData.mwlog.modLog("From " + Username + ":" + toLog);
+		//server.MWLogger.modLog("From " + Username + ":" + toLog);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " made a modlog entry: " + toLog);
 		CampaignMain.cm.toUser("Comment added to modlog: " + toLog,Username,true);
 	}

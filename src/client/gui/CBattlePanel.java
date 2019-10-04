@@ -39,7 +39,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import client.MWClient;
-
 import common.MMGame;
 
 /**

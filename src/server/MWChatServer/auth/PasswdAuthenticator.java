@@ -34,12 +34,11 @@ package server.MWChatServer.auth;
 
 import java.io.IOException;
 
+import common.util.MWLogger;
 import server.MWChatServer.MWChatClient;
 import server.MWChatServer.MWChatServer;
 import server.util.MWPasswd;
 import server.util.MWPasswdRecord;
-
-import common.CampaignData;
 
 /**
  * Authenitcator that reads from a password file.<p>
@@ -64,7 +63,7 @@ public class PasswdAuthenticator extends NullAuthenticator {
             MWPasswdRecord record = MWPasswd.getRecord(userId, password);
             
             if (record == null) {
-            	CampaignData.mwlog.debugLog("record is null for: "+userId);
+            	MWLogger.debugLog("record is null for: "+userId);
             	if (_allowGuests) {
             		Auth auth = super.authenticate(client, password);
             		if (_storeGuests) {
@@ -81,7 +80,7 @@ public class PasswdAuthenticator extends NullAuthenticator {
             
         }
         catch (IOException e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
             throw new Exception(userId);
         }
     }

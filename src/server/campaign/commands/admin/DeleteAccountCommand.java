@@ -75,7 +75,7 @@ public class DeleteAccountCommand implements Command {
 		CampaignMain.cm.toUser("You deleted " + p.getName() + "'s account.",Username,true);
 		CampaignMain.cm.toUser(Username + " deleted your account.",p.getName(),true);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " deleted " + p.getName() + "'s account.");
-		//server.CampaignData.mwlog.modLog(Username + " deleted " + p.getName() + "'s account.");
+		//server.MWLogger.modLog(Username + " deleted " + p.getName() + "'s account.");
 		CampaignMain.cm.doLogoutPlayer(p.getName(),false);  //Baruk Khazad! 20151110
 		if (CampaignMain.cm.getServer().getClient(MWChatServer.clientKey(p.getName())) != null)
 			CampaignMain.cm.getServer().killClient(p.getName(),Username);

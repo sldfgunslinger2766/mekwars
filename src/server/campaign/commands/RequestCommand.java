@@ -21,6 +21,8 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.Unit;
+import common.util.MWLogger;
 import server.campaign.BuildTable;
 import server.campaign.CampaignMain;
 import server.campaign.NewbieHouse;
@@ -30,9 +32,6 @@ import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.SUnitFactory;
 import server.campaign.pilot.SPilot;
-
-import common.CampaignData;
-import common.Unit;
 
 public class RequestCommand implements Command {
 
@@ -435,7 +434,7 @@ public class RequestCommand implements Command {
 
             result = "AM:You've been granted the following " + results.toString() + ". (-";
             result += CampaignMain.cm.moneyOrFluMessage(true, false, mechCbills) + " / -" + CampaignMain.cm.moneyOrFluMessage(false, true, mechInfluence) + ")";
-            CampaignData.mwlog.mainLog(p.getName() + " bought the following " + results.toString() + " from " + factory.getName() + " on " + planet.getName());
+            MWLogger.mainLog(p.getName() + " bought the following " + results.toString() + " from " + factory.getName() + " on " + planet.getName());
             CampaignMain.cm.toUser(result, Username, true);
             CampaignMain.cm.doSendHouseMail(playerHouse, "NOTE", p.getName() + " bought the following " + results.toString() + " from " + factory.getName() + " on " + planet.getName() + "!");
 

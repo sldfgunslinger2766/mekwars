@@ -20,9 +20,9 @@ package dedicatedhost.cmd;
 import java.io.File;
 import java.util.StringTokenizer;
 
+import dedicatedhost.MWDedHost;
 import megamek.common.options.GameOptions;
 import megamek.common.options.Option;
-import dedicatedhost.MWDedHost;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)

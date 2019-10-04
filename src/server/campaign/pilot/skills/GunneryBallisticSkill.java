@@ -20,17 +20,15 @@
  */
 package server.campaign.pilot.skills;
 
+import common.MegaMekPilotOption;
+import common.Unit;
+import common.campaign.pilot.Pilot;
 import megamek.common.Entity;
 import megamek.common.Mounted;
 import megamek.common.WeaponType;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.pilot.SPilot;
-
-import common.CampaignData;
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.Pilot;
 
 /**
  * NOTE: This is a unofficial rule. Pilot gets a -1 to-hit bonus on all
@@ -93,7 +91,7 @@ public class GunneryBallisticSkill extends SPilotSkill {
         		effectedWeaponBV += weapon.getType().getBV(unit);
             }
         }
-        //CampaignData.mwlog.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
+        //MWLogger.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
         //		" sumWeaponBV=" + sumWeaponBV);
         return (int) (unit.calculateBattleValue(false, true) *  (effectedWeaponBV /sumWeaponBV) * (bvSkillDelta - 1));
     }

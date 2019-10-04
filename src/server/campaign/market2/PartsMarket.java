@@ -27,11 +27,11 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+import common.BMEquipment;
+import common.Equipment;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
-import common.BMEquipment;
-import common.CampaignData;
-import common.Equipment;
 
 public class PartsMarket {
 	
@@ -114,7 +114,7 @@ public class PartsMarket {
 				eq.setAmount(Math.abs(eq.getAmount()));
 			}catch (Exception ex) {
 
-				CampaignData.mwlog.errLog(ex);
+				MWLogger.errLog(ex);
 			}
 			eq.setAmount(Math.max(eq.getAmount(), masterEq.getMinProduction()));
 			eq.getEquipmentName();
@@ -162,7 +162,7 @@ public class PartsMarket {
 				
 			}
 		}catch(Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 		
 		return result.toString();
@@ -193,9 +193,9 @@ public class PartsMarket {
 			}
 			ps.close();
 		} catch (FileNotFoundException fe) {
-			CampaignData.mwlog.errLog("partsblackmarket.dat not found");
+			MWLogger.errLog("partsblackmarket.dat not found");
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}   
 
 	}
@@ -230,13 +230,13 @@ public class PartsMarket {
 			}
 			
 		}catch (Exception ex){
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		} finally {
 			try {
 				if (dis!=null)
 				dis.close();
 			} catch (IOException e) {
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 		}
 	}

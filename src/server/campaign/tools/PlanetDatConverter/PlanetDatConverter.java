@@ -10,18 +10,18 @@ import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import server.campaign.BuildTable;
-import server.campaign.NewbieHouse;
-import server.campaign.SHouse;
-import server.campaign.mercenaries.MercHouse;
-import server.campaign.util.SerializedMessage;
-
 import common.CampaignData;
 import common.Continent;
 import common.House;
 import common.Planet;
 import common.UnitFactory;
+import common.util.MWLogger;
 import common.util.MekwarsFileReader;
+import server.campaign.BuildTable;
+import server.campaign.NewbieHouse;
+import server.campaign.SHouse;
+import server.campaign.mercenaries.MercHouse;
+import server.campaign.util.SerializedMessage;
 
 public class PlanetDatConverter {
 
@@ -44,8 +44,8 @@ public class PlanetDatConverter {
 
 	        // Check for new faction save location
 	        if (!factionFile.exists() || factionFile.listFiles().length < 1) {
-	            CampaignData.mwlog.errLog("Unable to find and load faction data");
-	            CampaignData.mwlog.errLog("Going to create from XML");
+	            MWLogger.errLog("Unable to find and load faction data");
+	            MWLogger.errLog("Going to create from XML");
 	            return;
 	        }
 
@@ -76,7 +76,7 @@ public class PlanetDatConverter {
 	                addHouse(h);
 	                dis.close();
 	            } catch (Exception ex) {
-	                CampaignData.mwlog.errLog("Unable to load " + faction.getName());
+	                MWLogger.errLog("Unable to load " + faction.getName());
 	            }
 	        }
 
@@ -104,7 +104,7 @@ public class PlanetDatConverter {
 	        FilenameFilter filter = new datFileFilter();
 	        
 	        if(!planetFile.exists()) {
-	        	CampaignData.mwlog.errLog("Unable to open ./campaign/planets");
+	        	MWLogger.errLog("Unable to open ./campaign/planets");
                 return;
 	        }
             // dir and files exist. read them.
@@ -124,8 +124,8 @@ public class PlanetDatConverter {
                     addPlanet(p);
                     dis.close();
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog("Unable to load " + planet.getName());
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog("Unable to load " + planet.getName());
+                    MWLogger.errLog(ex);
                 }
             }
         }
@@ -133,7 +133,7 @@ public class PlanetDatConverter {
 	    public static void loadPlanetOpFlags() {
 	        File configFile = new File("./campaign/planetOpFlags.dat");
 	        if (!configFile.exists()) {
-	            CampaignData.mwlog.errLog("No planetOpFlags.dat. Skipping.");
+	            MWLogger.errLog("No planetOpFlags.dat. Skipping.");
 	            return;
 	        }
 
@@ -143,7 +143,7 @@ public class PlanetDatConverter {
 
 	            String nextLine = dis.readLine();
 	            if (nextLine == null) {
-	                CampaignData.mwlog.errLog("Timestamp-only planetOpFlags.dat. Skipping.");
+	                MWLogger.errLog("Timestamp-only planetOpFlags.dat. Skipping.");
 	                return;
 	            }
 
@@ -154,8 +154,8 @@ public class PlanetDatConverter {
 
 	            dis.close();
 	        } catch (Exception ex) {
-	            CampaignData.mwlog.errLog("Error loading Planet Op Flags.");
-	            CampaignData.mwlog.errLog(ex);
+	            MWLogger.errLog("Error loading Planet Op Flags.");
+	            MWLogger.errLog(ex);
 	        }
 	    }
 
@@ -246,8 +246,8 @@ public class PlanetDatConverter {
 	                        ps.close();
 	                        out.close();
 	                    } catch (Exception ex) {
-	                        CampaignData.mwlog.errLog("Unable to save planet: " + saveName);
-	                        CampaignData.mwlog.errLog(ex);
+	                        MWLogger.errLog("Unable to save planet: " + saveName);
+	                        MWLogger.errLog(ex);
 	                    }
 	                }
 	            }

@@ -27,8 +27,8 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import server.MWServ;
 import client.MWClient;
+import server.MWServ;
 
 /**
  *

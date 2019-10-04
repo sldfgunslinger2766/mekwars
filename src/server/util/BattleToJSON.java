@@ -8,9 +8,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.Date;
 import java.util.TreeMap;
 
-import common.CampaignData;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
-import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.operations.OperationEntity;
@@ -29,7 +28,7 @@ public class BattleToJSON
     	//I could just randomly pick a winner...
     	if(gameEndedInDraw)
     	{
-    		CampaignData.mwlog.errLog("BattleToJSON - Draw games are not saved to JSON");
+    		MWLogger.errLog("BattleToJSON - Draw games are not saved to JSON");
     		return;
     	}
     	
@@ -59,7 +58,7 @@ public class BattleToJSON
              * Not sure if it was ever resolved. Leaving the check here just in case.
              */
             if (owner == null) {
-                CampaignData.mwlog.errLog("Null _owner_ while processing post-game salvage for " 
+                MWLogger.errLog("Null _owner_ while processing post-game salvage for " 
                 		+ " Attack #" + theOp.getShortID() + ". Needed to find Player: " + ownerName + " Unit #" 
                 		+ currOpEnt.getID() + "/Type: " + currOpEnt.getType());
                 continue;
@@ -92,7 +91,7 @@ public class BattleToJSON
              * Not sure if it was ever resolved. Leaving the check here just in case.
              */
             if (owner == null) {
-                CampaignData.mwlog.errLog("Null _owner_ while processing BattleToJson " 
+                MWLogger.errLog("Null _owner_ while processing BattleToJson " 
                 		+ " Attack #" + theOp.getShortID() + ". Needed to find Player: " + ownerName + " Unit #" 
                 		+ currOpEnt.getID() + "/Type: " + currOpEnt.getType());
                 continue;
@@ -128,7 +127,7 @@ public class BattleToJSON
 		{
 			if(pathCheck.mkdirs() == false)
 			{
-				CampaignData.mwlog.errLog("error in BattleToJSON, failed to create directories");
+				MWLogger.errLog("error in BattleToJSON, failed to create directories");
 				return;
 			}			
 		}
@@ -141,12 +140,12 @@ public class BattleToJSON
 			         StandardOpenOption.CREATE,
 			         StandardOpenOption.TRUNCATE_EXISTING);
 						
-			CampaignData.mwlog.debugLog("SPlayer to json filewrite completed successfully");
+			MWLogger.debugLog("SPlayer to json filewrite completed successfully");
 		} 
 		catch (IOException e) 
 		{
-			CampaignData.mwlog.debugLog(e);
-			CampaignData.mwlog.errLog(e);
+			MWLogger.debugLog(e);
+			MWLogger.errLog(e);
 		}
 		
 		jsonString = ""; //clear for next use

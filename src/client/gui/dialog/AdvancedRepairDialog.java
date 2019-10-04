@@ -50,6 +50,13 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import client.MWClient;
+import client.campaign.CUnit;
+import common.House;
+import common.campaign.pilot.Pilot;
+import common.campaign.pilot.skills.PilotSkill;
+import common.util.SpringLayoutHelper;
+import common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;
@@ -60,13 +67,6 @@ import megamek.common.Mounted;
 import megamek.common.Protomech;
 import megamek.common.Tank;
 import megamek.common.TechConstants;
-import client.MWClient;
-import client.campaign.CUnit;
-import common.House;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
 
 public class AdvancedRepairDialog extends JFrame implements ActionListener, MouseListener, KeyListener, ChangeListener {
 

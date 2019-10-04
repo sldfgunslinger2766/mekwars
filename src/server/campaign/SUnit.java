@@ -27,6 +27,17 @@ import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import common.CampaignData;
+import common.MegaMekPilotOption;
+import common.Unit;
+import common.campaign.operations.Operation;
+import common.campaign.pilot.skills.PilotSkill;
+import common.campaign.targetsystems.TargetSystem;
+import common.campaign.targetsystems.TargetTypeNotImplementedException;
+import common.campaign.targetsystems.TargetTypeOutOfBoundsException;
+import common.util.MWLogger;
+import common.util.TokenReader;
+import common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.BattleArmor;
 import megamek.common.Crew;
@@ -50,16 +61,6 @@ import server.campaign.pilot.skills.TraitSkill;
 import server.campaign.pilot.skills.WeaponSpecialistSkill;
 import server.campaign.util.SerializedMessage;
 import server.util.QuirkHandler;
-import common.CampaignData;
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.operations.Operation;
-import common.campaign.pilot.skills.PilotSkill;
-import common.campaign.targetsystems.TargetSystem;
-import common.campaign.targetsystems.TargetTypeNotImplementedException;
-import common.campaign.targetsystems.TargetTypeOutOfBoundsException;
-import common.util.TokenReader;
-import common.util.UnitUtils;
 
 /**
  * A class representing an MM.Net Entity
@@ -709,8 +710,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
             return s;
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
-            CampaignData.mwlog.errLog("Unable to Load SUnit: " + s);
+            MWLogger.errLog(ex);
+            MWLogger.errLog("Unable to Load SUnit: " + s);
             // the unit should still be good return what did get set
             return s;
         }
@@ -918,7 +919,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             while (ski.hasNext()) {
                 SPilotSkill skill = (SPilotSkill) ski.next();
                 if (skill.getName().equals("Weapon Specialist") && p.getWeapon().equals("Default")) {
-                    // CampaignData.mwlog.errLog("setPilot inside");
+                    // MWLogger.errLog("setPilot inside");
                     p.getSkills().remove(skill);
                     ((WeaponSpecialistSkill) skill).assignWeapon(getEntity(), p);
                     skill.addToPilot(p);
@@ -1112,7 +1113,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                      * missing unit. Either way, need to set up and return a
                      * failsafe unit.
                      */
-                    CampaignData.mwlog.errLog("Error loading: " + Filename);
+                    MWLogger.errLog("Error loading: " + Filename);
 
                     try {
                         ent = UnitUtils.createOMG();// new MechFileParser(new
@@ -1122,8 +1123,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                          * Can't even find the default unit file. Are all the
                          * .zip files missing? Misnamed? Read access is denied?
                          */
-                        CampaignData.mwlog.errLog("Unable to find default unit file. Server Exiting");
-                        CampaignData.mwlog.errLog(exep);
+                        MWLogger.errLog("Unable to find default unit file. Server Exiting");
+                        MWLogger.errLog(exep);
                         System.exit(1);
                     }
                 }
@@ -1212,7 +1213,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
     public boolean hasSemiGuided() {
         for (Mounted ammo : getEntity().getAmmo()) {
-            // CampaignData.mwlog.errLog("ammo type:
+            // MWLogger.errLog("ammo type:
             // "+((AmmoType)ammo.getType()).getMunitionType());
             if (((AmmoType) ammo.getType()).getMunitionType() == AmmoType.M_SEMIGUIDED) {
                 return true;
@@ -1279,8 +1280,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             loadedUnits = EntityListFile.loadFrom(entityFile);
             loadedUnits.trimToSize();
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Unable to load file " + entityFile.getName());
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Unable to load file " + entityFile.getName());
+            MWLogger.errLog(ex);
             return mulUnits;
         }
 
@@ -1431,7 +1432,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 		
 		if (refigureWeightClass) {
 			cm.setWeightclass(cm.getEntity().getWeightClass());
-			CampaignData.mwlog.debugLog("Setting " + cm.getEntity().getModel() + " to weight class " + cm.getEntity().getWeightClass());
+			MWLogger.debugLog("Setting " + cm.getEntity().getModel() + " to weight class " + cm.getEntity().getWeightClass());
 		}
 		
 		SPilot pilot = null;

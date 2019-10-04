@@ -58,7 +58,7 @@ public class AdminPlayerStatusCommand implements Command {
 		//get the status
 		CampaignMain.cm.toUser("SM|" + p.getReadableStatus(true),Username,false);
 		
-		//server.CampaignData.mwlog.modLog(Username + " examined " + p.getName() + "'s account.");
+		//server.MWLogger.modLog(Username + " examined " + p.getName() + "'s account.");
 		CampaignMain.cm.doSendModMail("NOTE",Username + " examined "+ p.getName() +"'s account.");
 		
 	}

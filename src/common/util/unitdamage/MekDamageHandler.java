@@ -3,6 +3,8 @@ package common.util.unitdamage;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -10,9 +12,6 @@ import megamek.common.IArmorState;
 import megamek.common.Mech;
 import megamek.common.MiscType;
 import megamek.common.Mounted;
-
-import common.CampaignData;
-import common.util.UnitUtils;
 
 
 public class MekDamageHandler extends AbstractUnitDamageHandler {
@@ -237,8 +236,8 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
             result.append(delimiter);
 
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog("Entity: " + unit.getShortNameRaw());
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog("Entity: " + unit.getShortNameRaw());
+            MWLogger.errLog(ex);
             return "%%-%%-%%";
         }
         return result.toString();
@@ -345,7 +344,7 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                 }
                 unit.setCritical(location, slot, critSlot);
             } catch (Exception ex) {
-                CampaignData.mwlog.errLog(ex);
+                MWLogger.errLog(ex);
             }
         }
 
@@ -371,7 +370,7 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                         weapon.setShotsLeft(ammoLeft);
                     }
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog("Error while parsing ammo Moving along");
+                    MWLogger.errLog("Error while parsing ammo Moving along");
                 }
             }
         }

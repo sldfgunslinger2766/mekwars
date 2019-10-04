@@ -35,8 +35,8 @@ package server.campaign;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.CampaignData;
 import common.Unit;
+import common.util.MWLogger;
 
 public class AutoArmy {
 	
@@ -469,7 +469,7 @@ public class AutoArmy {
 		try {
 			v.elements();
 		} catch (Exception e) {
-			CampaignData.mwlog.mainLog("AUTOARMY UNITS WERE NULL");
+			MWLogger.mainLog("AUTOARMY UNITS WERE NULL");
 		}
 		
 		for (SUnit currU : this.getUnits()){

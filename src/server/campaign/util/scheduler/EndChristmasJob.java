@@ -14,9 +14,9 @@ import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.util.ChristmasHandler;
-import common.CampaignData;
 
 /**
  * Ends the Christmas season
@@ -50,7 +50,7 @@ public class EndChristmasJob implements Job {
 		try {
 			date = sdf.parse(endDateString);
 		} catch (ParseException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 		
 		Trigger trigger = newTrigger()

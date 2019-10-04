@@ -21,7 +21,6 @@ import java.awt.Dimension;
 import java.util.StringTokenizer;
 
 import client.MWClient;
-
 import common.util.TokenReader;
 
 /**

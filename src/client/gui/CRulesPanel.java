@@ -19,17 +19,14 @@ package client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-
+import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.JEditorPane;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import client.MWClient;
-
-import java.net.URL;
-import java.io.IOException;
 
 /**
  * Class to display simple rules tab

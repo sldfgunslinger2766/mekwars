@@ -48,21 +48,20 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
 
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
-import megamek.common.CrewType;
-import megamek.common.Entity;
-import megamek.common.Infantry;
 import client.MWClient;
 import client.campaign.CCampaign;
 import client.campaign.CPlayer;
 import client.campaign.CUnit;
-
-import common.CampaignData;
 import common.House;
 import common.Unit;
 import common.UnitFactory;
+import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 import common.util.UnitUtils;
+import megamek.client.ui.swing.unitDisplay.UnitDisplay;
+import megamek.common.CrewType;
+import megamek.common.Entity;
+import megamek.common.Infantry;
 
 /**
  * SHouse Status Panel
@@ -459,14 +458,14 @@ public class CHSPanel extends JPanel {
         // if weight and type map is null, there is no way to change the
         // factory.
         if (weightAndTypeMap == null) {
-            CampaignData.mwlog.errLog("Error updating factory: null treemap at weight & type.");
+            MWLogger.errLog("Error updating factory: null treemap at weight & type.");
             return;
         }
 
         // no factory with matching name on planet. return.
         String oldFactoryInfo = weightAndTypeMap.get(planet + "$" + factoryName);
         if (oldFactoryInfo == null) {
-            CampaignData.mwlog.errLog("Error updating factory: null oldFactory.");
+            MWLogger.errLog("Error updating factory: null oldFactory.");
             return;
         }
 

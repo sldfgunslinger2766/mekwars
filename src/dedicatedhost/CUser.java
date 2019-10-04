@@ -19,8 +19,8 @@ package dedicatedhost;
 
 import java.util.StringTokenizer;
 
-import common.CampaignData;
 import common.campaign.clientutils.IClientUser;
+import common.util.MWLogger;
 
 /*
  * Class for User objects held in userlist
@@ -53,7 +53,7 @@ public class CUser implements Comparable<Object>, IClientUser {
 			ST.nextToken();
 			Userlevel = Integer.parseInt(ST.nextToken());
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog("Error in deserializing user");
+			MWLogger.errLog("Error in deserializing user");
 		}
 	}
 

@@ -21,14 +21,13 @@
  */ 
 package server.MWChatServer.commands;
 
+import common.util.MWLogger;
+import common.util.StringUtils;
 import server.ServerWrapper;
 import server.MWChatServer.MWChatClient;
 import server.MWChatServer.Translator;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
-
-import common.CampaignData;
-import common.util.StringUtils;
 
 /**
  * @author  Steve Hawkins
@@ -122,13 +121,13 @@ public class SignOn extends CommandBase implements ICommands {
 			return true;
 			
 		} catch (NullPointerException NPE) {
-			CampaignData.mwlog.errLog("Sign On Error");
-			CampaignData.mwlog.errLog(NPE);
+			MWLogger.errLog("Sign On Error");
+			MWLogger.errLog(NPE);
 		} catch (Exception e) {//even though access is denied, find an acceptable nobody
 			
 			if (e.getMessage() == null) {
-				CampaignData.mwlog.errLog("Sign On Error: Null exception message");
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog("Sign On Error: Null exception message");
+				MWLogger.errLog(e);
 			}
 			
 			else if (e.getMessage().equals(ACCESS_DENIED)){
@@ -143,7 +142,7 @@ public class SignOn extends CommandBase implements ICommands {
 				return this.process(client, args);
 			}
 			else{
-				CampaignData.mwlog.errLog(e);
+				MWLogger.errLog(e);
 			}
 			String userId = client.getUserId();
 			//client.setUserId(null);

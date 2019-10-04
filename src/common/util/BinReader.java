@@ -20,7 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
-import common.CampaignData;
+import org.mekwars.libpk.converters.HTML;
 
 
 /**
@@ -64,7 +64,7 @@ public class BinReader {
             if (!debug)
                 this.in.reset();
         } catch (IOException e) {
-            CampaignData.mwlog.errLog(e);
+            MWLogger.errLog(e);
             debug = false;
         }
     }

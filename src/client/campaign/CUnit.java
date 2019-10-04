@@ -25,6 +25,18 @@ import java.util.Enumeration;
 import java.util.StringJoiner;
 import java.util.StringTokenizer;
 
+import client.MWClient;
+import common.House;
+import common.MegaMekPilotOption;
+import common.Unit;
+import common.campaign.pilot.Pilot;
+import common.campaign.pilot.skills.PilotSkill;
+import common.campaign.targetsystems.TargetSystem;
+import common.campaign.targetsystems.TargetTypeNotImplementedException;
+import common.campaign.targetsystems.TargetTypeOutOfBoundsException;
+import common.util.MWLogger;
+import common.util.TokenReader;
+import common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.CrewType;
 import megamek.common.CriticalSlot;
@@ -37,19 +49,6 @@ import megamek.common.WeaponType;
 import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
-import client.MWClient;
-
-import common.CampaignData;
-import common.House;
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.campaign.targetsystems.TargetSystem;
-import common.campaign.targetsystems.TargetTypeNotImplementedException;
-import common.campaign.targetsystems.TargetTypeOutOfBoundsException;
-import common.util.TokenReader;
-import common.util.UnitUtils;
 
 /**
  * Class for unit object used by Client
@@ -90,7 +89,7 @@ public class CUnit extends Unit {
         StringTokenizer ST;
         String element;
         String unitDamage = null;
-        CampaignData.mwlog.infoLog("PDATA: " + data);
+        MWLogger.infoLog("PDATA: " + data);
 
         ST = new StringTokenizer(data, "$");
         element = TokenReader.readString(ST);
@@ -163,7 +162,7 @@ public class CUnit extends Unit {
 
         createEntity();
         if (unitEntity == null) {
-            CampaignData.mwlog.errLog("Cannot load entity!");
+            MWLogger.errLog("Cannot load entity!");
             return (false);
         }
 
@@ -563,7 +562,7 @@ public class CUnit extends Unit {
         unitEntity.setCrew(UnitUtils.createEntityPilot(this));
 
         if (unitEntity == null) {
-            CampaignData.mwlog.errLog("Error unit failed to load. Exiting.");
+            MWLogger.errLog("Error unit failed to load. Exiting.");
             System.exit(1);
         }
 
@@ -647,7 +646,7 @@ public class CUnit extends Unit {
                 result = 0;
             }
         } catch (Exception ex) {
-            CampaignData.mwlog.errLog(ex);
+            MWLogger.errLog(ex);
         }
         return result;
     }// end getPriceForCUnit()

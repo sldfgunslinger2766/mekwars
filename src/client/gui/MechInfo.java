@@ -43,19 +43,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import client.GUIClientConfig;
+import client.MWClient;
+import client.campaign.CArmy;
+import client.campaign.CUnit;
+import common.Unit;
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import megamek.client.ui.swing.MechTileset;
 import megamek.client.ui.swing.util.RotateFilter;
 import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Tank;
-import client.GUIClientConfig;
-import client.MWClient;
-import client.campaign.CArmy;
-import client.campaign.CUnit;
-
-import common.CampaignData;
-import common.Unit;
-import common.util.UnitUtils;
 
 /**
  * 
@@ -519,7 +518,7 @@ public class MechInfo extends JPanel {
             try {
                 mt.loadFromFile("mechset.txt");
             } catch (IOException ex) {
-                CampaignData.mwlog.errLog("Unable to read data/images/units/mechset.txt");
+                MWLogger.errLog("Unable to read data/images/units/mechset.txt");
             }
         }// end if(null tileset)
         //@Salient - from what i can tell from the megamek code, passing in the component does nothing.
@@ -571,18 +570,18 @@ public class MechInfo extends JPanel {
         }
         catch (Exception ex)
         {
-        	CampaignData.mwlog.errLog(ex);   	
+        	MWLogger.errLog(ex);   	
         	try 
         	{
         	    File pathToFile = new File("./data/images/ImageMissing.png");
         	    unit = ImageIO.read(pathToFile);
         	    unit = unit.getScaledInstance(84, 72, Image.SCALE_DEFAULT);
-        	    CampaignData.mwlog.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
+        	    MWLogger.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
         	} 
         	catch (IOException ex2) 
         	{
-        	    CampaignData.mwlog.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
-        	    CampaignData.mwlog.errLog(ex2);
+        	    MWLogger.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
+        	    MWLogger.errLog(ex2);
         	}
         }
 
@@ -688,11 +687,11 @@ public class MechInfo extends JPanel {
             try {
                 pgMech.grabPixels();
             } catch (InterruptedException e) {
-                CampaignData.mwlog.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image." + e.getMessage());
+                MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image." + e.getMessage());
                 return image;
             }
             if ((pgMech.getStatus() & ImageObserver.ABORT) != 0) {
-                CampaignData.mwlog.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
+                MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
                 return image;
             }
 
@@ -701,11 +700,11 @@ public class MechInfo extends JPanel {
                 try {
                     pgCamo.grabPixels();
                 } catch (InterruptedException e) {
-                    CampaignData.mwlog.errLog("EntityImage.applyColor(): Failed to grab pixels for camo image." + e.getMessage());
+                    MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for camo image." + e.getMessage());
                     return image;
                 }
                 if ((pgCamo.getStatus() & ImageObserver.ABORT) != 0) {
-                    CampaignData.mwlog.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
+                    MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
                     return image;
                 }
             }

@@ -32,8 +32,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import megamek.client.ui.swing.UnitLoadingDialog;
-import megamek.common.TechConstants;
 import admin.dialog.BannedAmmoDialog;
 import admin.dialog.BannedTargetingDialog;
 import admin.dialog.CommandNameDialog;
@@ -55,6 +53,9 @@ import common.Planet;
 import common.Terrain;
 import common.Unit;
 import common.UnitFactory;
+import common.util.MWLogger;
+import megamek.client.ui.swing.UnitLoadingDialog;
+import megamek.common.TechConstants;
 
 public class AdminMenu extends JMenu {
 
@@ -235,10 +236,10 @@ public class AdminMenu extends JMenu {
 
                     while (mwclient.isWaiting()) {
                         Thread.sleep(120);
-                        // CampaignData.mwlog.errLog("Waiting for faction config");
+                        // MWLogger.errLog("Waiting for faction config");
                     }
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                     mwclient.setWaiting(false);
                 }
 
@@ -274,7 +275,7 @@ public class AdminMenu extends JMenu {
                 try {
                     mwclient.refreshData();
                 } catch (Exception ex) {
-                    CampaignData.mwlog.errLog(ex);
+                    MWLogger.errLog(ex);
                 }
                 SubFactionNameDialog subFactionDialog = new SubFactionNameDialog(mwclient, "SubFaction", faction);
                 subFactionDialog.setVisible(true);
@@ -1354,10 +1355,10 @@ public class AdminMenu extends JMenu {
                     br.close();
                     in.close();
                 } catch (IOException ioex) {
-                    CampaignData.mwlog.errLog("IOException: " + line.toString());
+                    MWLogger.errLog("IOException: " + line.toString());
                 }
             } catch (FileNotFoundException fnfex) {
-                CampaignData.mwlog.errLog("FileNotFoundException: " + line.toString());
+                MWLogger.errLog("FileNotFoundException: " + line.toString());
             }
             line.append("#");
             mwclient.sendChat(line.toString());
@@ -1402,10 +1403,10 @@ public class AdminMenu extends JMenu {
                     br.close();
                     in.close();
                 } catch (IOException ioex) {
-                    CampaignData.mwlog.errLog("IOException: " + line.toString());
+                    MWLogger.errLog("IOException: " + line.toString());
                 }
             } catch (FileNotFoundException fnfex) {
-                CampaignData.mwlog.errLog("FileNotFoundException: " + line.toString());
+                MWLogger.errLog("FileNotFoundException: " + line.toString());
             }
             line.append("#");
             mwclient.sendChat(line.toString());

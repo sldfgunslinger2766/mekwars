@@ -23,8 +23,7 @@ import java.io.PrintStream;
 import java.util.StringTokenizer;
 
 import client.MWClient;
-
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * @author Torren
@@ -64,7 +63,7 @@ public class DMML extends Command {
     			p.flush();
     			p.close();
         	}catch(Exception ex) {
-        		CampaignData.mwlog.errLog(ex);
+        		MWLogger.errLog(ex);
         	}
         }
 	}

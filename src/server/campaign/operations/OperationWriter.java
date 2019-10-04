@@ -34,11 +34,10 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import server.campaign.CampaignMain;
-
-import common.CampaignData;
 import common.House;
 import common.campaign.operations.Operation;
+import common.util.MWLogger;
+import server.campaign.CampaignMain;
 
 //IMPORTS
 
@@ -156,9 +155,9 @@ public class OperationWriter {
 			}
 			ps.close();
 		} catch (FileNotFoundException fe) {
-			CampaignData.mwlog.errLog("Error: could not find " + path);
+			MWLogger.errLog("Error: could not find " + path);
 		} catch (Exception ex) {
-			CampaignData.mwlog.errLog(ex);
+			MWLogger.errLog(ex);
 		}
 		
 	}//end writeOpList

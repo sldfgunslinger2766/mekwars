@@ -43,10 +43,9 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import client.MWClient;
-
-import common.CampaignData;
 import common.House;
 import common.Planet;
+import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 //util imports
 //swing imports
@@ -182,7 +181,7 @@ public class PlanetNameDialog extends JDialog implements ActionListener {
 				
                 //Check for allowed planet flags. the planet most have these flags.
                 if ( allowPlanetFlags.length() > 0 ){
-                    //CampaignData.mwlog.errLog(currOpName+" AllowPlanetFlags: "+allowPlanetFlags);
+                    //MWLogger.errLog(currOpName+" AllowPlanetFlags: "+allowPlanetFlags);
                     boolean allowOp = true;
                     StringTokenizer st = new StringTokenizer(allowPlanetFlags,"^");
                     while ( st.hasMoreTokens() ){
@@ -191,7 +190,7 @@ public class PlanetNameDialog extends JDialog implements ActionListener {
                         if ( key.trim().length() < 1 )
                             continue;
                         if ( !tp.getPlanetFlags().containsKey(key) ){
-                            CampaignData.mwlog.errLog(tp.getName()+" does not have flag: "+key);
+                            MWLogger.errLog(tp.getName()+" does not have flag: "+key);
                             allowOp = false;
                             break;
                         }
@@ -203,7 +202,7 @@ public class PlanetNameDialog extends JDialog implements ActionListener {
                 //Check for disallowed planet flags. If the planet has one of these flags
                 // The planet will not be allowed.
                 if ( disallowPlanetFlags.length() > 0){
-                    //CampaignData.mwlog.errLog(currOpName+" DisallowPlanetFlags: "+disallowPlanetFlags);
+                    //MWLogger.errLog(currOpName+" DisallowPlanetFlags: "+disallowPlanetFlags);
                     
                     boolean allowOp = true;
                     StringTokenizer st = new StringTokenizer(disallowPlanetFlags,"^");

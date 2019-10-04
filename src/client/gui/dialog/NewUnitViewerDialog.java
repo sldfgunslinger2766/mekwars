@@ -40,6 +40,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
+import client.MWClient;
+import common.util.MWLogger;
+import common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.client.ui.swing.AdvancedSearchDialog;
 import megamek.client.ui.swing.MechViewPanel;
@@ -55,10 +58,6 @@ import megamek.common.MechView;
 import megamek.common.TechConstants;
 import megamek.common.UnitType;
 import megamek.common.loaders.EntityLoadingException;
-import client.MWClient;
-
-import common.CampaignData;
-import common.util.UnitUtils;
 
 	public class NewUnitViewerDialog extends JDialog implements Runnable,
 	    KeyListener, ActionListener {
@@ -800,7 +799,7 @@ import common.util.UnitUtils;
 
 	                    dispose();
 	                } catch (Exception ex) {
-	                    CampaignData.mwlog.errLog(ex);
+	                    MWLogger.errLog(ex);
 	                    // MMClient.mwClientLog.clientErrLog("Problem with
 	                    // actionPerformed in RepodDialog");
 	                }
@@ -852,7 +851,7 @@ import common.util.UnitUtils;
 
 	                    dispose();
 	                } catch (Exception ex) {
-	                    CampaignData.mwlog.errLog(ex);
+	                    MWLogger.errLog(ex);
 	                    // MMClient.mwClientLog.clientErrLog("Problem with
 	                    // actionPerformed in RepodDialog");
 	                }

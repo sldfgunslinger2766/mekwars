@@ -21,7 +21,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import common.CampaignData;
+import common.util.MWLogger;
 
 /**
  * HPGListenerThread listens for connections from MekWars servers, makes
@@ -73,7 +73,7 @@ public class HPGListenerThread extends Thread {
 					try {
 						server.close();
 					} catch (IOException e) {
-						CampaignData.mwlog.errLog(e);
+						MWLogger.errLog(e);
 					}
 				}
 				

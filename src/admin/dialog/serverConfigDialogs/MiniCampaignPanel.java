@@ -11,9 +11,8 @@
 
 package admin.dialog.serverConfigDialogs;
 
-import java.awt.BorderLayout;
-
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,8 +20,6 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import client.MWClient;
-
-import javax.swing.JCheckBox;
 import common.VerticalLayout;
 import common.util.SpringLayoutHelper;
 

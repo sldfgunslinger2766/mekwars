@@ -18,12 +18,11 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.House;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
-
-import common.House;
 
 
 /**

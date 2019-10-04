@@ -16,15 +16,15 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.CampaignData;
+import common.campaign.operations.Operation;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.operations.OperationManager;
 import server.campaign.operations.OpsChickenThread;
 import server.campaign.operations.ShortOperation;
-
-import common.CampaignData;
-import common.campaign.operations.Operation;
 
 /**
  * DefendCommand is analagous to the Task system's "join" command - it allows a
@@ -296,7 +296,7 @@ public class DefendCommand implements Command {
             toSend += ".";
 
         // tell the defender that he has successfully joined the attack.
-        CampaignData.mwlog.gameLog("Defend: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
+        MWLogger.gameLog("Defend: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
         CampaignMain.cm.toUser(toSend, Username, true);
 
         if (o.getBooleanValue("FreeForAllOperation")) {

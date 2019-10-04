@@ -23,10 +23,6 @@ import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.commands.Command;
-import server.campaign.pilot.SPilot;
-import server.campaign.pilot.SPilotSkills;
-import server.campaign.pilot.skills.SPilotSkill;
-import server.campaign.pilot.skills.TraitSkill;
 
 /**
  * A command to create a unit
@@ -81,7 +77,7 @@ public class CreateUnitCommand implements Command {
 		SUnit cm = SUnit.create(filename, FlavorText, Integer.parseInt(gunnery), Integer.parseInt(piloting), weight, skillTokens);
 		p.addUnit(cm, true);
 		CampaignMain.cm.toUser("Unit created: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+cm.getPilot().getSkillString(true) + ". ID #" + cm.getId(),Username,true);
-		//server.CampaignData.mwlog.modLog(Username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+pilot.getSkillString(true));	
+		//server.MWLogger.modLog(Username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+pilot.getSkillString(true));	
 		CampaignMain.cm.doSendModMail("NOTE",Username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+cm.getPilot().getSkillString(true));
 	}
 }

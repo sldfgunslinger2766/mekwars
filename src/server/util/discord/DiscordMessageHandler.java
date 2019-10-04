@@ -27,7 +27,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
-import common.CampaignData;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 
 /**
@@ -65,13 +65,13 @@ public class DiscordMessageHandler {
 		try {
 			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 
 		try {
 			httpclient.execute(httppost);
 		} catch (IOException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		}
 	}
 }

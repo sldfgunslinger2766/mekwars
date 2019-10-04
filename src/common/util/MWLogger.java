@@ -17,112 +17,19 @@
 package common.util;
 
 import java.io.File;
-import java.text.DecimalFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+
+import org.mekwars.libpk.logging.PKLogManager;
 
 
 public final class MWLogger {// final - no extension of the server logger
 
-    private static final int rotations = 5; // Configurable
-    private static final int normFileSize = 1000000; // Configurable
-    private static final int bigFileSize = 5000000; // Configurable
-    private static final int hugeFileSize = 10000000; // Configurable
-
-    private static boolean logging = false;
-    private static boolean addSeconds = true;
-    private static boolean isServer = false;
-    
-    // private static boolean clientlog = false;
-
     private File logDir;
-
-    private Logger mainLog; // Log for main channel
-    private Logger factionLog; // Log for faction mails (all factions)
-    private Logger gameLog; // Log for game reports (started, canceled and
-                            // reported)
-    private Logger resultsLog; // Log for game results as sent to players
-    private Logger cmdLog; // Log for all issued commands
-    private Logger pmLog; // Log for PMs
-    private Logger bmLog; // Log for Black Market results
-    private Logger infoLog; // Log for server generic messages (informative)
-    private Logger warnLog; // Log for server warnings (problems)
-    private Logger errLog; // Log for server errors (troubles!)
-    private Logger modLog; // Log for moderators, normal log (double reg,
-                            // 2nd/same, modchannel)
-    private Logger tickLog; // Log for tick events (rankings, production, player
-                            // stats)
-    private Logger ipLog; // Log connecting IPs.
-    private Logger testLog; // Log test code
-    private Logger debugLog; // for all debug messages
-
-    private HashMap<String, Logger> factionLoggers = new HashMap<String, Logger>();
+    private static PKLogManager logmanager = null;
+    private static MWLogger logger = null;
     
-    private MMNetFormatter mmnetFormatter;
-
-    private FileHandler mainHandler;
-    //private FileHandler factionHandler;
-    private FileHandler gameHandler;
-    private FileHandler resultsHandler;
-    private FileHandler cmdHandler;
-    private FileHandler pmHandler;
-    private FileHandler bmHandler;
-    private FileHandler infoHandler;
-    private FileHandler warnHandler;
-    private FileHandler errHandler;
-    private FileHandler modHandler;
-    private FileHandler tickHandler;
-    private FileHandler ipHandler;
-    private FileHandler testHandler;
-    private FileHandler debugHandler;
-
-    public static class MMNetFormatter extends SimpleFormatter {
-
-        @Override
-        public String format(LogRecord record) {
-
-            GregorianCalendar now = new GregorianCalendar();
-            now.setTimeInMillis(record.getMillis());
-            StringBuilder sb = new StringBuilder();
-
-            DecimalFormat mills = new DecimalFormat("000");
-            DecimalFormat secs = new DecimalFormat("00");
-            
-            sb.append(now.get(Calendar.YEAR));
-            sb.append(secs.format(now.get(Calendar.MONTH) + 1));
-            sb.append(secs.format(now.get(Calendar.DAY_OF_MONTH)));
-            sb.append(" ");
-            sb.append(now.get(Calendar.HOUR_OF_DAY));
-            sb.append(":");
-            sb.append(secs.format(now.get(Calendar.MINUTE)));
-            if (addSeconds) {
-                sb.append(":");
-                sb.append(secs.format(now.get(Calendar.SECOND)));
-                sb.append(".");
-                sb.append(mills.format(now.get(Calendar.MILLISECOND)));
-                sb.append(" ");
-                sb.append(formatMessage(record));
-                sb.append("\n");
-            } else {
-                sb.append(" ");
-                sb.append(formatMessage(record) + "\n");
-            }
-            return sb.toString();
-        }
-    }
-
-    public MWLogger() {
-
-        if (logging)
-            return;
-
+    private MWLogger() {
+        
+        logmanager = PKLogManager.getInstance();
         logDir = new File("logs");
         if (!logDir.exists()) {
             try {
@@ -145,376 +52,131 @@ public final class MWLogger {// final - no extension of the server logger
             System.err.println("WARNING: disabling log subsystem");
             return;
         }
-
-        mmnetFormatter = new MMNetFormatter();
-
-    }
-
-    public void createClientLoggers(){
-        try {
-
-            infoHandler = new FileHandler(logDir.getPath() + "/infolog", normFileSize, rotations, true);
-            infoHandler.setLevel(Level.INFO);
-            infoHandler.setFilter(null);
-            infoHandler.setFormatter(mmnetFormatter);
-            infoHandler.setEncoding("UTF8");
-            infoLog = Logger.getLogger("infoLogger");
-            infoLog.setUseParentHandlers(false);
-            infoLog.addHandler(infoHandler);
-
-            errHandler = new FileHandler(logDir.getPath() + "/errlog", normFileSize, rotations, true);
-            errHandler.setLevel(Level.INFO);
-            errHandler.setFilter(null);
-            errHandler.setEncoding("UTF8");
-            errHandler.setFormatter(mmnetFormatter);
-            errLog = Logger.getLogger("errLogger");
-            errLog.setUseParentHandlers(false);
-            errLog.addHandler(errHandler);
-
-            debugHandler = new FileHandler(logDir.getPath() + "/debuglog", normFileSize, rotations, true);
-            debugHandler.setLevel(Level.INFO);
-            debugHandler.setFilter(null);
-            debugHandler.setEncoding("UTF8");
-            debugHandler.setFormatter(mmnetFormatter);
-            debugLog = Logger.getLogger("debugLogger");
-            debugLog.setUseParentHandlers(false);
-            debugLog.addHandler(debugHandler);
-            
-            logging = true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
     
-    public void createServerLoggers(){
-        try {
-
-            mainHandler = new FileHandler(logDir.getPath() + "/mainlog", bigFileSize, rotations, true);
-            mainHandler.setLevel(Level.INFO);
-            mainHandler.setFilter(null);
-            mainHandler.setFormatter(mmnetFormatter);
-            mainHandler.setEncoding("UTF8");
-            mainLog = Logger.getLogger("mainLogger");
-            mainLog.setUseParentHandlers(false);
-            mainLog.addHandler(mainHandler);
-
-            gameHandler = new FileHandler(logDir.getPath() + "/gamelog", bigFileSize, rotations, true);
-            gameHandler.setLevel(Level.INFO);
-            gameHandler.setFilter(null);
-            gameHandler.setFormatter(mmnetFormatter);
-            gameHandler.setEncoding("UTF8");
-            gameLog = Logger.getLogger("gameLogger");
-            gameLog.setUseParentHandlers(false);
-            gameLog.addHandler(gameHandler);
-
-            resultsHandler = new FileHandler(logDir.getPath() + "/resultslog", bigFileSize, rotations, true);
-            resultsHandler.setLevel(Level.INFO);
-            resultsHandler.setFilter(null);
-            resultsHandler.setFormatter(mmnetFormatter);
-            resultsHandler.setEncoding("UTF8");
-            resultsLog = Logger.getLogger("resultsLogger");
-            resultsLog.setUseParentHandlers(false);
-            resultsLog.addHandler(resultsHandler);
-
-            cmdHandler = new FileHandler(logDir.getPath() + "/cmdlog", hugeFileSize, rotations, true);
-            cmdHandler.setLevel(Level.INFO);
-            cmdHandler.setFilter(null);
-            cmdHandler.setFormatter(mmnetFormatter);
-            cmdHandler.setEncoding("UTF8");
-            cmdLog = Logger.getLogger("cmdLogger");
-            cmdLog.setUseParentHandlers(false);
-            cmdLog.addHandler(cmdHandler);
-
-            pmHandler = new FileHandler(logDir.getPath() + "/pmlog", bigFileSize, rotations, true);
-            pmHandler.setLevel(Level.INFO);
-            pmHandler.setFilter(null);
-            pmHandler.setFormatter(mmnetFormatter);
-            pmHandler.setEncoding("UTF8");
-            pmLog = Logger.getLogger("pmLogger");
-            pmLog.setUseParentHandlers(false);
-            pmLog.addHandler(pmHandler);
-
-            bmHandler = new FileHandler(logDir.getPath() + "/bmlog", normFileSize, rotations, true);
-            bmHandler.setLevel(Level.INFO);
-            bmHandler.setFilter(null);
-            bmHandler.setEncoding("UTF8");
-            bmHandler.setFormatter(mmnetFormatter);
-            bmLog = Logger.getLogger("bmLogger");
-            bmLog.setUseParentHandlers(false);
-            bmLog.addHandler(bmHandler);
-
-            infoHandler = new FileHandler(logDir.getPath() + "/infolog", normFileSize, rotations, true);
-            infoHandler.setLevel(Level.INFO);
-            infoHandler.setFilter(null);
-            infoHandler.setFormatter(mmnetFormatter);
-            infoHandler.setEncoding("UTF8");
-            infoLog = Logger.getLogger("infoLogger");
-            infoLog.setUseParentHandlers(false);
-            infoLog.addHandler(infoHandler);
-
-            warnHandler = new FileHandler(logDir.getPath() + "/warnlog", normFileSize, rotations, true);
-            warnHandler.setLevel(Level.INFO);
-            warnHandler.setFilter(null);
-            warnHandler.setFormatter(mmnetFormatter);
-            warnHandler.setEncoding("UTF8");
-            warnLog = Logger.getLogger("warnLogger");
-            warnLog.setUseParentHandlers(false);
-            warnLog.addHandler(warnHandler);
-
-            errHandler = new FileHandler(logDir.getPath() + "/errlog", normFileSize, rotations, true);
-            errHandler.setLevel(Level.INFO);
-            errHandler.setFilter(null);
-            errHandler.setEncoding("UTF8");
-            errHandler.setFormatter(mmnetFormatter);
-            errLog = Logger.getLogger("errLogger");
-            errLog.setUseParentHandlers(false);
-            errLog.addHandler(errHandler);
-
-            modHandler = new FileHandler(logDir.getPath() + "/modlog", bigFileSize, rotations, true);
-            modHandler.setLevel(Level.INFO);
-            modHandler.setFilter(null);
-            modHandler.setFormatter(mmnetFormatter);
-            modHandler.setEncoding("UTF8");
-            modLog = Logger.getLogger("modLogger");
-            modLog.setUseParentHandlers(false);
-            modLog.addHandler(modHandler);
-
-            tickHandler = new FileHandler(logDir.getPath() + "/ticklog", normFileSize, rotations, true);
-            tickHandler.setLevel(Level.INFO);
-            tickHandler.setFilter(null);
-            tickHandler.setFormatter(mmnetFormatter);
-            tickHandler.setEncoding("UTF8");
-            tickLog = Logger.getLogger("tickLogger");
-            tickLog.setUseParentHandlers(false);
-            tickLog.addHandler(tickHandler);
-
-            // 104857600 is exactly 100 megabytes
-            ipHandler = new FileHandler(logDir.getPath() + "/iplog", 104857600, rotations, true);
-            ipHandler.setLevel(Level.INFO);
-            ipHandler.setFilter(null);
-            ipHandler.setEncoding("UTF8");
-            ipHandler.setFormatter(mmnetFormatter);
-            ipLog = Logger.getLogger("ipLogger");
-            ipLog.setUseParentHandlers(false);
-            ipLog.addHandler(ipHandler);
-        
-            testHandler = new FileHandler(logDir.getPath() + "/testlog", 104857600, rotations, true);
-            testHandler.setLevel(Level.INFO);
-            testHandler.setFilter(null);
-            testHandler.setFormatter(mmnetFormatter);
-            testHandler.setEncoding("UTF8");
-            testLog = Logger.getLogger("testLogger");
-            testLog.setUseParentHandlers(false);
-            testLog.addHandler(testHandler);
-
-            debugHandler = new FileHandler(logDir.getPath() + "/debuglog", hugeFileSize, rotations, true);
-            debugHandler.setLevel(Level.INFO);
-            debugHandler.setFilter(null);
-            debugHandler.setFormatter(mmnetFormatter);
-            debugHandler.setEncoding("UTF8");
-            debugLog = Logger.getLogger("debugLogger");
-            debugLog.setUseParentHandlers(false);
-            debugLog.addHandler(debugHandler);
-
-            logging = true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static MWLogger getInstance() {
+        if (logger == null) {
+            logger = new MWLogger();
         }
-
-    }
-    public void mainLog(String s) {
-        if (logging) {
-            mainLog.info(s);
-            mainHandler.flush();
-        }
-    }
-
-    public void factionLog(String s, String LogName) {
-        //errLog("Logging to house file: " + LogName);
-    	//factionLog = Logger.getLogger(LogName);
-        factionLog = factionLoggers.get(LogName);
-        factionLog.info(s);
-        factionLog.getHandlers()[0].flush();
-    }
-
-    public void gameLog(String s) {
-        if (logging) {
-            gameLog.info(s);
-            gameHandler.flush();
-        }
-    }
-
-    public void resultsLog(String s) {
-        if (logging) {
-            resultsLog.info(s);
-            resultsHandler.flush();
-        }
-    }
-
-    public void cmdLog(String s) {
-
-        if (logging) {
-            /*
-             * exclude hm and factionmail commands, as there is a seperate
-             * factionlog
-             */
-            String lower = s.toLowerCase();
-            if (lower.indexOf("hm#") == -1 && lower.indexOf("factionmail#") == -1) {
-                cmdLog.info(s);
-                cmdHandler.flush();
-            }
-        }
-    }
-
-    public void pmLog(String s) {
-        if (logging) {
-            pmLog.info(s);
-            pmHandler.flush();
-        }
-    }
-
-    public void bmLog(String s) {
-        if (logging) {
-            bmLog.info(s);
-            bmHandler.flush();
-        }
-    }
-
-    public void infoLog(String s) {
-        if (logging) {
-            infoLog.info(s);
-            infoHandler.flush();
-        }
-    }
-
-    public void log(String s) {
-        if (logging) {
-            infoLog.info(s);
-            infoHandler.flush();
-        }
-    }
-
-    public void warnLog(String s) {
-        if (logging) {
-            warnLog.info(s);
-            warnHandler.flush();
-        }
-    }
-
-    public void errLog(String s) {
-        if (logging) {
-            errLog.info(s);
-            errHandler.flush();
-            if ( isServer && server.campaign.CampaignMain.cm != null)
-                server.campaign.CampaignMain.cm.doSendErrLog(s);
-        }
-    }
-
-    public void errLog(Exception e) {
-        if (logging) {
-            errLog.warning("[" + e.toString() + "]");
-            errHandler.flush();
-            if (isServer && server.campaign.CampaignMain.cm != null)
-                server.campaign.CampaignMain.cm.doSendErrLog("[" + e.toString() + "]");
-            StackTraceElement[] t = e.getStackTrace();
-            for (int i = 0; i < t.length; i++) {
-                errLog.warning("   " + t[i].toString());
-                errHandler.flush();
-                if (isServer && server.campaign.CampaignMain.cm != null)
-                    server.campaign.CampaignMain.cm.doSendErrLog("   " + t[i].toString());
-            }
-        }
-    }
-
-    public void debugLog(String s) {
-        if (logging) {
-            debugLog.info(s);
-            debugHandler.flush();
-        }
-    }
-
-    public void debugLog(Exception e) {
-        if (logging) {
-            debugLog.warning("[" + e.toString() + "]");
-            debugHandler.flush();
-            StackTraceElement[] t = e.getStackTrace();
-            for (int i = 0; i < t.length; i++) {
-                debugLog.warning("   " + t[i].toString());
-                debugHandler.flush();
-                if (isServer && server.campaign.CampaignMain.cm != null) {
-                    server.campaign.CampaignMain.cm.doSendErrLog("   " + t[i].toString());
-                }
-
-            }
-        }
-    }
-
-    public void modLog(String s) {
-        if (logging) {
-            modLog.info(s);
-            modHandler.flush();
-        }
-    }
-
-    public void tickLog(String s) {
-        if (logging) {
-            tickLog.info(s);
-            tickHandler.flush();
-        }
-    }
-
-    public void ipLog(String s) {
-        if (logging) {
-            ipLog.info(s);
-            ipHandler.flush();
-        }
-    }
-
-    public void testLog(String s) {
-    	if (logging)
-    		testLog.info(s);
+        return logger;
     }
     
-    public void testLog(Exception e) {
-    	if (logging) {
-    		testLog.warning("[" + e.toString() + "]");
-    		StackTraceElement[] t = e.getStackTrace();
-    		for (int i = 0; i < t.length; i++) {
-    			testLog.warning("   " + t[i].toString());
-    		}
-    	}
+    public static void errLog(String message) {
+        logmanager.log("errlog", message);
     }
     
-    public void enableSeconds(boolean b) {
-        MWLogger.addSeconds = b;
-    }
-
-    public void enableLogging(boolean b) {
-        MWLogger.logging = b;
-    }
-
-    public void setServer(boolean b){
-        MWLogger.isServer = b;
+    public static void mainLog(String message) {
+        logmanager.log("mainlog", message);
     }
     
-    public void createFactionLogger(String logName) {
+    public static void modLog(String message) {
+        logmanager.log("modlog", message);
+    }
+    
+    public static void debugLog(String message) {
+        logmanager.log("debuglog", message);
+    }
+    
+    public static void ipLog(String message) {
+        logmanager.log("iplog", message);
+    }
+    
+    public static void cmdLog(String message) {
+        logmanager.log("errlog", message);
+    }
+    
+    public static void errLog(Exception e) {
+        logmanager.log("errlog", e);
+    }
+    
+    public static void mainLog(Exception e) {
+        logmanager.log("mainlog", e);
+    }
+    
+    public static void modLog(Exception e) {
+        logmanager.log("modlog", e);
+    }
+    
+    public static void debugLog(Exception e) {
+        logmanager.log("debuglog", e);
+    }
+    
+    public static void ipLog(Exception e) {
+        logmanager.log("iplog", e);
+    }
+    
+    public static void cmdLog(Exception e) {
+        logmanager.log("errlog", e);
+    }
+    
+    public static void infoLog(String message) {
+        logmanager.log("infolog", message);
+    }
+    
+    public static void infoLog(Exception e) {
+        logmanager.log("infolog", e);
+    }
 
-        try {
-            Handler factionHandler = new FileHandler(logDir.getPath() + "/" + logName, bigFileSize, rotations, true);
-            factionHandler.setLevel(Level.INFO);
-            factionHandler.setFilter(null);
-            factionHandler.setFormatter(mmnetFormatter);
-            factionLog = Logger.getLogger(logName.trim());
-            factionLog.setUseParentHandlers(false);
-            factionLog.addHandler(factionHandler);
-            factionLog.info(logName + " log touched");
-            factionLoggers.put(logName, factionLog);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    public static void bmLog(String message) {
+        logmanager.log("bmlog", message);
+    }
+    
+    public static void bmLog(Exception e) {
+        logmanager.log("bmlog", e);
+    }
+    public static void resultsLog(String message) {
+        logmanager.log("resultslog", message);
+    }
+    
+    public static void resultsLog(Exception e) {
+        logmanager.log("resultslog", e);
+    }
 
+    public static void gameLog(String message) {
+        logmanager.log("gamelog", message);
+    }
+    
+    public static void gameLog(Exception e) {
+        logmanager.log("gamelog", e);
+    }
+    
+    public static void testLog(String message) {
+        logmanager.log("testlog", message);
+    }
+    
+    public static void testLog(Exception e) {
+        logmanager.log("testlog", e);
+    }
+    
+    public static void tickLog(String message) {
+        logmanager.log("ticklog", message);
+    }
+    
+    public static void tickLog(Exception e) {
+        logmanager.log("ticklog", e);
+    }
+    
+    public static void warnLog(String message) {
+        logmanager.log("warnlog", message);
+    }
+    
+    public static void warnLog(Exception e) {
+        logmanager.log("warnlog", e);
+    }
+    
+    public static void pmLog(String message) {
+        logmanager.log("pmlog", message);
+    }
+    
+    public static void pmLog(Exception e) {
+        logmanager.log("pmlog", e);
+    }
+    
+    public static void factionLog(String factionName, String message) {
+        logmanager.log(factionName, message);
+    }
+    
+    public static void factionLog(String factionName, Exception e) {
+        logmanager.log(factionName, e);
     }
 }

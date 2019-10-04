@@ -46,9 +46,9 @@ public class UnlockLancesCommand implements Command {
 		p.lockArmy(-1);
 		
 		CampaignMain.cm.toUser("You unlocked " + p.getName() + "'s armies.",Username,true);
-		//server.CampaignData.mwlog.modLog(Username + " unlocked " + p.getName() + "'s armies.");
+		//server.MWLogger.modLog(Username + " unlocked " + p.getName() + "'s armies.");
 		CampaignMain.cm.doSendModMail("NOTE",Username + " unlocked " + p.getName() + "'s armies.");
-		//server.CampaignData.mwlog.modLog(Username + " unlocked " + p.getName() + "'s armies.");
+		//server.MWLogger.modLog(Username + " unlocked " + p.getName() + "'s armies.");
 		
 	}
 }

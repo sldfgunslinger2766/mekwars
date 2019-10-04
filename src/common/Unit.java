@@ -22,6 +22,8 @@ package common;
 
 import java.util.Vector;
 
+import common.campaign.pilot.Pilot;
+import common.campaign.targetsystems.TargetSystem;
 import megamek.common.Aero;
 import megamek.common.AmmoType;
 import megamek.common.BattleArmor;
@@ -30,9 +32,6 @@ import megamek.common.EntityWeightClass;
 import megamek.common.Mech;
 import megamek.common.Protomech;
 import megamek.common.Tank;
-
-import common.campaign.pilot.Pilot;
-import common.campaign.targetsystems.TargetSystem;
 
 
 /**
@@ -412,7 +411,7 @@ public class Unit {
             if ( master.getC3Level() != C3_MASTER && master.getC3Level() != C3_MMASTER)//master is really a slave or doesn't have C3
                 return -1;
 
-            //CampaignData.mwlog.errLog("Return 7");
+            //MWLogger.errLog("Return 7");
 
             /* if ( master.getId() == this.getId() )//master is a company master
 			 return master.getId();*/

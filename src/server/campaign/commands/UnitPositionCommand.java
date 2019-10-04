@@ -18,12 +18,11 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.Unit;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-
-import common.Unit;
 
 
 public class UnitPositionCommand implements Command {

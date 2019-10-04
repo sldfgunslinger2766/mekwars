@@ -19,13 +19,12 @@ package server.campaign.market2;
 import java.util.Iterator;
 import java.util.TreeMap;
 
+import common.Unit;
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-
-import common.CampaignData;
-import common.Unit;
 
 /**
  * Classic MMNET-style sealed bid auction.
@@ -118,7 +117,7 @@ public final class HighestSealedBidAuction implements IAuction {
 					// OK, we've got a unit to work with
 					baysNeeded = SUnit.getHangarSpaceRequired(u, sellingFaction);
 				} else {
-					CampaignData.mwlog.errLog("Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
+					MWLogger.errLog("Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
 					CampaignMain.cm.doSendModMail("NOTE", "Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
 					baysNeeded = 0;
 				}
@@ -137,7 +136,7 @@ public final class HighestSealedBidAuction implements IAuction {
 			// if the buyer doesn't have room, move on as well.
 			
 			if (potentialWinner.isHuman() && !hiddenBM && !((SPlayer) potentialWinner).hasRoomForUnit(unitType, unitWeightClass)) {
-				CampaignData.mwlog.errLog(currBid.getBidderName() + " has no room for a " + Unit.getWeightClassDesc(unitWeightClass) + " " + Unit.getTypeClassDesc(unitType) + " from the BM");
+				MWLogger.errLog(currBid.getBidderName() + " has no room for a " + Unit.getWeightClassDesc(unitWeightClass) + " " + Unit.getTypeClassDesc(unitType) + " from the BM");
 				CampaignMain.cm.toUser("The " + listing.getListedModelName() 
 						+ " from the BM could have been yours! Unfortunately, you don't have room for another "
 						+ Unit.getWeightClassDesc(unitWeightClass) + " " 

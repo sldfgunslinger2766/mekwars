@@ -19,11 +19,10 @@ package server.campaign.commands;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
+import common.Unit;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlayer;
-
-import common.Unit;
 
 
 public class LinkUnitCommand implements Command {

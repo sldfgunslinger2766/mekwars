@@ -38,11 +38,11 @@ import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
+import common.util.MWLogger;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-import common.CampaignData;
 
 /**
  * A class to handle distribution of Influence due to player activity
@@ -76,7 +76,7 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
         
         SPlayer p = CampaignMain.cm.getPlayer(playerName);
         if (p == null) {
-        	CampaignData.mwlog.errLog("Null player " + playerName + " in UserActivityInfluenceJob.");
+        	MWLogger.errLog("Null player " + playerName + " in UserActivityInfluenceJob.");
         	UserActivityInfluenceJob.stop(playerName);
         	return;
         }
@@ -232,7 +232,7 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
             fileName = "./data/influencemessages/CommonInfluenceMessages.txt";
             messageFile = new File(fileName);
             if (!messageFile.exists()) {
-                CampaignData.mwlog.errLog("A problem occured with your CommonInfluenceMessages File!");
+                MWLogger.errLog("A problem occured with your CommonInfluenceMessages File!");
                 return "";
             }
         }
@@ -245,7 +245,7 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
 			fis = new FileInputStream(messageFile);
 			dis = new BufferedReader(new InputStreamReader(fis));
 
-			CampaignData.mwlog.debugLog("getting random flu message");
+			MWLogger.debugLog("getting random flu message");
 			int messages = Integer.parseInt(dis.readLine());
 			int messageLine = rand.nextInt(messages);
 			while (dis.ready()) {
@@ -259,24 +259,24 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
 			dis.close();
 			fis.close();
 		} catch (NumberFormatException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		} catch (FileNotFoundException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		} catch (IOException e) {
-			CampaignData.mwlog.errLog(e);
+			MWLogger.errLog(e);
 		} finally {
 			if (dis != null) {
 				try {
 					dis.close();
 				} catch (IOException e) {
-					CampaignData.mwlog.errLog(e);
+					MWLogger.errLog(e);
 				}
 			}
 			if (fis != null) {
 				try {
 					fis.close();
 				} catch (IOException e) {
-					CampaignData.mwlog.errLog(e);
+					MWLogger.errLog(e);
 				}
 			}
 		}

@@ -22,10 +22,10 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import server.dataProvider.ServerCommand;
-
 import common.CampaignData;
 import common.util.BinWriter;
+import common.util.MWLogger;
+import server.dataProvider.ServerCommand;
 
 /**
  * Retrieve the MD5 of the current campaignconfig file.
@@ -47,12 +47,12 @@ public class BannedAmmoTimeStamp implements ServerCommand {
                 in.close();
                 
             } catch (Exception e) {
-                CampaignData.mwlog.infoLog("Error reading first line from banammo.dat");       
+                MWLogger.infoLog("Error reading first line from banammo.dat");       
             }
         } 
         
         else
-            CampaignData.mwlog.infoLog("banammo.dat didn't exist. returning ficticious timestamp to requesting client.");       
+            MWLogger.infoLog("banammo.dat didn't exist. returning ficticious timestamp to requesting client.");       
         
         out.println(bannedAmmoTimestamp, "BannedAmmoTimeStamp");
     }

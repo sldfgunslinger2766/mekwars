@@ -17,11 +17,10 @@ package server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import common.SubFaction;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
-
-import common.SubFaction;
 
 public class RequestSubFactionPromotionCommand implements Command {
 
