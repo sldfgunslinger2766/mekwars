@@ -24,7 +24,7 @@ import server.campaign.SUnit;
  * @version	1.0
  * @since	2013-06-19
  */
-public class BVSpreadCalculator extends AbstractSpreadCalculator implements ISpreadCalculator {
+public class BVSpreadCalculator extends AbstractSpreadCalculator implements I_SpreadCalculator {
 	
 	/**
 	 * Calculates the maximum BV of any unit in the army

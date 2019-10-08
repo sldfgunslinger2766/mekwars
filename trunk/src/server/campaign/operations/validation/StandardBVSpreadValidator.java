@@ -21,7 +21,7 @@ package server.campaign.operations.validation;
  * @version	1.0
  * @since	2013-06-19
  */
-public class StandardBVSpreadValidator extends BVSpreadValidator implements ISpreadValidator {
+public class StandardBVSpreadValidator extends BVSpreadValidator implements I_SpreadValidator {
 	
 	/**
 	 * Validates Unit BV Spread
@@ -29,8 +29,8 @@ public class StandardBVSpreadValidator extends BVSpreadValidator implements ISpr
 	 * @param max Maximum spread allowed
 	 */
 	public StandardBVSpreadValidator(int min, int max) {
-		setValidatorClass(ISpreadValidator.VALIDATOR_CLASS_BV_STANDARD);
-		setSpreadType(ISpreadValidator.SPREADTYPE_BV);
+		setValidatorClass(I_SpreadValidator.VALIDATOR_CLASS_BV_STANDARD);
+		setSpreadType(I_SpreadValidator.SPREADTYPE_BV);
 		
 		setMaxAllowed(max);
 		setMinAllowed(min);

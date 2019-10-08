@@ -25,6 +25,7 @@ import server.campaign.SArmy;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.operations.OperationManager;
+import server.campaign.operations.newopmanager.I_OperationManager;
 
 public class CheckAttackCommand implements Command {
 	
@@ -185,7 +186,7 @@ public class CheckAttackCommand implements Command {
 	
 	private String listDefendableOperations(SArmy aa, SPlayer dp, SArmy da, SHouse ah){
 		StringBuffer report = new StringBuffer(" [");
-		OperationManager manager = CampaignMain.cm.getOpsManager(); 
+		I_OperationManager manager = CampaignMain.cm.getOpsManager(); 
 		for ( String attack : aa.getLegalOperations().keySet() ){
 			Operation o = manager.getOperation(attack);
 			// Don't show AFR-only attacks

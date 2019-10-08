@@ -51,48 +51,13 @@ import server.campaign.SHouse;
 import server.campaign.SPlanet;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
+import server.campaign.operations.newopmanager.AbstractOperationManager;
+import server.campaign.operations.newopmanager.I_OperationManager;
 
 
-public class OperationManager {
+public class OperationManager extends AbstractOperationManager implements I_OperationManager {
 	
-	//statics
-	public static final int TERM_TERMCOMMAND = 0;
-	public static final int TERM_NOATTACKERS = 1;
-	public static final int TERM_NOPOSSIBLEDEFENDERS = 2;
-	public static final int TERM_REPORTINGERROR = 3;
-	public static final int TERM_NO_REMAINING_PLAYERS = 4;
-	
-	//red/write classes
-	private OperationLoader opLoader;
-	private OperationWriter opWriter;
-	
-	//resolvers
-	private ShortResolver shortResolver;
-	//private LongResolver  longResolver;
-	
-	//validators
-	private ShortValidator shortValidator;
-	//private LongValidator  longValidator;
-	
-	//local maps
-	private TreeMap<String, Operation> ops;
-	private TreeMap<String, ModifyingOperation> mods;
-	
-	//running operations
-	private TreeMap<Integer, ShortOperation> runningOperations;//shorts
-	
-	//disonnection and scrap handling
-	private TreeMap<String, OpsDisconnectionThread> disconnectionThreads;
-	private TreeMap<String, OpsScrapThread> scrapThreads; 
-	
-	private TreeMap<String, Long> disconnectionTimestamps;
-	private TreeMap<String, Long> disconnectionDurations;
-	
-	//Map of outstanding long operations
-	//ISSUE: should these be somehow sorted by faction?
-	private TreeMap<Integer, LongOperation> activeLongOps;
-	
-	private boolean MULOnlyArmiesOpsLoad = false;
+
 	
 	/**
 	 * Construction of the Manager is keystone event for
@@ -171,7 +136,7 @@ public class OperationManager {
 		//if the other player is also disconnected, simply terminate the game
 		OpsDisconnectionThread otherThread = disconnectionThreads.get(otherName.toLowerCase());
 		if (otherThread != null && !otherThread.playerHasReturned()) {
-			this.terminateOperation(so, TERM_NO_REMAINING_PLAYERS, null);
+			this.terminateOperation(so, I_OperationManager.TERM_NO_REMAINING_PLAYERS, null);
 			return;
 		}
 		
@@ -286,7 +251,7 @@ public class OperationManager {
 		return ops;
 	}
 	
-	public ModifyingOperation getModifyingOperation(String name) {
+	private ModifyingOperation getModifyingOperation(String name) {
 		return mods.get(name);
 	}
 	
@@ -661,7 +626,7 @@ public class OperationManager {
 	 * Method which checks whether there is a long
 	 * operation, from any faction, running on a planet.
 	 */
-	public boolean isLongOnPlanet(SPlanet p) {
+	private boolean isLongOnPlanet(SPlanet p) {
 		Iterator<LongOperation> i = activeLongOps.values().iterator();
 		while (i.hasNext()) {
 			LongOperation currL = i.next();
@@ -713,7 +678,7 @@ public class OperationManager {
 	 * Method which checks to see if a Faction has
 	 * a short operation running on a given world.
 	 */
-	public boolean hasShortOnPlanet(SHouse h, SPlanet p) {
+	private boolean hasShortOnPlanet(SHouse h, SPlanet p) {
 			
 		Iterator<ShortOperation> i = runningOperations.values().iterator();
 		while (i.hasNext()) {
@@ -736,7 +701,7 @@ public class OperationManager {
 	 * loading the ShortOperation if only the Thread is
 	 * needed.
 	 */
-	public OpsChickenThread getPlayerThreadForAttack(String pname, int opID) {
+	private OpsChickenThread getPlayerThreadForAttack(String pname, int opID) {
 		TreeMap<String, OpsChickenThread> threads = this.getRunningOps().get(opID).getChickenThreads();
 		return threads.get(pname.toLowerCase());
 	}

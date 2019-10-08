@@ -29,12 +29,13 @@ import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlanet;
 import server.campaign.SPlayer;
+import server.campaign.operations.newopmanager.I_OperationManager;
 //TODO: remove "unused" once longs are running
 public class LongValidator {
 	
 	//IVARS
 	//backreference to manager which owns this object
-	private OperationManager manager;
+	private I_OperationManager manager;
 	
 	//public static int MODE_ATTACKER = 0;
 	//public static int MODE_DEFENDER = 1;

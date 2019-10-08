@@ -26,7 +26,7 @@ import server.campaign.SArmy;
  * 
  * Abstract class to validate unit spreads based on BV
  */
-public abstract class BVSpreadValidator implements ISpreadValidator {
+public abstract class BVSpreadValidator implements I_SpreadValidator {
 	private int validatorClass;
 	
 	protected int maxAllowedSpread = 0;
@@ -35,7 +35,7 @@ public abstract class BVSpreadValidator implements ISpreadValidator {
 	protected int minActualBV = 99999;
 	
 	protected int validatorType;
-	protected int error = ISpreadValidator.ERROR_UNKNOWN;
+	protected int error = I_SpreadValidator.ERROR_UNKNOWN;
 	
 	private boolean debug = false;
 	
@@ -95,13 +95,13 @@ public abstract class BVSpreadValidator implements ISpreadValidator {
 		int spreadError;
 
 		if(spread > getMaxAllowed()) {
-			spreadError = ISpreadValidator.ERROR_SPREAD_TOO_LARGE;
+			spreadError = I_SpreadValidator.ERROR_SPREAD_TOO_LARGE;
 		} else if (spread < getMinAllowed()) {
-			spreadError = ISpreadValidator.ERROR_SPREAD_TOO_SMALL;
+			spreadError = I_SpreadValidator.ERROR_SPREAD_TOO_SMALL;
 		} else if ((spread >= getMinAllowed()) && (spread <= getMaxAllowed())) {
-			spreadError = ISpreadValidator.ERROR_NONE;
+			spreadError = I_SpreadValidator.ERROR_NONE;
 		} else {
-			spreadError = ISpreadValidator.ERROR_UNKNOWN;
+			spreadError = I_SpreadValidator.ERROR_UNKNOWN;
 		}
 		setError(spreadError);
 	}
@@ -120,7 +120,7 @@ public abstract class BVSpreadValidator implements ISpreadValidator {
 			logDebugInfo(a, o);
 		}
 		
-		if(getError() == ISpreadValidator.ERROR_NONE) {
+		if(getError() == I_SpreadValidator.ERROR_NONE) {
 			return true;
 		} else {
 			return false;

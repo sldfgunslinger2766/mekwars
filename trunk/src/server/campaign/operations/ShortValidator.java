@@ -45,7 +45,7 @@ import server.campaign.SPlanet;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.mercenaries.ContractInfo;
-import server.campaign.operations.validation.ISpreadValidator;
+import server.campaign.operations.validation.I_SpreadValidator;
 import server.campaign.operations.validation.PercentBVSpreadValidator;
 import server.campaign.operations.validation.StandardBVSpreadValidator;
 
@@ -952,8 +952,8 @@ public class ShortValidator {
         if ( o.getBooleanValue("MULArmiesOnly") ) {
             return;
         }
-        ISpreadValidator isv;
-        int spreadError = ISpreadValidator.ERROR_NONE;
+        I_SpreadValidator isv;
+        int spreadError = I_SpreadValidator.ERROR_NONE;
         if (o.getBooleanValue("AttackerUsePercentageBVSpread")) {
         	isv = new PercentBVSpreadValidator(o.getIntValue("MaxAttackerUnitBVSpread"), o.getDoubleValue("AttackerBVSpreadPercent"));
         } else {
@@ -1274,9 +1274,9 @@ public class ShortValidator {
 
         // check unit BV difference failures
        
-        if (spreadError == ISpreadValidator.ERROR_SPREAD_TOO_LARGE) {
+        if (spreadError == I_SpreadValidator.ERROR_SPREAD_TOO_LARGE) {
         	failureReasons.add(SFAIL_ATTACK_MAXSPREAD);
-        } else if (spreadError == ISpreadValidator.ERROR_SPREAD_TOO_SMALL) {
+        } else if (spreadError == I_SpreadValidator.ERROR_SPREAD_TOO_SMALL) {
         	failureReasons.add(SFAIL_ATTACK_MINSPREAD);
         }
         
@@ -1452,8 +1452,8 @@ public class ShortValidator {
             return;
         }
         
-        ISpreadValidator isv;
-        int spreadError = ISpreadValidator.ERROR_NONE;
+        I_SpreadValidator isv;
+        int spreadError = I_SpreadValidator.ERROR_NONE;
         if (o.getBooleanValue("DefenderUsePercentageBVSpread")) {
         	isv = new PercentBVSpreadValidator(o.getIntValue("MaxDefenderUnitBVSpread"), o.getDoubleValue("DefenderBVSpreadPercent"));
         } else {
@@ -1748,9 +1748,9 @@ public class ShortValidator {
             failureReasons.add(new Integer(SFAIL_DEFEND_MINARMYTON));
 
         // check unit BV difference failures
-        if (spreadError == ISpreadValidator.ERROR_SPREAD_TOO_LARGE) {
+        if (spreadError == I_SpreadValidator.ERROR_SPREAD_TOO_LARGE) {
         	failureReasons.add(SFAIL_DEFEND_MAXSPREAD);
-        } else if (spreadError == ISpreadValidator.ERROR_SPREAD_TOO_SMALL) {
+        } else if (spreadError == I_SpreadValidator.ERROR_SPREAD_TOO_SMALL) {
         	failureReasons.add(SFAIL_DEFEND_MINSPREAD);
         }
         

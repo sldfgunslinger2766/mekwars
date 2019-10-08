@@ -23,6 +23,7 @@ import server.campaign.SArmy;
 import server.campaign.SPlanet;
 import server.campaign.SPlayer;
 import server.campaign.operations.OperationManager;
+import server.campaign.operations.newopmanager.I_OperationManager;
 import server.campaign.util.ExclusionList;
 
 /**
@@ -60,7 +61,7 @@ public class AttackFromReserveCommand implements Command {
             }
         }
 
-        OperationManager manager = CampaignMain.cm.getOpsManager();
+        I_OperationManager manager = CampaignMain.cm.getOpsManager();
         SPlayer ap = CampaignMain.cm.getPlayer(Username);
         if (ap == null) {
             CampaignMain.cm.toUser("AM:Null player. Contact an administrator to report this, immediately!", Username, true);

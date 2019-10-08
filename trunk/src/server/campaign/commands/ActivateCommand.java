@@ -27,6 +27,7 @@ import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
 import server.campaign.operations.OperationManager;
+import server.campaign.operations.newopmanager.I_OperationManager;
 import server.campaign.util.scheduler.MWScheduler;
 import server.util.SPlayerToJSON;
 import server.util.StringUtil;
@@ -468,7 +469,7 @@ public class ActivateCommand implements Command {
             }
 
             // check for legal defense
-            OperationManager manager = CampaignMain.cm.getOpsManager();
+            I_OperationManager manager = CampaignMain.cm.getOpsManager();
             for (Operation op : manager.getOperations().values()) {
                 if (manager.validateShortDefense(player, army, op, null) == null) {
                     canDefend = true;

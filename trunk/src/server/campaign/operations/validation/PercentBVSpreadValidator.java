@@ -25,7 +25,7 @@ import server.campaign.SArmy;
  * @since	2013-06-19
  */
 public class PercentBVSpreadValidator extends BVSpreadValidator implements
-		ISpreadValidator {
+		I_SpreadValidator {
 
 	protected double percent;
 	protected int base;
@@ -52,7 +52,7 @@ public class PercentBVSpreadValidator extends BVSpreadValidator implements
 			logDebugInfo(a, o);
 		}
 		
-		if(getError() == ISpreadValidator.ERROR_NONE) {
+		if(getError() == I_SpreadValidator.ERROR_NONE) {
 			return true;
 		} else {
 			return false;
@@ -66,8 +66,8 @@ public class PercentBVSpreadValidator extends BVSpreadValidator implements
 	 * @param percent	Percent of army BV added to the base
 	 */
 	public PercentBVSpreadValidator(int base, double percent) {
-		setValidatorClass(ISpreadValidator.VALIDATOR_CLASS_BV_PERCENT);
-		setSpreadType(ISpreadValidator.SPREADTYPE_BV);
+		setValidatorClass(I_SpreadValidator.VALIDATOR_CLASS_BV_PERCENT);
+		setSpreadType(I_SpreadValidator.SPREADTYPE_BV);
 		setMinAllowed(0);
 		this.base = base;
 		this.percent = percent;
