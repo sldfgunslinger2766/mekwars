@@ -131,6 +131,8 @@ import server.campaign.mercenaries.ContractInfo;
 import server.campaign.mercenaries.MercHouse;
 import server.campaign.operations.OperationManager;
 import server.campaign.operations.ShortOperation;
+import server.campaign.operations.newopmanager.I_OperationManager;
+import server.campaign.operations.newopmanager.NewOperationManager;
 import server.campaign.pilot.SPilotSkills;
 import server.campaign.util.ChatRoom;
 import server.campaign.util.ChristmasHandler;
@@ -215,7 +217,7 @@ public final class CampaignMain implements Serializable {
 
     private VoteManager voteManager;
 
-    private OperationManager opsManager;
+    private I_OperationManager opsManager;
 
     private Vector<ContractInfo> unresolvedContracts = new Vector<ContractInfo>(1, 1);
 
@@ -652,12 +654,16 @@ public final class CampaignMain implements Serializable {
      * Method that allows other classes to access the opsManager instance via
      * the static CampaignMain.
      */
-    public OperationManager getOpsManager() {
+    public I_OperationManager getOpsManager() {
         return opsManager;
     }
 
     public void createNewOpsManager() {
-        opsManager = new OperationManager();
+        if(CampaignMain.cm.getBooleanConfig("UseNewOpManager")) {
+            opsManager = new NewOperationManager();
+        } else {
+            opsManager = new OperationManager();            
+        }
     }
 
     public void fromUser(String text, String Username) {

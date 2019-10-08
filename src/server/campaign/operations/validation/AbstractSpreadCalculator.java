@@ -36,7 +36,7 @@ import common.Unit;
  * However, because of the static keyword in those, I cannot define them in either
  * the abstract class or the interface
  */
-public abstract class AbstractSpreadCalculator implements ISpreadCalculator {
+public abstract class AbstractSpreadCalculator implements I_SpreadCalculator {
 	
 	public static int SPREADTYPE_BV = 0;
 	public static int SPREADTYPE_TONNAGE = 1;

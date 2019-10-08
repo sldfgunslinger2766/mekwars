@@ -31,6 +31,7 @@ import server.campaign.SArmy;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.operations.OperationManager;
+import server.campaign.operations.newopmanager.I_OperationManager;
 
 /**
  * 
@@ -130,7 +131,7 @@ public class OpponentListHelper {
 				 * as opponents in each others' lists.
 				 */
 				ArrayList<SArmy> possDefendArmies = new ArrayList<SArmy>();
-				OperationManager manager = CampaignMain.cm.getOpsManager(); 
+				I_OperationManager manager = CampaignMain.cm.getOpsManager(); 
 
 				for (SArmy searchArmy : searchPlayer.getArmies()) {
 					for (SArmy enemyArmy : currPlayer.getArmies()) {

@@ -27,6 +27,7 @@ import server.campaign.SPlanet;
 import server.campaign.SPlayer;
 import server.campaign.operations.OperationManager;
 import server.campaign.operations.ShortOperation;
+import server.campaign.operations.newopmanager.I_OperationManager;
 
 /**
  * DefendCommand is analagous to the Task system's
@@ -59,7 +60,7 @@ public class AcceptAttackFromReserveCommand implements Command {
 		}
 
         //Get the attacker's name, the op id, army id, and so on
-        OperationManager manager = CampaignMain.cm.getOpsManager();
+        I_OperationManager manager = CampaignMain.cm.getOpsManager();
 		int armyID = -1;
         int attackingArmyID = -1;
         SPlayer ap = null;

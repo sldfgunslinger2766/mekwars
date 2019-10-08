@@ -1469,6 +1469,9 @@ public class DefaultServerOptions {
         //Discord Integration
         defaults.setProperty("DiscordWebHookAddress", "");
         defaults.setProperty("DiscordEnable", "false");
+        
+        // New OpsManager - use at your own risk!
+        defaults.setProperty("UseNewOpManager", "false");
     }
 
     /**

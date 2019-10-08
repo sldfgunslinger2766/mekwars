@@ -20,6 +20,7 @@ import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.operations.OperationManager;
 import server.campaign.operations.ShortOperation;
+import server.campaign.operations.newopmanager.I_OperationManager;
 
 /**
  * JoinAttackCommand is used to join a
@@ -45,7 +46,7 @@ public class JoinAttackCommand implements Command {
 			}
 		}
 		
-		OperationManager manager = CampaignMain.cm.getOpsManager();
+		I_OperationManager manager = CampaignMain.cm.getOpsManager();
 		SPlayer jp = CampaignMain.cm.getPlayer(Username);
 
 		if (jp == null) {
