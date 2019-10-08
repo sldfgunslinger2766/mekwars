@@ -1,6 +1,14 @@
 VERSION HISTORY:
 ----------------
-+ Started separating out truly independent code into libpk.jar to imrpove 
++ Updated xstream to current for MM compatibility
+  **********************************************
+  * NOTE TO OPERATORS                          *
+  *                                            *
+  * Make sure to replace xstream-1.4.7.jar     *
+  * with the newest version from the client    *
+  * and server lib folders                     *
+  **********************************************
++ Started separating out truly independent code into libpk.jar to improve 
   OOP adherence
   ***********************************
   * NOTE TO OPERATORS               *
