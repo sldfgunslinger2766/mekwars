@@ -86,11 +86,8 @@ import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.looks.plastic.theme.DesertGreen;
 import com.jgoodies.looks.plastic.theme.SkyBlue;
-import com.jgoodies.looks.windows.WindowsLookAndFeel;
 import com.l2fprod.gui.plaf.skin.Skin;
 import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
-import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
-
 //import server.campaign.SHouse;
 //import server.campaign.CampaignMain;
 import client.campaign.CCampaign;
@@ -1985,8 +1982,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         LookAndFeel LAF = new com.incors.plaf.kunststoff.KunststoffLookAndFeel();
         if (Config.getParam("LOOKANDFEEL").equals("metal")) {
             LAF = new MetalLookAndFeel();
-        } else if (Config.getParam("LOOKANDFEEL").equals("motif")) {
-            LAF = new MotifLookAndFeel();
         } else if (Config.getParam("LOOKANDFEEL").equals("metouia")) {
             LAF = new MetouiaLookAndFeel();
         } else if (Config.getParam("LOOKANDFEEL").equals("plastic")) {
@@ -1997,8 +1992,6 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
         } else if (Config.getParam("LOOKANDFEEL").equals("plastic3d")) {
             PlasticLookAndFeel.setMyCurrentTheme(new SkyBlue());
             LAF = new Plastic3DLookAndFeel();
-        } else if (Config.getParam("LOOKANDFEEL").equals("jwindows")) {
-            LAF = new WindowsLookAndFeel();
         } else if (Config.getParam("LOOKANDFEEL").equals("skins")) {
             try {
                 Skin theSkinToUse = SkinLookAndFeel
