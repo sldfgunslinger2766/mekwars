@@ -140,10 +140,13 @@ import megamek.client.ui.swing.GameOptionsDialog;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
+import megamek.common.Game;
+import megamek.common.IGame;
 //import megamek.common.IGame;
 //import megamek.common.IGame.Phase;
 import megamek.common.Mech;
 import megamek.common.MechWarrior;
+import megamek.common.event.GameCFREvent;
 //import megamek.common.event.GameEntityRemoveEvent;
 import megamek.common.event.GameEvent;
 //import megamek.common.event.GamePhaseChangeEvent;
@@ -206,6 +209,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
     int mapMedium = 0;
 
     SplashWindow splash = null;
+    private IGame game = new Game();
 
     public static final String GUI_PREFIX = "/"; // prefix for commands in GUI
 
@@ -4049,6 +4053,20 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
 		//call a new command to capture chat server side
 		sendChat(MWClient.CAMPAIGN_PREFIX + "CHATBOT " + temp);
     }
+
+	@Override
+	public void gameClientFeedbackRequest(GameCFREvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public IGame getGame() {
+		return game;
+	}
+
+	public void setGame(IGame game) {
+		this.game = game;
+	}
 
 }
 

@@ -386,7 +386,7 @@ public class House {
             basePilotSkills.add(" ");
         }
 
-        id = new Integer(in.readInt("id"));
+        id = in.readInt("id");
         name = HTML.br2cr(in.readLine("name"));
         logo = HTML.br2cr(in.readLine("logo"));
         setBaseGunner(in.readInt("baseGunner"));

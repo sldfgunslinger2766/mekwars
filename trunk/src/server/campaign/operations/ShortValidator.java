@@ -734,9 +734,9 @@ public class ShortValidator {
 			boolean value = Boolean.parseBoolean(element.nextToken());
 			if (pFlags.getFlagStatus(fName) != value) {
 				if (value) {
-					failureReasons.add(new Integer(SFAIL_ATTACK_MISSING_REQUIRED_FLAG));
+					failureReasons.add(SFAIL_ATTACK_MISSING_REQUIRED_FLAG);
 				} else {
-					failureReasons.add(new Integer(SFAIL_ATTACK_HAS_BANNED_FLAG));
+					failureReasons.add(SFAIL_ATTACK_HAS_BANNED_FLAG);
 				}
 			}
 		}
@@ -976,30 +976,30 @@ public class ShortValidator {
         // BV min/max. Remember - these are for op qualification, not army
         // matching.
         if (aa.getBV() > o.getIntValue("MaxAttackerBV"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MAXBV));
+            failureReasons.add(SFAIL_ATTACK_MAXBV);
         else if (aa.getBV() < o.getIntValue("MinAttackerBV"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MINBV));
+            failureReasons.add(SFAIL_ATTACK_MINBV);
 
         // Mek min/max. Remember - these are for op qualification, not related
         // to limiters.
         if (aa.getNumberOfUnitTypes(Unit.MEK, countSupport) > o.getIntValue("MaxAttackerMeks"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MAXMEKS));
+            failureReasons.add(SFAIL_ATTACK_MAXMEKS);
         else if (aa.getNumberOfUnitTypes(Unit.MEK, countSupport) < o.getIntValue("MinAttackerMeks"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MINMEKS));
+            failureReasons.add(SFAIL_ATTACK_MINMEKS);
 
         // Vehicle min/max. Remember - these are for op qualification, not
         // related to limiters.
         if (aa.getNumberOfUnitTypes(Unit.VEHICLE, countSupport) > o.getIntValue("MaxAttackerVehicles"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MAXVEHICLES));
+            failureReasons.add(SFAIL_ATTACK_MAXVEHICLES);
         else if (aa.getNumberOfUnitTypes(Unit.VEHICLE, countSupport) < o.getIntValue("MinAttackerVehicles"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MINVEHICLES));
+            failureReasons.add(SFAIL_ATTACK_MINVEHICLES);
 
         // Aero min/max. Remember - these are for op qualification, not
         // related to limiters.
         if (aa.getNumberOfUnitTypes(Unit.AERO, countSupport) > o.getIntValue("MaxAttackerAero"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MAX_AERO));
+            failureReasons.add(SFAIL_ATTACK_MAX_AERO);
         else if (aa.getNumberOfUnitTypes(Unit.AERO, countSupport) < o.getIntValue("MinAttackerAero"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MIN_AERO));
+            failureReasons.add(SFAIL_ATTACK_MIN_AERO);
         
         // Check Aero ratios
         if (o.getBooleanValue("EnforceAttackerAeroRatio")) {
@@ -1011,9 +1011,9 @@ public class ShortValidator {
         	double actualPercent = (double) (((double)numAero / (double)totalUnits) * 100);
         	
         	if (actualPercent < minPercent) {
-        		failureReasons.add(new Integer(SFAIL_ATTACK_MIN_AERO));
+        		failureReasons.add(SFAIL_ATTACK_MIN_AERO);
         	} else if (actualPercent > maxPercent) {
-        		failureReasons.add(new Integer(SFAIL_ATTACK_MAX_AERO));
+        		failureReasons.add(SFAIL_ATTACK_MAX_AERO);
         	}
         }
 
@@ -1026,28 +1026,28 @@ public class ShortValidator {
         // Mek min/max. Remember - these are for op qualification, not related
         // to limiters.
         if (infCount > o.getIntValue("MaxAttackerInfantry"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MAXINFANTRY));
+            failureReasons.add(SFAIL_ATTACK_MAXINFANTRY);
         else if (infCount < o.getIntValue("MinAttackerInfantry"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MININFANTRY));
+            failureReasons.add(SFAIL_ATTACK_MININFANTRY);
 
         // NonInfantry min/max. Remember - these are for op qualification, not
         // related to limiters.
         if (aa.getNumberOfUnitTypes(Unit.MEK) + aa.getNumberOfUnitTypes(Unit.VEHICLE) + aa.getNumberOfUnitTypes(Unit.AERO) > o.getIntValue("MaxAttackerNonInfantry"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MAXNONINFANTRY));
+            failureReasons.add(SFAIL_ATTACK_MAXNONINFANTRY);
         else if (aa.getNumberOfUnitTypes(Unit.MEK) + aa.getNumberOfUnitTypes(Unit.VEHICLE) + aa.getNumberOfUnitTypes(Unit.AERO) < o.getIntValue("MinAttackerNonInfantry"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MINNONINFANTRY));
+            failureReasons.add(SFAIL_ATTACK_MINNONINFANTRY);
 
         // Support Unit min/max
         if (aa.getTotalSupportUnits() < o.getIntValue("MinAttackerSupportUnits")) {
-        	failureReasons.add(new Integer(SFAIL_ATTACK_TOO_FEW_SUPPORT_UNITS));
+        	failureReasons.add(SFAIL_ATTACK_TOO_FEW_SUPPORT_UNITS);
         } else if (aa.getTotalSupportUnits() > o.getIntValue("MaxAttackerSupportUnits")) {
-        	failureReasons.add(new Integer(SFAIL_ATTACK_TOO_MANY_SUPPORT_UNITS));
+        	failureReasons.add(SFAIL_ATTACK_TOO_MANY_SUPPORT_UNITS);
         }
         // Non-Support Unit min/max
         if ((aa.getAmountOfUnitsWithoutInfantry() - aa.getTotalSupportUnits()) < o.getIntValue("MinAttackerNonSupportUnits")) {
-        	failureReasons.add(new Integer(SFAIL_ATTACK_TOO_FEW_NONSUPPORT_UNITS));
+        	failureReasons.add(SFAIL_ATTACK_TOO_FEW_NONSUPPORT_UNITS);
         } else if ((aa.getAmountOfUnitsWithoutInfantry() - aa.getTotalSupportUnits()) > o.getIntValue("MaxAttackerNonSupportUnits")) {
-        	failureReasons.add(new Integer(SFAIL_ATTACK_TOO_MANY_NONSUPPORT_UNITS));
+        	failureReasons.add(SFAIL_ATTACK_TOO_MANY_NONSUPPORT_UNITS);
         }
         
         
@@ -1215,20 +1215,20 @@ public class ShortValidator {
 
         // add unit exclusion failures to list
         if (hasMeks && !o.getBooleanValue("AttackerAllowedMeks"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_NOMEKS));
+            failureReasons.add(SFAIL_ATTACK_NOMEKS);
         if (hasVehs && !o.getBooleanValue("AttackerAllowedVehs"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_NOVEHS));
+            failureReasons.add(SFAIL_ATTACK_NOVEHS);
         if (hasAeros && !o.getBooleanValue("AttackerAllowedAeros"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_NOAEROS));
+            failureReasons.add(SFAIL_ATTACK_NOAEROS);
         if (hasInf && !o.getBooleanValue("AttackerAllowedInf")) {
             // powered allowed, but there's unarmored inf too
             if (o.getBooleanValue("AttackerPoweredInfAllowed") && normInf)
-                failureReasons.add(new Integer(SFAIL_ATTACK_NONORMINF));
+                failureReasons.add(SFAIL_ATTACK_NONORMINF);
             else if (o.getBooleanValue("AttackerStandardInfAllowed") && powerInf)
-                failureReasons.add(new Integer(SFAIL_ATTACK_NOPOWERINF));
+                failureReasons.add(SFAIL_ATTACK_NOPOWERINF);
             else if ( !normInf && !powerInf ) {
                 // no infantry allowed, at all
-                failureReasons.add(new Integer(SFAIL_ATTACK_NOINF));
+                failureReasons.add(SFAIL_ATTACK_NOINF);
             }
         }// end if(!AllowedInf)
 
@@ -1240,37 +1240,37 @@ public class ShortValidator {
         }
 
         if (checkOmni && omniFail)
-            failureReasons.add(new Integer(SFAIL_ATTACK_OMNIONLY));
+            failureReasons.add(SFAIL_ATTACK_OMNIONLY);
 
         // proto failures. wee.
         if (o.getBooleanValue("ProtosMustbeGrouped") && numProtoMeks > 0 && numProtoMeks % 5 != 0)
-            failureReasons.add(new Integer(SFAIL_COMMON_PROTOGROUPS));
+            failureReasons.add(SFAIL_COMMON_PROTOGROUPS);
 
         // add speed failure to list
         if (speedFail)
-            failureReasons.add(new Integer(SFAIL_ATTACK_MINSPEED));
+            failureReasons.add(SFAIL_ATTACK_MINSPEED);
 
         if (jumpTooFar) {
-        	failureReasons.add(new Integer(SFAIL_ATTACK_MAXJUMP));
+        	failureReasons.add(SFAIL_ATTACK_MAXJUMP);
         }
         
         // add max/min unit ton failures to list
         if (maxTonFail)
-            failureReasons.add(new Integer(SFAIL_ATTACK_MAXUNITTON));
+            failureReasons.add(SFAIL_ATTACK_MAXUNITTON);
         if (minTonFail)
-            failureReasons.add(new Integer(SFAIL_ATTACK_MINUNITTON));
+            failureReasons.add(SFAIL_ATTACK_MINUNITTON);
 
         // add max/min unit BV failures to list
         if (maxBVFail)
-            failureReasons.add(new Integer(SFAIL_ATTACK_MAXUNITBV));
+            failureReasons.add(SFAIL_ATTACK_MAXUNITBV);
         if (minBVFail)
-            failureReasons.add(new Integer(SFAIL_ATTACK_MINUNITBV));
+            failureReasons.add(SFAIL_ATTACK_MINUNITBV);
 
         // check total tonnage failures
         if (totalWeight > o.getIntValue("MaxTotalAttackerTonnage"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MAXARMYTON));
+            failureReasons.add(SFAIL_ATTACK_MAXARMYTON);
         else if (totalWeight < o.getIntValue("MinTotalAttackerTonnage"))
-            failureReasons.add(new Integer(SFAIL_ATTACK_MINARMYTON));
+            failureReasons.add(SFAIL_ATTACK_MINARMYTON);
 
         // check unit BV difference failures
        
@@ -1352,9 +1352,9 @@ public class ShortValidator {
 			boolean value = Boolean.parseBoolean(element.nextToken());
 			if (pFlags.getFlagStatus(fName) != value) {
 				if (value) {
-					failureReasons.add(new Integer(SFAIL_DEFEND_MISSING_REQUIRED_FLAG));
+					failureReasons.add(SFAIL_DEFEND_MISSING_REQUIRED_FLAG);
 				} else {
-					failureReasons.add(new Integer(SFAIL_DEFEND_HAS_BANNED_FLAG));
+					failureReasons.add(SFAIL_DEFEND_HAS_BANNED_FLAG);
 				}
 			}
 		}
@@ -1471,30 +1471,30 @@ public class ShortValidator {
         // BV min/max. Remember - these are for op qualification, not army
         // matching.
         if (da.getBV() > o.getIntValue("MaxDefenderBV"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MAXBV));
+            failureReasons.add(SFAIL_DEFEND_MAXBV);
         else if (da.getBV() < o.getIntValue("MinDefenderBV"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MINBV));
+            failureReasons.add(SFAIL_DEFEND_MINBV);
 
         // Meks min/max. Remember - these are for op qualification, not related
         // to limiters.
         if (da.getNumberOfUnitTypes(Unit.MEK, countSupport) > o.getIntValue("MaxDefenderMeks"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MAXMEKS));
+            failureReasons.add(SFAIL_DEFEND_MAXMEKS);
         else if (da.getNumberOfUnitTypes(Unit.MEK, countSupport) < o.getIntValue("MinDefenderMeks"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MINMEKS));
+            failureReasons.add(SFAIL_DEFEND_MINMEKS);
 
         // Vehicles min/max. Remember - these are for op qualification, not
         // related to limiters.
         if (da.getNumberOfUnitTypes(Unit.VEHICLE, countSupport) > o.getIntValue("MaxDefenderVehicles"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MAXVEHICLES));
+            failureReasons.add(SFAIL_DEFEND_MAXVEHICLES);
         else if (da.getNumberOfUnitTypes(Unit.VEHICLE, countSupport) < o.getIntValue("MinDefenderVehicles"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MINVEHICLES));
+            failureReasons.add(SFAIL_DEFEND_MINVEHICLES);
 
         // Aero min/max. Remember - these are for op qualification, not
         // related to limiters.
         if (da.getNumberOfUnitTypes(Unit.AERO, countSupport) > o.getIntValue("MaxDefenderAero"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MAX_AERO));
+            failureReasons.add(SFAIL_DEFEND_MAX_AERO);
         else if (da.getNumberOfUnitTypes(Unit.AERO, countSupport) < o.getIntValue("MinDefenderAero"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MIN_AERO));
+            failureReasons.add(SFAIL_DEFEND_MIN_AERO);
 
         // Check Aero ratios
         if (o.getBooleanValue("EnforceDefenderAeroRatio")) {
@@ -1505,9 +1505,9 @@ public class ShortValidator {
         	double maxPercent = o.getDoubleValue("MaxAttackerAeroPercent");
         	double actualPercent = (double) (((double)numAero / (double)totalUnits) * 100);
         	if (actualPercent < minPercent) {
-        		failureReasons.add(new Integer(SFAIL_DEFEND_MIN_AERO));
+        		failureReasons.add(SFAIL_DEFEND_MIN_AERO);
         	} else if (actualPercent > maxPercent) {
-        		failureReasons.add(new Integer(SFAIL_DEFEND_MAX_AERO));
+        		failureReasons.add(SFAIL_DEFEND_MAX_AERO);
         	}
         }
 
@@ -1521,29 +1521,29 @@ public class ShortValidator {
         // Infantry min/max. Remember - these are for op qualification, not
         // related to limiters.
         if (infCount > o.getIntValue("MaxDefenderInfantry"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MAXINFANTRY));
+            failureReasons.add(SFAIL_DEFEND_MAXINFANTRY);
         else if (infCount < o.getIntValue("MinDefenderInfantry"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MININFANTRY));
+            failureReasons.add(SFAIL_DEFEND_MININFANTRY);
 
         // NonInfantry min/max. Remember - these are for op qualification, not
         // related to limiters.
         if (da.getNumberOfUnitTypes(Unit.MEK) + da.getNumberOfUnitTypes(Unit.VEHICLE) + da.getNumberOfUnitTypes(Unit.AERO) > o.getIntValue("MaxDefenderNonInfantry"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MAXNONINFANTRY));
+            failureReasons.add(SFAIL_DEFEND_MAXNONINFANTRY);
         else if (da.getNumberOfUnitTypes(Unit.MEK) + da.getNumberOfUnitTypes(Unit.VEHICLE) + da.getNumberOfUnitTypes(Unit.AERO) < o.getIntValue("MinDefenderNonInfantry"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MINNONINFANTRY));
+            failureReasons.add(SFAIL_DEFEND_MINNONINFANTRY);
 
         // Support Unit min/max
         if (da.getTotalSupportUnits() < o.getIntValue("MinDefenderSupportUnits")) {
-        	failureReasons.add(new Integer(SFAIL_DEFEND_TOO_FEW_SUPPORT_UNITS));
+        	failureReasons.add(SFAIL_DEFEND_TOO_FEW_SUPPORT_UNITS);
         } else if (da.getTotalSupportUnits() > o.getIntValue("MaxDefenderSupportUnits")) {
-        	failureReasons.add(new Integer(SFAIL_DEFEND_TOO_MANY_SUPPORT_UNITS));
+        	failureReasons.add(SFAIL_DEFEND_TOO_MANY_SUPPORT_UNITS);
         }
         
         // Non-Support Unit min/max
         if ((da.getAmountOfUnitsWithoutInfantry() - da.getTotalSupportUnits()) < o.getIntValue("MinDefenderNonSupportUnits")) {
-        	failureReasons.add(new Integer(SFAIL_DEFEND_TOO_FEW_NONSUPPORT_UNITS));
+        	failureReasons.add(SFAIL_DEFEND_TOO_FEW_NONSUPPORT_UNITS);
         } else if (da.getAmountOfUnitsWithoutInfantry() - da.getTotalSupportUnits() > o.getIntValue("MaxDefenderSupportUnits")) {
-        	failureReasons.add(new Integer(SFAIL_DEFEND_TOO_MANY_NONSUPPORT_UNITS));
+        	failureReasons.add(SFAIL_DEFEND_TOO_MANY_NONSUPPORT_UNITS);
         }        
         
         /*
@@ -1693,24 +1693,24 @@ public class ShortValidator {
 
         // add unit exclusion failures to list
         if (hasMeks && !o.getBooleanValue("DefenderAllowedMeks"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_NOMEKS));
+            failureReasons.add(SFAIL_DEFEND_NOMEKS);
         if (hasVehs && !o.getBooleanValue("DefenderAllowedVehs"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_NOVEHS));
+            failureReasons.add(SFAIL_DEFEND_NOVEHS);
         if (hasAeros && !o.getBooleanValue("DefenderAllowedAeros"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_NOAEROS));
+            failureReasons.add(SFAIL_DEFEND_NOAEROS);
         if (hasInf && !o.getBooleanValue("DefenderAllowedInf")) {
             // powered allowed, but there's unarmored inf too
             if (o.getBooleanValue("DefenderPoweredInfAllowed") && normInf)
-                failureReasons.add(new Integer(SFAIL_DEFEND_NONORMINF));
+                failureReasons.add(SFAIL_DEFEND_NONORMINF);
             if (o.getBooleanValue("DefenderStandardInfAllowed") && powerInf)
-                failureReasons.add(new Integer(SFAIL_DEFEND_NOPOWERINF));
+                failureReasons.add(SFAIL_DEFEND_NOPOWERINF);
             else if ( !normInf && !powerInf ) {
                 // no infantry allowed, at all
-                failureReasons.add(new Integer(SFAIL_ATTACK_NOINF));
+                failureReasons.add(SFAIL_ATTACK_NOINF);
             }
         }// end if(!AllowedInf)
         if (checkOmni && omniFail)
-            failureReasons.add(new Integer(SFAIL_DEFEND_OMNIONLY));
+            failureReasons.add(SFAIL_DEFEND_OMNIONLY);
 
         if (o.getBooleanValue("UseUnitCommander")) {
             if (numberOfCommanders < o.getIntValue("MinimumUnitCommanders"))
@@ -1721,31 +1721,31 @@ public class ShortValidator {
 
         // proto failures. wee.
         if (o.getBooleanValue("ProtosMustbeGrouped") && numProtoMeks > 0 && numProtoMeks % 5 != 0)
-            failureReasons.add(new Integer(SFAIL_COMMON_PROTOGROUPS));
+            failureReasons.add(SFAIL_COMMON_PROTOGROUPS);
 
         // add speed failure to list
         if (speedFail)
-            failureReasons.add(new Integer(SFAIL_DEFEND_MINSPEED));
+            failureReasons.add(SFAIL_DEFEND_MINSPEED);
         if (jumpTooFar) {
-        	failureReasons.add(new Integer(SFAIL_DEFEND_MAXJUMP));
+        	failureReasons.add(SFAIL_DEFEND_MAXJUMP);
         }
         // add max/min unit ton failures to list
         if (maxTonFail)
-            failureReasons.add(new Integer(SFAIL_DEFEND_MAXUNITTON));
+            failureReasons.add(SFAIL_DEFEND_MAXUNITTON);
         else if (minTonFail)
-            failureReasons.add(new Integer(SFAIL_DEFEND_MINUNITTON));
+            failureReasons.add(SFAIL_DEFEND_MINUNITTON);
 
         // add max/min unit BV failures to list
         if (maxBVFail)
-            failureReasons.add(new Integer(SFAIL_DEFEND_MAXUNITBV));
+            failureReasons.add(SFAIL_DEFEND_MAXUNITBV);
         else if (minBVFail)
-            failureReasons.add(new Integer(SFAIL_DEFEND_MINUNITBV));
+            failureReasons.add(SFAIL_DEFEND_MINUNITBV);
 
         // check total tonnage failures
         if (totalWeight > o.getIntValue("MaxTotalDefenderTonnage"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MAXARMYTON));
+            failureReasons.add(SFAIL_DEFEND_MAXARMYTON);
         else if (totalWeight < o.getIntValue("MinTotalDefenderTonnage"))
-            failureReasons.add(new Integer(SFAIL_DEFEND_MINARMYTON));
+            failureReasons.add(SFAIL_DEFEND_MINARMYTON);
 
         // check unit BV difference failures
         if (spreadError == I_SpreadValidator.ERROR_SPREAD_TOO_LARGE) {

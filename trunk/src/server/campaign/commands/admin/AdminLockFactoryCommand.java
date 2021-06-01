@@ -58,7 +58,7 @@ public class AdminLockFactoryCommand implements Command {
 			
 			boolean lock; 
 			if (command.hasMoreElements())
-				lock = new Boolean(command.nextToken()).booleanValue();
+				lock = Boolean.parseBoolean(command.nextToken());
 			else {
 				if (uf.isLocked())
 					lock = false;

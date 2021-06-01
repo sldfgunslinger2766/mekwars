@@ -26,7 +26,6 @@ import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlayer;
 import server.campaign.SUnit;
-import server.campaign.operations.OperationManager;
 import server.campaign.operations.newopmanager.I_OperationManager;
 import server.campaign.util.scheduler.MWScheduler;
 import server.util.SPlayerToJSON;
@@ -60,7 +59,7 @@ public class ActivateCommand implements Command {
         }
 
         SPlayer p = CampaignMain.cm.getPlayer(Username);
-        if (new Boolean(CampaignMain.cm.getConfig("CampaignLock")).booleanValue() == true) {
+        if (Boolean.parseBoolean(CampaignMain.cm.getConfig("CampaignLock")) == true) {
             CampaignMain.cm.toUser("AM:The campaign is currently locked. Player activation is disabled until the campaign is unlocked. NOTE: Running games will resolve normally.", Username, true);
             return;
         }
@@ -295,7 +294,7 @@ public class ActivateCommand implements Command {
         p.setActive(true);
 
         CampaignMain.cm.toUser("AM:[!] You're on your way to the front lines.", Username, true);
-        CampaignMain.cm.sendPlayerStatusUpdate(p, !new Boolean(CampaignMain.cm.getConfig("HideActiveStatus")).booleanValue());
+        CampaignMain.cm.sendPlayerStatusUpdate(p,!Boolean.parseBoolean(CampaignMain.cm.getConfig("HideActiveStatus")));
         
         
 

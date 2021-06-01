@@ -456,7 +456,7 @@ public class ShortResolver {
                 // start new thread
                 Integer maxScrapPay = unitCosts.get(currName);
                 if (maxScrapPay == null) {
-                    maxScrapPay = new Integer(0);
+                    maxScrapPay = 0;
                 }
 
                 OpsScrapThread scrap = scrapThreads.get(currName);
@@ -716,7 +716,7 @@ public class ShortResolver {
         if (scrapThreads.containsKey(winName)) {
             Integer maxScrapPay = unitCosts.get(winName);
             if ((maxScrapPay == null) || (maxScrapPay < 0)) {
-                maxScrapPay = new Integer(0);
+                maxScrapPay = 0;
             }
             scrapThreads.get(winName).setMaxPayment(maxScrapPay);
             ThreadManager.getInstance().runInThreadFromPool(scrapThreads.get(winName));
@@ -3965,7 +3965,7 @@ public class ShortResolver {
 
         // setup the return array
         Object[] toReturn = new Object[5];
-        toReturn[0] = new Boolean(false);
+        toReturn[0] = Boolean.parseBoolean("false");
         toReturn[1] = "";
         toReturn[2] = "";
         toReturn[3] = "";
@@ -3993,7 +3993,7 @@ public class ShortResolver {
                     // if the player is fighting for the same house, simply
                     // return the pilot
                     if (currEntity.getOwner().getHouseFightingFor().equals(pickupPlayer.getHouseFightingFor())) {
-                        toReturn[0] = new Boolean(true);
+                        toReturn[0] = Boolean.parseBoolean("true");
                         toReturn[1] = currUnit.getPilot().getName() + " ejected and was picked up by a friendly unit.";
                         toReturn[3] = "The pilot survived.";
                         return toReturn;
@@ -4019,7 +4019,7 @@ public class ShortResolver {
                             pickupPlayer.getHouseFightingFor().addDispossessedPilot(currUnit, true);
                         }
 
-                        toReturn[0] = new Boolean(false);// although the
+                        toReturn[0] = Boolean.parseBoolean("false");// although the
                         // pilot is
                         // technically
                         // alive, treat as
@@ -4040,7 +4040,7 @@ public class ShortResolver {
 
                 // allow so.getWinners() to recover all of their pilots outright
                 if (shortOp.getWinners().containsKey(currEntity.getOwnerName().toLowerCase())) {
-                    toReturn[0] = new Boolean(true);
+                    toReturn[0] = Boolean.parseBoolean("true");
                     toReturn[1] = currUnit.getPilot().getName() + " was picked up by a recovery team.";
                     toReturn[3] = "The pilot survived.";
                     return toReturn;
@@ -4063,7 +4063,7 @@ public class ShortResolver {
 
                 // survived. let the player know and return.
                 if (CampaignMain.cm.getRandomNumber(100) < survivalChance) {
-                    toReturn[0] = new Boolean(true);
+                    toReturn[0] = Boolean.parseBoolean("true");
                     toReturn[1] = ((SPilot) currUnit.getPilot()).getPilotRescueMessage(currUnit);
                     toReturn[3] = "The pilot survived";
                     return toReturn;
@@ -4093,7 +4093,7 @@ public class ShortResolver {
                     } else {
                         pickupPlayer.getHouseFightingFor().addDispossessedPilot(currUnit, true);
                     }
-                    toReturn[0] = new Boolean(false);// pilot technically
+                    toReturn[0] = Boolean.parseBoolean("false");// pilot technically
                     // lives, but we say
                     // that he is dead.
                     toReturn[2] = ((SPilot) currUnit.getPilot()).getPilotCaptureAndDefectedMessage(currUnit, pickupPlayer.getHouseFightingFor());
@@ -4135,7 +4135,7 @@ public class ShortResolver {
                      * always returned to its owner.
                      */
                     if (shortOp.getWinners().containsKey(currEntity.getOwnerName().toLowerCase()) || !CampaignMain.cm.getBooleanConfig("DownPilotsMustRollForSurvival")) {
-                        toReturn[0] = new Boolean(true);
+                        toReturn[0] = Boolean.parseBoolean("true");
                         toReturn[1] = "The crew survived.";
                         toReturn[3] = "The crew survived.";
                         return toReturn;
@@ -4154,11 +4154,11 @@ public class ShortResolver {
 
                     // survived. let the player know and return.
                     if (CampaignMain.cm.getRandomNumber(100) < survivalChance) {
-                        toReturn[0] = new Boolean(true);
+                        toReturn[0] = true;
                         toReturn[1] = "The crew survived.";
                         toReturn[3] = "The crew survived.";
                     } else {
-                        toReturn[0] = new Boolean(false);
+                        toReturn[0] = false;
                         toReturn[1] = "The crew didn't make it back to base.";
                         toReturn[3] = "The crew was killed.";
                     }
@@ -4221,7 +4221,7 @@ public class ShortResolver {
              * by an admin.
              */
             if (shortOp.getWinners().containsKey(currEntity.getOwnerName().toLowerCase()) || !CampaignMain.cm.getBooleanConfig("DownPilotsMustRollForSurvival")) {
-                toReturn[0] = new Boolean(true);
+                toReturn[0] = Boolean.parseBoolean("true");
                 toReturn[1] = ((SPilot) currUnit.getPilot()).getPilotRescueMessage(currUnit);
                 toReturn[3] = "The pilot survived.";
                 return toReturn;
@@ -4257,7 +4257,7 @@ public class ShortResolver {
 
             // survived. let the player know and return.
             if (CampaignMain.cm.getRandomNumber(100) < survivalChance) {
-                toReturn[0] = new Boolean(true);
+                toReturn[0] = Boolean.parseBoolean("true");
                 toReturn[1] = ((SPilot) currUnit.getPilot()).getPilotRescueMessage(currUnit);
                 toReturn[3] = "The pilot survived.";
                 return toReturn;
@@ -4289,7 +4289,7 @@ public class ShortResolver {
                 } else {
                     pickupPlayer.getHouseFightingFor().addDispossessedPilot(currUnit, true);
                 }
-                toReturn[0] = new Boolean(false);// technically alive, but
+                toReturn[0] = Boolean.parseBoolean("false");// technically alive, but
                 // dead for New Pilot
                 // purposes
                 toReturn[2] = ((SPilot) currUnit.getPilot()).getPilotCaptureAndDefectedMessage(currUnit, pickupPlayer.getHouseFightingFor());
@@ -5018,8 +5018,8 @@ public class ShortResolver {
                             ((Mech) cm.getEntity()).setAutoEject(((Mech) en).isAutoEject());
                         }
 
-                       	cm.getEntity().setExternalSpotlight(en.hasSpotlight());
-                        cm.getEntity().setSpotlightState(en.isUsingSpotlight());
+                       	cm.getEntity().setExternalSearchlight(en.hasSearchlight());
+                        cm.getEntity().setSearchlightState(en.isUsingSearchlight());
                         cm.setWeightclass(unit.getWeightclass());
                         cm.setType(unit.getType());
 

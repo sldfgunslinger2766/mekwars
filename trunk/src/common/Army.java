@@ -354,8 +354,8 @@ public class Army {
 
     public void removeUnitFromC3Network(int unitID) {
 
-        if (getC3Network().get(new Integer(unitID)) != null) {
-            getC3Network().remove(new Integer(unitID));
+        if (getC3Network().get(unitID) != null) {
+            getC3Network().remove(unitID);
             return;
         }
 

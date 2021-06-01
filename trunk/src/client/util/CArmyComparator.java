@@ -54,33 +54,33 @@ import client.campaign.CArmy;
 				return army1.getName().compareTo(army2.getName());
  		
  			case ARMYSORT_BV : //self evident
- 				Integer army1BV = new Integer(army1.getBV());
- 				Integer army2BV = new Integer(army2.getBV());
+ 				Integer army1BV = army1.getBV();
+ 				Integer army2BV = army2.getBV();
  				return army1BV.compareTo(army2BV);
  				
  			case ARMYSORT_ID : //the unique unit ID
- 				Integer army1ID = new Integer(army1.getID());
- 				Integer army2ID = new Integer(army2.getID());
+ 				Integer army1ID = army1.getID();
+ 				Integer army2ID = army2.getID();
  				return army1ID.compareTo(army2ID);	
 
  			case ARMYSORT_TONNAGE: //Total tonnage of the army
- 				Float army1Ton = new Float(army1.getTotalTonnage());
- 				Float army2Ton = new Float(army2.getTotalTonnage());
+ 				Float army1Ton = army1.getTotalTonnage();
+ 				Float army2Ton = army2.getTotalTonnage();
  				return army1Ton.compareTo(army2Ton);
 
  			case ARMYSORT_AVGMPWALK : //average walk MP for the army
- 				Integer army1MP = new Integer(army1.getAverageWalk());
- 				Integer army2MP = new Integer(army2.getAverageWalk());
+ 				Integer army1MP = army1.getAverageWalk();
+ 				Integer army2MP = army2.getAverageWalk();
  				return army1MP.compareTo(army2MP);	
 
  			case ARMYSORT_AVGMPJUMP : //average jump mp of the army
- 				Integer army1JP = new Integer(army1.getAverageJump());
- 				Integer army2JP = new Integer(army2.getAverageJump());
+ 				Integer army1JP = army1.getAverageJump();
+ 				Integer army2JP = army2.getAverageJump();
  				return army1JP.compareTo(army2JP);	
 
  			case ARMYSORT_UNITS:
- 				Integer army1Size = new Integer(army1.getUnits().size());
- 				Integer army2Size = new Integer(army2.getUnits().size());
+ 				Integer army1Size = army1.getUnits().size();
+ 				Integer army2Size = army2.getUnits().size();
  				return army1Size.compareTo(army2Size);
  				
  			default :

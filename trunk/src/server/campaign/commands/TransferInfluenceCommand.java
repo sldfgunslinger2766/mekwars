@@ -51,12 +51,6 @@ public class TransferInfluenceCommand implements Command {
 		SPlayer player = CampaignMain.cm.getPlayer(Username);
 		SHouse house = player.getMyHouse();
 
-		if (player == null)
-		{
-			CampaignMain.cm.toUser("AM:Null player (" + Username + ") in transfer " + CampaignMain.cm.getConfig("FluLongName") + " points. Report to an admin.",Username,true);
-			return;
-		}
-
 		if (player.getMyHouse().isNewbieHouse())
 		{
 			CampaignMain.cm.toUser("AM:You may not transfer " + CampaignMain.cm.getConfig("FluLongName") + " while in a training faction.",Username,true);

@@ -46,7 +46,7 @@ public class SetPlanetConquerCommand implements Command {
 		
 		try {
 			p = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
-			conquer = new Boolean(command.nextToken()).booleanValue();
+			conquer = Boolean.parseBoolean(command.nextToken());
 		} catch (Exception e) {
 			CampaignMain.cm.toUser("Improper command. Try: /c setplanetconquer#planet#true/false", Username, true);
 			return;

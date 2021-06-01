@@ -491,8 +491,8 @@ public class RepodCommand implements Command {
             ((Mech) cm.getEntity()).setAutoEject(((Mech) entity).isAutoEject());
         }
 
-       	cm.getEntity().setExternalSpotlight(entity.hasSpotlight());
-        cm.getEntity().setSpotlightState(entity.isUsingSpotlight());
+       	cm.getEntity().setExternalSearchlight(entity.hasSearchlight());
+        cm.getEntity().setSearchlightState(entity.isUsingSearchlight());
         cm.setWeightclass(m.getWeightclass());
         cm.setType(m.getType());
         // since unit cannot be in armies, no checkOperations on remove
@@ -502,7 +502,7 @@ public class RepodCommand implements Command {
         p.addUnit(cm, true);
         CampaignMain.cm.toUser("AM:Your " + m.getVerboseModelName() + " is now " + StringUtils.aOrAn(cm.getVerboseModelName(), true) + ".", Username, true);
         if (!global) {
-            if (new Boolean(h.getConfig("RepodUsesComp")).booleanValue()) {
+        	if (Boolean.parseBoolean(h.getConfig("RepodUsesComp"))) {
                 CampaignMain.cm.toUser("AM:Repodding cost " + CampaignMain.cm.moneyOrFluMessage(true, false, moneyCost) + " and " + CampaignMain.cm.moneyOrFluMessage(false, true, influenceCost) + " " + compCost + " Components.", Username, true);
             } else {
                 CampaignMain.cm.toUser("AM:Repodding cost " + CampaignMain.cm.moneyOrFluMessage(true, false, moneyCost) + " and " + CampaignMain.cm.moneyOrFluMessage(false, true, influenceCost) + ".", Username, true);

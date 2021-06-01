@@ -50,7 +50,7 @@ import client.campaign.CUnit;
 import common.Unit;
 import common.util.MWLogger;
 import common.util.UnitUtils;
-import megamek.client.ui.swing.MechTileset;
+import megamek.client.ui.swing.tileset.MechTileset;
 import megamek.client.ui.swing.util.RotateFilter;
 import megamek.common.Entity;
 import megamek.common.Mech;
@@ -522,7 +522,7 @@ public class MechInfo extends JPanel {
             }
         }// end if(null tileset)
         //@Salient - from what i can tell from the megamek code, passing in the component does nothing.
-        return mt.imageFor(m, c, -1); 
+        return mt.imageFor(m, -1); 
     }
 
     public void setPreviewIcon(ImageIcon preview) {

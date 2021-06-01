@@ -58,6 +58,7 @@ import common.UnitFactory;
 import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 import common.util.UnitUtils;
+import megamek.client.generator.RandomGenderGenerator;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.CrewType;
 import megamek.common.Entity;
@@ -296,22 +297,22 @@ public class CHSPanel extends JPanel {
          * :-(
          */
         if (canProduce(Unit.MEK, type)) {
-            addFactoryHelper(weight, new Integer(Unit.MEK), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
+            addFactoryHelper(weight, Unit.MEK, timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
         if (canProduce(Unit.VEHICLE, type)) {
-            addFactoryHelper(weight, new Integer(Unit.VEHICLE), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
+            addFactoryHelper(weight, Unit.VEHICLE, timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
         if (canProduce(Unit.INFANTRY, type)) {
-            addFactoryHelper(weight, new Integer(Unit.INFANTRY), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
+            addFactoryHelper(weight, Unit.INFANTRY, timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
         if (canProduce(Unit.PROTOMEK, type)) {
-            addFactoryHelper(weight, new Integer(Unit.PROTOMEK), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
+            addFactoryHelper(weight, Unit.PROTOMEK, timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
         if (canProduce(Unit.BATTLEARMOR, type)) {
-            addFactoryHelper(weight, new Integer(Unit.BATTLEARMOR), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
+            addFactoryHelper(weight, Unit.BATTLEARMOR, timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
         if (canProduce(Unit.AERO, type)) {
-            addFactoryHelper(weight, new Integer(Unit.AERO), timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
+            addFactoryHelper(weight, Unit.AERO, timeToRefresh, founder, planet, factoryName, accessLevel, factoryID);
         }
     }
 
@@ -826,9 +827,9 @@ public class CHSPanel extends JPanel {
         unitEntity = embeddedUnit.getEntity();
 
         JFrame InfoWindow = new JFrame();
-        UnitDisplay unitDetailInfo = new UnitDisplay(null);
+        UnitDisplay unitDetailInfo = new MWUnitDisplay(null, mwclient);
         unitEntity.loadAllWeapons();
-        unitEntity.setCrew(new megamek.common.Crew(CrewType.SINGLE, "", 1, gunnery, piloting));
+        unitEntity.setCrew(new megamek.common.Crew(CrewType.SINGLE, "", 1, gunnery, gunnery, gunnery, piloting, RandomGenderGenerator.generate(), null));
         if (battleDamage.trim().length() > 1) {
             UnitUtils.applyBattleDamage(unitEntity, battleDamage, false);
         }

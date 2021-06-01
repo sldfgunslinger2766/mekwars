@@ -19,7 +19,6 @@ package server.campaign.operations;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import common.CampaignData;
 import common.Unit;
 import common.UnitFactory;
 import common.campaign.operations.Operation;
@@ -474,7 +473,7 @@ public class OpsChickenThread extends Thread {
                 SPlayer currP = CampaignMain.cm.getPlayer(pdefender.getName());
                 currP.setActive(false);
                 currP.leechCount = 0;
-                CampaignMain.cm.sendPlayerStatusUpdate(currP, !new Boolean(CampaignMain.cm.getConfig("HideActiveStatus")).booleanValue());
+                CampaignMain.cm.sendPlayerStatusUpdate(currP, !Boolean.parseBoolean(CampaignMain.cm.getConfig("HideActiveStatus")));
                 CampaignMain.cm.toUser("You've been deactivated!", currP.getName(), true);
                 return;
             }

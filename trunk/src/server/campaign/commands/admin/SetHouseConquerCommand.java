@@ -46,7 +46,7 @@ public class SetHouseConquerCommand implements Command {
 		
 		try {
 			h = CampaignMain.cm.getHouseFromPartialString(command.nextToken(),Username);
-			conquer = new Boolean(command.nextToken()).booleanValue();
+			conquer = Boolean.parseBoolean(command.nextToken());
 		} catch (Exception e) {
 			CampaignMain.cm.toUser("Improper command. Try: /c sethouseconquer#Faction#true/false", Username, true);
 			return;

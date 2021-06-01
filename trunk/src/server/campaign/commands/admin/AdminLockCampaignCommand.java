@@ -49,7 +49,7 @@ public class AdminLockCampaignCommand implements Command {
             return;
         }
 
-        if (new Boolean(CampaignMain.cm.getConfig("CampaignLock")).booleanValue() == true) {
+        if (Boolean.parseBoolean(CampaignMain.cm.getConfig("CampaignLock")) == true) {
             CampaignMain.cm.toUser("Campaign is already locked.", Username, true);
             return;
         }
@@ -60,7 +60,7 @@ public class AdminLockCampaignCommand implements Command {
             for (SPlayer p : h.getActivePlayers().values()) {
                 p.setActive(false);
                 CampaignMain.cm.toUser("AM:" + Username + " locked the campaign. You were deactivated.", p.getName(), true);
-                CampaignMain.cm.sendPlayerStatusUpdate(p, !new Boolean(CampaignMain.cm.getConfig("HideActiveStatus")).booleanValue());
+                CampaignMain.cm.sendPlayerStatusUpdate(p, !Boolean.parseBoolean(CampaignMain.cm.getConfig("HideActiveStatus")));
             }// end while (act members remain)
 
         }// end while(factions remain)

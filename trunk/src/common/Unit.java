@@ -402,7 +402,7 @@ public class Unit {
             if ( !master.checkC3mNetworkHasOpen(army,this.getC3Level()))  
                 return -1;
 
-            army.getC3Network().put(new Integer(this.getId()),new Integer(master.getId()));
+            army.getC3Network().put(this.getId(),master.getId());
             return master.getId();
         }
 
@@ -425,7 +425,7 @@ public class Unit {
             if ( !master.checkC3mNetworkHasOpen(army,this.getC3Level()))  
                 return -1;
 
-            army.getC3Network().put(new Integer(this.getId()),new Integer(master.getId()));
+            army.getC3Network().put(this.getId(),master.getId());
             return master.getId();
         }
 
@@ -439,7 +439,7 @@ public class Unit {
             if ( !master.checkC3iNetworkHasOpen(army))
                 return -1;
 
-            army.getC3Network().put(new Integer(this.getId()),new Integer(master.getId()));
+            army.getC3Network().put(this.getId(),master.getId());
             return master.getId();
         }
 
@@ -487,7 +487,7 @@ public class Unit {
         if ( army.getUnit(this.getId()) == null )
             return false;
 
-        if ( army.getC3Network().get(new Integer(this.getId())) != null ) //meaning hes already linked to someone
+        if ( army.getC3Network().get(this.getId()) != null ) //meaning hes already linked to someone
             return false;
 
         if ( this.getC3Level() == C3_MMASTER){
@@ -533,7 +533,7 @@ public class Unit {
         if ( army.getUnit(this.getId()) == null )
             return false;
 
-        if ( army.getC3Network().get(new Integer(this.getId())) != null )
+        if ( army.getC3Network().get(this.getId()) != null )
             return false;
 
         for (Integer c3U : army.getC3Network().values()){

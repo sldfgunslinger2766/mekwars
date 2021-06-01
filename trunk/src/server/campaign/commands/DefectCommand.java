@@ -148,7 +148,7 @@ public class DefectCommand implements Command {
 
             // throw out if player is going merc and lacks the requisite XP
             else if (newHouse != null && p.getExperience() < mercEXPRequired && newHouse.isMercHouse()) {
-                if (new Boolean(CampaignMain.cm.getConfig("HideELO")).booleanValue())
+                if (Boolean.parseBoolean(CampaignMain.cm.getConfig("HideELO")))
                     CampaignMain.cm.toUser("AM:You're too inexperienced to defect to a Mercenary faction!", p.getName(), true);
                 else
                     CampaignMain.cm.toUser("AM:You're too inexperienced to defect to a Mercenary faction!  You need " + mercEXPRequired + " experience with your current Rating!", p.getName(), true);

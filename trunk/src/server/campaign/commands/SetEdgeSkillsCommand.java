@@ -62,10 +62,10 @@ public class SetEdgeSkillsCommand implements Command {
 		}//end catch
 		
 		try {
-            edge_when_tac = new Boolean(command.nextToken()).booleanValue();
-            edge_when_ko = new Boolean(command.nextToken()).booleanValue();
-            edge_when_headhit = new Boolean(command.nextToken()).booleanValue();
-            edge_when_explosion = new Boolean(command.nextToken()).booleanValue();
+            edge_when_tac = Boolean.parseBoolean(command.nextToken());
+            edge_when_ko = Boolean.parseBoolean(command.nextToken());
+            edge_when_headhit = Boolean.parseBoolean(command.nextToken());
+            edge_when_explosion = Boolean.parseBoolean(command.nextToken());
 		}//end try
 		catch (Exception ex){
 			CampaignMain.cm.toUser("AM:SetAutoEject Command failed. Check your input. It should be something like this: /c SetEdgeSkills#unitid#true/false#true/false#true/false#true/false",Username,true);

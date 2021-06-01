@@ -51,14 +51,14 @@ public class AdminSetServerAmmoBanCommand implements Command {
 		if ( CampaignMain.cm.getServerBannedAmmo().get(ammoName)!= null ){
 			CampaignMain.cm.getServerBannedAmmo().remove(ammoName);
             CampaignMain.cm.getData().setServerBannedAmmo(CampaignMain.cm.getServerBannedAmmo());
-			ammoName = CampaignMain.cm.getData().getMunitionsByNumber().get(new Long(ammoName));
+			ammoName = CampaignMain.cm.getData().getMunitionsByNumber().get(Long.parseLong(ammoName));
 			CampaignMain.cm.toUser("Server-wide ban on " + ammoName + " lifted.",Username,true);
 			CampaignMain.cm.doSendModMail("NOTE",Username + " lifted the server-wide ban on " + ammoName+ ".");
 		}
 		else {
 			CampaignMain.cm.getServerBannedAmmo().put(ammoName,"banned");
             CampaignMain.cm.getData().setServerBannedAmmo(CampaignMain.cm.getServerBannedAmmo());
-			ammoName = CampaignMain.cm.getData().getMunitionsByNumber().get(new Long(ammoName));
+			ammoName = CampaignMain.cm.getData().getMunitionsByNumber().get(Long.parseLong(ammoName));
 			CampaignMain.cm.toUser(ammoName + " banned server-wide.",Username,true);
 			CampaignMain.cm.doSendModMail("NOTE",Username + " banned " + ammoName+ " server-wide.");
 		}

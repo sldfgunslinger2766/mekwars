@@ -45,7 +45,7 @@ public class ArmyOpForceSizeCommand implements Command {
 		if (command.hasMoreElements()) {
 			
 			//first, make sure limiters are allowed ...
-			boolean useForceSize = new Boolean(CampaignMain.cm.getConfig("UseOperationsRule")).booleanValue();
+			boolean useForceSize = Boolean.parseBoolean(CampaignMain.cm.getConfig("UseOperationsRule"));
 			if (!useForceSize) {
 				CampaignMain.cm.toUser("AM:Force size is disabled.",Username,true);
 				return;

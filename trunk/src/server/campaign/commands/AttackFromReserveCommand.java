@@ -22,7 +22,6 @@ import server.campaign.CampaignMain;
 import server.campaign.SArmy;
 import server.campaign.SPlanet;
 import server.campaign.SPlayer;
-import server.campaign.operations.OperationManager;
 import server.campaign.operations.newopmanager.I_OperationManager;
 import server.campaign.util.ExclusionList;
 
@@ -74,7 +73,7 @@ public class AttackFromReserveCommand implements Command {
         }
 
         // Fix for BUG 1491934: AFR possible when campaign locked
-        if (new Boolean(CampaignMain.cm.getConfig("CampaignLock")).booleanValue() == true) {
+        if (Boolean.parseBoolean(CampaignMain.cm.getConfig("CampaignLock")) == true) {
             CampaignMain.cm.toUser("AM:The campaign is currently locked. Attacks are disabled until the campaign is unlocked.", Username, true);
             return;
         }

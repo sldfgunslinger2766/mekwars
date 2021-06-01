@@ -96,7 +96,7 @@ public class NoPlayCommand implements Command {
         int removeRPCost = CampaignMain.cm.getIntegerConfig("NoPlayRPCost");
         int removeFluCost = CampaignMain.cm.getIntegerConfig("NoPlayInfluenceCost");
         int removeMUCost = CampaignMain.cm.getIntegerConfig("NoPlayMUCost");
-        boolean adminListCountsForCap = new Boolean(CampaignMain.cm.getConfig("NoPlaysFromAdminsCountForMax")).booleanValue();
+        boolean adminListCountsForCap = Boolean.parseBoolean(CampaignMain.cm.getConfig("NoPlaysFromAdminsCountForMax"));
 
         // check player's values
         boolean hasEnoughRP = false;

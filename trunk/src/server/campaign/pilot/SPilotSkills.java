@@ -40,30 +40,30 @@ public class SPilotSkills {
 	
 	 public static void initializePilotSkills() {
 	        // PilotSkills
-	        pilotSkills.put(new Integer(PilotSkill.DodgeManeuverSkillID), (new DodgeManeuverSkill(PilotSkill.DodgeManeuverSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.ManeuveringAceSkillID), (new ManeuveringAceSkill(PilotSkill.ManeuveringAceSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.MeleeSpecialistSkillID), (new MeleeSpecialistSkill(PilotSkill.MeleeSpecialistSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.PainResistanceSkillID), (new PainResistanceSkill(PilotSkill.PainResistanceSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.AstechSkillID), (new AstechSkill(PilotSkill.AstechSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.NaturalAptitudeGunnerySkillID), (new NaturalAptitudeGunnerySkill(PilotSkill.NaturalAptitudeGunnerySkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.NaturalAptitudePilotingSkillID), (new NaturalAptitudePilotingSkill(PilotSkill.NaturalAptitudePilotingSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.IronManSkillID), (new IronManSkill(PilotSkill.IronManSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.GunneryBallisticSkillID), (new GunneryBallisticSkill(PilotSkill.GunneryBallisticSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.GunneryLaserSkillID), (new GunneryLaserSkill(PilotSkill.GunneryLaserSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.GunneryMissileSkillID), (new GunneryMissileSkill(PilotSkill.GunneryMissileSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.TacticalGeniusSkillID), (new TacticalGeniusSkill(PilotSkill.TacticalGeniusSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.WeaponSpecialistSkillID), (new WeaponSpecialistSkill(PilotSkill.WeaponSpecialistSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.SurvivalistSkillID), (new SurvivalistSkill(PilotSkill.SurvivalistSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.TraitID), (new TraitSkill(PilotSkill.TraitID)));
-	        pilotSkills.put(new Integer(PilotSkill.EnhancedInterfaceID), (new EnhancedInterfaceSkill(PilotSkill.EnhancedInterfaceID)));
-	        pilotSkills.put(new Integer(PilotSkill.QuickStudyID), (new QuickStudySkill(PilotSkill.QuickStudyID)));
-	        pilotSkills.put(new Integer(PilotSkill.GiftedID), (new GiftedSkill(PilotSkill.GiftedID)));
-	        pilotSkills.put(new Integer(PilotSkill.MedTechID), (new MedTechSkill(PilotSkill.MedTechID)));
-	        pilotSkills.put(new Integer(PilotSkill.EdgeSkillID), (new EdgeSkill(PilotSkill.EdgeSkillID)));
-	        pilotSkills.put(new Integer(PilotSkill.ClanPilotTraingID), (new ClanPilotTrainingSkill(PilotSkill.ClanPilotTraingID)));
-	        pilotSkills.put(new Integer(PilotSkill.VDNIID), (new VDNI(PilotSkill.VDNIID)));
-	        pilotSkills.put(new Integer(PilotSkill.BufferedVDNIID), (new BufferedVDNI(PilotSkill.BufferedVDNIID)));
-	        pilotSkills.put(new Integer(PilotSkill.PainShuntID), (new PainShunt(PilotSkill.PainShuntID)));
+	        pilotSkills.put(PilotSkill.DodgeManeuverSkillID, (new DodgeManeuverSkill(PilotSkill.DodgeManeuverSkillID)));
+	        pilotSkills.put(PilotSkill.ManeuveringAceSkillID, (new ManeuveringAceSkill(PilotSkill.ManeuveringAceSkillID)));
+	        pilotSkills.put(PilotSkill.MeleeSpecialistSkillID, (new MeleeSpecialistSkill(PilotSkill.MeleeSpecialistSkillID)));
+	        pilotSkills.put(PilotSkill.PainResistanceSkillID, (new PainResistanceSkill(PilotSkill.PainResistanceSkillID)));
+	        pilotSkills.put(PilotSkill.AstechSkillID, (new AstechSkill(PilotSkill.AstechSkillID)));
+	        pilotSkills.put(PilotSkill.NaturalAptitudeGunnerySkillID, (new NaturalAptitudeGunnerySkill(PilotSkill.NaturalAptitudeGunnerySkillID)));
+	        pilotSkills.put(PilotSkill.NaturalAptitudePilotingSkillID, (new NaturalAptitudePilotingSkill(PilotSkill.NaturalAptitudePilotingSkillID)));
+	        pilotSkills.put(PilotSkill.IronManSkillID, (new IronManSkill(PilotSkill.IronManSkillID)));
+	        pilotSkills.put(PilotSkill.GunneryBallisticSkillID, (new GunneryBallisticSkill(PilotSkill.GunneryBallisticSkillID)));
+	        pilotSkills.put(PilotSkill.GunneryLaserSkillID, (new GunneryLaserSkill(PilotSkill.GunneryLaserSkillID)));
+	        pilotSkills.put(PilotSkill.GunneryMissileSkillID, (new GunneryMissileSkill(PilotSkill.GunneryMissileSkillID)));
+	        pilotSkills.put(PilotSkill.TacticalGeniusSkillID, (new TacticalGeniusSkill(PilotSkill.TacticalGeniusSkillID)));
+	        pilotSkills.put(PilotSkill.WeaponSpecialistSkillID, (new WeaponSpecialistSkill(PilotSkill.WeaponSpecialistSkillID)));
+	        pilotSkills.put(PilotSkill.SurvivalistSkillID, (new SurvivalistSkill(PilotSkill.SurvivalistSkillID)));
+	        pilotSkills.put(PilotSkill.TraitID, (new TraitSkill(PilotSkill.TraitID)));
+	        pilotSkills.put(PilotSkill.EnhancedInterfaceID, (new EnhancedInterfaceSkill(PilotSkill.EnhancedInterfaceID)));
+	        pilotSkills.put(PilotSkill.QuickStudyID, (new QuickStudySkill(PilotSkill.QuickStudyID)));
+	        pilotSkills.put(PilotSkill.GiftedID, (new GiftedSkill(PilotSkill.GiftedID)));
+	        pilotSkills.put(PilotSkill.MedTechID, (new MedTechSkill(PilotSkill.MedTechID)));
+	        pilotSkills.put(PilotSkill.EdgeSkillID, (new EdgeSkill(PilotSkill.EdgeSkillID)));
+	        pilotSkills.put(PilotSkill.ClanPilotTraingID, (new ClanPilotTrainingSkill(PilotSkill.ClanPilotTraingID)));
+	        pilotSkills.put(PilotSkill.VDNIID, (new VDNI(PilotSkill.VDNIID)));
+	        pilotSkills.put(PilotSkill.BufferedVDNIID, (new BufferedVDNI(PilotSkill.BufferedVDNIID)));
+	        pilotSkills.put(PilotSkill.PainShuntID, (new PainShunt(PilotSkill.PainShuntID)));
 	    }
 	 
 	    public static SPilotSkill getRandomSkill(SPilot p, int unitType) {
@@ -112,7 +112,7 @@ public class SPilotSkills {
 	            while (it.hasNext()) {
 	                SPilotSkill skill = it.next();
 	                int chance = skill.getChance(unitType, p);
-	                if (skilltable.get(new Integer(skill.getId())) != null) {
+	                if (skilltable.get(skill.getId()) != null) {
 	                    chance += skilltable.get(skill.getId());
 	                }
 

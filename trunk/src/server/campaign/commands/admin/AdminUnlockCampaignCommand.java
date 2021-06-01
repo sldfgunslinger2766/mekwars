@@ -37,7 +37,7 @@ public class AdminUnlockCampaignCommand implements Command {
 			return;
 		}
 		
-		if (new Boolean(CampaignMain.cm.getConfig("CampaignLock")).booleanValue() != true) {
+		if (Boolean.parseBoolean(CampaignMain.cm.getConfig("CampaignLock")) != true) {
 			CampaignMain.cm.toUser("AM:Campaign is already unlocked.",Username,true);
 			return;
 		}

@@ -510,7 +510,7 @@ public class Market2 {
 						 * the pilot to the faction queue and pull a random
 						 * pilot from the faction stack.
 						 */
-						if (new Boolean(CampaignMain.cm.getConfig("AllowPersonalPilotQueues")).booleanValue()
+						if (Boolean.parseBoolean(CampaignMain.cm.getConfig("AllowPersonalPilotQueues"))
 								&& unitForSale.isSinglePilotUnit()) {
 							
 							// If the old owner is human, he keeps the pilot and gets an updated PPQ. If a

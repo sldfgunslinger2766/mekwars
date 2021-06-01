@@ -78,7 +78,7 @@ public class DeactivateCommand implements Command {
 		 * elsewhere now (in SHouse.doLogout and SPlayer.setActive).
 		 */
 		
-		CampaignMain.cm.sendPlayerStatusUpdate(p,!new Boolean(CampaignMain.cm.getConfig("HideActiveStatus")).booleanValue());
+		CampaignMain.cm.sendPlayerStatusUpdate(p,!Boolean.parseBoolean(CampaignMain.cm.getConfig("HideActiveStatus")));
 	}//end process()
 	
 }//end DeactivateCommand class

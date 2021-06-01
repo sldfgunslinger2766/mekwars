@@ -46,7 +46,7 @@ public class TransferPilotCommand implements Command {
 		SHouse house = player.getMyHouse();
 
 		//make sure PPQs are allowed
-		if (!new Boolean(house.getConfig("AllowPersonalPilotQueues")).booleanValue()) {
+		if (!Boolean.parseBoolean(house.getConfig("AllowPersonalPilotQueues"))) {
 			CampaignMain.cm.toUser("AM:Pilot queues are not enabled on this server.",Username,true);
 			return;
 		}
@@ -78,7 +78,7 @@ public class TransferPilotCommand implements Command {
 
 		//The receiving player must have enough room
 		if (targetplayer.getPersonalPilotQueue().getPilotQueue(pUnitType,pWeightClass).size()+1 > Integer.parseInt(house.getConfig("MaxAllowedPilotsInQueueToBuyFromHouse"))){
-			CampaignMain.cm.toUser("AM:"+Username + " tried to send you a pilot, but your faction allows only "+new Integer(house.getConfig("MaxAllowedPilotsInQueueToBuyFromHouse")).intValue()+" pilots of each type in your barracks.",targetplayer.getName(),true);
+			CampaignMain.cm.toUser("AM:"+Username + " tried to send you a pilot, but your faction allows only " + Integer.parseInt(house.getConfig("MaxAllowedPilotsInQueueToBuyFromHouse")) + " pilots of each type in your barracks.",targetplayer.getName(),true);
 			CampaignMain.cm.toUser("AM:"+targetplayer.getName()+"'s barracks are currently full!",Username,true);
 			return;
 		}
@@ -110,7 +110,7 @@ public class TransferPilotCommand implements Command {
 			player.getPersonalPilotQueue().addPilot(pilot, pWeightClass);
 			return;
 			//Same IP address?
-		} else if (new Boolean(house.getConfig("IPCheck")).booleanValue()) {
+		} else if (Boolean.parseBoolean(house.getConfig("IPCheck"))) {
 			if (CampaignMain.cm.getServer().getIP(player.getName()).toString().equals(CampaignMain.cm.getServer().getIP(targetplayer.getName()).toString())) {
 				CampaignMain.cm.toUser("AM:"+targetplayer.getName() + " has the same IP as you do. You can't send them pilots.", Username, true);
 				player.getPersonalPilotQueue().addPilot(pilot, pWeightClass);

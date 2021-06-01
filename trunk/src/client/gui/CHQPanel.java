@@ -75,7 +75,7 @@ import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 import common.util.TokenReader;
 import common.util.UnitUtils;
-import megamek.client.ui.swing.MechTileset;
+import megamek.client.ui.swing.tileset.MechTileset;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
 import megamek.common.Infantry;
@@ -660,7 +660,7 @@ public class CHQPanel extends JPanel {
 
                 if (mek != null) {
                     JFrame infoWindow = new JFrame();
-                    UnitDisplay unitdisplay = new UnitDisplay(null);
+                    UnitDisplay unitdisplay = new MWUnitDisplay(null, mwclient);
                     Entity theEntity = mek.getEntity();
                     theEntity.loadAllWeapons();
                     infoWindow.getContentPane().add(unitdisplay);
@@ -1640,7 +1640,7 @@ public class CHQPanel extends JPanel {
                         if (cm.getC3Level() != Unit.C3_NONE) {
                             popup.add(linkMenu);
                         }
-                        if (cm.hasBeenC3LinkedTo(l) || (l.getC3Network().get(new Integer(cm.getId())) != null)) {
+                        if (cm.hasBeenC3LinkedTo(l) || (l.getC3Network().get(cm.getId()) != null)) {
                             menuItem = new JMenuItem("Unlink");
                             menuItem.setActionCommand("LCN|" + lid + "|" + cm.getId() + "|-1");
                             menuItem.addActionListener(this);
@@ -2593,7 +2593,7 @@ public class CHQPanel extends JPanel {
                 CUnit mek = MekTable.getMekAt(row, col);
                 Entity theEntity = mek.getEntity();
                 JFrame infoWindow = new JFrame();
-                UnitDisplay unitDisplay = new UnitDisplay(null);
+                UnitDisplay unitDisplay = new MWUnitDisplay(null, mwclient);
                 theEntity.loadAllWeapons();
                 infoWindow.getContentPane().add(unitDisplay);
                 infoWindow.setSize(300, 400);
@@ -3064,7 +3064,7 @@ public class CHQPanel extends JPanel {
                         armyName = armyName.substring(0, 11);
                     }
 
-                    String toReturn = "<html><center><b>Army #" + new Integer(lid) + "</b><br>";
+                    String toReturn = "<html><center><b>Army #" + lid + "</b><br>";
                     if (army.isPlayerLocked()) {
                         toReturn += "(locked)<br>";
                     }
@@ -3146,7 +3146,7 @@ public class CHQPanel extends JPanel {
             if (army != null) {
                 if (cm.hasBeenC3LinkedTo(army)) {
                     result.append(" |M|");
-                } else if (army.getC3Network().get(new Integer(cm.getId())) != null) {
+                } else if (army.getC3Network().get(cm.getId()) != null) {
                     result.append(" |L|");
                 }
                 if (!Boolean.parseBoolean(mwclient.getConfig().getParam("RIGHTCOMMANDER")) && !Boolean.parseBoolean(mwclient.getConfig().getParam("LEFTCOMMANDER")) && army.isCommander(cm.getId())) {
@@ -3234,8 +3234,8 @@ public class CHQPanel extends JPanel {
                             C3Text.append("C3 Improved");
                         }
 
-                        if ((l != null) && (l.getC3Network().get(new Integer(cm.getId())) != null)) {
-                            Integer master = l.getC3Network().get(new Integer(cm.getId()));
+                        if ((l != null) && (l.getC3Network().get(cm.getId())) != null) {
+                            Integer master = l.getC3Network().get(cm.getId());
                             if (cm.getC3Level() == Unit.C3_IMPROVED) {
                                 C3Text.append(" linked to #" + master.intValue());
                             } else {

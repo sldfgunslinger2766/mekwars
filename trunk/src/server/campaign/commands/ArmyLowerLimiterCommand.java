@@ -44,7 +44,7 @@ public class ArmyLowerLimiterCommand implements Command {
 		
 		if (command.hasMoreElements()) {
 			
-			boolean limitsAllowed = new Boolean(CampaignMain.cm.getConfig("AllowLimiters")).booleanValue();
+			boolean limitsAllowed = Boolean.parseBoolean(CampaignMain.cm.getConfig("AllowLimiters"));
 			if (!limitsAllowed) {
 				CampaignMain.cm.toUser("AM:Limits are disabled.",Username,true);
 				return;

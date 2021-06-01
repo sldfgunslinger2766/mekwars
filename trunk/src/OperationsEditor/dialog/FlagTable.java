@@ -60,9 +60,9 @@ public class FlagTable extends JTable implements ActionListener {
 		PFTableModel model = new PFTableModel(cNames);
 		this.setModel(model);
 		if (flagType == FlagSet.FLAGTYPE_PLAYER) {
-			model.addRow(new Object[]{" ", new Boolean(false)});
+			model.addRow(new Object[]{" ", false});
 		} else if (flagType == FlagSet.FLAGTYPE_RESULTS) {
-			model.addRow(new Object[]{ " ", new Boolean(false), new Boolean(false), new Boolean(false)});
+			model.addRow(new Object[]{ " ", false, false, false});
 		}
 				
 		this.getColumnModel().getColumn(0).setPreferredWidth(200);
@@ -227,7 +227,7 @@ public class FlagTable extends JTable implements ActionListener {
 			DefaultTableModel tableModel = (DefaultTableModel) getModel();
 			String flagName = (String) JOptionPane.showInputDialog(parent, "Add which flag", "Select a flag", JOptionPane.PLAIN_MESSAGE, null, availableFlags.getFlagNames().toArray(), "");
 			if (flagName != null) {
-				tableModel.addRow(new Object[]{flagName, new Boolean(false), new Boolean(false), new Boolean(false)});
+				tableModel.addRow(new Object[]{flagName, false, false, false});
 			}
 		}
 	}
@@ -258,7 +258,7 @@ public class FlagTable extends JTable implements ActionListener {
 		public void removeRow(int row) {
 			super.removeRow(row);
 			if (this.getRowCount() == 0) {
-				this.addRow(new Object[] {" ", new Boolean(false)});
+				this.addRow(new Object[] {" ", false});
 			}
 		}
 		

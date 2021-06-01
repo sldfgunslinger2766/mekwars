@@ -238,8 +238,6 @@ public class DefaultPlayerFlagListDialog extends JDialog implements ActionListen
 		
 		public void tableChanged(TableModelEvent e) {
 			int firstRow = e.getFirstRow();
-			int lastRow = e.getLastRow();
-			int mColIndex = e.getColumn();
 			
 			if (e.getType() == TableModelEvent.UPDATE) {
 				// The rows in the range [firstRow, lastRow] changed

@@ -67,6 +67,7 @@ import megamek.common.IGame;
 import megamek.common.IGame.Phase;
 import megamek.common.Mech;
 import megamek.common.MechWarrior;
+import megamek.common.event.GameCFREvent;
 import megamek.common.options.IOption;
 import megamek.common.preference.IClientPreferences;
 import megamek.common.preference.PreferenceManager;
@@ -1881,4 +1882,10 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
             checkForRestart();
         }
     }
+
+	@Override
+	public void gameClientFeedbackRequest(GameCFREvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 }

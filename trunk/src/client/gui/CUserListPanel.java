@@ -1310,10 +1310,10 @@ public class CUserListPanel extends JPanel implements ActionListener{
 				if (Mode == SORTMODE_HOUSE) {result = user1.getHouse().compareToIgnoreCase(user2.getHouse());}
 				if (Mode == SORTMODE_COUNTRY) {result = user1.getCountry().compareToIgnoreCase(user2.getCountry());}
 				// orders are switched for the following, meaning, bigger value is earlier on list
-				if (Mode == SORTMODE_EXP) {result = new Integer(user2.getExp()).compareTo(new Integer(user1.getExp()));}
-				if (Mode == SORTMODE_RATING) {result = new Float(user2.getRating()).compareTo(new Float(user1.getRating()));}
-				if (Mode == SORTMODE_STATUS) {result = new Integer(user2.getStatus()).compareTo(new Integer(user1.getStatus()));}
-				if (Mode == SORTMODE_USERLEVEL) {result = new Integer(user2.getUserlevel()).compareTo(new Integer(user1.getUserlevel()));}
+				if (Mode == SORTMODE_EXP) {result = Integer.valueOf(user2.getExp()).compareTo(user1.getExp());}
+				if (Mode == SORTMODE_RATING) {result = Float.valueOf(user2.getRating()).compareTo(user1.getRating());}
+				if (Mode == SORTMODE_STATUS) {result = Integer.valueOf(user2.getStatus()).compareTo(user1.getStatus());}
+				if (Mode == SORTMODE_USERLEVEL) {result = Integer.valueOf(user2.getUserlevel()).compareTo(user1.getUserlevel());}
 				// if other modes gave equal result or no mode known, sort by name
 				if (result == 0)
 				{
