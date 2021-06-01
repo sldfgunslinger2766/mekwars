@@ -41,7 +41,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.mekwars.libpk.logging.PKLogManager;
 
 import common.BMEquipment;
-import common.CampaignData;
 import common.Planet;
 import common.SubFaction;
 import common.Unit;
@@ -456,7 +455,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             while (!finished) {
                 next = TokenReader.readString(ST);
                 if (!next.equals("EndComponents")) {
-                    Integer id = new Integer(next);
+                    Integer id = Integer.parseInt(next);
                     int count = TokenReader.readInt(ST);
                     for (int i = 0; i < count; i++) {
                         Vector<Integer> v = getComponents().get(id);
@@ -1654,7 +1653,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
             // standard addition
             Vector<Integer> v = getComponents().get(type_id);
-            v.setElementAt(new Integer(v.elementAt(weight).intValue() + val), weight);
+            v.setElementAt(v.elementAt(weight).intValue() + val, weight);
         } catch (Exception ex) {
             MWLogger.errLog(ex);
             MWLogger.errLog("Error in addPP()");

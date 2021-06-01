@@ -601,7 +601,7 @@ public class SArmy extends Army {
         for (int i = 0; i < count; i++) {
             int key = TokenReader.readInt(ST);
             int unit = TokenReader.readInt(ST);
-            getC3Network().put(new Integer(key), new Integer(unit));
+            getC3Network().put(key, unit);
         }
         setOpForceSize(TokenReader.readFloat(ST));
 

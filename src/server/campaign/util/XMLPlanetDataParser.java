@@ -368,7 +368,7 @@ public class XMLPlanetDataParser implements XMLResponder {
         } else if (lastElement.equalsIgnoreCase("AMOUNT")) {
             SHouse h = CampaignMain.cm.getHouseFromPartialString(lastInfFaction, null);
             if (h != null) {
-                Influence.put(new Integer(h.getId()), new Integer(charData));
+                Influence.put(h.getId(), Integer.parseInt(charData));
                 MWLogger.mainLog("Parsed: " + h.toString() + " - " + charData);
             } else {
                 MWLogger.mainLog("ERROR READING FACTION: " + lastInfFaction);

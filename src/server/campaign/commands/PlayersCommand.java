@@ -72,7 +72,7 @@ public class PlayersCommand implements Command {
 		 * Now, we care about whether or not activity status is
 		 * being hidden. If not, split reserve and active lists.
 		 */
-		if (!(new Boolean(CampaignMain.cm.getConfig("HideActiveStatus")).booleanValue())) {
+		if (!(Boolean.parseBoolean(CampaignMain.cm.getConfig("HideActiveStatus")))) {
 			
 			toSend += ("<br><h2>Active Duty Players:</h2><br>");
 			for (House vh : CampaignMain.cm.getData().getAllHouses()) {

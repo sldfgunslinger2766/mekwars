@@ -355,7 +355,7 @@ public class CBMPanel extends JPanel {
         theEntity.loadAllWeapons();
 
         JFrame infoWindow = new JFrame();
-        UnitDisplay unitDisplay = new UnitDisplay(null);
+        UnitDisplay unitDisplay = new MWUnitDisplay(null, mwclient);
 
         infoWindow.getContentPane().add(unitDisplay);
         infoWindow.setSize(300,400);

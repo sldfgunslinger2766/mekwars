@@ -366,7 +366,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
      * Decode all mutable fields from the stream.
      */
     public void decodeMutableFields(BinReader in, CampaignData dataProvider) throws IOException {
-        setId(new Integer(in.readInt("id")));
+        setId(in.readInt("id"));
         getInfluence().decodeMutableFields(in, dataProvider);
         binIn(in, dataProvider);
     }
@@ -401,7 +401,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
     }
 
     public void binIn(BinReader in, CampaignData data) throws IOException {
-        setId(new Integer(in.readInt("id")));
+        setId(in.readInt("id"));
         setName(in.readLine("name"));
         setPosition(new Position(in.readDouble("x"), in.readDouble("y")));
         int size = in.readInt("unitFactories.size");

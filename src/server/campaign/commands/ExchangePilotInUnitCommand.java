@@ -44,7 +44,7 @@ public class ExchangePilotInUnitCommand implements Command {
 			}
 		}
 		
-		if ( !new Boolean(CampaignMain.cm.getConfig("AllowPersonalPilotQueues")).booleanValue() )
+		if ( !Boolean.parseBoolean(CampaignMain.cm.getConfig("AllowPersonalPilotQueues")) )
 			return;
 		
 		if (command.hasMoreElements()) {

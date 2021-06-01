@@ -22,6 +22,7 @@ import java.util.StringTokenizer;
 import common.Unit;
 import common.campaign.pilot.Pilot;
 import common.util.TokenReader;
+import megamek.client.generator.RandomGenderGenerator;
 import megamek.common.CrewType;
 
 /**
@@ -101,7 +102,7 @@ public class CBMUnit {
 			 *
 			 * As such, we need to set the crew. See BlackMarketModel.java for usage.
 			 */
-			embeddedUnit.getEntity().setCrew(new megamek.common.Crew(CrewType.SINGLE, "Generic Pilot", 1, factionGunnery, factionPiloting));
+			embeddedUnit.getEntity().setCrew(new megamek.common.Crew(CrewType.SINGLE, "Generic Pilot", 1, factionGunnery, factionGunnery, factionGunnery, factionPiloting, RandomGenderGenerator.generate(), null));
 		}
 	}
 

@@ -85,7 +85,7 @@ public class SetUnitBurstCommand implements Command {
         }// end catch
 
         try {
-            selection = new Boolean(command.nextToken()).booleanValue();
+            selection = Boolean.parseBoolean(command.nextToken());
         }// end try
         catch (Exception ex) {
             CampaignMain.cm.toUser("AM:SetBurstAmmo command failed. Boolean not found. It should be something like this: /c SetunitBurst#unitid#weaponlocation#slot#true/false", Username, true);

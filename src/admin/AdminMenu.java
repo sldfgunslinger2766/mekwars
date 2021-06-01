@@ -1018,7 +1018,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String terrainChance = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Terrain Chance", new Integer(100));
+        String terrainChance = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Terrain Chance", 100);
 
         if ((terrainChance == null) || (terrainChance.length() == 0)) {
             return;

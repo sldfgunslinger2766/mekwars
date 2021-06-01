@@ -59,6 +59,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import client.MWClient;
 import client.campaign.CUnit;
+import client.gui.MWUnitDisplay;
 import client.gui.TableSorter;
 import client.util.CUnitComparator;
 import common.House;
@@ -245,7 +246,7 @@ public class TableViewerDialog extends JFrame implements ItemListener {
                     theEntity.loadAllWeapons();
 
                     JFrame infoWindow = new JFrame();
-                    UnitDisplay unitDetailInfo = new UnitDisplay(null);
+                    UnitDisplay unitDetailInfo = new MWUnitDisplay(null, client);
 
                     infoWindow.getContentPane().add(unitDetailInfo);
                     infoWindow.setSize(300, 400);

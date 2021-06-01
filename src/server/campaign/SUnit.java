@@ -74,7 +74,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
     // VARIABLES
     private Integer BV = 0;
-    private Integer scrappableFor = new Integer(-1);
+    private Integer scrappableFor = -1;
 
     private long passesMaintainanceUntil = 0;
     private boolean pilotIsRepairing = false;

@@ -131,7 +131,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
 		//check to see if the player has disconnected recently
 		Long timeOffline = disconnectionDurations.get(p.getName().toLowerCase());
 		if (timeOffline == null)
-			timeOffline = new Long(0);
+			timeOffline = (long)0;
 		
 		//if the other player is also disconnected, simply terminate the game
 		OpsDisconnectionThread otherThread = disconnectionThreads.get(otherName.toLowerCase());
@@ -950,7 +950,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
 	public int getFreeShortID() {
 		int i = 0;
 		while (true) {
-			if (runningOperations.get(new Integer(i)) == null) return i;
+			if (runningOperations.get(i) == null) return i;
 			i++;
 		}
 	}
@@ -962,7 +962,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
 	public int getFreeLongID() {
 		int i = 0;
 		while (true) {
-			if (activeLongOps.get(new Integer(i)) == null) return i;
+			if (activeLongOps.get(i) == null) return i;
 			i++;
 		}
 	}

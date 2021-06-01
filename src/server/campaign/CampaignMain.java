@@ -1909,7 +1909,7 @@ public final class CampaignMain implements Serializable {
             }
 
             HashMap<Integer, Integer> solFlu = new HashMap<Integer, Integer>();
-            solFlu.put(new Integer(CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"), null).getId()), new Integer(100));
+            solFlu.put(CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"), null).getId(), 100);
             SPlanet newbieP = new SPlanet(0, "Solaris VII", new Influences(solFlu), 0, 0, -3, -2);
             if (data.getPlanetByName("Solaris VII") == null) {
                 addPlanet(newbieP);

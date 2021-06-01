@@ -37,7 +37,7 @@ public class BuyPilotsFromHouseCommand implements Command {
 		SPlayer p = CampaignMain.cm.getPlayer(Username);
 		SHouse h = p.getMyHouse();
 
-		if ( !new Boolean(h.getConfig("AllowPersonalPilotQueues")).booleanValue() )
+		if ( !Boolean.parseBoolean(h.getConfig("AllowPersonalPilotQueues")) )
 			return;
 		
 		//access check

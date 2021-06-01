@@ -83,7 +83,7 @@ public class OperationEntity {
     		while (STR.hasMoreElements()){
     			String kill = STR.nextToken();
     			if (!kill.trim().equals("")){
-    				Integer killid = new Integer(kill);
+    				Integer killid = Integer.parseInt(kill);
     				kills.add(killid);
     			}
     		}

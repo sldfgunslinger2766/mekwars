@@ -86,12 +86,6 @@ public class SelfPromoteCommand implements Command {
             return;
         }
 
-        if (user == null) 
-        {
-            CampaignMain.cm.toUser("AM:Unknown Player", Username);
-            return;
-        }
-
         subFaction = user.getMyHouse().getSubFactionList().get(subFactionName);
 
         if (subFaction == null) 

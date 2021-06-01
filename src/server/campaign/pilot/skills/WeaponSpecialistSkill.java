@@ -108,7 +108,7 @@ public class WeaponSpecialistSkill extends SPilotSkill {
 			if ( bannedWeapons.indexOf(m.getDesc()) >= 0) {
                 continue;
             }
-			uniqueWeapons.put(m.getName(),new Boolean(true));
+			uniqueWeapons.put(m.getName(),true);
 		}
 
 		int selectedWeapon = 0;

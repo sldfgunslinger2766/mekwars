@@ -92,7 +92,7 @@ public class LongValidator {
 		//NOTE: Commented out until ops are ready, at which point hooks
 		//      into SHouse/SPlayer will be written.
 		if (manager.hasLongOnPlanet(ah, pl)) {
-			failList.add(new Integer(LFAILS_ALREADYTARGETTED));
+			failList.add(LFAILS_ALREADYTARGETTED);
 			return failList;
 		}
 		
@@ -118,18 +118,18 @@ public class LongValidator {
 		int reqPlayerXP = o.getIntValue("LPlayerLaunchExp");
 
 		if (requiredMoney > ah.getMoney())
-			failList.add(new Integer(LFAILS_HOUSEMONEY));
+			failList.add(LFAILS_HOUSEMONEY);
 		//if (requiredActions > ah.getActions())
 			//failList.add(new Integer(LFAILS_HOUSEACTIONS));
 		
 		if (reqPlayerMoney > p.getMoney())
-			failList.add(new Integer(LFAILS_PLAYERMONEY));
+			failList.add(LFAILS_PLAYERMONEY);
 		if (reqPlayerFlu > p.getInfluence())
-			failList.add(new Integer(LFAILS_PLAYERFLU));
+			failList.add(LFAILS_PLAYERFLU);
 		if (reqPlayerRP > p.getReward())
-			failList.add(new Integer(LFAILS_PLAYERREWARD));
+			failList.add(LFAILS_PLAYERREWARD);
 		if (reqPlayerXP > p.getExperience())
-			failList.add(new Integer(LFAILS_PLAYEREXP));
+			failList.add(LFAILS_PLAYEREXP);
 		
 		return failList;
 	}

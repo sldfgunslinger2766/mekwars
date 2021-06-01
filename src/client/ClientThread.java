@@ -49,6 +49,7 @@ import megamek.common.KeyBindParser;
 import megamek.common.MapSettings;
 import megamek.common.OffBoardDirection;
 import megamek.common.PlanetaryConditions;
+import megamek.common.icons.Camouflage;
 import megamek.common.logging.LogLevel;
 import megamek.common.options.IBasicOption;
 import megamek.common.preference.IClientPreferences;
@@ -452,9 +453,10 @@ public class ClientThread extends Thread implements CloseClientListener {
                  */
                  cs = null;
 
-                if (!mwclient.getConfig().getParam("UNITCAMO").equals(IPlayer.NO_CAMO)) {
-                    client.getLocalPlayer().setCamoCategory(IPlayer.ROOT_CAMO);
-                    client.getLocalPlayer().setCamoFileName(mwclient.getConfig().getParam("UNITCAMO"));
+                if (!mwclient.getConfig().getParam("UNITCAMO").equals(Camouflage.NO_CAMOUFLAGE)) {
+                	client.getLocalPlayer().setCamouflage(new Camouflage(Camouflage.ROOT_CATEGORY, mwclient.getConfig().getParam("UNITCAMO")));
+//                    client.getLocalPlayer().setCategory(Camouflage.ROOT_CATEGORY);
+//                    client.getLocalPlayer().setCamoFileName(mwclient.getConfig().getParam("UNITCAMO"));
                     playerUpdate = true;
                 }
 
@@ -480,10 +482,10 @@ public class ClientThread extends Thread implements CloseClientListener {
                     entity.setCommander(currA.isCommander(mek.getId()));
 
                     // Set slights based on games light conditions.
-                    if ( !entity.hasSpotlight()){
+                    if ( !entity.hasSearchlight()){
                         entity.getQuirks().getOption("searchlight").setValue(nightGame);
                     }
-                    entity.setSpotlightState(nightGame);
+                    entity.setSearchlightState(nightGame);
 
                     // Set the correct home edge for off board units
                     if (entity.isOffBoard()) {
@@ -541,8 +543,8 @@ public class ClientThread extends Thread implements CloseClientListener {
                     Entity entity = autoUnit.getEntity();
 
                     // Set slights based on games light conditions.
-                   	entity.setExternalSpotlight(nightGame);
-                    entity.setSpotlightState(nightGame);
+                   	entity.setExternalSearchlight(nightGame);
+                    entity.setSearchlightState(nightGame);
 
                     // Had issues with Id's so we are now setting them.
                     // entity.setId(autoUnit.getId());
@@ -835,7 +837,7 @@ public class ClientThread extends Thread implements CloseClientListener {
         Random r = new Random();
 
         TreeSet<String> tempMap = new TreeSet<String>();
-        Coords coord = new Coords();
+        Coords coord = new Coords(0,0);
         String stringCoord = "";
 
         for (int count = 0; count < buildingTemplate.getTotalBuildings(); count++) {

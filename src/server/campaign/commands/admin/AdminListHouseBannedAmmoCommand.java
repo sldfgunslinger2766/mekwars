@@ -61,7 +61,7 @@ public class AdminListHouseBannedAmmoCommand implements Command {
 			Hashtable<Long,String> munitions = CampaignMain.cm.getData().getMunitionsByNumber();
 			while (ammoBan.hasMoreElements()) {
 				String ammoName = ammoBan.nextElement();
-				CampaignMain.cm.toUser(munitions.get(new Long(ammoName)),Username,true);
+				CampaignMain.cm.toUser(munitions.get(Long.parseLong(ammoName)),Username,true);
 			}
 		}
 		

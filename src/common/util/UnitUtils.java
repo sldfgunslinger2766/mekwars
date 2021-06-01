@@ -2656,7 +2656,7 @@ public class UnitUtils {
         Crew pilot = null;
         if (mek.getPilot() == null) {
 			//when looking at a pilotless mek - we need a default pilot
-		    pilot = new Crew(CrewType.SINGLE, "No Pilot", 1, 4, 5);
+		    pilot = new Crew(CrewType.SINGLE, "No Pilot", 1, 4, 4, 4, 5, null, null);
 		    return pilot;
 		} else {
             pilot = new Crew(CrewType.SINGLE, mek.getPilot().getName(), 1, mek.getPilot()

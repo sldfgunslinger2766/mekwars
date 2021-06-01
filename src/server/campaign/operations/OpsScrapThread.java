@@ -38,7 +38,7 @@ public class OpsScrapThread extends Thread {
 	public OpsScrapThread(String playerName) {
 		super(playerName + " Scrap Thread");
 		this.playerName = playerName;
-		waitTime = new Long(CampaignMain.cm.getConfig("TimeToSelectSalvage"));
+		waitTime = Long.parseLong(CampaignMain.cm.getConfig("TimeToSelectSalvage"));
 
 		maxTotalPayment = 0;
 		paymentsToDate = 0;

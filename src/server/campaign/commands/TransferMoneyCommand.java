@@ -43,12 +43,7 @@ public class TransferMoneyCommand implements Command {
 		
 		SPlayer player = CampaignMain.cm.getPlayer(Username);
 		SHouse house = player.getMyHouse();
-		
-		if (player == null) {
-			CampaignMain.cm.toUser("AM:Null player (" + Username + ") in transfermoney. Report to an admin.",Username,true);
-			return;
-		}
-		
+
 		if (player.getMyHouse().isNewbieHouse()) {
 			CampaignMain.cm.toUser("AM:You may not transfer " + house.getConfig("MoneyLongName") + " while in a training faction.",Username,true);
 			return;

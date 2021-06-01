@@ -66,7 +66,7 @@ public class RetirePilotCommand implements Command {
 			}
 			
 			//see if its even possible to retire pilots
-			if (new Boolean(CampaignMain.cm.getConfig("PilotRetirementAllowed")).booleanValue() == false) {
+			if (Boolean.parseBoolean(CampaignMain.cm.getConfig("PilotRetirementAllowed")) == false) {
 				CampaignMain.cm.toUser("AM:Pilot retirement is not allowed.",Username,true);
 				return;
 			}
@@ -130,7 +130,7 @@ public class RetirePilotCommand implements Command {
 				retirementCost = costPerLevelNeeded * numLevelsNeeded;
 				
 				//check to see if early is allowed. if not, break out.
-				boolean earlyAllowed = new Boolean(CampaignMain.cm.getConfig("EarlyRetirementAllowed")).booleanValue();
+				boolean earlyAllowed = Boolean.parseBoolean(CampaignMain.cm.getConfig("EarlyRetirementAllowed"));
 				if (!earlyAllowed) {
 					String toReturn = m.getPilot().getName() + " may not retire yet. He needs to " +
 					"level up " + numLevelsNeeded + " more time";
@@ -190,7 +190,7 @@ public class RetirePilotCommand implements Command {
 
 			//now, handle the pilot. if PPQs are in use leave the unit vacant,
 			//otherwise add a new pilot from the faction queue.
-			boolean allowPPQs = new Boolean(CampaignMain.cm.getConfig("AllowPersonalPilotQueues")).booleanValue();
+			boolean allowPPQs = Boolean.parseBoolean(CampaignMain.cm.getConfig("AllowPersonalPilotQueues"));
 			if (allowPPQs && m.isSinglePilotUnit()) {
 				SPilot pilot = new SPilot("Vacant",99,99);
 			    m.setPilot(pilot);
@@ -198,7 +198,7 @@ public class RetirePilotCommand implements Command {
 			
 			else {//add a new pilot from the queue
 				m.setPilot(p.getMyHouse().getNewPilot(m.getType()));
-				m.setExperience(new Integer(0));
+				m.setExperience(0);
 			}
 			
 			//continue normally. update unit and its armies, etc.

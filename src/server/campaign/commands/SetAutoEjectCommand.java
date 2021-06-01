@@ -57,7 +57,7 @@ public class SetAutoEjectCommand implements Command {
 		}//end catch
 		
 		try {
-			autoEject = new Boolean(command.nextToken()).booleanValue();
+			autoEject = Boolean.parseBoolean(command.nextToken());
 		}//end try
 		catch (Exception ex){
 			CampaignMain.cm.toUser("AM:SetAutoEject Command failed. Check your input. It should be something like this: /c setAutoEject#unitid#true/false",Username,true);

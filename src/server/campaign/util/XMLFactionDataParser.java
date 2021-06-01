@@ -259,11 +259,11 @@ public class XMLFactionDataParser implements XMLResponder {
 		else if (lastElement.equalsIgnoreCase("BASEPILOT"))
 			BasePilot = Integer.parseInt(charData);
 		else if (lastElement.equalsIgnoreCase("ISMERCENARY"))
-			isMercenary = new Boolean(charData).booleanValue();
+			isMercenary = Boolean.parseBoolean(charData);
 		else if (lastElement.equalsIgnoreCase("CONQUERABLE"))
-			canConquer = new Boolean(charData).booleanValue();
+			canConquer = Boolean.parseBoolean(charData);
 		else if (lastElement.equalsIgnoreCase("INHOUSEATTACKS"))
-			inHouseAttacks = new Boolean(charData).booleanValue();
+			inHouseAttacks = Boolean.parseBoolean(charData);
 		else if (lastElement.equalsIgnoreCase("HOUSEPLAYERCOLOR"))
 			houseColor = charData;
 		else if (lastElement.equalsIgnoreCase("DEFECTTO"))

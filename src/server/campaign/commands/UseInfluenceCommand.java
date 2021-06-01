@@ -93,7 +93,7 @@ public class UseInfluenceCommand implements Command {
 				return;
 			}
 
-			if ( !(new Boolean(house.getConfig("AllowTechsForRewards")).booleanValue()) ){
+			if ( !(Boolean.parseBoolean(house.getConfig("AllowTechsForRewards"))) ){
 				CampaignMain.cm.toUser("AM:Sorry but you are not allowed to buy techs with " + CampaignMain.cm.getConfig("RPLongName") + ".",Username,true);
 				return;
 			}
@@ -144,7 +144,7 @@ public class UseInfluenceCommand implements Command {
 				return;
 			}
 
-			if ( !(new Boolean(house.getConfig("AllowInfluenceForRewards")).booleanValue())){
+			if ( !(Boolean.parseBoolean(house.getConfig("AllowInfluenceForRewards")))){
 				CampaignMain.cm.toUser("Sorry but you are not allowed to buy influence with " + CampaignMain.cm.getConfig("RPLongName") + ".",Username,true);
 				return;
 			}
@@ -170,7 +170,7 @@ public class UseInfluenceCommand implements Command {
 			break;
 
 		case 2: //buying units
-			if ( !(new Boolean(house.getConfig("AllowUnitsForRewards")).booleanValue())){
+			if ( !(Boolean.parseBoolean(house.getConfig("AllowUnitsForRewards")))){
 				CampaignMain.cm.toUser("AM:Sorry but you are not allowed to buy units with " + CampaignMain.cm.getConfig("RPLongName") + ".",Username,true);
 				return;
 			}
@@ -206,7 +206,7 @@ public class UseInfluenceCommand implements Command {
 				factionstring = command.nextToken();
 				if ( factionstring.equalsIgnoreCase("rare") ) {
 
-					if ( !(new Boolean(house.getConfig("AllowRareUnitsForRewards")).booleanValue()) ) {
+					if ( !(Boolean.parseBoolean(house.getConfig("AllowRareUnitsForRewards"))) ) {
 						CampaignMain.cm.toUser("AM:Sorry. You are not allowed to buy rare units with your " + CampaignMain.cm.getConfig("RPLongName") + ".",Username,true);
 						return;
 					}
@@ -253,7 +253,7 @@ public class UseInfluenceCommand implements Command {
 
 			try {
 				//Lets get us a pilot and a unit
-				if ( new Boolean(house.getConfig("AllowPersonalPilotQueues")).booleanValue() && ( unitType == Unit.MEK || unitType == Unit.PROTOMEK) )
+				if ( Boolean.parseBoolean(house.getConfig("AllowPersonalPilotQueues")) && ( unitType == Unit.MEK || unitType == Unit.PROTOMEK) )
 					newPilot = new SPilot("Vacant",99,99);
 				else
 					newPilot = player.getMyHouse().getNewPilot(unitType);
@@ -400,7 +400,7 @@ public class UseInfluenceCommand implements Command {
 		//Use special RP-build fluff text for the unit
 		String producer = "Reward Unit";
 
-		if (new Boolean(house.getConfig("UseOnlyOneVehicleSize")).booleanValue() && type_id == Unit.VEHICLE)
+		if (Boolean.parseBoolean(house.getConfig("UseOnlyOneVehicleSize")) && type_id == Unit.VEHICLE)
 			unitSize = Unit.getWeightClassDesc(CampaignMain.cm.getRandomNumber(4));
 
 		Filename = BuildTable.getUnitFilename(faction,unitSize,type_id,BuildTable.REWARD);//build from rewards dir.

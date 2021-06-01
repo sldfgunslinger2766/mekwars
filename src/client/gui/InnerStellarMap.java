@@ -394,7 +394,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                         loader = new URLClassLoader(new URL[] { loadJar.toURI().toURL() });
                         Class<?> c = loader.loadClass("admin.AdminMapPopupMenu");
                         Object o = c.newInstance();
-                        c.getDeclaredMethod("createMenu", new Class[] { MWClient.class, InnerStellarMap.class, Integer.class, Integer.class, Planet.class }).invoke(o, new Object[] { mwclient, this, new Integer((int) scr2mapX(e.getX())), new Integer((int) scr2mapY(e.getY())), mp.getPPanel().getPlanet() });
+                        c.getDeclaredMethod("createMenu", new Class[] { MWClient.class, InnerStellarMap.class, Integer.class, Integer.class, Planet.class }).invoke(o, new Object[] { mwclient, this, (int) scr2mapX(e.getX()), (int) scr2mapY(e.getY()), mp.getPPanel().getPlanet() });
                         popup.add((JMenu) o);
                     }
                 } catch (Exception ex) {

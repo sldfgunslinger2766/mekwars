@@ -24,6 +24,7 @@ import client.campaign.CUnit;
 import common.Unit;
 import common.campaign.pilot.Pilot;
 import common.util.TokenReader;
+import megamek.client.generator.RandomGenderGenerator;
 import megamek.common.BattleArmor;
 import megamek.common.CrewType;
 import megamek.common.Entity;
@@ -84,7 +85,7 @@ public class HSMek {
 		 * stringed CUnit BV. The server sends over units without pilot data, so we set
 		 * a faction-default crew. See CHSPanel.java for usage.
 		 */
-		embeddedUnit.getEntity().setCrew(new megamek.common.Crew(CrewType.SINGLE, "Generic Pilot", 1, factionGunnery, factionPiloting));
+		embeddedUnit.getEntity().setCrew(new megamek.common.Crew(CrewType.SINGLE, "Generic Pilot", 1, factionGunnery, factionGunnery, factionGunnery, factionPiloting, RandomGenderGenerator.generate(), null));
 
 		//set type
 		Entity e = embeddedUnit.getEntity();

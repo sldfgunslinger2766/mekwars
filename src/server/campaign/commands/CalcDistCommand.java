@@ -52,8 +52,8 @@ public class CalcDistCommand implements Command {
 		
 		SPlanet p2 = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
 		if (p1 != null && p2 != null) {
-			int xdiff = (int)(Math.pow((new Double(p1.getPosition().getX()).intValue() - new Double(p2.getPosition().getX()).intValue()),2));
-			int ydiff = (int)(Math.pow((new Double(p1.getPosition().getY()).intValue() - new Double(p2.getPosition().getY()).intValue()),2));
+			int xdiff = (int)(Math.pow(p1.getPosition().getX() - p2.getPosition().getX(),2));
+			int ydiff = (int)(Math.pow(p1.getPosition().getY() - p2.getPosition().getY(),2));
 			int newdist = (int)Math.sqrt(xdiff+ydiff);
 			CampaignMain.cm.toUser("SM|The distance between " + p1.getName() + " and " + p2.getName() + " is " + newdist + " LY",Username,false);
 		}

@@ -98,7 +98,7 @@ public class CampaignData implements TerrainProvider {
      * @return The requested Planet. This is usually a subclass of Planet.
      */
     public Planet getPlanet(int id) {
-        return planets.get(new Integer(id));
+        return planets.get(id);
     }
 
     /**
@@ -179,8 +179,8 @@ public class CampaignData implements TerrainProvider {
         if (planet.getId() == -1) {
             planet.setId(getUnusedPlanetID());
         }
-        planets.put(new Integer(planet.getId()), planet);
-        planetid.put(planet.getName().toLowerCase(), new Integer(planet.getId()));
+        planets.put(planet.getId(), planet);
+        planetid.put(planet.getName().toLowerCase(), planet.getId());
     }
 
     /**
@@ -211,7 +211,7 @@ public class CampaignData implements TerrainProvider {
      */
     public int getUnusedPlanetID() {
         int id = 0;
-        while (planets.keySet().contains(new Integer(id))) {
+        while (planets.keySet().contains(id)) {
             id++;
         }
         return id;
@@ -498,7 +498,7 @@ public class CampaignData implements TerrainProvider {
             Influences infOld = new Influences(getPlanet(id).getInfluence());
             getPlanet(id).decodeMutableFields(in, this);
             Influences infNew = getPlanet(id).getInfluence();
-            changesSinceLastRefresh.put(new Integer(id), infNew.difference(infOld));
+            changesSinceLastRefresh.put(id, infNew.difference(infOld));
         }
     }
 
@@ -832,7 +832,7 @@ public class CampaignData implements TerrainProvider {
             for (int pos = 0; pos < size; pos++) {
                 String commandName = in.readLine("CommandName");
                 int accessLevel = in.readInt("AccessLevel");
-                commandTemp.put(commandName, new Integer(accessLevel));
+                commandTemp.put(commandName, accessLevel);
             }// end while
         }// end try
         catch (Exception ex) {

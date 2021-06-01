@@ -157,15 +157,15 @@ public class BlackMarketModel extends AbstractTableModel {
             	}
                 return mm.getEmbeddedUnit().getEntity().calculateBattleValue();
             case MIN:
-                return new Integer(mm.getMinBid());
+                return mm.getMinBid();
             case TICKS:
-                return new Integer(mm.getTicks());
+                return mm.getTicks();
             case BID:
                 if (mm.getBid() > 0)
-                    return new Integer(mm.getBid());
+                    return mm.getBid();
                 return null;
             case AUCTION_ID:
-                return new Integer(mm.getAuctionID());
+                return mm.getAuctionID();
         }
         return "";
     }

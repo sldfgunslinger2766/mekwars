@@ -72,6 +72,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 //import server.campaign.CampaignMain;
 import client.MWClient;
 import client.campaign.CUnit;
+import client.gui.MWUnitDisplay;
 import client.gui.TableSorter;
 import client.util.CUnitComparator;
 import common.House;
@@ -297,7 +298,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                     theEntity.loadAllWeapons();
 
                     JFrame infoWindow = new JFrame();
-                    UnitDisplay unitDetailInfo = new UnitDisplay(null);
+                    UnitDisplay unitDetailInfo = new MWUnitDisplay(null, client);
 
                     infoWindow.getContentPane().add(unitDetailInfo);
                     infoWindow.setSize(300, 400);
@@ -653,10 +654,10 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                                     eu = currentUnits.get(tu.getRealFilename());// existing
                                     // unit
                                     if (eu.getTables().get(currTableName) == null) {
-                                        eu.getTables().put(currTableName, new Double(frequency));
+                                        eu.getTables().put(currTableName, frequency);
                                     } else {
                                         Double currFreq = eu.getTables().get(currTableName);
-                                        Double newFreq = new Double(currFreq.doubleValue() + frequency);
+                                        Double newFreq = currFreq + frequency;
                                         eu.getTables().remove(currTableName);
                                         eu.getTables().put(currTableName, newFreq);
                                     }
@@ -681,10 +682,10 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                                 eu = currentUnits.get(Filename);// existing
                                 // unit
                                 if (eu.getTables().get(currTableName) == null) {
-                                    eu.getTables().put(currTableName, new Double(frequency));
+                                    eu.getTables().put(currTableName, frequency);
                                 } else {
                                     Double currFreq = eu.getTables().get(currTableName);
-                                    Double newFreq = new Double(currFreq.doubleValue() + frequency);
+                                    Double newFreq = currFreq.doubleValue() + frequency;
                                     eu.getTables().remove(currTableName);
                                     eu.getTables().put(currTableName, newFreq);
                                 }
@@ -710,9 +711,9 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                                     Double d = next.get(crossTableName);
                                     double newTableWeight = d.doubleValue() + ((weight / totaltableweight) * tablemultiplier);
                                     next.remove(crossTableName);
-                                    next.put(crossTableName, new Double(newTableWeight));
+                                    next.put(crossTableName, newTableWeight);
                                 } else {
-                                    next.put(crossTableName, new Double((weight / totaltableweight) * tablemultiplier));
+                                    next.put(crossTableName, (weight / totaltableweight) * tablemultiplier);
                                 }
                             }
                         }
@@ -833,7 +834,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
          * value and carries a 100% weight.
          */
         TreeMap<String, Double> temp = new TreeMap<String, Double>();
-        temp.put(factionString, new Double(100.0));// using 100 makes things
+        temp.put(factionString, 100.0);// using 100 makes things
         // %'s instead of decimals
         // ...
         // System.out.println("this.doTableLayer - base");
@@ -994,11 +995,11 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                     return "";
                 }
             case WEIGHT:
-                return new Integer((int) currU.getEntity().getWeight());
+                return (int) currU.getEntity().getWeight();
 
             case BATTLEVALUE:
 
-                return new Integer(currU.getEntity().calculateBattleValue());
+                return currU.getEntity().calculateBattleValue();
 
             case FREQUENCY:
 
@@ -1070,10 +1071,10 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                             Double d1 = 0.0;
                             Double d2 = 0.0;
                             if (t1 != null) {
-                                d1 = new Double(t1.getFrequency());
+                                d1 = t1.getFrequency();
                             }
                             if (t2 != null) {
-                                d2 = new Double(t2.getFrequency());
+                                d2 = t2.getFrequency();
                             }
                             return d1.compareTo(d2);
                         } catch (Exception ex) {

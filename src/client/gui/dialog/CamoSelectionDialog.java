@@ -51,6 +51,7 @@ import common.util.MWLogger;
 import common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.Player;
+import megamek.common.icons.Camouflage;
 
 /*
  * 
@@ -131,7 +132,7 @@ public class CamoSelectionDialog extends JDialog implements ListSelectionListene
 
         // Create a list model and add NO CAMO
         listModel = new DefaultListModel<String>();
-        listModel.addElement(Player.NO_CAMO);
+        listModel.addElement(Camouflage.NO_CAMOUFLAGE);
 
         // Get camo file names.
         camos = new TreeMap<String, Object>();
