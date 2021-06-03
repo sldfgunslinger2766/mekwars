@@ -172,7 +172,7 @@ public final class MWClient extends GameHost implements IClient, IGameHost {
     DataFetchClient dataFetcher;
     Thread updateDataFetcher;
 
-    public static final String CLIENT_VERSION = "0.7.0.3"; // change this with
+    public static final String CLIENT_VERSION = "0.8.0.0"; // change this with
 
     // all client
     // changes @Torren

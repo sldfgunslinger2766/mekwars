@@ -56,7 +56,7 @@ import server.util.TrackerThread;
 public class MWServ {
 
 	// Static logging engine, and static version info.
-    public static final String SERVER_VERSION = "0.7.0.2";
+    public static final String SERVER_VERSION = "0.8.0.0";
 
 
     private ServerWrapper myCommunicator;
