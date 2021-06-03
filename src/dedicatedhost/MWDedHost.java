@@ -81,7 +81,7 @@ public final class MWDedHost extends GameHost implements IClient, IGameHost {
 
     DataFetchClient dataFetcher;
 
-    public static final String CLIENT_VERSION = "0.7.0.1"; // change this with
+    public static final String CLIENT_VERSION = "0.8.0.0"; // change this with
     // all client
     // changes @Torren
 
