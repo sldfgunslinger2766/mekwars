@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="mekwars">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/icons.zip!/" />
+      <root url="jar://$PROJECT_DIR$/MegaMek.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

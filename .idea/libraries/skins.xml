@@ -1,0 +1,43 @@
+<component name="libraryTable">
+  <library name="skins">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/opusOSDeepthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/fatalEthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/hmmXPMonoBluethemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/b0sumithemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/mmMagra-Xthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/opusOSBluethemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/midnightthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/gorillathemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/blueMetalthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/underlingthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/solunaRthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/opusOSOlivethemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/tigerGraphitethemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/silverLunaXPthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/blueTurquesathemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/roueGreenthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/b0sumiErgothempack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/tigerthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/cougarthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/coronaHthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/architectOlivethemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/crystal2themepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/hmmXPBluethemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/roueBrownthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/iBarthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/quickSilverRthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/royalInspiratthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/architectBluethemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/roueBluethemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/amarachthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/chaNinja-Bluethemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/opusLunaSilverthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/BeOSthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/oliveGreenLunaXPthemepack.zip!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/data/skins/gfxOasisthemepack.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

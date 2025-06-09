@@ -1,0 +1,59 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/commons-logging-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/istack-commons-runtime-3.0.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/TinyXML.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/xom-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/PngEncoder.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/xmlpull-1.1.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/metouia.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/TabPanel.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/kunststoff.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/commons-lang-2.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/wstx-asl-3.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/joda-time-1.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/commons-lang3-3.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/jdom-1.1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/commons-configuration-1.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/txw2-2.3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/looks-1.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/freemarker-2.3.28.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/commons-collections-3.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/j3dcore.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/json-20080701.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/jdom2-2.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/vecmath.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/jettison-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/stax-ex-1.8.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/locales.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/FastInfoset-1.2.16.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/jaxb-impl-2.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/jaxb-core-2.3.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/stax-1.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/commons-text-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/xpp3_min-1.1.4c.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/jakarta.xml.bind-api-2.3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/jaxb-runtime-2.3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/dom4j-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/kxml2-2.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/flatlaf-0.26.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/j3dutils.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/jdatepicker-1.3.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/xstream-1.4.11.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/skinlf.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/log4j.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/stax-api-1.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/cglib-nodep-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/log4j-1.2.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/jakarta.activation-api-1.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/Ostermiller.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/SerialKiller-master-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/xstream-1.4.14.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/kxml2-min-2.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client-dist/lib/libpk-0.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

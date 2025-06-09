@@ -1,0 +1,24 @@
+<component name="libraryTable">
+  <library name="mechfiles">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/jumpships.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/mechs.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/dropships.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/warship.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/unsupported.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/fighters.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/Meks.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/spacestation.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/smallcraft.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/battlearmor.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/protomechs.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/Infantry.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/ge.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/Vehicles.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/convfighter.zip!/" />
+      <root url="jar://$PROJECT_DIR$/server-dist/data/mechfiles/unofficial.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

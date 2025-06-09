@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MegaMek">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/server-dist/MegaMek.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

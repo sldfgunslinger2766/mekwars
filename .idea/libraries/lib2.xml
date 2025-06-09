@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="lib2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/hpg-dist/lib/guava-24.0-jre.jar!/" />
+      <root url="jar://$PROJECT_DIR$/hpg-dist/lib/gson-2.8.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
